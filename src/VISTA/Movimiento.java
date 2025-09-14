@@ -30,7 +30,7 @@ public class Movimiento extends javax.swing.JFrame {
 
     Connection con = Conexiones.Conexion();
     ResultSet rs;
-    int id, band, cont = 0, idtrip;
+    int id = 0, band, cont = 0, idtrip;
     String veri, fechaActual;
 
     //Metodos para editar
@@ -1213,8 +1213,12 @@ public class Movimiento extends javax.swing.JFrame {
     }//GEN-LAST:event_TerminarActionPerformed
 
     private void RelevarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RelevarActionPerformed
-        Relevar ventana = new Relevar();
-        ventana.setVisible(true);
+        if (id == 0) {
+            JOptionPane.showMessageDialog(null, "SELECCIONE UNA TRIPULACION");
+        } else {
+            Relevar ventana = new Relevar(id);
+            ventana.setVisible(true);
+        }
     }//GEN-LAST:event_RelevarActionPerformed
 
     private void HistorialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HistorialActionPerformed

@@ -15,6 +15,7 @@ import java.awt.image.*;
 import java.io.*;
 import java.sql.*;
 import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -28,18 +29,31 @@ public class Relevar extends javax.swing.JFrame {
 
     Connection con = Conexiones.Conexion();
     ResultSet rs;
-    int idChofer, idMedico, idEnfermero, idvictor, idtrip;
-    static int idband;
+    int idChofer, idMedico, idEnfermero, idvictor;
+    static int idtrip;
     String fechaActual, veri;
 
-    class PanelDibujo extends JPanel {
+    public class PanelDibujo extends JPanel {
 
-        private BufferedImage imagen;
+        private BufferedImage imagen, imagenOriginal;
 
         public PanelDibujo(String ruta) throws IOException {
+
+            Toolkit toolkit = Toolkit.getDefaultToolkit();
+            Image cursorImg = toolkit.getImage(getClass().getResource("/IMAGENES/lapiz.png"));
+
+            // 📍 Crear cursor
+            Point hotspot = new Point(0, 0); // Donde está la punta del lápiz
+            Cursor cursorPersonalizado = toolkit.createCustomCursor(cursorImg, hotspot, "Lapiz");
+
+            // 🔁 Aplicar cursor al panel
+            this.setCursor(cursorPersonalizado);
+
             imagen = ImageIO.read(
                     getClass().getResource(ruta)
             );
+
+            imagenOriginal = ImageIO.read(getClass().getResource(ruta));
 
             addMouseMotionListener(new MouseMotionAdapter() {
                 @Override
@@ -62,13 +76,22 @@ public class Relevar extends javax.swing.JFrame {
         public void guardar(String ruta) throws IOException {
             ImageIO.write(imagen, "png", new File(ruta));
         }
+
+        // Método para borrar (restaurar la imagen original)
+        public void borrar() {
+            imagen = new BufferedImage(imagenOriginal.getWidth(), imagenOriginal.getHeight(), imagenOriginal.getType());
+            Graphics2D g2d = imagen.createGraphics();
+            g2d.drawImage(imagenOriginal, 0, 0, null);
+            g2d.dispose();
+            repaint();
+        }
     }
 
     public class PanelImagen extends JPanel {
 
-        private BufferedImage imagen2;
+        private final BufferedImage imagen2;
 
-        public PanelImagen(String ruta) throws IOException{
+        public PanelImagen(String ruta) throws IOException {
             imagen2 = ImageIO.read(
                     getClass().getResource(ruta)
             );
@@ -85,8 +108,19 @@ public class Relevar extends javax.swing.JFrame {
         }
     }
 
-    public Relevar() {
+    public Relevar(int idtrip) {
+        this.idtrip = idtrip;
+        
         initComponents();
+        this.setLocationRelativeTo(null);
+        setSize(1570, 860);
+        String vic = String.valueOf(idtrip);
+        LocalDate hoy = LocalDate.now();
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String fechaActual2 = hoy.format(formato);
+        
+        Fecha1.setText(fechaActual2);
+        Victor.setText(vic);
     }
 
     /**
@@ -177,12 +211,11 @@ public class Relevar extends javax.swing.JFrame {
         jLabel175 = new javax.swing.JLabel();
         jLabel176 = new javax.swing.JLabel();
         entrante = new javax.swing.JLabel();
-        jPanel1 = new javax.swing.JPanel();
+        Fondo = new javax.swing.JPanel();
         jPanel16 = new javax.swing.JPanel();
         jLabel177 = new javax.swing.JLabel();
         Fecha1 = new javax.swing.JLabel();
         jLabel178 = new javax.swing.JLabel();
-        victor1 = new javax.swing.JComboBox<>();
         jLabel179 = new javax.swing.JLabel();
         kmi1 = new javax.swing.JLabel();
         jLabel180 = new javax.swing.JLabel();
@@ -195,9 +228,11 @@ public class Relevar extends javax.swing.JFrame {
         jLabel185 = new javax.swing.JLabel();
         jLabel186 = new javax.swing.JLabel();
         entrante1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        jLabel19 = new javax.swing.JLabel();
+        Victor = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         try {
@@ -225,10 +260,12 @@ public class Relevar extends javax.swing.JFrame {
                 try {
                     jPanel12 = new PanelDibujo("/IMAGENES/nivel.png");
                     jLabel10 = new javax.swing.JLabel();
+                    Borrar2 = new javax.swing.JButton();
                     jPanel6 = new javax.swing.JPanel();
                     jLabel9 = new javax.swing.JLabel();
                     try {
                         Ambulancia = new PanelDibujo("/IMAGENES/ambulancia.jpg");
+                        Borrar = new javax.swing.JButton();
                         jPanel7 = new javax.swing.JPanel();
                         jLabel1 = new javax.swing.JLabel();
                         jScrollPane1 = new javax.swing.JScrollPane();
@@ -675,73 +712,117 @@ public class Relevar extends javax.swing.JFrame {
                             jPanel2.add(entrante, new org.netbeans.lib.awtextra.AbsoluteConstraints(653, 74, 262, -1));
 
                             setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-                            setMaximumSize(new java.awt.Dimension(1568, 880));
-                            setMinimumSize(new java.awt.Dimension(1568, 880));
-                            setPreferredSize(new java.awt.Dimension(1568, 880));
+                            setMaximumSize(new java.awt.Dimension(1550, 840));
+                            setMinimumSize(new java.awt.Dimension(1550, 840));
+                            setUndecorated(true);
+                            setPreferredSize(new java.awt.Dimension(1550, 840));
+                            setResizable(false);
                             getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-                            jPanel1.setBackground(new java.awt.Color(204, 255, 204));
-                            jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+                            Fondo.setBackground(new java.awt.Color(204, 255, 204));
+                            Fondo.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+                            Fondo.setMinimumSize(new java.awt.Dimension(1550, 860));
+                            Fondo.setPreferredSize(new java.awt.Dimension(1550, 860));
+                            Fondo.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+                            jPanel16.setBackground(new java.awt.Color(0, 0, 0));
                             jPanel16.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-                            jLabel177.setText("Fecha:");
-                            jPanel16.add(jLabel177, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 11, -1, -1));
+                            jLabel177.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+                            jLabel177.setForeground(new java.awt.Color(255, 255, 255));
+                            jLabel177.setText(">Fecha:");
+                            jPanel16.add(jLabel177, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 40, -1, -1));
 
+                            Fecha1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+                            Fecha1.setForeground(new java.awt.Color(255, 255, 255));
                             Fecha1.setText("jLabel3");
-                            jPanel16.add(Fecha1, new org.netbeans.lib.awtextra.AbsoluteConstraints(53, 11, -1, -1));
+                            jPanel16.add(Fecha1, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 40, -1, -1));
 
-                            jLabel178.setText("Victor");
-                            jPanel16.add(jLabel178, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 36, -1, -1));
+                            jLabel178.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+                            jLabel178.setForeground(new java.awt.Color(255, 255, 255));
+                            jLabel178.setText(">Victor:");
+                            jPanel16.add(jLabel178, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 20, -1, -1));
 
-                            jPanel16.add(victor1, new org.netbeans.lib.awtextra.AbsoluteConstraints(47, 36, 133, -1));
+                            jLabel179.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+                            jLabel179.setForeground(new java.awt.Color(255, 255, 255));
+                            jLabel179.setText(">Kilometraje Inicial:");
+                            jPanel16.add(jLabel179, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 20, -1, -1));
 
-                            jLabel179.setText("Kilometraje Inicial:");
-                            jPanel16.add(jLabel179, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 40, -1, -1));
-
+                            kmi1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+                            kmi1.setForeground(new java.awt.Color(255, 255, 255));
                             kmi1.setText("0");
-                            jPanel16.add(kmi1, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 40, 59, -1));
+                            jPanel16.add(kmi1, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 20, 59, -1));
 
-                            jLabel180.setText("Kilometraje final:");
-                            jPanel16.add(jLabel180, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 40, -1, -1));
+                            jLabel180.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+                            jLabel180.setForeground(new java.awt.Color(255, 255, 255));
+                            jLabel180.setText(">Kilometraje final:");
+                            jPanel16.add(jLabel180, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 20, -1, 20));
 
+                            jLabel181.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+                            jLabel181.setForeground(new java.awt.Color(255, 255, 255));
                             jLabel181.setText("0");
-                            jPanel16.add(jLabel181, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 40, 64, -1));
+                            jPanel16.add(jLabel181, new org.netbeans.lib.awtextra.AbsoluteConstraints(1040, 20, 64, -1));
 
-                            jLabel182.setText("CVS Anterior:");
-                            jPanel16.add(jLabel182, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 74, -1, -1));
+                            jLabel182.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+                            jLabel182.setForeground(new java.awt.Color(255, 255, 255));
+                            jLabel182.setText(">CVS Anterior:");
+                            jPanel16.add(jLabel182, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 70, -1, -1));
 
+                            anterior1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+                            anterior1.setForeground(new java.awt.Color(255, 255, 255));
                             anterior1.setText("-");
-                            jPanel16.add(anterior1, new org.netbeans.lib.awtextra.AbsoluteConstraints(93, 74, 204, -1));
+                            jPanel16.add(anterior1, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 70, 140, -1));
 
-                            jLabel183.setText("CVS Saliente:");
-                            jPanel16.add(jLabel183, new org.netbeans.lib.awtextra.AbsoluteConstraints(303, 74, -1, -1));
+                            jLabel183.setBackground(new java.awt.Color(255, 255, 255));
+                            jLabel183.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+                            jLabel183.setForeground(new java.awt.Color(255, 255, 255));
+                            jLabel183.setText(">CVS Saliente:");
+                            jPanel16.add(jLabel183, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 70, -1, -1));
 
+                            saliente1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+                            saliente1.setForeground(new java.awt.Color(255, 255, 255));
                             saliente1.setText("-");
-                            jPanel16.add(saliente1, new org.netbeans.lib.awtextra.AbsoluteConstraints(377, 74, 196, -1));
+                            jPanel16.add(saliente1, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 70, 140, -1));
 
-                            jLabel184.setText("CVS Entrante:");
-                            jPanel16.add(jLabel184, new org.netbeans.lib.awtextra.AbsoluteConstraints(579, 74, -1, -1));
+                            jLabel184.setBackground(new java.awt.Color(255, 255, 255));
+                            jLabel184.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+                            jLabel184.setForeground(new java.awt.Color(255, 255, 255));
+                            jLabel184.setText(">CVS Entrante:");
+                            jPanel16.add(jLabel184, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 70, -1, -1));
 
-                            jLabel185.setText("Turno:");
-                            jPanel16.add(jLabel185, new org.netbeans.lib.awtextra.AbsoluteConstraints(909, 11, -1, -1));
+                            jLabel185.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+                            jLabel185.setForeground(new java.awt.Color(255, 255, 255));
+                            jLabel185.setText(">Turno:");
+                            jPanel16.add(jLabel185, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 70, -1, -1));
 
+                            jLabel186.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+                            jLabel186.setForeground(new java.awt.Color(255, 255, 255));
                             jLabel186.setText("00:00hrs");
-                            jPanel16.add(jLabel186, new org.netbeans.lib.awtextra.AbsoluteConstraints(947, 11, -1, -1));
+                            jPanel16.add(jLabel186, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 70, -1, -1));
 
+                            entrante1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+                            entrante1.setForeground(new java.awt.Color(255, 255, 255));
                             entrante1.setText("-");
-                            jPanel16.add(entrante1, new org.netbeans.lib.awtextra.AbsoluteConstraints(653, 74, 262, -1));
+                            jPanel16.add(entrante1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1030, 70, 160, -1));
 
-                            jPanel1.add(jPanel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 11, 1000, 108));
+                            jLabel19.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+                            jLabel19.setForeground(new java.awt.Color(255, 51, 51));
+                            jLabel19.setText("FICHA DE RELEVO DE MOVILES");
+                            jPanel16.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 10, -1, -1));
 
-                            jButton1.setText("Todos no");
-                            jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1346, 11, -1, -1));
+                            Victor.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+                            Victor.setForeground(new java.awt.Color(255, 255, 255));
+                            Victor.setText("-");
+                            jPanel16.add(Victor, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 20, 40, -1));
 
                             jButton2.setText("Todos si");
-                            jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1429, 11, -1, -1));
+                            jPanel16.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1420, 70, 90, -1));
 
                             jButton3.setText("Guardar");
-                            jPanel1.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(1352, 40, -1, -1));
+                            jPanel16.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(1430, 10, -1, -1));
+
+                            jButton1.setText("Todos no");
+                            jPanel16.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1310, 70, 90, -1));
 
                             jButton4.setText("Volver");
                             jButton4.addActionListener(new java.awt.event.ActionListener() {
@@ -749,7 +830,9 @@ public class Relevar extends javax.swing.JFrame {
                                     jButton4ActionPerformed(evt);
                                 }
                             });
-                            jPanel1.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 11, -1, -1));
+                            jPanel16.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(1320, 10, -1, -1));
+
+                            Fondo.add(jPanel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 11, 1520, 108));
 
                             jPanel3.setBackground(new java.awt.Color(0, 0, 0));
                             jPanel3.setMaximumSize(new java.awt.Dimension(600, 281));
@@ -815,7 +898,7 @@ public class Relevar extends javax.swing.JFrame {
                                 .addContainerGap())
                         );
 
-                        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 560, -1, 280));
+                        Fondo.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 560, -1, 280));
 
                         jPanel4.setBackground(new java.awt.Color(0, 0, 0));
                         jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -913,7 +996,15 @@ public class Relevar extends javax.swing.JFrame {
                 jLabel10.setText(">MARCAR (Nivel)");
                 jPanel4.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 11, -1, -1));
 
-                jPanel1.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 260, 600, 290));
+                Borrar2.setText("Borrar");
+                Borrar2.addActionListener(new java.awt.event.ActionListener() {
+                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                        Borrar2ActionPerformed(evt);
+                    }
+                });
+                jPanel4.add(Borrar2, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 10, 90, -1));
+
+                Fondo.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 260, 600, 290));
 
                 jPanel6.setBackground(new java.awt.Color(0, 0, 0));
                 jPanel6.setMaximumSize(new java.awt.Dimension(600, 420));
@@ -936,16 +1027,24 @@ public class Relevar extends javax.swing.JFrame {
             Ambulancia.setLayout(AmbulanciaLayout);
             AmbulanciaLayout.setHorizontalGroup(
                 AmbulanciaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGap(0, 578, Short.MAX_VALUE)
+                .addGap(0, 0, Short.MAX_VALUE)
             );
             AmbulanciaLayout.setVerticalGroup(
                 AmbulanciaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGap(0, 358, Short.MAX_VALUE)
+                .addGap(0, 0, Short.MAX_VALUE)
             );
 
             jPanel6.add(Ambulancia, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 44, 580, 360));
 
-            jPanel1.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 130, 600, 420));
+            Borrar.setText("Borrar");
+            Borrar.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    BorrarActionPerformed(evt);
+                }
+            });
+            jPanel6.add(Borrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 10, 90, -1));
+
+            Fondo.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 130, 600, 420));
 
             jPanel7.setBackground(new java.awt.Color(0, 0, 0));
 
@@ -980,7 +1079,7 @@ public class Relevar extends javax.swing.JFrame {
                     .addContainerGap())
             );
 
-            jPanel1.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 560, 600, 280));
+            Fondo.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 560, 600, 280));
 
             jPanel8.setBackground(new java.awt.Color(0, 0, 0));
             jPanel8.setMaximumSize(new java.awt.Dimension(600, 122));
@@ -1079,7 +1178,7 @@ public class Relevar extends javax.swing.JFrame {
 
             jPanel8.add(jPanel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 10, 280, 100));
 
-            jPanel1.add(jPanel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 130, 600, 120));
+            Fondo.add(jPanel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 130, 600, 120));
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -1108,7 +1207,7 @@ public class Relevar extends javax.swing.JFrame {
         Funciona.add(jToggleButton21, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 170, 89, -1));
 
         jToggleButton22.setText("NO");
-        Funciona.add(jToggleButton22, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 220, 89, -1));
+        Funciona.add(jToggleButton22, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 210, 89, -1));
 
         jToggleButton23.setText("NO");
         Funciona.add(jToggleButton23, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 260, 89, -1));
@@ -1117,32 +1216,32 @@ public class Relevar extends javax.swing.JFrame {
         Funciona.add(jToggleButton24, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 310, 89, -1));
 
         jToggleButton25.setText("NO");
-        Funciona.add(jToggleButton25, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 360, 89, -1));
+        Funciona.add(jToggleButton25, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 350, 89, -1));
 
         jToggleButton26.setText("NO");
         Funciona.add(jToggleButton26, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 400, 89, -1));
 
         jToggleButton27.setText("NO");
-        Funciona.add(jToggleButton27, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 450, 89, -1));
+        Funciona.add(jToggleButton27, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 440, 89, -1));
 
         jToggleButton28.setText("NO");
         Funciona.add(jToggleButton28, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 490, 89, -1));
 
         jToggleButton29.setText("NO");
-        Funciona.add(jToggleButton29, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 540, 89, -1));
+        Funciona.add(jToggleButton29, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 530, 89, -1));
 
         jToggleButton30.setText("NO");
-        Funciona.add(jToggleButton30, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 590, 89, -1));
+        Funciona.add(jToggleButton30, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 580, 89, -1));
 
         jToggleButton31.setText("NO");
-        Funciona.add(jToggleButton31, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 640, 89, -1));
+        Funciona.add(jToggleButton31, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 630, 89, -1));
 
         jToggleButton32.setText("NO");
-        Funciona.add(jToggleButton32, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 680, 89, -1));
+        Funciona.add(jToggleButton32, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 670, 89, -1));
 
-        jPanel1.add(Funciona, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 120, -1, 720));
+        Fondo.add(Funciona, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 130, -1, 710));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1570, 880));
+        getContentPane().add(Fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1570, 880));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -1150,6 +1249,14 @@ public class Relevar extends javax.swing.JFrame {
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         this.dispose();
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void Borrar2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Borrar2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Borrar2ActionPerformed
+
+    private void BorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BorrarActionPerformed
+
+    }//GEN-LAST:event_BorrarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1182,17 +1289,21 @@ public class Relevar extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Relevar().setVisible(true);
+                new Relevar(idtrip).setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Ambulancia;
+    private javax.swing.JButton Borrar;
+    private javax.swing.JButton Borrar2;
     private javax.swing.JLabel Fecha;
     private javax.swing.JLabel Fecha1;
+    private javax.swing.JPanel Fondo;
     private javax.swing.JPanel Funciona;
     private javax.swing.JPanel Marca;
+    private javax.swing.JLabel Victor;
     private javax.swing.JLabel anterior;
     private javax.swing.JLabel anterior1;
     private javax.swing.JLabel entrante;
@@ -1225,6 +1336,7 @@ public class Relevar extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel184;
     private javax.swing.JLabel jLabel185;
     private javax.swing.JLabel jLabel186;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
@@ -1280,7 +1392,6 @@ public class Relevar extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel13;
@@ -1347,6 +1458,5 @@ public class Relevar extends javax.swing.JFrame {
     private javax.swing.JLabel saliente;
     private javax.swing.JLabel saliente1;
     private javax.swing.JComboBox<Cliente> victor;
-    private javax.swing.JComboBox<Cliente> victor1;
     // End of variables declaration//GEN-END:variables
 }
