@@ -118,9 +118,9 @@ public class Relevar extends javax.swing.JFrame {
         LocalDate hoy = LocalDate.now();
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String fechaActual2 = hoy.format(formato);
-        
+        CLASES.Relevar.Relevo(con, Victor, anterior1, saliente1, entrante1, kmi1, kmf, turno, idtrip);
         Fecha1.setText(fechaActual2);
-        Victor.setText(vic);
+        
     }
 
     /**
@@ -219,14 +219,14 @@ public class Relevar extends javax.swing.JFrame {
         jLabel179 = new javax.swing.JLabel();
         kmi1 = new javax.swing.JLabel();
         jLabel180 = new javax.swing.JLabel();
-        jLabel181 = new javax.swing.JLabel();
+        kmf = new javax.swing.JLabel();
         jLabel182 = new javax.swing.JLabel();
         anterior1 = new javax.swing.JLabel();
         jLabel183 = new javax.swing.JLabel();
         saliente1 = new javax.swing.JLabel();
         jLabel184 = new javax.swing.JLabel();
         jLabel185 = new javax.swing.JLabel();
-        jLabel186 = new javax.swing.JLabel();
+        turno = new javax.swing.JLabel();
         entrante1 = new javax.swing.JLabel();
         jLabel19 = new javax.swing.JLabel();
         Victor = new javax.swing.JLabel();
@@ -746,64 +746,64 @@ public class Relevar extends javax.swing.JFrame {
                             jLabel179.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
                             jLabel179.setForeground(new java.awt.Color(255, 255, 255));
                             jLabel179.setText(">Kilometraje Inicial:");
-                            jPanel16.add(jLabel179, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 20, -1, -1));
+                            jPanel16.add(jLabel179, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 50, -1, -1));
 
                             kmi1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
                             kmi1.setForeground(new java.awt.Color(255, 255, 255));
                             kmi1.setText("0");
-                            jPanel16.add(kmi1, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 20, 59, -1));
+                            jPanel16.add(kmi1, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 50, 59, -1));
 
                             jLabel180.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
                             jLabel180.setForeground(new java.awt.Color(255, 255, 255));
                             jLabel180.setText(">Kilometraje final:");
-                            jPanel16.add(jLabel180, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 20, -1, 20));
+                            jPanel16.add(jLabel180, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 80, -1, 20));
 
-                            jLabel181.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-                            jLabel181.setForeground(new java.awt.Color(255, 255, 255));
-                            jLabel181.setText("0");
-                            jPanel16.add(jLabel181, new org.netbeans.lib.awtextra.AbsoluteConstraints(1040, 20, 64, -1));
+                            kmf.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+                            kmf.setForeground(new java.awt.Color(255, 255, 255));
+                            kmf.setText("0");
+                            jPanel16.add(kmf, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 80, 64, -1));
 
                             jLabel182.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
                             jLabel182.setForeground(new java.awt.Color(255, 255, 255));
                             jLabel182.setText(">CVS Anterior:");
-                            jPanel16.add(jLabel182, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 70, -1, -1));
+                            jPanel16.add(jLabel182, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 20, -1, -1));
 
                             anterior1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
                             anterior1.setForeground(new java.awt.Color(255, 255, 255));
                             anterior1.setText("-");
-                            jPanel16.add(anterior1, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 70, 140, -1));
+                            jPanel16.add(anterior1, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 20, 560, -1));
 
                             jLabel183.setBackground(new java.awt.Color(255, 255, 255));
                             jLabel183.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
                             jLabel183.setForeground(new java.awt.Color(255, 255, 255));
                             jLabel183.setText(">CVS Saliente:");
-                            jPanel16.add(jLabel183, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 70, -1, -1));
+                            jPanel16.add(jLabel183, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 50, -1, -1));
 
                             saliente1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
                             saliente1.setForeground(new java.awt.Color(255, 255, 255));
                             saliente1.setText("-");
-                            jPanel16.add(saliente1, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 70, 140, -1));
+                            jPanel16.add(saliente1, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 50, 580, -1));
 
                             jLabel184.setBackground(new java.awt.Color(255, 255, 255));
                             jLabel184.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
                             jLabel184.setForeground(new java.awt.Color(255, 255, 255));
                             jLabel184.setText(">CVS Entrante:");
-                            jPanel16.add(jLabel184, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 70, -1, -1));
+                            jPanel16.add(jLabel184, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 80, -1, -1));
 
                             jLabel185.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
                             jLabel185.setForeground(new java.awt.Color(255, 255, 255));
                             jLabel185.setText(">Turno:");
                             jPanel16.add(jLabel185, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 70, -1, -1));
 
-                            jLabel186.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-                            jLabel186.setForeground(new java.awt.Color(255, 255, 255));
-                            jLabel186.setText("00:00hrs");
-                            jPanel16.add(jLabel186, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 70, -1, -1));
+                            turno.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+                            turno.setForeground(new java.awt.Color(255, 255, 255));
+                            turno.setText("00:00hrs");
+                            jPanel16.add(turno, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 70, -1, -1));
 
                             entrante1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
                             entrante1.setForeground(new java.awt.Color(255, 255, 255));
                             entrante1.setText("-");
-                            jPanel16.add(entrante1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1030, 70, 160, -1));
+                            jPanel16.add(entrante1, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 80, 560, -1));
 
                             jLabel19.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
                             jLabel19.setForeground(new java.awt.Color(255, 51, 51));
@@ -1330,12 +1330,10 @@ public class Relevar extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel179;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel180;
-    private javax.swing.JLabel jLabel181;
     private javax.swing.JLabel jLabel182;
     private javax.swing.JLabel jLabel183;
     private javax.swing.JLabel jLabel184;
     private javax.swing.JLabel jLabel185;
-    private javax.swing.JLabel jLabel186;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel21;
@@ -1453,10 +1451,12 @@ public class Relevar extends javax.swing.JFrame {
     private javax.swing.JToggleButton jToggleButton7;
     private javax.swing.JToggleButton jToggleButton8;
     private javax.swing.JToggleButton jToggleButton9;
+    private javax.swing.JLabel kmf;
     private javax.swing.JLabel kmi;
     private javax.swing.JLabel kmi1;
     private javax.swing.JLabel saliente;
     private javax.swing.JLabel saliente1;
+    private javax.swing.JLabel turno;
     private javax.swing.JComboBox<Cliente> victor;
     // End of variables declaration//GEN-END:variables
 }
