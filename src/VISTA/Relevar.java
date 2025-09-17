@@ -27,6 +27,7 @@ import javax.swing.*;
  */
 public class Relevar extends javax.swing.JFrame {
 
+    private boolean marcado = true;
     Connection con = Conexiones.Conexion();
     ResultSet rs;
     int idChofer, idMedico, idEnfermero, idvictor;
@@ -110,7 +111,7 @@ public class Relevar extends javax.swing.JFrame {
 
     public Relevar(int idtrip) {
         this.idtrip = idtrip;
-        
+
         initComponents();
         this.setLocationRelativeTo(null);
         setSize(1570, 860);
@@ -118,9 +119,9 @@ public class Relevar extends javax.swing.JFrame {
         LocalDate hoy = LocalDate.now();
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String fechaActual2 = hoy.format(formato);
-        CLASES.Relevar.Relevo(con, Victor, anterior1, saliente1, entrante1, kmi1, kmf, turno, idtrip);
+        CLASES.Relevar.Relevo(con, Victor, anterior1, saliente1, entrante1, kmi1, kmf, turno, serie, idtrip);
         Fecha1.setText(fechaActual2);
-        
+
     }
 
     /**
@@ -230,33 +231,33 @@ public class Relevar extends javax.swing.JFrame {
         entrante1 = new javax.swing.JLabel();
         jLabel19 = new javax.swing.JLabel();
         Victor = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
+        activado = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        Deshabilitar = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
-        jPanel3 = new javax.swing.JPanel();
+        Marcarext = new javax.swing.JPanel();
         try {
             Marca = new PanelImagen("/IMAGENES/Marca.png");
-            jToggleButton33 = new javax.swing.JToggleButton();
-            jToggleButton34 = new javax.swing.JToggleButton();
-            jToggleButton35 = new javax.swing.JToggleButton();
-            jToggleButton36 = new javax.swing.JToggleButton();
-            jToggleButton37 = new javax.swing.JToggleButton();
-            jToggleButton38 = new javax.swing.JToggleButton();
-            jToggleButton39 = new javax.swing.JToggleButton();
-            jToggleButton40 = new javax.swing.JToggleButton();
-            jToggleButton41 = new javax.swing.JToggleButton();
+            jToggleButton46 = new javax.swing.JToggleButton();
+            jToggleButton47 = new javax.swing.JToggleButton();
+            jToggleButton48 = new javax.swing.JToggleButton();
+            jToggleButton49 = new javax.swing.JToggleButton();
+            jToggleButton50 = new javax.swing.JToggleButton();
+            jToggleButton51 = new javax.swing.JToggleButton();
+            jToggleButton52 = new javax.swing.JToggleButton();
+            jToggleButton53 = new javax.swing.JToggleButton();
+            jToggleButton56 = new javax.swing.JToggleButton();
             jLabel8 = new javax.swing.JLabel();
             jPanel4 = new javax.swing.JPanel();
             try {
-                jPanel15 = new PanelImagen("/IMAGENES/marcanivel.png");
-                jToggleButton42 = new javax.swing.JToggleButton();
-                jToggleButton43 = new javax.swing.JToggleButton();
-                jToggleButton44 = new javax.swing.JToggleButton();
+                extint = new PanelImagen("/IMAGENES/marcanivel.png");
                 jTextField2 = new javax.swing.JTextField();
                 jLabel16 = new javax.swing.JLabel();
                 jLabel17 = new javax.swing.JLabel();
-                jLabel18 = new javax.swing.JLabel();
+                serie = new javax.swing.JLabel();
+                jToggleButton33 = new javax.swing.JToggleButton();
+                jToggleButton34 = new javax.swing.JToggleButton();
+                jToggleButton35 = new javax.swing.JToggleButton();
                 try {
                     jPanel12 = new PanelDibujo("/IMAGENES/nivel.png");
                     jLabel10 = new javax.swing.JLabel();
@@ -272,21 +273,20 @@ public class Relevar extends javax.swing.JFrame {
                         jTextArea1 = new javax.swing.JTextArea();
                         jPanel8 = new javax.swing.JPanel();
                         jPanel11 = new javax.swing.JPanel();
-                        jPanel13 = new javax.swing.JPanel();
+                        lavadero = new javax.swing.JPanel();
                         jLabel11 = new javax.swing.JLabel();
                         jLabel12 = new javax.swing.JLabel();
-                        jToggleButton1 = new javax.swing.JToggleButton();
-                        jPanel14 = new javax.swing.JPanel();
+                        jToggleButton54 = new javax.swing.JToggleButton();
+                        ypf = new javax.swing.JPanel();
                         jLabel13 = new javax.swing.JLabel();
                         jLabel14 = new javax.swing.JLabel();
                         jTextField1 = new javax.swing.JTextField();
                         jLabel15 = new javax.swing.JLabel();
-                        jToggleButton2 = new javax.swing.JToggleButton();
+                        jToggleButton55 = new javax.swing.JToggleButton();
                         try {
                             Funciona = new PanelImagen("/IMAGENES/Funciona.png");
                             jLabel67 = new javax.swing.JLabel();
                             jToggleButton18 = new javax.swing.JToggleButton();
-                            jToggleButton19 = new javax.swing.JToggleButton();
                             jToggleButton20 = new javax.swing.JToggleButton();
                             jToggleButton21 = new javax.swing.JToggleButton();
                             jToggleButton22 = new javax.swing.JToggleButton();
@@ -300,6 +300,7 @@ public class Relevar extends javax.swing.JFrame {
                             jToggleButton30 = new javax.swing.JToggleButton();
                             jToggleButton31 = new javax.swing.JToggleButton();
                             jToggleButton32 = new javax.swing.JToggleButton();
+                            jToggleButton45 = new javax.swing.JToggleButton();
 
                             jPanel5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -712,6 +713,7 @@ public class Relevar extends javax.swing.JFrame {
                             jPanel2.add(entrante, new org.netbeans.lib.awtextra.AbsoluteConstraints(653, 74, 262, -1));
 
                             setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+                            setTitle("Relevar");
                             setMaximumSize(new java.awt.Dimension(1550, 840));
                             setMinimumSize(new java.awt.Dimension(1550, 840));
                             setUndecorated(true);
@@ -815,14 +817,24 @@ public class Relevar extends javax.swing.JFrame {
                             Victor.setText("-");
                             jPanel16.add(Victor, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 20, 40, -1));
 
-                            jButton2.setText("Todos si");
-                            jPanel16.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1420, 70, 90, -1));
+                            activado.setText("Todos si");
+                            activado.addActionListener(new java.awt.event.ActionListener() {
+                                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                    activadoActionPerformed(evt);
+                                }
+                            });
+                            jPanel16.add(activado, new org.netbeans.lib.awtextra.AbsoluteConstraints(1420, 70, 90, -1));
 
                             jButton3.setText("Guardar");
                             jPanel16.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(1430, 10, -1, -1));
 
-                            jButton1.setText("Todos no");
-                            jPanel16.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1310, 70, 90, -1));
+                            Deshabilitar.setText("Todos no");
+                            Deshabilitar.addActionListener(new java.awt.event.ActionListener() {
+                                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                    DeshabilitarActionPerformed(evt);
+                                }
+                            });
+                            jPanel16.add(Deshabilitar, new org.netbeans.lib.awtextra.AbsoluteConstraints(1310, 70, 90, -1));
 
                             jButton4.setText("Volver");
                             jButton4.addActionListener(new java.awt.event.ActionListener() {
@@ -834,10 +846,10 @@ public class Relevar extends javax.swing.JFrame {
 
                             Fondo.add(jPanel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 11, 1520, 108));
 
-                            jPanel3.setBackground(new java.awt.Color(0, 0, 0));
-                            jPanel3.setMaximumSize(new java.awt.Dimension(600, 281));
-                            jPanel3.setMinimumSize(new java.awt.Dimension(600, 281));
-                            jPanel3.setPreferredSize(new java.awt.Dimension(600, 281));
+                            Marcarext.setBackground(new java.awt.Color(0, 0, 0));
+                            Marcarext.setMaximumSize(new java.awt.Dimension(600, 281));
+                            Marcarext.setMinimumSize(new java.awt.Dimension(600, 281));
+                            Marcarext.setPreferredSize(new java.awt.Dimension(600, 281));
 
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -846,51 +858,132 @@ public class Relevar extends javax.swing.JFrame {
                         Marca.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
                         Marca.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-                        jToggleButton33.setText("NO");
-                        Marca.add(jToggleButton33, new org.netbeans.lib.awtextra.AbsoluteConstraints(189, 10, 70, -1));
+                        jToggleButton46.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/NO.png"))); // NOI18N
+                        jToggleButton46.setToolTipText("");
+                        jToggleButton46.setBorderPainted(false);
+                        jToggleButton46.setContentAreaFilled(false);
+                        jToggleButton46.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+                        jToggleButton46.setDisabledIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+                        jToggleButton46.setDisabledSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+                        jToggleButton46.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/NO.png"))); // NOI18N
+                        jToggleButton46.setRolloverSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+                        jToggleButton46.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+                        Marca.add(jToggleButton46, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 10, 70, 30));
 
-                        jToggleButton34.setText("NO");
-                        Marca.add(jToggleButton34, new org.netbeans.lib.awtextra.AbsoluteConstraints(189, 70, 70, -1));
+                        jToggleButton47.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/NO.png"))); // NOI18N
+                        jToggleButton47.setToolTipText("");
+                        jToggleButton47.setBorderPainted(false);
+                        jToggleButton47.setContentAreaFilled(false);
+                        jToggleButton47.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+                        jToggleButton47.setDisabledIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+                        jToggleButton47.setDisabledSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+                        jToggleButton47.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/NO.png"))); // NOI18N
+                        jToggleButton47.setRolloverSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+                        jToggleButton47.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+                        Marca.add(jToggleButton47, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 70, 70, 30));
 
-                        jToggleButton35.setText("NO");
-                        Marca.add(jToggleButton35, new org.netbeans.lib.awtextra.AbsoluteConstraints(189, 130, 70, -1));
+                        jToggleButton48.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/NO.png"))); // NOI18N
+                        jToggleButton48.setToolTipText("");
+                        jToggleButton48.setBorderPainted(false);
+                        jToggleButton48.setContentAreaFilled(false);
+                        jToggleButton48.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+                        jToggleButton48.setDisabledIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+                        jToggleButton48.setDisabledSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+                        jToggleButton48.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/NO.png"))); // NOI18N
+                        jToggleButton48.setRolloverSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+                        jToggleButton48.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+                        Marca.add(jToggleButton48, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 140, 80, 30));
 
-                        jToggleButton36.setText("NO");
-                        Marca.add(jToggleButton36, new org.netbeans.lib.awtextra.AbsoluteConstraints(189, 190, 70, -1));
+                        jToggleButton49.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/NO.png"))); // NOI18N
+                        jToggleButton49.setToolTipText("");
+                        jToggleButton49.setBorderPainted(false);
+                        jToggleButton49.setContentAreaFilled(false);
+                        jToggleButton49.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+                        jToggleButton49.setDisabledIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+                        jToggleButton49.setDisabledSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+                        jToggleButton49.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/NO.png"))); // NOI18N
+                        jToggleButton49.setRolloverSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+                        jToggleButton49.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+                        Marca.add(jToggleButton49, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 190, 70, 30));
 
-                        jToggleButton37.setText("NO");
-                        Marca.add(jToggleButton37, new org.netbeans.lib.awtextra.AbsoluteConstraints(489, 10, 70, -1));
+                        jToggleButton50.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/NO.png"))); // NOI18N
+                        jToggleButton50.setToolTipText("");
+                        jToggleButton50.setBorderPainted(false);
+                        jToggleButton50.setContentAreaFilled(false);
+                        jToggleButton50.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+                        jToggleButton50.setDisabledIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+                        jToggleButton50.setDisabledSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+                        jToggleButton50.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/NO.png"))); // NOI18N
+                        jToggleButton50.setRolloverSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+                        jToggleButton50.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+                        Marca.add(jToggleButton50, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 10, 70, 30));
 
-                        jToggleButton38.setText("NO");
-                        Marca.add(jToggleButton38, new org.netbeans.lib.awtextra.AbsoluteConstraints(489, 70, 70, -1));
+                        jToggleButton51.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/NO.png"))); // NOI18N
+                        jToggleButton51.setToolTipText("");
+                        jToggleButton51.setBorderPainted(false);
+                        jToggleButton51.setContentAreaFilled(false);
+                        jToggleButton51.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+                        jToggleButton51.setDisabledIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+                        jToggleButton51.setDisabledSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+                        jToggleButton51.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/NO.png"))); // NOI18N
+                        jToggleButton51.setRolloverSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+                        jToggleButton51.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+                        Marca.add(jToggleButton51, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 70, 70, 30));
 
-                        jToggleButton39.setText("NO");
-                        Marca.add(jToggleButton39, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 140, 60, -1));
+                        jToggleButton52.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/NO.png"))); // NOI18N
+                        jToggleButton52.setToolTipText("");
+                        jToggleButton52.setBorderPainted(false);
+                        jToggleButton52.setContentAreaFilled(false);
+                        jToggleButton52.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+                        jToggleButton52.setDisabledIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+                        jToggleButton52.setDisabledSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+                        jToggleButton52.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/NO.png"))); // NOI18N
+                        jToggleButton52.setRolloverSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+                        jToggleButton52.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+                        Marca.add(jToggleButton52, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 130, 70, 30));
 
-                        jToggleButton40.setText("NO");
-                        Marca.add(jToggleButton40, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 190, 70, -1));
+                        jToggleButton53.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/NO.png"))); // NOI18N
+                        jToggleButton53.setToolTipText("");
+                        jToggleButton53.setBorderPainted(false);
+                        jToggleButton53.setContentAreaFilled(false);
+                        jToggleButton53.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+                        jToggleButton53.setDisabledIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+                        jToggleButton53.setDisabledSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+                        jToggleButton53.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/NO.png"))); // NOI18N
+                        jToggleButton53.setRolloverSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+                        jToggleButton53.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+                        Marca.add(jToggleButton53, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 190, 70, 30));
 
-                        jToggleButton41.setText("NO");
-                        Marca.add(jToggleButton41, new org.netbeans.lib.awtextra.AbsoluteConstraints(489, 140, 70, -1));
+                        jToggleButton56.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/NO.png"))); // NOI18N
+                        jToggleButton56.setToolTipText("");
+                        jToggleButton56.setBorderPainted(false);
+                        jToggleButton56.setContentAreaFilled(false);
+                        jToggleButton56.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+                        jToggleButton56.setDisabledIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+                        jToggleButton56.setDisabledSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+                        jToggleButton56.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/NO.png"))); // NOI18N
+                        jToggleButton56.setRolloverSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+                        jToggleButton56.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+                        Marca.add(jToggleButton56, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 140, 80, 30));
 
                         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
                         jLabel8.setForeground(new java.awt.Color(255, 255, 255));
                         jLabel8.setText(">MARCAR (Extravio, deterioro, pérdida o mal funcionamiento)");
 
-                        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-                        jPanel3.setLayout(jPanel3Layout);
-                        jPanel3Layout.setHorizontalGroup(
-                            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
+                        javax.swing.GroupLayout MarcarextLayout = new javax.swing.GroupLayout(Marcarext);
+                        Marcarext.setLayout(MarcarextLayout);
+                        MarcarextLayout.setHorizontalGroup(
+                            MarcarextLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(MarcarextLayout.createSequentialGroup()
                                 .addContainerGap()
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(MarcarextLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(Marca, javax.swing.GroupLayout.PREFERRED_SIZE, 574, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel8))
                                 .addContainerGap(16, Short.MAX_VALUE))
                         );
-                        jPanel3Layout.setVerticalGroup(
-                            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        MarcarextLayout.setVerticalGroup(
+                            MarcarextLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, MarcarextLayout.createSequentialGroup()
                                 .addContainerGap()
                                 .addComponent(jLabel8)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -898,7 +991,7 @@ public class Relevar extends javax.swing.JFrame {
                                 .addContainerGap())
                         );
 
-                        Fondo.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 560, -1, 280));
+                        Fondo.add(Marcarext, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 560, -1, 280));
 
                         jPanel4.setBackground(new java.awt.Color(0, 0, 0));
                         jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -907,70 +1000,97 @@ public class Relevar extends javax.swing.JFrame {
                         e.printStackTrace();
                         JOptionPane.showMessageDialog(this, "No se pudo cargar la imagen", "Error", JOptionPane.ERROR_MESSAGE);
                     }
-                    jPanel15.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-
-                    jToggleButton42.setText("No");
-
-                    jToggleButton43.setText("No");
-
-                    jToggleButton44.setText("No");
+                    extint.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
                     jLabel16.setText("Nº Serie:");
 
                     jLabel17.setText("Cantidad");
 
-                    jLabel18.setText("jLabel18");
+                    serie.setText("jLabel18");
 
-                    javax.swing.GroupLayout jPanel15Layout = new javax.swing.GroupLayout(jPanel15);
-                    jPanel15.setLayout(jPanel15Layout);
-                    jPanel15Layout.setHorizontalGroup(
-                        jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel15Layout.createSequentialGroup()
-                            .addGap(251, 251, 251)
-                            .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jToggleButton43, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jToggleButton42, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(jPanel15Layout.createSequentialGroup()
-                                    .addGap(93, 93, 93)
-                                    .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(jPanel15Layout.createSequentialGroup()
+                    jToggleButton33.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/NO.png"))); // NOI18N
+                    jToggleButton33.setToolTipText("");
+                    jToggleButton33.setBorderPainted(false);
+                    jToggleButton33.setContentAreaFilled(false);
+                    jToggleButton33.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+                    jToggleButton33.setDisabledIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+                    jToggleButton33.setDisabledSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+                    jToggleButton33.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/NO.png"))); // NOI18N
+                    jToggleButton33.setRolloverSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+                    jToggleButton33.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+
+                    jToggleButton34.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/NO.png"))); // NOI18N
+                    jToggleButton34.setToolTipText("");
+                    jToggleButton34.setBorderPainted(false);
+                    jToggleButton34.setContentAreaFilled(false);
+                    jToggleButton34.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+                    jToggleButton34.setDisabledIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+                    jToggleButton34.setDisabledSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+                    jToggleButton34.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/NO.png"))); // NOI18N
+                    jToggleButton34.setRolloverSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+                    jToggleButton34.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+
+                    jToggleButton35.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/NO.png"))); // NOI18N
+                    jToggleButton35.setToolTipText("");
+                    jToggleButton35.setBorderPainted(false);
+                    jToggleButton35.setContentAreaFilled(false);
+                    jToggleButton35.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+                    jToggleButton35.setDisabledIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+                    jToggleButton35.setDisabledSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+                    jToggleButton35.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/NO.png"))); // NOI18N
+                    jToggleButton35.setRolloverSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+                    jToggleButton35.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+
+                    javax.swing.GroupLayout extintLayout = new javax.swing.GroupLayout(extint);
+                    extint.setLayout(extintLayout);
+                    extintLayout.setHorizontalGroup(
+                        extintLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(extintLayout.createSequentialGroup()
+                            .addGap(223, 223, 223)
+                            .addGroup(extintLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(extintLayout.createSequentialGroup()
+                                    .addComponent(jToggleButton35, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jToggleButton33, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(extintLayout.createSequentialGroup()
+                                    .addComponent(jToggleButton34, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(103, 103, 103)
+                                    .addGroup(extintLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(extintLayout.createSequentialGroup()
                                             .addComponent(jLabel17)
                                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                             .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGroup(jPanel15Layout.createSequentialGroup()
+                                        .addGroup(extintLayout.createSequentialGroup()
                                             .addComponent(jLabel16)
                                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                            .addComponent(jLabel18)))
-                                    .addContainerGap(13, Short.MAX_VALUE))
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel15Layout.createSequentialGroup()
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jToggleButton44, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(32, 32, 32))))
-                    );
-                    jPanel15Layout.setVerticalGroup(
-                        jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel15Layout.createSequentialGroup()
-                            .addGap(23, 23, 23)
-                            .addComponent(jToggleButton42)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
-                            .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jToggleButton43)
-                                .addComponent(jToggleButton44))
+                                            .addComponent(serie)))
+                                    .addGap(0, 3, Short.MAX_VALUE)))
                             .addContainerGap())
-                        .addGroup(jPanel15Layout.createSequentialGroup()
-                            .addGap(18, 18, 18)
-                            .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jLabel17)
-                                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGap(14, 14, 14)
-                            .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jLabel16)
-                                .addComponent(jLabel18))
-                            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    );
+                    extintLayout.setVerticalGroup(
+                        extintLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(extintLayout.createSequentialGroup()
+                            .addGroup(extintLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(extintLayout.createSequentialGroup()
+                                    .addGap(18, 18, 18)
+                                    .addGroup(extintLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jLabel17)
+                                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGap(14, 14, 14)
+                                    .addGroup(extintLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jLabel16)
+                                        .addComponent(serie)))
+                                .addGroup(extintLayout.createSequentialGroup()
+                                    .addGap(20, 20, 20)
+                                    .addComponent(jToggleButton34, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
+                            .addGroup(extintLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jToggleButton33, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jToggleButton35, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addContainerGap())
                     );
 
-                    jPanel4.add(jPanel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 165, 580, -1));
+                    jPanel4.add(extint, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 165, 580, -1));
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -1090,45 +1210,56 @@ public class Relevar extends javax.swing.JFrame {
             jPanel11.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
             jPanel8.add(jPanel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 11, -1, 100));
 
-            jPanel13.setBackground(new java.awt.Color(255, 255, 255));
+            lavadero.setBackground(new java.awt.Color(255, 255, 255));
 
             jLabel11.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
             jLabel11.setText("LAVADERO");
 
+            jLabel12.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
             jLabel12.setText("Lavado Unidad");
 
-            jToggleButton1.setText("NO");
+            jToggleButton54.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/NO.png"))); // NOI18N
+            jToggleButton54.setToolTipText("");
+            jToggleButton54.setBorderPainted(false);
+            jToggleButton54.setContentAreaFilled(false);
+            jToggleButton54.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+            jToggleButton54.setDisabledIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+            jToggleButton54.setDisabledSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+            jToggleButton54.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/NO.png"))); // NOI18N
+            jToggleButton54.setRolloverSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+            jToggleButton54.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
 
-            javax.swing.GroupLayout jPanel13Layout = new javax.swing.GroupLayout(jPanel13);
-            jPanel13.setLayout(jPanel13Layout);
-            jPanel13Layout.setHorizontalGroup(
-                jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel13Layout.createSequentialGroup()
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            javax.swing.GroupLayout lavaderoLayout = new javax.swing.GroupLayout(lavadero);
+            lavadero.setLayout(lavaderoLayout);
+            lavaderoLayout.setHorizontalGroup(
+                lavaderoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, lavaderoLayout.createSequentialGroup()
+                    .addContainerGap(108, Short.MAX_VALUE)
                     .addComponent(jLabel11)
                     .addGap(105, 105, 105))
-                .addGroup(jPanel13Layout.createSequentialGroup()
+                .addGroup(lavaderoLayout.createSequentialGroup()
                     .addContainerGap()
                     .addComponent(jLabel12)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 82, Short.MAX_VALUE)
-                    .addComponent(jToggleButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jToggleButton54, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addContainerGap())
             );
-            jPanel13Layout.setVerticalGroup(
-                jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel13Layout.createSequentialGroup()
+            lavaderoLayout.setVerticalGroup(
+                lavaderoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(lavaderoLayout.createSequentialGroup()
                     .addContainerGap()
-                    .addComponent(jLabel11)
-                    .addGap(18, 18, 18)
-                    .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jToggleButton1)
-                        .addComponent(jLabel12))
-                    .addContainerGap(33, Short.MAX_VALUE))
+                    .addGroup(lavaderoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jToggleButton54, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(lavaderoLayout.createSequentialGroup()
+                            .addComponent(jLabel11)
+                            .addGap(18, 18, 18)
+                            .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addContainerGap(30, Short.MAX_VALUE))
             );
 
-            jPanel8.add(jPanel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 280, 100));
+            jPanel8.add(lavadero, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 280, 100));
 
-            jPanel14.setBackground(new java.awt.Color(255, 255, 255));
+            ypf.setBackground(new java.awt.Color(255, 255, 255));
 
             jLabel13.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
             jLabel13.setText("YPF RUTA");
@@ -1137,46 +1268,55 @@ public class Relevar extends javax.swing.JFrame {
 
             jLabel15.setText("Entrega a Guarda Siguiente:");
 
-            jToggleButton2.setText("NO");
+            jToggleButton55.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/NO.png"))); // NOI18N
+            jToggleButton55.setToolTipText("");
+            jToggleButton55.setBorderPainted(false);
+            jToggleButton55.setContentAreaFilled(false);
+            jToggleButton55.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+            jToggleButton55.setDisabledIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+            jToggleButton55.setDisabledSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+            jToggleButton55.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/NO.png"))); // NOI18N
+            jToggleButton55.setRolloverSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+            jToggleButton55.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
 
-            javax.swing.GroupLayout jPanel14Layout = new javax.swing.GroupLayout(jPanel14);
-            jPanel14.setLayout(jPanel14Layout);
-            jPanel14Layout.setHorizontalGroup(
-                jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel14Layout.createSequentialGroup()
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            javax.swing.GroupLayout ypfLayout = new javax.swing.GroupLayout(ypf);
+            ypf.setLayout(ypfLayout);
+            ypfLayout.setHorizontalGroup(
+                ypfLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ypfLayout.createSequentialGroup()
+                    .addContainerGap(107, Short.MAX_VALUE)
                     .addComponent(jLabel13)
                     .addGap(104, 104, 104))
-                .addGroup(jPanel14Layout.createSequentialGroup()
+                .addGroup(ypfLayout.createSequentialGroup()
                     .addContainerGap()
-                    .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel14Layout.createSequentialGroup()
+                    .addGroup(ypfLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(ypfLayout.createSequentialGroup()
                             .addComponent(jLabel14)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(jTextField1))
-                        .addGroup(jPanel14Layout.createSequentialGroup()
+                        .addGroup(ypfLayout.createSequentialGroup()
                             .addComponent(jLabel15)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 77, Short.MAX_VALUE)
-                            .addComponent(jToggleButton2)))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jToggleButton55, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addContainerGap())
             );
-            jPanel14Layout.setVerticalGroup(
-                jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel14Layout.createSequentialGroup()
+            ypfLayout.setVerticalGroup(
+                ypfLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(ypfLayout.createSequentialGroup()
                     .addContainerGap()
                     .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addGroup(ypfLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel14)
                         .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                    .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel15)
-                        .addComponent(jToggleButton2))
-                    .addContainerGap(12, Short.MAX_VALUE))
+                    .addGroup(ypfLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jToggleButton55, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             );
 
-            jPanel8.add(jPanel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 10, 280, 100));
+            jPanel8.add(ypf, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 10, 280, 100));
 
             Fondo.add(jPanel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 130, 600, 120));
 
@@ -1194,50 +1334,185 @@ public class Relevar extends javax.swing.JFrame {
         jLabel67.setText("Funciona");
         Funciona.add(jLabel67, new org.netbeans.lib.awtextra.AbsoluteConstraints(138, 1, -1, 20));
 
-        jToggleButton18.setText("NO");
-        Funciona.add(jToggleButton18, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 30, 89, -1));
+        jToggleButton18.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/NO.png"))); // NOI18N
+        jToggleButton18.setToolTipText("");
+        jToggleButton18.setBorderPainted(false);
+        jToggleButton18.setContentAreaFilled(false);
+        jToggleButton18.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jToggleButton18.setDisabledIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+        jToggleButton18.setDisabledSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+        jToggleButton18.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/NO.png"))); // NOI18N
+        jToggleButton18.setRolloverSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+        jToggleButton18.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+        Funciona.add(jToggleButton18, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 670, 70, 30));
 
-        jToggleButton19.setText("NO");
-        Funciona.add(jToggleButton19, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 80, 89, -1));
+        jToggleButton20.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/NO.png"))); // NOI18N
+        jToggleButton20.setToolTipText("");
+        jToggleButton20.setBorderPainted(false);
+        jToggleButton20.setContentAreaFilled(false);
+        jToggleButton20.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jToggleButton20.setDisabledIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+        jToggleButton20.setDisabledSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+        jToggleButton20.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/NO.png"))); // NOI18N
+        jToggleButton20.setRolloverSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+        jToggleButton20.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+        Funciona.add(jToggleButton20, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 70, 70, -1));
 
-        jToggleButton20.setText("NO");
-        Funciona.add(jToggleButton20, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 120, 89, -1));
+        jToggleButton21.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/NO.png"))); // NOI18N
+        jToggleButton21.setToolTipText("");
+        jToggleButton21.setBorderPainted(false);
+        jToggleButton21.setContentAreaFilled(false);
+        jToggleButton21.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jToggleButton21.setDisabledIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+        jToggleButton21.setDisabledSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+        jToggleButton21.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/NO.png"))); // NOI18N
+        jToggleButton21.setRolloverSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+        jToggleButton21.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+        Funciona.add(jToggleButton21, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 120, 70, 30));
 
-        jToggleButton21.setText("NO");
-        Funciona.add(jToggleButton21, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 170, 89, -1));
+        jToggleButton22.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/NO.png"))); // NOI18N
+        jToggleButton22.setToolTipText("");
+        jToggleButton22.setBorderPainted(false);
+        jToggleButton22.setContentAreaFilled(false);
+        jToggleButton22.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jToggleButton22.setDisabledIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+        jToggleButton22.setDisabledSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+        jToggleButton22.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/NO.png"))); // NOI18N
+        jToggleButton22.setRolloverSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+        jToggleButton22.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+        Funciona.add(jToggleButton22, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 160, 70, 40));
 
-        jToggleButton22.setText("NO");
-        Funciona.add(jToggleButton22, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 210, 89, -1));
+        jToggleButton23.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/NO.png"))); // NOI18N
+        jToggleButton23.setToolTipText("");
+        jToggleButton23.setBorderPainted(false);
+        jToggleButton23.setContentAreaFilled(false);
+        jToggleButton23.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jToggleButton23.setDisabledIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+        jToggleButton23.setDisabledSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+        jToggleButton23.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/NO.png"))); // NOI18N
+        jToggleButton23.setRolloverSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+        jToggleButton23.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+        Funciona.add(jToggleButton23, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 210, 70, 30));
 
-        jToggleButton23.setText("NO");
-        Funciona.add(jToggleButton23, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 260, 89, -1));
+        jToggleButton24.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/NO.png"))); // NOI18N
+        jToggleButton24.setToolTipText("");
+        jToggleButton24.setBorderPainted(false);
+        jToggleButton24.setContentAreaFilled(false);
+        jToggleButton24.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jToggleButton24.setDisabledIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+        jToggleButton24.setDisabledSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+        jToggleButton24.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/NO.png"))); // NOI18N
+        jToggleButton24.setRolloverSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+        jToggleButton24.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+        Funciona.add(jToggleButton24, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 250, 70, 40));
 
-        jToggleButton24.setText("NO");
-        Funciona.add(jToggleButton24, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 310, 89, -1));
+        jToggleButton25.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/NO.png"))); // NOI18N
+        jToggleButton25.setToolTipText("");
+        jToggleButton25.setBorderPainted(false);
+        jToggleButton25.setContentAreaFilled(false);
+        jToggleButton25.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jToggleButton25.setDisabledIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+        jToggleButton25.setDisabledSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+        jToggleButton25.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/NO.png"))); // NOI18N
+        jToggleButton25.setRolloverSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+        jToggleButton25.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+        Funciona.add(jToggleButton25, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 300, 70, 30));
 
-        jToggleButton25.setText("NO");
-        Funciona.add(jToggleButton25, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 350, 89, -1));
+        jToggleButton26.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/NO.png"))); // NOI18N
+        jToggleButton26.setToolTipText("");
+        jToggleButton26.setBorderPainted(false);
+        jToggleButton26.setContentAreaFilled(false);
+        jToggleButton26.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jToggleButton26.setDisabledIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+        jToggleButton26.setDisabledSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+        jToggleButton26.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/NO.png"))); // NOI18N
+        jToggleButton26.setRolloverSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+        jToggleButton26.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+        Funciona.add(jToggleButton26, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 340, 70, 40));
 
-        jToggleButton26.setText("NO");
-        Funciona.add(jToggleButton26, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 400, 89, -1));
+        jToggleButton27.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/NO.png"))); // NOI18N
+        jToggleButton27.setToolTipText("");
+        jToggleButton27.setBorderPainted(false);
+        jToggleButton27.setContentAreaFilled(false);
+        jToggleButton27.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jToggleButton27.setDisabledIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+        jToggleButton27.setDisabledSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+        jToggleButton27.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/NO.png"))); // NOI18N
+        jToggleButton27.setRolloverSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+        jToggleButton27.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+        Funciona.add(jToggleButton27, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 390, 70, 40));
 
-        jToggleButton27.setText("NO");
-        Funciona.add(jToggleButton27, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 440, 89, -1));
+        jToggleButton28.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/NO.png"))); // NOI18N
+        jToggleButton28.setToolTipText("");
+        jToggleButton28.setBorderPainted(false);
+        jToggleButton28.setContentAreaFilled(false);
+        jToggleButton28.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jToggleButton28.setDisabledIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+        jToggleButton28.setDisabledSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+        jToggleButton28.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/NO.png"))); // NOI18N
+        jToggleButton28.setRolloverSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+        jToggleButton28.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+        Funciona.add(jToggleButton28, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 440, 70, 30));
 
-        jToggleButton28.setText("NO");
-        Funciona.add(jToggleButton28, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 490, 89, -1));
+        jToggleButton29.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/NO.png"))); // NOI18N
+        jToggleButton29.setToolTipText("");
+        jToggleButton29.setBorderPainted(false);
+        jToggleButton29.setContentAreaFilled(false);
+        jToggleButton29.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jToggleButton29.setDisabledIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+        jToggleButton29.setDisabledSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+        jToggleButton29.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/NO.png"))); // NOI18N
+        jToggleButton29.setRolloverSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+        jToggleButton29.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+        Funciona.add(jToggleButton29, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 480, 70, 40));
 
-        jToggleButton29.setText("NO");
-        Funciona.add(jToggleButton29, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 530, 89, -1));
+        jToggleButton30.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/NO.png"))); // NOI18N
+        jToggleButton30.setToolTipText("");
+        jToggleButton30.setBorderPainted(false);
+        jToggleButton30.setContentAreaFilled(false);
+        jToggleButton30.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jToggleButton30.setDisabledIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+        jToggleButton30.setDisabledSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+        jToggleButton30.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/NO.png"))); // NOI18N
+        jToggleButton30.setRolloverSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+        jToggleButton30.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+        Funciona.add(jToggleButton30, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 530, 70, 30));
 
-        jToggleButton30.setText("NO");
-        Funciona.add(jToggleButton30, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 580, 89, -1));
+        jToggleButton31.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/NO.png"))); // NOI18N
+        jToggleButton31.setToolTipText("");
+        jToggleButton31.setBorderPainted(false);
+        jToggleButton31.setContentAreaFilled(false);
+        jToggleButton31.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jToggleButton31.setDisabledIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+        jToggleButton31.setDisabledSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+        jToggleButton31.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/NO.png"))); // NOI18N
+        jToggleButton31.setRolloverSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+        jToggleButton31.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+        Funciona.add(jToggleButton31, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 580, 70, 30));
 
-        jToggleButton31.setText("NO");
-        Funciona.add(jToggleButton31, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 630, 89, -1));
+        jToggleButton32.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/NO.png"))); // NOI18N
+        jToggleButton32.setToolTipText("");
+        jToggleButton32.setBorderPainted(false);
+        jToggleButton32.setContentAreaFilled(false);
+        jToggleButton32.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jToggleButton32.setDisabledIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+        jToggleButton32.setDisabledSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+        jToggleButton32.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/NO.png"))); // NOI18N
+        jToggleButton32.setRolloverSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+        jToggleButton32.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+        Funciona.add(jToggleButton32, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 620, 70, 40));
 
-        jToggleButton32.setText("NO");
-        Funciona.add(jToggleButton32, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 670, 89, -1));
+        jToggleButton45.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/NO.png"))); // NOI18N
+        jToggleButton45.setToolTipText("");
+        jToggleButton45.setBorderPainted(false);
+        jToggleButton45.setContentAreaFilled(false);
+        jToggleButton45.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jToggleButton45.setDisabledIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+        jToggleButton45.setDisabledSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+        jToggleButton45.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/NO.png"))); // NOI18N
+        jToggleButton45.setRolloverSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+        jToggleButton45.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/SI.png"))); // NOI18N
+        Funciona.add(jToggleButton45, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 30, 70, 30));
 
         Fondo.add(Funciona, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 130, -1, 710));
 
@@ -1257,6 +1532,73 @@ public class Relevar extends javax.swing.JFrame {
     private void BorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BorrarActionPerformed
 
     }//GEN-LAST:event_BorrarActionPerformed
+
+    private void DeshabilitarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeshabilitarActionPerformed
+
+        marcado = !marcado;
+
+        for (Component comp : Funciona.getComponents()) {
+            if (comp instanceof JToggleButton) {
+                ((JToggleButton) comp).setSelected(false);
+            }
+        }
+        
+        for (Component comp : Marca.getComponents()) {
+            if (comp instanceof JToggleButton) {
+                ((JToggleButton) comp).setSelected(false);
+            }
+        }
+        
+        for (Component comp : lavadero.getComponents()) {
+            if (comp instanceof JToggleButton) {
+                ((JToggleButton) comp).setSelected(false);
+            }
+        }
+        
+        for (Component comp : ypf.getComponents()) {
+            if (comp instanceof JToggleButton) {
+                ((JToggleButton) comp).setSelected(false);
+            }
+        }
+        
+        for (Component comp : extint.getComponents()) {
+            if (comp instanceof JToggleButton) {
+                ((JToggleButton) comp).setSelected(false);
+            }
+        }
+    }//GEN-LAST:event_DeshabilitarActionPerformed
+
+    private void activadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_activadoActionPerformed
+        for (Component comp : Funciona.getComponents()) {
+            if (comp instanceof JToggleButton) {
+                ((JToggleButton) comp).setSelected(true);
+            }
+        }
+        
+        for (Component comp : Marca.getComponents()) {
+            if (comp instanceof JToggleButton) {
+                ((JToggleButton) comp).setSelected(true);
+            }
+        }
+        
+        for (Component comp : lavadero.getComponents()) {
+            if (comp instanceof JToggleButton) {
+                ((JToggleButton) comp).setSelected(true);
+            }
+        }
+        
+        for (Component comp : ypf.getComponents()) {
+            if (comp instanceof JToggleButton) {
+                ((JToggleButton) comp).setSelected(true);
+            }
+        }
+        
+        for (Component comp : extint.getComponents()) {
+            if (comp instanceof JToggleButton) {
+                ((JToggleButton) comp).setSelected(true);
+            }
+        }
+    }//GEN-LAST:event_activadoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1298,18 +1640,20 @@ public class Relevar extends javax.swing.JFrame {
     private javax.swing.JPanel Ambulancia;
     private javax.swing.JButton Borrar;
     private javax.swing.JButton Borrar2;
+    private javax.swing.JButton Deshabilitar;
     private javax.swing.JLabel Fecha;
     private javax.swing.JLabel Fecha1;
     private javax.swing.JPanel Fondo;
     private javax.swing.JPanel Funciona;
     private javax.swing.JPanel Marca;
+    private javax.swing.JPanel Marcarext;
     private javax.swing.JLabel Victor;
+    private javax.swing.JButton activado;
     private javax.swing.JLabel anterior;
     private javax.swing.JLabel anterior1;
     private javax.swing.JLabel entrante;
     private javax.swing.JLabel entrante1;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JPanel extint;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
@@ -1328,7 +1672,6 @@ public class Relevar extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel177;
     private javax.swing.JLabel jLabel178;
     private javax.swing.JLabel jLabel179;
-    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel180;
     private javax.swing.JLabel jLabel182;
     private javax.swing.JLabel jLabel183;
@@ -1392,12 +1735,8 @@ public class Relevar extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel12;
-    private javax.swing.JPanel jPanel13;
-    private javax.swing.JPanel jPanel14;
-    private javax.swing.JPanel jPanel15;
     private javax.swing.JPanel jPanel16;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
@@ -1407,7 +1746,6 @@ public class Relevar extends javax.swing.JFrame {
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
-    private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JToggleButton jToggleButton10;
     private javax.swing.JToggleButton jToggleButton11;
     private javax.swing.JToggleButton jToggleButton12;
@@ -1417,8 +1755,6 @@ public class Relevar extends javax.swing.JFrame {
     private javax.swing.JToggleButton jToggleButton16;
     private javax.swing.JToggleButton jToggleButton17;
     private javax.swing.JToggleButton jToggleButton18;
-    private javax.swing.JToggleButton jToggleButton19;
-    private javax.swing.JToggleButton jToggleButton2;
     private javax.swing.JToggleButton jToggleButton20;
     private javax.swing.JToggleButton jToggleButton21;
     private javax.swing.JToggleButton jToggleButton22;
@@ -1436,17 +1772,20 @@ public class Relevar extends javax.swing.JFrame {
     private javax.swing.JToggleButton jToggleButton33;
     private javax.swing.JToggleButton jToggleButton34;
     private javax.swing.JToggleButton jToggleButton35;
-    private javax.swing.JToggleButton jToggleButton36;
-    private javax.swing.JToggleButton jToggleButton37;
-    private javax.swing.JToggleButton jToggleButton38;
-    private javax.swing.JToggleButton jToggleButton39;
     private javax.swing.JToggleButton jToggleButton4;
-    private javax.swing.JToggleButton jToggleButton40;
-    private javax.swing.JToggleButton jToggleButton41;
-    private javax.swing.JToggleButton jToggleButton42;
-    private javax.swing.JToggleButton jToggleButton43;
-    private javax.swing.JToggleButton jToggleButton44;
+    private javax.swing.JToggleButton jToggleButton45;
+    private javax.swing.JToggleButton jToggleButton46;
+    private javax.swing.JToggleButton jToggleButton47;
+    private javax.swing.JToggleButton jToggleButton48;
+    private javax.swing.JToggleButton jToggleButton49;
     private javax.swing.JToggleButton jToggleButton5;
+    private javax.swing.JToggleButton jToggleButton50;
+    private javax.swing.JToggleButton jToggleButton51;
+    private javax.swing.JToggleButton jToggleButton52;
+    private javax.swing.JToggleButton jToggleButton53;
+    private javax.swing.JToggleButton jToggleButton54;
+    private javax.swing.JToggleButton jToggleButton55;
+    private javax.swing.JToggleButton jToggleButton56;
     private javax.swing.JToggleButton jToggleButton6;
     private javax.swing.JToggleButton jToggleButton7;
     private javax.swing.JToggleButton jToggleButton8;
@@ -1454,9 +1793,12 @@ public class Relevar extends javax.swing.JFrame {
     private javax.swing.JLabel kmf;
     private javax.swing.JLabel kmi;
     private javax.swing.JLabel kmi1;
+    private javax.swing.JPanel lavadero;
     private javax.swing.JLabel saliente;
     private javax.swing.JLabel saliente1;
+    private javax.swing.JLabel serie;
     private javax.swing.JLabel turno;
     private javax.swing.JComboBox<Cliente> victor;
+    private javax.swing.JPanel ypf;
     // End of variables declaration//GEN-END:variables
 }

@@ -42,7 +42,7 @@ GROUP BY idtripulacion;
     
     ;
      */
-    public static void Relevo(Connection conexion, JLabel victor, JLabel anterior, JLabel saliente, JLabel entrante, JLabel kmi, JLabel kmf, JLabel turno, int id) {
+    public static void Relevo(Connection conexion, JLabel victor, JLabel anterior, JLabel saliente, JLabel entrante, JLabel kmi, JLabel kmf, JLabel turno, JLabel serie, int id) {
         String sql = "SELECT SEC_TO_TIME(TIME_TO_SEC(CASE WHEN MAX(llegada) < MIN(salida) THEN ADDTIME(MAX(llegada), '24:00:00') ELSE MAX(llegada) END) - TIME_TO_SEC(MIN(salida))) AS tiempo_total FROM movimientos WHERE idtripulacion = ? GROUP BY idtripulacion;";
         try {
             PreparedStatement ps = conexion.prepareStatement(sql);
@@ -102,7 +102,7 @@ GROUP BY idtripulacion;
                 } catch (SQLException ex) {
                     JOptionPane.showMessageDialog(null, "ERROR: " + ex.getMessage());
                 }
-                
+
                 String sql6 = "SELECT CONCAT(e1.nombre, ' ', e1.apellido) AS cvs, CONCAT(e2.nombre, ' ', e2.apellido) AS medico, CONCAT(e3.nombre, ' ', e3.apellido) AS enfermero FROM tripulacion t JOIN empleado e1 ON t.cvs = e1.id_Empleado JOIN empleado e2 ON t.medico = e2.id_Empleado JOIN empleado e3 ON t.enfermero = e3.id_Empleado WHERE idtripulacion=? and e1.borrado=0 and e2.borrado=0 and e3.borrado=0;";
                 try {
                     PreparedStatement ps6 = conexion.prepareStatement(sql6);
@@ -121,6 +121,17 @@ GROUP BY idtripulacion;
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "ERROR: " + ex.getMessage());
         }
-
+        
+        String sql7 = "SELECT matafuego.numeroserie from tripulacion inner join ambulancia on tripulacion.idAmbulancia=ambulancia.idAmbulancia inner join matafuego on ambulancia.idMatafuego=matafuego.idMatafuego where tripulacion.idtripulacion=?;";
+        try {
+            PreparedStatement ps7 = conexion.prepareStatement(sql7);
+            ps7.setInt(1, id);
+            ResultSet rs7 = ps7.executeQuery();
+            if (rs7.next()) {
+                serie.setText(rs7.getString("matafuego.numeroserie"));
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "ERROR: " + ex.getMessage());
+        }
     }
 }
