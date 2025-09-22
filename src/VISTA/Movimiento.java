@@ -88,7 +88,7 @@ public class Movimiento extends javax.swing.JFrame {
         Cancelar.setEnabled(false);
 
         LocalDate hoy = LocalDate.now();
-        DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
         fechaActual = hoy.format(formato);
         Tabla.setRowHeight(30);

@@ -150,16 +150,22 @@ public class Movimientos {
 
     public static void Select(Connection conexion, JComboBox<Trip> combo1, String fecha) {
 
-        String sql = "SELECT t.idtripulacion, CONCAT(e1.nombre, ' ', e1.apellido) AS cvs, CONCAT(e2.nombre, ' ', e2.apellido) AS medico, CONCAT(e3.nombre, ' ', e3.apellido) AS enfermero FROM tripulacion t JOIN empleado e1 ON t.cvs = e1.id_Empleado JOIN empleado e2 ON t.medico = e2.id_Empleado JOIN empleado e3 ON t.enfermero = e3.id_Empleado WHERE Fecha=? and e1.borrado=0 and e2.borrado=0 and e3.borrado=0";
+        String sql = "SELECT t.idtripulacion, CONCAT(e1.nombre, ' ', e1.apellido) AS cvs, CONCAT(e2.nombre, ' ', e2.apellido) AS medico, CONCAT(e3.nombre, ' ', e3.apellido) AS enfermero, t.Fecha FROM tripulacion t JOIN empleado e1 ON t.cvs = e1.id_Empleado JOIN empleado e2 ON t.medico = e2.id_Empleado JOIN empleado e3 ON t.enfermero = e3.id_Empleado WHERE relevado=0 and e1.borrado=0 and e2.borrado=0 and e3.borrado=0;";
         try {
             PreparedStatement ps = conexion.prepareStatement(sql);
-            ps.setString(1, fecha);
             ResultSet rs = ps.executeQuery();
             DefaultComboBoxModel<Trip> trip = new DefaultComboBoxModel();
             while (rs.next()) {
+                String fechatr = rs.getString("t.Fecha");
                 int id = rs.getInt("t.idtripulacion");
                 String tripulacion = rs.getString("cvs") + "-" + rs.getString("medico") + "-" + rs.getString("enfermero");
-                trip.addElement(new Trip(id, tripulacion));
+                
+                if (fechatr.equalsIgnoreCase(fecha)) {
+                    trip.addElement(new Trip(id, tripulacion));
+                } else {
+                    String tripulacionsin = (tripulacion + " (¡Sin Relevar!) ");
+                    trip.addElement(new Trip(id, tripulacionsin));
+                }
             }
 
             combo1.setModel(trip);
@@ -173,7 +179,7 @@ public class Movimientos {
 
     public static void Carga(Connection conexion, int id, int id2, int id3, int id4, String fecha) {
 
-        String sql = "INSERT into tripulacion (cvs, medico, enfermero, idAmbulancia, Fecha) VALUES (?,?,?,?,?) ";
+        String sql = "INSERT into tripulacion (cvs, medico, enfermero, idAmbulancia, Fecha, relevado) VALUES (?,?,?,?,?,0) ";
         try {
             PreparedStatement ps = conexion.prepareStatement(sql);
             ps.setInt(1, id);
@@ -187,7 +193,7 @@ public class Movimientos {
         }
 
     }
-    
+
     public static void ActualizarTrip(Connection conexion, int id, int id2, int id3, int id4, int id5) {
 
         String sql = "UPDATE tripulacion SET cvs=?, medico=?, enfermero=?, idAmbulancia=? WHERE idtripulacion=?";
@@ -233,9 +239,8 @@ public class Movimientos {
 
     public static void MostrarMov(Connection conexion, DefaultTableModel modelo, String fechaActual, int id) throws SQLException {
 
-        PreparedStatement stm = conexion.prepareStatement("SELECT movimientos.idMovimientos, movimientos.salida, movimientos.llegada, movimientos.kilometrosdesalida, movimientos.destino, movimientos.num_servicio FROM movimientos WHERE fecha=? AND idtripulacion=? AND borrado=0");
-        stm.setString(1, fechaActual);
-        stm.setInt(2, id);
+        PreparedStatement stm = conexion.prepareStatement("SELECT movimientos.idMovimientos, movimientos.salida, movimientos.llegada, movimientos.kilometrosdesalida, movimientos.destino, movimientos.num_servicio FROM movimientos WHERE idtripulacion=? AND borrado=0");
+        stm.setInt(1, id);
         ResultSet rs = stm.executeQuery();
 
         while (rs.next()) {
@@ -383,8 +388,8 @@ public class Movimientos {
                         i++;
                     }
                 }
-                    i=0;
-                    while (i < model2.getSize()) {
+                i = 0;
+                while (i < model2.getSize()) {
                     Object value = model2.getElementAt(i);
                     if (value instanceof Cliente) {
                         Cliente dat = (Cliente) value;
@@ -396,9 +401,9 @@ public class Movimientos {
                         i++;
                     }
                 }
-                    
-                    i=0;
-                    while (i < model3.getSize()) {
+
+                i = 0;
+                while (i < model3.getSize()) {
                     Object value = model3.getElementAt(i);
                     if (value instanceof Cliente) {
                         Cliente dat = (Cliente) value;
@@ -410,9 +415,9 @@ public class Movimientos {
                         i++;
                     }
                 }
-                    
-                    i=0;
-                    while (i < model4.getSize()) {
+
+                i = 0;
+                while (i < model4.getSize()) {
                     Object value = model4.getElementAt(i);
                     if (value instanceof Cliente) {
                         Cliente dat = (Cliente) value;
