@@ -5,7 +5,6 @@
  */
 package CLASES;
 
-import java.awt.image.BufferedImage;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,13 +14,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
@@ -33,61 +28,94 @@ import java.io.*;
  */
 public class Relevar {
 
-    /*
-    // Convierte un JPanel a BufferedImage
-    private static BufferedImage panelToImage(JPanel panel) {
-        BufferedImage img = new BufferedImage(panel.getWidth(), panel.getHeight(), BufferedImage.TYPE_INT_RGB);
-        Graphics2D g2d = img.createGraphics();
-        panel.paint(g2d);
-        g2d.dispose();
-        return img;
+    public static void Insert(Connection conexion, int luzpos, int luzdir, int luzalt, int luzdest, int luzbaj, int luzfre, int luztras, int limpara, int fren, int indictemp, int testserv, int indcom, int indac, int carbat, int calair, int bal, int ant, int sir, int eqcom, int cint, int rueda, int lla, int gan, int cat, int lavadero2, int entregaypf, int liquidfreno, int refrigerante, int matafuego, String texto, String fecha, int id) {
+
+        String sql = "INSERT INTO observaciones (idtripulacion, observacion) VALUES (?,?);";
+        String sql2 = "INSERT INTO estado(idtripulacion, Matafuego, Liquido_freno, Agua_Refrigerante) VALUES (?,?,?,?)";
+        String sql3 = "INSERT INTO partes (idtripulacion, cinturones, ruedaaux, llave, gancho, gato, lavuni, guardsig) VALUES (?,?,?,?,?,?,?,?)";
+        String sql4 = "INSERT INTO luces (idtripulacion, luz_posicion, direccionales, alta, destalladora_emergencia, baja, freno, trasera, parabrisas) VALUES (?,?,?,?,?,?,?,?,?)";
+        String sql5 = "INSERT INTO senales (idtripulacion, Frenos, temperatura_motor, testigo_service, carga_bateria, calefactor_aire, baliza, antena, sirenas, equipo_comunicacion, nivcomb, nivace) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
+
+        try {
+            PreparedStatement ps = conexion.prepareStatement(sql);
+            ps.setInt(1, id);
+            ps.setString(2, texto);
+            ps.execute();
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "ERROR: " + ex.getMessage());
+        }
+
+        try {
+            PreparedStatement ps2 = conexion.prepareStatement(sql2);
+            ps2.setInt(1, id);
+            ps2.setInt(2, matafuego);
+            ps2.setInt(3, liquidfreno);
+            ps2.setInt(4, refrigerante);
+            ps2.execute();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "ERROR: " + ex.getMessage());
+        }
+        
+        try {
+            PreparedStatement ps3 = conexion.prepareStatement(sql3);
+            ps3.setInt(1, id);
+            ps3.setInt(2, cint);
+            ps3.setInt(3, rueda);
+            ps3.setInt(4, lla);
+            ps3.setInt(5, gan);
+            ps3.setInt(6, cat);
+            ps3.setInt(7, lavadero2);
+            ps3.setInt(8, entregaypf);
+            ps3.execute();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "ERROR: " + ex.getMessage());
+        }
+        
+        try {
+            PreparedStatement ps4 = conexion.prepareStatement(sql4);
+            ps4.setInt(1, id);
+            ps4.setInt(2, luzpos);
+            ps4.setInt(3, luzdir);
+            ps4.setInt(4, luzalt);
+            ps4.setInt(5, luzdest);
+            ps4.setInt(6, luzbaj);
+            ps4.setInt(7, luzfre);
+            ps4.setInt(8, luztras);
+            ps4.setInt(9, limpara);
+            ps4.execute();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "ERROR: " + ex.getMessage());
+        }
+        
+        try {
+            PreparedStatement ps5 = conexion.prepareStatement(sql5);
+            ps5.setInt(1, id);
+            ps5.setInt(2, fren);
+            ps5.setInt(3, indictemp);
+            ps5.setInt(4, testserv);
+            ps5.setInt(5, carbat);
+            ps5.setInt(6, calair);
+            ps5.setInt(7, bal);
+            ps5.setInt(8, ant);
+            ps5.setInt(9, sir);
+            ps5.setInt(10, eqcom);
+            ps5.setInt(11, indcom);
+            ps5.setInt(12, indac);
+            ps5.execute();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "ERROR: " + ex.getMessage());
+        }
+        
+        String sql6 = "UPDATE tripulacion SET relevado=1 WHERE idtripulacion=?";
+        try {
+            PreparedStatement ps6 = conexion.prepareStatement(sql6);
+            ps6.setInt(1, id);
+            ps6.execute();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
     }
-
-    // Convierte JPanel → byte[] (PNG)
-    private static byte[] toBytes(JPanel panel) throws IOException {
-        BufferedImage bimg = panelToImage(panel);
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write(bimg, "png", baos);
-        return baos.toByteArray();
-    }
-
-    public static void guardar(JPanel superior, JPanel izq1, JPanel izq2, JPanel izqgrande, JPanel dergrande, JPanel dermedio, JPanel inferior, String direccion) throws Exception {
-        Document document = new Document();
-        PdfWriter.getInstance(document, new FileOutputStream(direccion));
-        document.open();
-
-        // 📌 Tabla principal con 2 columnas
-        PdfPTable tabla = new PdfPTable(2);
-        tabla.setWidthPercentage(100);
-
-        // ---- Panel Superior (ocupa 2 columnas)
-        PdfPCell cellSuperior = new PdfPCell(Image.getInstance(toBytes(superior)), true);
-        cellSuperior.setColspan(2);
-        tabla.addCell(cellSuperior);
-
-        // ---- Panel izquierdo chico 1 + Panel derecho grande
-        tabla.addCell(Image.getInstance(toBytes(izq1)));
-        PdfPCell cellDerGrande = new PdfPCell(Image.getInstance(toBytes(dergrande)), true);
-        cellDerGrande.setRowspan(2); // ocupa dos filas
-        tabla.addCell(cellDerGrande);
-
-        // ---- Panel izquierdo chico 2
-        tabla.addCell(Image.getInstance(toBytes(izq2)));
-
-        // ---- Panel izquierdo grande + Panel derecho medio
-        tabla.addCell(Image.getInstance(toBytes(izqgrande)));
-        tabla.addCell(Image.getInstance(toBytes(dermedio)));
-
-        // ---- Panel inferior (ocupa 2 columnas)
-        PdfPCell cellInferior = new PdfPCell(Image.getInstance(toBytes(inferior)), true);
-        cellInferior.setColspan(2);
-        tabla.addCell(cellInferior);
-
-        // Agregar tabla al documento
-        document.add(tabla);
-        document.close();
-    }
-     */
 
     // Convierte un JPanel en BufferedImage
     private static BufferedImage panelToImage(JPanel panel) {
@@ -107,7 +135,7 @@ public class Relevar {
     }
 
     // Guardar PDF con posiciones absolutas
-    public static void guardar(JPanel panelSuperior, JPanel panelIzq1, JPanel panelIzq2, JPanel panelIzqGrande, JPanel panelDerGrande, JPanel panelDerMedio, JPanel panelInferior, String rutaArchivo) throws Exception {
+    public static void guardar(JPanel panelSuperior, JPanel panelIzq1, JPanel panelIzq2, JPanel panelIzqGrande, JPanel panelDerGrande, JPanel panelDerMedio, JPanel panelInferior, JPanel Marcarext, String rutaArchivo) throws Exception {
 
         Document document = new Document(PageSize.A4);
         PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(rutaArchivo));
@@ -117,44 +145,50 @@ public class Relevar {
 
         // ---- Panel superior (arriba de todo, ocupa todo el ancho)
         com.itextpdf.text.Image imgSup = panelToPDFImage(panelSuperior);
-        imgSup.scaleAbsolute(panelSuperior.getWidth(), panelSuperior.getHeight());
-        imgSup.setAbsolutePosition(50, pageHeight - panelSuperior.getHeight() - 50);
+        imgSup.scaleAbsolute(550, 60);
+        imgSup.setAbsolutePosition(25, 765);
         document.add(imgSup);
 
         // ---- Panel izquierdo chico 1
         com.itextpdf.text.Image imgIzq1 = panelToPDFImage(panelIzq1);
-        imgIzq1.scaleAbsolute(panelIzq1.getWidth(), panelIzq1.getHeight());
-        imgIzq1.setAbsolutePosition(50, pageHeight - panelSuperior.getHeight() - panelIzq1.getHeight() - 70);
+        imgIzq1.scaleAbsolute(245, 60);
+        imgIzq1.setAbsolutePosition(25, 700);
         document.add(imgIzq1);
 
         // ---- Panel izquierdo chico 2
         com.itextpdf.text.Image imgIzq2 = panelToPDFImage(panelIzq2);
-        imgIzq2.scaleAbsolute(panelIzq2.getWidth(), panelIzq2.getHeight());
-        imgIzq2.setAbsolutePosition(50, pageHeight - panelSuperior.getHeight() - panelIzq1.getHeight() - panelIzq2.getHeight() - 90);
+        imgIzq2.scaleAbsolute(245, 75);
+        imgIzq2.setAbsolutePosition(25, 620);
         document.add(imgIzq2);
 
         // ---- Panel derecho grande
         com.itextpdf.text.Image imgDerGrande = panelToPDFImage(panelDerGrande);
-        imgDerGrande.scaleAbsolute(panelDerGrande.getWidth(), panelDerGrande.getHeight());
-        imgDerGrande.setAbsolutePosition(250, pageHeight - panelSuperior.getHeight() - imgDerGrande.getScaledHeight() - 70);
+        imgDerGrande.scaleAbsolute(295, 220);
+        imgDerGrande.setAbsolutePosition(280, 540);
         document.add(imgDerGrande);
 
         // ---- Panel izquierdo grande
         com.itextpdf.text.Image imgIzqGrande = panelToPDFImage(panelIzqGrande);
-        imgIzqGrande.scaleAbsolute(panelIzqGrande.getWidth(), panelIzqGrande.getHeight());
-        imgIzqGrande.setAbsolutePosition(50, 150);
+        imgIzqGrande.scaleAbsolute(245, 405);
+        imgIzqGrande.setAbsolutePosition(25, 210);
         document.add(imgIzqGrande);
 
         // ---- Panel derecho medio
         com.itextpdf.text.Image imgDerMedio = panelToPDFImage(panelDerMedio);
-        imgDerMedio.scaleAbsolute(panelDerMedio.getWidth(), panelDerMedio.getHeight());
-        imgDerMedio.setAbsolutePosition(250, 150);
+        imgDerMedio.scaleAbsolute(295, 140);
+        imgDerMedio.setAbsolutePosition(280, 210);
         document.add(imgDerMedio);
+
+        // ---- Panel derecho abajo
+        com.itextpdf.text.Image imgDerBajo = panelToPDFImage(Marcarext);
+        imgDerBajo.scaleAbsolute(295, 180);
+        imgDerBajo.setAbsolutePosition(280, 355);
+        document.add(imgDerBajo);
 
         // ---- Panel inferior (abajo, ocupa todo el ancho)
         com.itextpdf.text.Image imgInferior = panelToPDFImage(panelInferior);
-        imgInferior.scaleAbsolute(panelInferior.getWidth(), panelInferior.getHeight());
-        imgInferior.setAbsolutePosition(50, 50);
+        imgInferior.scaleAbsolute(550, 180);
+        imgInferior.setAbsolutePosition(25, 25);
         document.add(imgInferior);
 
         document.close();

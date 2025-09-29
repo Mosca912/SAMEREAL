@@ -155,6 +155,7 @@ public class Movimientos {
             PreparedStatement ps = conexion.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             DefaultComboBoxModel<Trip> trip = new DefaultComboBoxModel();
+            trip.addElement(new Trip(0, "Opciones"));
             while (rs.next()) {
                 String fechatr = rs.getString("t.Fecha");
                 int id = rs.getInt("t.idtripulacion");
