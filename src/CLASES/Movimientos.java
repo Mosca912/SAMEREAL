@@ -5,15 +5,23 @@
  */
 package CLASES;
 
+import java.awt.Color;
+import java.awt.Component;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
@@ -25,6 +33,8 @@ public class Movimientos {
 
     static DefaultComboBoxModel<Cliente> model, model2, model3, model4;
     static DefaultComboBoxModel<Trip> model5;
+    static List<Integer> relevado = new ArrayList<>();
+    static List<Integer> relevadont = new ArrayList<>();
 
     public static class Cliente {
 
@@ -160,7 +170,7 @@ public class Movimientos {
                 String fechatr = rs.getString("t.Fecha");
                 int id = rs.getInt("t.idtripulacion");
                 String tripulacion = rs.getString("cvs") + "-" + rs.getString("medico") + "-" + rs.getString("enfermero");
-                
+
                 if (fechatr.equalsIgnoreCase(fecha)) {
                     trip.addElement(new Trip(id, tripulacion));
                 } else {
@@ -331,9 +341,8 @@ public class Movimientos {
             JOptionPane.showMessageDialog(null, e);
         }
 
-        PreparedStatement stm3 = conexion.prepareStatement("SELECT COUNT(idMovimientos) FROM samerealpro.movimientos WHERE idtripulacion=? AND fecha=? AND borrado=0");
+        PreparedStatement stm3 = conexion.prepareStatement("SELECT COUNT(idMovimientos) FROM samerealpro.movimientos WHERE idtripulacion=? AND borrado=0");
         stm3.setInt(1, id);
-        stm3.setString(2, fecha);
         ResultSet rs3 = stm3.executeQuery();
         if (rs3.next()) {
             cantidad.setText(rs3.getString("COUNT(idMovimientos)"));
@@ -433,6 +442,70 @@ public class Movimientos {
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "ERROR: " + ex.getMessage());
+        }
+    }
+
+    //Historial
+    public static void MostrarHist(Connection conexion, DefaultTableModel modelo, JTable tabla) throws SQLException {
+        //BASE
+
+        PreparedStatement stm = conexion.prepareStatement("SELECT t.idtripulacion, CONCAT(e1.nombre, ' ', e1.apellido) AS cvs, CONCAT(e2.nombre, ' ', e2.apellido) AS medico, CONCAT(e3.nombre, ' ', e3.apellido) AS enfermero, a.victor, t.Fecha, COUNT(m.idMovimientos) AS cantidad_movimientos FROM tripulacion t JOIN empleado e1 ON t.cvs = e1.id_Empleado JOIN empleado e2 ON t.medico = e2.id_Empleado JOIN empleado e3 ON t.enfermero = e3.id_Empleado INNER JOIN ambulancia a ON t.idAmbulancia=a.idAmbulancia LEFT JOIN movimientos m ON t.idtripulacion = m.idtripulacion WHERE e1.borrado=0 and e2.borrado=0 and e3.borrado=0 GROUP BY t.idtripulacion, cvs, medico, enfermero, a.victor, t.Fecha, t.relevado;");
+        ResultSet rs = stm.executeQuery();
+        while (rs.next()) {
+            Object[] fila = new Object[5];
+            fila[0] = rs.getInt("t.idtripulacion");
+            fila[1] = rs.getString("cvs") + " " + rs.getString("medico") + " " + rs.getString("enfermero");
+            fila[2] = rs.getString("a.victor");
+            fila[3] = rs.getString("t.Fecha");
+            fila[4] = rs.getString("cantidad_movimientos");
+            modelo.addRow(fila);
+        }
+
+        // 🚩 Después de cargar, aplicamos el renderer UNA sola vez
+        DefaultTableCellRenderer renderizador;
+        renderizador = new DefaultTableCellRenderer() {
+
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+                String idfiado = table.getValueAt(row, 0).toString();
+
+                int idF = Integer.parseInt(idfiado);
+
+                try {
+                    PreparedStatement stm2 = conexion.prepareStatement("SELECT relevado FROM tripulacion WHERE idtripulacion=?");
+                    stm2.setInt(1, idF);
+                    ResultSet rs2 = stm2.executeQuery();
+                    if (rs2.next()) {
+                        int relevado = rs2.getInt("relevado");
+                        if (relevado == 0) {
+                            c.setBackground(new Color(255,153,153));
+                            c.setForeground(Color.BLACK);
+                        } else if (relevado == 1) {
+                            c.setBackground(new Color(144, 238, 144));
+                            c.setForeground(Color.BLACK);
+                        }
+                    }
+                } catch (NumberFormatException e) {
+                    c.setBackground(Color.WHITE);
+                    c.setForeground(Color.BLACK);
+                } catch (SQLException ex) {
+
+                }
+
+                // Mantener selección visible
+                if (isSelected) {
+                    c.setBackground(table.getSelectionBackground());
+                    c.setForeground(table.getSelectionForeground());
+                }
+                return c;
+            }
+
+        };
+        // Aplicamos el render a todas las columnas
+        for (int i = 0; i < modelo.getColumnCount(); i++) {
+            tabla.getColumnModel().getColumn(i).setCellRenderer(renderizador);
         }
     }
 }

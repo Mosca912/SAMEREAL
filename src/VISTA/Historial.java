@@ -5,17 +5,11 @@
  */
 package VISTA;
 
-import CLASES.Movimientos.Trip;
 import CONEXIONES.Conexiones;
-import java.awt.HeadlessException;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JOptionPane;
+import java.awt.event.*;
+import java.sql.*;
+import java.util.logging.*;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 public class Historial extends javax.swing.JFrame {
@@ -58,11 +52,11 @@ public class Historial extends javax.swing.JFrame {
     //Metodos para editar
 
     //Tabla
-    ModeloEditablePorFila tabla1 = new ModeloEditablePorFila(new String[]{"Cod", "salida", "llegada", "KmSalidas", "Destino", "Num. de Servicio"}, 0) {
+    ModeloEditablePorFila tabla1 = new ModeloEditablePorFila(new String[]{"Cod", "Tripulacion", "Victor", "Fecha de inicio", "Movimientos"}, 0) {
         private final int editableRow = -1;
     };
     //Tabla
-    
+
     Connection con = Conexiones.Conexion();
     ResultSet rs;
     int id, band;
@@ -70,18 +64,43 @@ public class Historial extends javax.swing.JFrame {
 
     public Historial() {
         initComponents();
-        Tripulacion.setEnabled(false);
         Tabla.setRowHeight(30);
         Tabla.setModel(tabla1);
-        Fecha.getDateEditor().addPropertyChangeListener("date", evt -> {
-            Date fecha2 = Fecha.getDate();  // <- pedir la fecha dentro del evento
-            if (fecha2 != null) {
-                SimpleDateFormat formato = new SimpleDateFormat("yyyy/MM/dd");
-                fechaFormateada = formato.format(fecha2);
-                Tripulacion.setEnabled(true); // habilita el combo
-                CLASES.Movimientos.Select(con, Tripulacion, fechaFormateada);
-            } else {
-                Tripulacion.setEnabled(false); // deshabilita si se borra la fecha
+        Tabla.getTableHeader().setReorderingAllowed(false);
+        this.setLocationRelativeTo(null);
+
+        try {
+            CLASES.Movimientos.MostrarHist(con, tabla1, Tabla);
+        } catch (SQLException ex) {
+            Logger.getLogger(Historial.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        Tabla.getColumnModel().getColumn(0).setMinWidth(70);
+        Tabla.getColumnModel().getColumn(0).setMaxWidth(70);
+
+        Tabla.getColumnModel().getColumn(1).setMinWidth(280);
+        Tabla.getColumnModel().getColumn(1).setMaxWidth(280);
+
+        Tabla.getColumnModel().getColumn(2).setMinWidth(60);
+        Tabla.getColumnModel().getColumn(2).setMaxWidth(60);
+
+        Tabla.getColumnModel().getColumn(4).setMinWidth(100);
+        Tabla.getColumnModel().getColumn(4).setMaxWidth(100);
+        Tabla.getTableHeader().setResizingAllowed(false);
+        
+        Tabla.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                // Detectar doble click
+                if (e.getClickCount() == 2 && Tabla.getSelectedRow() != -1) {
+                    int fila = Tabla.getSelectedRow();
+
+                    // Tomamos datos de la fila seleccionada
+                    Object id = tabla1.getValueAt(fila, 0);
+                    int idOf = Integer.parseInt(id.toString());
+                    
+                    
+                }
             }
         });
     }
@@ -97,80 +116,42 @@ public class Historial extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
         Fecha = new com.toedter.calendar.JDateChooser();
         jLabel2 = new javax.swing.JLabel();
-        jSeparator2 = new javax.swing.JSeparator();
-        jLabel3 = new javax.swing.JLabel();
-        Tripulacion = new javax.swing.JComboBox<>();
-        jSeparator1 = new javax.swing.JSeparator();
         jScrollPane1 = new javax.swing.JScrollPane();
         Tabla = new javax.swing.JTable();
         Salir = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setTitle("Historial");
+        setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel1.setBackground(new java.awt.Color(0, 204, 102));
+        jPanel1.setBackground(new java.awt.Color(51, 102, 0));
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel1.setText("Historial");
-
         jLabel2.setText("Fecha");
-
-        jLabel3.setText("Tripulación");
-
-        Tripulacion.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                TripulacionActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(173, 173, 173)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel3)
-                .addGap(211, 211, 211))
-            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(430, 430, 430)
-                        .addComponent(jLabel1))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(34, 34, 34)
-                        .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 837, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(49, Short.MAX_VALUE))
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(86, 86, 86)
-                .addComponent(Fecha, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(Tripulacion, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(121, 121, 121))
+                    .addComponent(jLabel2)
+                    .addComponent(Fecha, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
-                .addGap(5, 5, 5)
-                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(5, 5, 5)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(Fecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(Tripulacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(38, Short.MAX_VALUE))
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(Fecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(62, Short.MAX_VALUE))
         );
 
         Tabla.setModel(new javax.swing.table.DefaultTableModel(
@@ -190,8 +171,6 @@ public class Historial extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("Generar PDF");
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -199,13 +178,12 @@ public class Historial extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jSeparator1)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 700, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(Salir)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton1)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(Salir)
+                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -213,18 +191,14 @@ public class Historial extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 424, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 389, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Salir)
-                    .addComponent(jButton1))
-                .addContainerGap(29, Short.MAX_VALUE))
+                .addComponent(Salir)
+                .addContainerGap())
         );
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 940, 620));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 720, 620));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -232,32 +206,6 @@ public class Historial extends javax.swing.JFrame {
     private void SalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SalirActionPerformed
         this.dispose();
     }//GEN-LAST:event_SalirActionPerformed
-
-    private void TripulacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TripulacionActionPerformed
-        Object value = Tripulacion.getSelectedItem();
-        if (value instanceof Trip) {
-            Trip dat = (Trip) value;
-            id = dat.getId();
-            veri = dat.getNombre();
-
-            if (!veri.equals("Opciones")) {
-                //Mostrar tabla
-                try {
-                    tabla1.setRowCount(0);
-                    CLASES.Movimientos.MostrarMov(con, tabla1, fechaFormateada, id);
-                    if (Tabla.getRowCount() == 0) {
-                        JOptionPane.showMessageDialog(null, "No se encontró ningún movimiento.");
-                    }
-                } catch (HeadlessException e) {
-                    JOptionPane.showMessageDialog(null, e);
-                } catch (SQLException ex) {
-                    Logger.getLogger(Historial.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            } else {
-                tabla1.setRowCount(0);
-            }
-        }
-    }//GEN-LAST:event_TripulacionActionPerformed
 
     /**
      * @param args the command line arguments
@@ -301,15 +249,9 @@ public class Historial extends javax.swing.JFrame {
     private com.toedter.calendar.JDateChooser Fecha;
     private javax.swing.JButton Salir;
     private javax.swing.JTable Tabla;
-    private javax.swing.JComboBox<Trip> Tripulacion;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JSeparator jSeparator2;
     // End of variables declaration//GEN-END:variables
 }
