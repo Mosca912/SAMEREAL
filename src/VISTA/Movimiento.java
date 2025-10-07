@@ -93,7 +93,6 @@ public class Movimiento extends javax.swing.JFrame {
         fechaActual = hoy.format(formato);
         Tabla.setRowHeight(30);
 
-        // Crear formateador de hora
         CLASES.Movimientos.Select(con, Trip, fechaActual);
         MaskFormatter formatter = null;
         try {

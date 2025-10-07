@@ -1,24 +1,71 @@
 package CLASES;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
 import javax.swing.table.DefaultTableModel;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 public class Asistencia {
+    
+    public static class Area {
+
+        private final int id;
+        private final String nombre;
+
+        public Area(int id, String nombre) {
+            this.id = id;
+            this.nombre = nombre;
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        public String getNombre() {
+            return nombre;
+        }
+
+        @Override
+        public String toString() {
+            return nombre; // lo que se muestra en el combo
+        }
+    }
+    
+    public static class Empleado {
+
+        private final int id;
+        private final String nombre;
+
+        public Empleado(int id, String nombre) {
+            this.id = id;
+            this.nombre = nombre;
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        public String getNombre() {
+            return nombre;
+        }
+
+        @Override
+        public String toString() {
+            return nombre; // lo que se muestra en el combo
+        }
+    }
 
     public static void MostrarAsistencia(Connection conexion, DefaultTableModel modelo) throws SQLException {
 
@@ -38,48 +85,14 @@ public class Asistencia {
         }
     }
 
-    public static void jCombo(Connection conexion, JComboBox<String> combo1, int veri, String area) {
-
-        int a = 0;
+    public static void jCombo(Connection conexion, JComboBox<Empleado> combo1, int id) {
         int car = 0;
-        if (veri == 0) {
-            String sql = "SELECT area FROM area ORDER BY idArea";
-
-            try {
-                PreparedStatement ps = conexion.prepareStatement(sql);
-                ResultSet rs = ps.executeQuery();
-                while (rs.next()) {
-                    String ar = rs.getString("area");
-                    combo1.addItem(ar);
-                }
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null, "ERROR: " + ex.getMessage());
-            }
-        }
-
-        if (veri == 1) {
-            String sql2 = "SELECT idArea FROM area WHERE area=?";
-
-            try {
-
-                PreparedStatement stm3 = conexion.prepareStatement(sql2);
-                stm3.setString(1, area);
-                ResultSet rs2 = stm3.executeQuery();
-
-                if (rs2.next()) {
-                    a = rs2.getInt("idArea");
-                }
-
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null, "ERROR: " + ex.getMessage());
-            }
-
-            String sql3 = "SELECT idCargo FROM cargo WHERE idArea=?";
+        String sql3 = "SELECT idCargo FROM cargo WHERE idArea=?";
 
             try {
 
                 PreparedStatement stm2 = conexion.prepareStatement(sql3);
-                stm2.setInt(1, a);
+                stm2.setInt(1, id);
                 ResultSet rs2 = stm2.executeQuery();
 
                 if (rs2.next()) {
@@ -89,33 +102,31 @@ public class Asistencia {
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, "ERROR: " + ex.getMessage());
             }
-
-            String sql = "SELECT apellido, dni FROM empleado WHERE idCargo=? and borrado=0";
-
-            try {
-                PreparedStatement ps = conexion.prepareStatement(sql);
-                ps.setInt(1, car);
-                ResultSet rs = ps.executeQuery();
-
-                while (rs.next()) {
-                    String ap = rs.getString("apellido");
-                    String dni = rs.getString("dni");
-                    String emp = (ap + "-" + dni);
-                    combo1.addItem(emp);
-                }
-
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null, "ERROR: " + ex.getMessage());
+        
+        String sql = "SELECT id_Empleado, apellido, dni FROM empleado WHERE idCargo=? and borrado=0;";
+        try {
+            PreparedStatement ps = conexion.prepareStatement(sql);
+            ps.setInt(1, car);
+            ResultSet rs = ps.executeQuery();
+            DefaultComboBoxModel<Asistencia.Empleado> empl = new DefaultComboBoxModel();
+            empl.addElement(new Asistencia.Empleado(0, "Opciones"));
+            while (rs.next()) {
+                int id2 = rs.getInt("id_Empleado");
+                String emp = rs.getString("apellido") + ("-") + rs.getString("dni");
+                    empl.addElement(new Asistencia.Empleado(id2, emp));
             }
 
+            combo1.setModel(empl);
+            AutoCompleteDecorator.decorate(combo1);
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "ERROR: " + ex.getMessage());
         }
     }
-    static String docu;
 
-    public static void Datos(Connection conexion, String dni, JLabel nya, JLabel cya, JLabel d) throws SQLException {
-        docu = dni;
-        PreparedStatement stm = conexion.prepareStatement("SELECT empleado.nombre, empleado.apellido, cargo.cargo, area.area FROM empleado inner join cargo on empleado.idCargo=cargo.idCargo inner join area on cargo.idArea=area.idArea WHERE empleado.dni=?");
-        stm.setString(1, dni);
+    public static void Datos(Connection conexion, JLabel nya, JLabel cya, JLabel d, int id) throws SQLException {
+        PreparedStatement stm = conexion.prepareStatement("SELECT empleado.nombre, empleado.apellido, cargo.cargo, area.area, empleado.dni FROM empleado inner join cargo on empleado.idCargo=cargo.idCargo inner join area on cargo.idArea=area.idArea WHERE empleado.id_Empleado=?");
+        stm.setInt(1, id);
         ResultSet rs = stm.executeQuery();
 
         if (rs.next()) {
@@ -123,6 +134,7 @@ public class Asistencia {
             String ap = rs.getString("empleado.apellido");
             String car = rs.getString("cargo.cargo");
             String ar = rs.getString("area.area");
+            String dni = rs.getString("empleado.dni");
             String nomap = ("Empleado: " + nom + " " + ap);
             String carar = ("Cargo: " + car + " - Area: " + ar);
             String doc = ("Documento: " + dni);
@@ -133,17 +145,8 @@ public class Asistencia {
         }
     }
 
-    public static void Asistencia(Connection conexion) throws SQLException {
-        int id = 0;
-        int ida = 0;
-        PreparedStatement stm = conexion.prepareStatement("SELECT id_Empleado from empleado where dni=?");
-        stm.setString(1, docu);
-        ResultSet rs = stm.executeQuery();
-
-        if (rs.next()) {
-            id = rs.getInt("id_Empleado");
-        }
-
+    public static void Asistencia(Connection conexion, int id) throws SQLException {
+        int ida=0;
         PreparedStatement stm5 = conexion.prepareStatement("SELECT idAsistencia from asistencia where id_Empleado=? and activo=1");
         stm5.setInt(1, id);
         ResultSet rs5 = stm5.executeQuery();
@@ -221,6 +224,29 @@ public class Asistencia {
         });
 
         timer.start(); // ⏯️ Comienza la cuenta
+    }
+    
+    public static void Select(Connection conexion, JComboBox<Area> combo1) {
+
+        String sql = "SELECT idArea, area FROM area WHERE borrado=0;";
+        try {
+            PreparedStatement ps = conexion.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            DefaultComboBoxModel<Asistencia.Area> area = new DefaultComboBoxModel();
+            area.addElement(new Asistencia.Area(0, "Opciones"));
+            while (rs.next()) {
+                int id = rs.getInt("idArea");
+                String tripulacion = rs.getString("area");
+                    area.addElement(new Asistencia.Area(id, tripulacion));
+            }
+
+            combo1.setModel(area);
+            AutoCompleteDecorator.decorate(combo1);
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "ERROR: " + ex.getMessage());
+        }
+
     }
 
 }

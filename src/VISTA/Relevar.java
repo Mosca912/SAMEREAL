@@ -22,6 +22,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.plaf.basic.BasicSliderUI;
 
 /**
  *
@@ -36,12 +37,67 @@ public class Relevar extends javax.swing.JFrame {
     static int idtrip2;
     String fechaActual, fechaActual2, veri;
 
+    private BufferedImage imagen;      // la imagen de fondo
+    private BufferedImage imagenOriginal;
+
+    private int centroX, centroY;   // centro del dial
+    private double angulo = Math.toRadians(225); // ángulo inicial 
+    private final int radio = 75;        // largo de la aguja
+    private boolean arrastrando = false;
+
+    /*
+    public class PanelDibujo2 extends JPanel {
+
+        public PanelDibujo2(String ruta) throws IOException {
+
+            Toolkit toolkit = Toolkit.getDefaultToolkit();
+            Image cursorImg = toolkit.getImage(getClass().getResource("/IMAGENES/lapiz.png"));
+
+            // 📍 Crear cursor
+            Point hotspot = new Point(0, 0); // Donde está la punta del lápiz
+            Cursor cursorPersonalizado = toolkit.createCustomCursor(cursorImg, hotspot, "Lapiz");
+
+            // 🔁 Aplicar cursor al panel
+            this.setCursor(cursorPersonalizado);
+
+            imagen3 = ImageIO.read(
+                    getClass().getResource(ruta)
+            );
+
+            imagenOriginal3 = ImageIO.read(getClass().getResource(ruta));
+
+            addMouseMotionListener(new MouseMotionAdapter() {
+                @Override
+                public void mouseDragged(MouseEvent e) {
+                    Graphics2D g2d = imagen3.createGraphics();
+                    g2d.setColor(Color.RED);
+                    g2d.fillOval(e.getX(), e.getY(), 5, 5);
+                    g2d.dispose();
+                    repaint();
+                }
+            });
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            g.drawImage(imagen3, 0, 0, (ImageObserver) this);
+        }
+
+        public void guardar(String ruta) throws IOException {
+            ImageIO.write(imagen3, "png", new File(ruta));
+        }
+    }
+     */
+    //AMBULANCIA
     public class PanelDibujo extends JPanel {
 
-        private BufferedImage imagen, imagenOriginal;
+        // Para guardar los círculos hechos
+        private final java.util.List<Point> puntos = new java.util.ArrayList<>();
 
         public PanelDibujo(String ruta) throws IOException {
-
+            imagen = ImageIO.read(getClass().getResource(ruta));
+            imagenOriginal = ImageIO.read(getClass().getResource(ruta));
             Toolkit toolkit = Toolkit.getDefaultToolkit();
             Image cursorImg = toolkit.getImage(getClass().getResource("/IMAGENES/lapiz.png"));
 
@@ -56,40 +112,45 @@ public class Relevar extends javax.swing.JFrame {
                     getClass().getResource(ruta)
             );
 
-            imagenOriginal = ImageIO.read(getClass().getResource(ruta));
-
-            addMouseMotionListener(new MouseMotionAdapter() {
+            addMouseListener(new MouseAdapter() {
                 @Override
-                public void mouseDragged(MouseEvent e) {
-                    Graphics2D g2d = imagen.createGraphics();
-                    g2d.setColor(Color.RED);
-                    g2d.fillOval(e.getX(), e.getY(), 5, 5);
-                    g2d.dispose();
+                public void mouseClicked(MouseEvent e) {
+                    Graphics2D g2 = imagen.createGraphics();
+                    g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+                    int radioExterno = 80; // tamaño del círculo grande
+                    int grosor = 5;       // grosor del borde
+
+                    // Dibuja el borde rojo
+                    g2.setColor(Color.RED);
+                    g2.setStroke(new BasicStroke(grosor));
+                    g2.drawOval(e.getX() - radioExterno / 2, e.getY() - radioExterno / 2, radioExterno, radioExterno);
+
+                    g2.dispose();
                     repaint();
                 }
             });
+
         }
 
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
-            g.drawImage(imagen, 0, 0, (ImageObserver) this);
-        }
+            // primero dibujás la imagen de fondo
+            g.drawImage(imagen, 0, 0, getWidth(), getHeight(), this);
 
-        public void guardar(String ruta) throws IOException {
-            ImageIO.write(imagen, "png", new File(ruta));
-        }
-
-        // Método para borrar (restaurar la imagen original)
-        public void borrar() {
-            imagen = new BufferedImage(imagenOriginal.getWidth(), imagenOriginal.getHeight(), imagenOriginal.getType());
-            Graphics2D g2d = imagen.createGraphics();
-            g2d.drawImage(imagenOriginal, 0, 0, null);
-            g2d.dispose();
-            repaint();
+            // después dibujás los círculos encima
+            g.setColor(Color.RED);
+            puntos.forEach((p) -> {
+                int radio = 10;  // radio del círculo, podés cambiar
+                int cx = p.x - radio / 2;
+                int cy = p.y - radio / 2;
+                g.fillOval(cx, cy, radio, radio);
+            });
         }
     }
 
+    //AMBULANCIA
     public class PanelImagen extends JPanel {
 
         private final BufferedImage imagen2;
@@ -111,6 +172,103 @@ public class Relevar extends javax.swing.JFrame {
         }
     }
 
+    public class AgujaInteractiva extends JPanel {
+
+        public AgujaInteractiva(String ruta) throws IOException {
+
+            // MOUSE LISTENER para click y arrastre
+            MouseAdapter mouseHandler = new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    arrastrando = true;
+                    actualizarAngulo(e.getX(), e.getY());
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent e) {
+                    arrastrando = false;
+                }
+
+                @Override
+                public void mouseDragged(MouseEvent e) {
+                    if (arrastrando) {
+                        actualizarAngulo(e.getX(), e.getY());
+                    }
+                }
+            };
+
+            addMouseListener(mouseHandler);
+            addMouseMotionListener(mouseHandler);
+        }
+
+        private void actualizarAngulo(int x, int y) {
+            double nuevoAngulo = Math.atan2(y - centroY, x - centroX);
+            if (nuevoAngulo < 0) {
+                nuevoAngulo += 2 * Math.PI; // normalizamos
+            }
+            // Limitar dentro del rango visual (225° a 315°)
+            double angMin = Math.toRadians(185);
+            double angMax = Math.toRadians(350);
+
+            if (nuevoAngulo < angMin) {
+                nuevoAngulo = angMin;
+            }
+            if (nuevoAngulo > angMax) {
+                nuevoAngulo = angMax;
+            }
+
+            angulo = nuevoAngulo;
+            repaint();
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            Graphics2D g2 = (Graphics2D) g;
+
+            // Suavizado
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+            // Centro del panel
+            centroX = nivelcomb.getWidth() / 2;
+            centroY = nivelcomb.getHeight() - 40;
+
+            // 🖼️ Fondo del medidor
+            Image fondo = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/IMAGENES/nivel_1.png"));
+            g2.drawImage(fondo, 0, 0, getWidth(), getHeight(), this);
+
+            // 🔴 Dibujar aguja
+            g2.setStroke(new BasicStroke(4f));
+            g2.setColor(Color.RED);
+
+            int x2 = (int) (centroX + radio * Math.cos(angulo));
+            int y2 = (int) (centroY + radio * Math.sin(angulo));
+            g2.drawLine(centroX, centroY, x2, y2);
+
+            // Centro del eje
+            g2.fillOval(centroX - 5, centroY - 5, 10, 10);
+        }
+    }
+
+    class Fondo extends JPanel {
+
+        private Image imagen5;
+
+        public void paint(Graphics g) {
+            imagen5 = new ImageIcon(getClass().getResource("/IMAGENES/nivel.png")).getImage();
+            g.drawImage(imagen5, 0, 0, getWidth(), getHeight(), this);
+            setOpaque(false);
+            super.paint(g);
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            // Dibuja la imagen escalada al tamaño del JPanel
+            g.drawImage(imagen5, 0, 0, getWidth(), getHeight(), this);
+        }
+    }
+
     public Relevar(int idtrip) {
         this.idtrip2 = idtrip;
 
@@ -124,6 +282,38 @@ public class Relevar extends javax.swing.JFrame {
         fechaActual = hoy.format(formato2);
         CLASES.Relevar.Relevo(con, Victor, anterior1, saliente1, entrante1, kmi1, kmf, turno, serie, idtrip);
         Fecha1.setText(fechaActual2);
+
+        // Le quitamos los ticks y labels si querés
+        slider.setPaintTicks(false);
+        slider.setPaintLabels(false);
+        slider.setOpaque(false);
+                
+        // Personalizamos la UI
+        slider.setUI(new BasicSliderUI(slider) {
+            @Override
+            public void paintThumb(Graphics g) {
+                // Convierte a Graphics2D para usar características de dibujo avanzadas como el grosor de línea
+                Graphics2D g2d = (Graphics2D) g;
+
+                g2d.setColor(Color.RED);
+
+                // Define el grosor de la línea (por ejemplo, 5 píxeles)
+                int grosor = 7;
+                g2d.setStroke(new BasicStroke(grosor));
+
+                // Calcula el punto central 'x' del área del thumbRect
+                int x = thumbRect.x + thumbRect.width / 2;
+
+                // Dibuja la línea con el nuevo grosor
+                // Si quieres que la línea sea vertical y visible, su altura debe ser adecuada
+                g2d.drawLine(x, thumbRect.y, x, thumbRect.y + thumbRect.height);
+            }
+
+            @Override
+            public void paintTrack(Graphics g) {
+                // No pintamos nada para que no se vea la barra
+            }
+        });
 
     }
 
@@ -258,9 +448,10 @@ public class Relevar extends javax.swing.JFrame {
                 liquidfren = new javax.swing.JToggleButton();
                 refr = new javax.swing.JToggleButton();
                 try {
-                    jPanel12 = new PanelDibujo("/IMAGENES/nivel.png");
+                    nivelcomb = new AgujaInteractiva("/IMAGENES/nivel_1.png");
                     jLabel10 = new javax.swing.JLabel();
-                    Borrar2 = new javax.swing.JButton();
+                    nivelac = new Fondo();
+                    slider = new javax.swing.JSlider();
                     MarcarAb = new javax.swing.JPanel();
                     jLabel9 = new javax.swing.JLabel();
                     try {
@@ -1073,33 +1264,36 @@ public class Relevar extends javax.swing.JFrame {
                     e.printStackTrace();
                     JOptionPane.showMessageDialog(this, "No se pudo cargar la imagen", "Error", JOptionPane.ERROR_MESSAGE);
                 }
-                jPanel12.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+                nivelcomb.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+                nivelcomb.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+                nivelcomb.setMaximumSize(new java.awt.Dimension(270, 120));
+                nivelcomb.setMinimumSize(new java.awt.Dimension(270, 120));
 
-                javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
-                jPanel12.setLayout(jPanel12Layout);
-                jPanel12Layout.setHorizontalGroup(
-                    jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGap(0, 578, Short.MAX_VALUE)
+                javax.swing.GroupLayout nivelcombLayout = new javax.swing.GroupLayout(nivelcomb);
+                nivelcomb.setLayout(nivelcombLayout);
+                nivelcombLayout.setHorizontalGroup(
+                    nivelcombLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGap(0, 268, Short.MAX_VALUE)
                 );
-                jPanel12Layout.setVerticalGroup(
-                    jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                nivelcombLayout.setVerticalGroup(
+                    nivelcombLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGap(0, 118, Short.MAX_VALUE)
                 );
 
-                MarcarNiv.add(jPanel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 39, -1, -1));
+                MarcarNiv.add(nivelcomb, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 39, 270, -1));
 
                 jLabel10.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
                 jLabel10.setForeground(new java.awt.Color(255, 255, 255));
                 jLabel10.setText(">MARCAR (Nivel)");
                 MarcarNiv.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 11, -1, -1));
 
-                Borrar2.setText("Borrar");
-                Borrar2.addActionListener(new java.awt.event.ActionListener() {
-                    public void actionPerformed(java.awt.event.ActionEvent evt) {
-                        Borrar2ActionPerformed(evt);
-                    }
-                });
-                MarcarNiv.add(Borrar2, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 10, 90, -1));
+                nivelac.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+                slider.setBackground(new java.awt.Color(255, 204, 204));
+                slider.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+                nivelac.add(slider, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 16, 230, 50));
+
+                MarcarNiv.add(nivelac, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, 300, 120));
 
                 Fondo.add(MarcarNiv, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 260, 600, 290));
 
@@ -1564,12 +1758,19 @@ public class Relevar extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jButton4ActionPerformed
 
-    private void Borrar2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Borrar2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_Borrar2ActionPerformed
-
     private void BorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BorrarActionPerformed
+        // Crea una copia limpia de la imagen original
+        imagen = new BufferedImage(
+                imagenOriginal.getWidth(),
+                imagenOriginal.getHeight(),
+                BufferedImage.TYPE_INT_RGB
+        );
 
+        Graphics2D g2 = imagen.createGraphics();
+        g2.drawImage(imagenOriginal, 0, 0, null);
+        g2.dispose();
+
+        repaint(); // refresca el panel
     }//GEN-LAST:event_BorrarActionPerformed
 
     private void DeshabilitarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeshabilitarActionPerformed
@@ -1653,7 +1854,7 @@ public class Relevar extends javax.swing.JFrame {
         );
 
         if (opcion == JOptionPane.OK_OPTION) {
-            
+
             //Funciona (primer panel)
             int luzpos = LuzPosicion.isSelected() ? 1 : 0;
             int luzdir = LucesDireccionales.isSelected() ? 1 : 0;
@@ -1671,7 +1872,7 @@ public class Relevar extends javax.swing.JFrame {
             int carbat = CarBat.isSelected() ? 1 : 0;
             int calair = CalAir.isSelected() ? 1 : 0;
             //Funciona (primer panel)
-            
+
             //Marcar
             int bal = balizas.isSelected() ? 1 : 0;
             int ant = antena.isSelected() ? 1 : 0;
@@ -1683,7 +1884,7 @@ public class Relevar extends javax.swing.JFrame {
             int gan = gancho.isSelected() ? 1 : 0;
             int cat = gato.isSelected() ? 1 : 0;
             //Marcar
-            
+
             int lavadero2 = lavun.isSelected() ? 1 : 0;
             int entregaypf = ypfguard.isSelected() ? 1 : 0;
             int liquidfreno = liquidfren.isSelected() ? 1 : 0;
@@ -1691,7 +1892,7 @@ public class Relevar extends javax.swing.JFrame {
             int matafuego = matafue.isSelected() ? 1 : 0;
 
             String texto = observations.getText();
-            
+
             try {
                 CLASES.Relevar.Insert(con, luzpos, luzdir, luzalt, luzdest, luzbaj, luzfre, luztras, limpara, fren, indictemp, testserv, indcom, indac, carbat, calair, bal, ant, sir, eqcom, cint, rueda, lla, gan, cat, lavadero2, entregaypf, liquidfreno, refrigerante, matafuego, texto, fechaActual, idtrip2);
             } catch (Exception ex) {
@@ -1699,14 +1900,14 @@ public class Relevar extends javax.swing.JFrame {
             }
 
             try {
-                CLASES.Relevar.guardar(Grande, lavadero, ypf, Funciona, MarcarAb, MarcarNiv, Observaciones, Marcarext, direccion);
+                CLASES.Relevar.guardar(Grande, lavadero, ypf, Funciona, MarcarAb, MarcarNiv, Observaciones, Marcarext, direccion, idtrip2);
             } catch (Exception ex) {
                 Logger.getLogger(Relevar.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+
             JOptionPane.showMessageDialog(null, "GUARDADO CORRECTAMENTE");
             this.dispose();
-            
+
         } else if (opcion == JOptionPane.CANCEL_OPTION || opcion == JOptionPane.CLOSED_OPTION) {
             System.out.println("Cancelado");
         }
@@ -1751,7 +1952,6 @@ public class Relevar extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Ambulancia;
     private javax.swing.JButton Borrar;
-    private javax.swing.JButton Borrar2;
     private javax.swing.JToggleButton CalAir;
     private javax.swing.JToggleButton CarBat;
     private javax.swing.JButton Deshabilitar;
@@ -1872,7 +2072,6 @@ public class Relevar extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel11;
-    private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel8;
@@ -1902,6 +2101,8 @@ public class Relevar extends javax.swing.JFrame {
     private javax.swing.JToggleButton liquidfren;
     private javax.swing.JToggleButton llave;
     private javax.swing.JToggleButton matafue;
+    private javax.swing.JPanel nivelac;
+    private javax.swing.JPanel nivelcomb;
     private javax.swing.JTextArea observations;
     private javax.swing.JToggleButton refr;
     private javax.swing.JToggleButton ruedaaux;
@@ -1909,6 +2110,7 @@ public class Relevar extends javax.swing.JFrame {
     private javax.swing.JLabel saliente1;
     private javax.swing.JLabel serie;
     private javax.swing.JToggleButton sirena;
+    private javax.swing.JSlider slider;
     private javax.swing.JLabel turno;
     private javax.swing.JComboBox<Cliente> victor;
     private javax.swing.JPanel ypf;

@@ -5,6 +5,8 @@
  */
 package VISTA;
 
+import CLASES.Asistencia.Area;
+import CLASES.Asistencia.Empleado;
 import CONEXIONES.Conexiones;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -21,19 +23,20 @@ import javax.swing.table.DefaultTableModel;
  * @author Facuymayriver
  */
 public class Asistencia extends javax.swing.JFrame {
-    public int x=0, c=0, id, v=0;
-    String emp="";
-    Connection con= Conexiones.Conexion();
+
+    public int x = 0, c = 0, id, id2;
+    String emp = "";
+    Connection con = Conexiones.Conexion();
     ResultSet rs;
-    int cont=0;
-    
+    int cont = 0;
+    String veri, veri2;
+
     public void refrescarCombo() {
-        while (Empleado.getItemCount() > 1) {
-            Empleado.removeItemAt(1); // Siempre elimina el segundo, el resto se va corriendo
+        while (empleado.getItemCount() > 1) {
+            empleado.removeItemAt(1); // Siempre elimina el segundo, el resto se va corriendo
         }
     }
 
-   
     public void refrescarTablaEmpleados() {
         tabla1.setRowCount(0); // Limpia
         try {
@@ -42,9 +45,10 @@ public class Asistencia extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Error al refrescar categorías");
         }
     }
-    
+
     //Metodos para editar
     public class ModeloEditablePorFila extends DefaultTableModel {
+
         private int editableRow = -1;
 
         public ModeloEditablePorFila(Object[] columnNames, int rowCount) {
@@ -53,8 +57,9 @@ public class Asistencia extends javax.swing.JFrame {
 
         @Override
         public boolean isCellEditable(int row, int column) {
-            if (column == 0) return false; // Nunca editar la columna ID
-
+            if (column == 0) {
+                return false; // Nunca editar la columna ID
+            }
             Object cod = getValueAt(row, 0);
 
             // Si es una fila nueva → editable
@@ -77,33 +82,31 @@ public class Asistencia extends javax.swing.JFrame {
         }
     }
     //Metodos para editar
-    
-    
+
     //Tabla
     ModeloEditablePorFila tabla1 = new ModeloEditablePorFila(new String[]{"Cod", "Apellido", "Cargo", "Base", "Entrada", "Salida", "Observación"}, 0) {
         private final int editableRow = -1;
     };
     //Tabla
-    
+
     public Asistencia() {
         initComponents();
         this.setLocationRelativeTo(null);
-        Empleado.setEnabled(false);
+        empleado.setEnabled(false);
         cargar.setEnabled(false);
         generar.setEnabled(false);
-        CLASES.Asistencia.jCombo(con, area, v, emp);
-        
-        
+        CLASES.Asistencia.Select(con, area);
+
         Tabla.setModel(tabla1);
-        
+
         //Mostrar tabla
-        try{
+        try {
             CLASES.Asistencia.MostrarAsistencia(con, tabla1);
             if (Tabla.getRowCount() == 0) {
-               JOptionPane.showMessageDialog(null, "No se encontró ningún Cliente.");
+                JOptionPane.showMessageDialog(null, "No se encontró ningún Cliente.");
             }
-        } catch (Exception e){
-            JOptionPane.showMessageDialog(null, "ERROR"+e);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "ERROR" + e);
         }
     }
 
@@ -138,7 +141,7 @@ public class Asistencia extends javax.swing.JFrame {
         jPanel9 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jSeparator3 = new javax.swing.JSeparator();
-        Empleado = new javax.swing.JComboBox<>();
+        empleado = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
         cargar = new javax.swing.JButton();
         jSeparator4 = new javax.swing.JSeparator();
@@ -452,12 +455,11 @@ public class Asistencia extends javax.swing.JFrame {
 
         jSeparator3.setForeground(new java.awt.Color(0, 0, 0));
 
-        Empleado.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        Empleado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Opciones" }));
-        Empleado.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        Empleado.addActionListener(new java.awt.event.ActionListener() {
+        empleado.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        empleado.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        empleado.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                EmpleadoActionPerformed(evt);
+                empleadoActionPerformed(evt);
             }
         });
 
@@ -525,7 +527,6 @@ public class Asistencia extends javax.swing.JFrame {
         jLabel8.setText("Area:");
 
         area.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        area.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Opciones" }));
         area.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 areaActionPerformed(evt);
@@ -569,7 +570,7 @@ public class Asistencia extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(Empleado, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(empleado, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(31, 31, 31))))
         );
         jPanel6Layout.setVerticalGroup(
@@ -582,7 +583,7 @@ public class Asistencia extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(Empleado, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(empleado, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel5)
                         .addComponent(jLabel8))
                     .addComponent(area))
@@ -782,7 +783,7 @@ public class Asistencia extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void EstadisticasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EstadisticasActionPerformed
-        Estadisticas ventana=new Estadisticas();
+        Estadisticas ventana = new Estadisticas();
         ventana.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_EstadisticasActionPerformed
@@ -796,43 +797,43 @@ public class Asistencia extends javax.swing.JFrame {
     }//GEN-LAST:event_SalirActionPerformed
 
     private void ConfiguracionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ConfiguracionActionPerformed
-        Configuracion ventana=new Configuracion();
+        Configuracion ventana = new Configuracion();
         ventana.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_ConfiguracionActionPerformed
 
     private void MenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuActionPerformed
-        Menu ventana=new Menu();
+        Menu ventana = new Menu();
         ventana.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_MenuActionPerformed
 
     private void MovimientosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MovimientosActionPerformed
-        Movimiento ventana=new Movimiento();
+        Movimiento ventana = new Movimiento();
         ventana.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_MovimientosActionPerformed
 
     private void EmpleadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EmpleadosActionPerformed
-        Empleados ventana=new Empleados();
+        Empleados ventana = new Empleados();
         ventana.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_EmpleadosActionPerformed
 
     private void AyudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AyudaActionPerformed
-        Ayuda ventana=new Ayuda();
+        Ayuda ventana = new Ayuda();
         ventana.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_AyudaActionPerformed
 
     private void Menu2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Menu2ActionPerformed
-        Menu ventana=new Menu();
+        Menu ventana = new Menu();
         ventana.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_Menu2ActionPerformed
 
     private void Movimientos1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Movimientos1ActionPerformed
-        Movimiento ventana=new Movimiento();
+        Movimiento ventana = new Movimiento();
         ventana.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_Movimientos1ActionPerformed
@@ -842,127 +843,138 @@ public class Asistencia extends javax.swing.JFrame {
     }//GEN-LAST:event_Asistencia2ActionPerformed
 
     private void Empleados2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Empleados2ActionPerformed
-        Empleados ventana=new Empleados();
+        Empleados ventana = new Empleados();
         ventana.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_Empleados2ActionPerformed
 
     private void Estadisticas2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Estadisticas2ActionPerformed
-        Estadisticas ventana=new Estadisticas();
+        Estadisticas ventana = new Estadisticas();
         ventana.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_Estadisticas2ActionPerformed
 
     private void Ayuda2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Ayuda2ActionPerformed
-        Ayuda ventana=new Ayuda();
+        Ayuda ventana = new Ayuda();
         ventana.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_Ayuda2ActionPerformed
 
     private void Configuracion2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Configuracion2ActionPerformed
-        Configuracion ventana=new Configuracion();
+        Configuracion ventana = new Configuracion();
         ventana.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_Configuracion2ActionPerformed
 
     private void areaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_areaActionPerformed
-        String ar=(String) area.getSelectedItem();
-        v=1;
-        if (!ar.equals("Opciones")){
-            Empleado.setEnabled(true);
-            refrescarCombo();
-            Empleado.setSelectedIndex(0);
-            CLASES.Asistencia.jCombo(con, Empleado, v, ar);
-        } else {
-            Empleado.setEnabled(false);
-            Empleado.setSelectedIndex(0);
+        Object value = area.getSelectedItem();
+        if (value instanceof Area) {
+            Area dat = (Area) value;
+            id = dat.getId();
+            veri = dat.getNombre();
+
+            if (!veri.equals("Opciones")) {
+                empleado.setEnabled(true);
+                refrescarCombo();
+                CLASES.Asistencia.jCombo(con, empleado, id);
+                empleado.setSelectedIndex(0);
+            } else {
+                empleado.setEnabled(false);
+                refrescarCombo();
+                empleado.setSelectedIndex(0);
+            }
         }
     }//GEN-LAST:event_areaActionPerformed
 
-    private void EmpleadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EmpleadoActionPerformed
-        String seleccion = (String) Empleado.getSelectedItem();
-        if (!seleccion.equals("Opciones")){
-            
-            Menu.setEnabled(false);
-            Movimientos.setEnabled(false);
-            Asistencia.setEnabled(false);
-            Empleados.setEnabled(false);
-            Estadisticas.setEnabled(false);
-            Ayuda.setEnabled(false);
-            Configuracion.setEnabled(false);
-            Salir.setEnabled(false);
-            
-            consultar.setEnabled(false);
-            terminar.setEnabled(false);
-            String dni = seleccion.split("-")[1];
-            cargar.setEnabled(true);
-            try {
-                CLASES.Asistencia.Datos(con, dni, nya, cya, doc);
-            } catch (SQLException ex) {
-                Logger.getLogger(Asistencia.class.getName()).log(Level.SEVERE, null, ex);
+    private void empleadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_empleadoActionPerformed
+        Object value = empleado.getSelectedItem();
+        if (value instanceof Empleado) {
+            Empleado dat = (Empleado) value;
+            id2 = dat.getId();
+            veri2 = dat.getNombre();
+            if (!veri2.equals("Opciones")) {
+                Menu.setEnabled(false);
+                Movimientos.setEnabled(false);
+                Asistencia.setEnabled(false);
+                Empleados.setEnabled(false);
+                Estadisticas.setEnabled(false);
+                Ayuda.setEnabled(false);
+                Configuracion.setEnabled(false);
+                Salir.setEnabled(false);
+
+                consultar.setEnabled(false);
+                terminar.setEnabled(false);
+                cargar.setEnabled(true);
+                try {
+                    CLASES.Asistencia.Datos(con, nya, cya, doc, id2);
+                } catch (SQLException ex) {
+                    Logger.getLogger(Asistencia.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            } else {
+                cargar.setEnabled(false);
+                consultar.setEnabled(true);
+                terminar.setEnabled(true);
+                nya.setText("Empleado:");
+                cya.setText("Cargo:                  -    Area:");
+                doc.setText("Documento:");
+
+                Menu.setEnabled(true);
+                Movimientos.setEnabled(true);
+                Asistencia.setEnabled(true);
+                Empleados.setEnabled(true);
+                Estadisticas.setEnabled(true);
+                Ayuda.setEnabled(true);
+                Configuracion.setEnabled(true);
+                Salir.setEnabled(true);
             }
-            
-        } else {
-            cargar.setEnabled(false);
-            consultar.setEnabled(true);
-            terminar.setEnabled(true);
-            nya.setText("Empleado:");
-            cya.setText("Cargo:                  -    Area:");
-            doc.setText("Documento:");
-            
-            Menu.setEnabled(true);
-            Movimientos.setEnabled(true);
-            Asistencia.setEnabled(true);
-            Empleados.setEnabled(true);
-            Estadisticas.setEnabled(true);
-            Ayuda.setEnabled(true);
-            Configuracion.setEnabled(true);
-            Salir.setEnabled(true);
         }
-    }//GEN-LAST:event_EmpleadoActionPerformed
+    }//GEN-LAST:event_empleadoActionPerformed
 
     private void cargarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cargarActionPerformed
+        
         try {
-            CLASES.Asistencia.Asistencia(con);     
+            CLASES.Asistencia.Asistencia(con, id2);
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "error principal"+ex);
+            JOptionPane.showMessageDialog(null, "error principal" + ex);
         }
         try {
-           tabla1.setRowCount(0); // Limpia
-           CLASES.Asistencia.MostrarAsistencia(con, tabla1);
+            tabla1.setRowCount(0); // Limpia
+            CLASES.Asistencia.MostrarAsistencia(con, tabla1);
         } catch (Exception e) {
-             JOptionPane.showMessageDialog(null, "Error al refrescar categorías");
+            JOptionPane.showMessageDialog(null, "Error al refrescar categorías");
         }
+        
         cargar.setEnabled(false);
-            consultar.setEnabled(true);
-            terminar.setEnabled(true);
-            nya.setText("Empleado:");
-            cya.setText("Cargo:                  -    Area:");
-            doc.setText("Documento:");
-            
-            Empleado.setSelectedIndex(0);
-            area.setSelectedIndex(0);
-            
-            Menu.setEnabled(true);
-            Movimientos.setEnabled(true);
-            Asistencia.setEnabled(true);
-            Empleados.setEnabled(true);
-            Estadisticas.setEnabled(true);
-            Ayuda.setEnabled(true);
-            Configuracion.setEnabled(true);
-            Salir.setEnabled(true);
+        consultar.setEnabled(true);
+        terminar.setEnabled(true);
+        nya.setText("Empleado:");
+        cya.setText("Cargo:                  -    Area:");
+        doc.setText("Documento:");
+
+        empleado.setSelectedIndex(0);
+        area.setSelectedIndex(0);
+
+        Menu.setEnabled(true);
+        Movimientos.setEnabled(true);
+        Asistencia.setEnabled(true);
+        Empleados.setEnabled(true);
+        Estadisticas.setEnabled(true);
+        Ayuda.setEnabled(true);
+        Configuracion.setEnabled(true);
+        Salir.setEnabled(true);
     }//GEN-LAST:event_cargarActionPerformed
 
     private void consultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consultarActionPerformed
         int filaSeleccionada = Tabla.getSelectedRow();
         if (filaSeleccionada != -1) {
             int fila = Tabla.getSelectedRow();
-            
+
             String fechaTexto = Tabla.getValueAt(fila, 4).toString();
             DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             LocalDateTime fechaEntrada = LocalDateTime.parse(fechaTexto, formato);
-            
-            CLASES.Asistencia.iniciarContador(con,fechaEntrada, HORAS);
+
+            CLASES.Asistencia.iniciarContador(con, fechaEntrada, HORAS);
         }
     }//GEN-LAST:event_consultarActionPerformed
 
@@ -984,7 +996,6 @@ public class Asistencia extends javax.swing.JFrame {
     private javax.swing.JMenuItem Ayuda2;
     private javax.swing.JButton Configuracion;
     private javax.swing.JMenuItem Configuracion2;
-    private javax.swing.JComboBox<String> Empleado;
     private javax.swing.JButton Empleados;
     private javax.swing.JMenuItem Empleados2;
     private javax.swing.JButton Estadisticas;
@@ -997,11 +1008,12 @@ public class Asistencia extends javax.swing.JFrame {
     private javax.swing.JMenu Opciones2;
     private javax.swing.JButton Salir;
     private javax.swing.JTable Tabla;
-    private javax.swing.JComboBox<String> area;
+    private javax.swing.JComboBox<Area> area;
     private javax.swing.JButton cargar;
     private javax.swing.JButton consultar;
     private javax.swing.JLabel cya;
     private javax.swing.JLabel doc;
+    private javax.swing.JComboBox<Empleado> empleado;
     private javax.swing.JButton generar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
