@@ -71,7 +71,7 @@ public class Movimiento extends javax.swing.JFrame {
     //Metodos para editar
 
     //Tabla
-    ModeloEditablePorFila tabla1 = new ModeloEditablePorFila(new String[]{"Cod", "salida", "llegada", "KmSalidas", "Destino", "Num. de Servicio"}, 0) {
+    ModeloEditablePorFila tabla1 = new ModeloEditablePorFila(new String[]{"Cod", "Salida", "Llegada", "KmSalida", "Destino", "Nº Serv."}, 0) {
         private final int editableRow = -1;
     };
     //Tabla
@@ -92,6 +92,24 @@ public class Movimiento extends javax.swing.JFrame {
 
         fechaActual = hoy.format(formato);
         Tabla.setRowHeight(30);
+        Tabla.getTableHeader().setReorderingAllowed(false);
+        Tabla.getTableHeader().setResizingAllowed(false);
+        
+        Tabla.getColumnModel().getColumn(0).setMinWidth(50);
+        Tabla.getColumnModel().getColumn(0).setMaxWidth(50);
+
+        Tabla.getColumnModel().getColumn(1).setMinWidth(90);
+        Tabla.getColumnModel().getColumn(1).setMaxWidth(90);
+
+        Tabla.getColumnModel().getColumn(2).setMinWidth(90);
+        Tabla.getColumnModel().getColumn(2).setMaxWidth(90);
+        
+        Tabla.getColumnModel().getColumn(3).setMinWidth(100);
+        Tabla.getColumnModel().getColumn(3).setMaxWidth(100);
+        
+        Tabla.getColumnModel().getColumn(4).setMinWidth(180);
+        Tabla.getColumnModel().getColumn(4).setMaxWidth(180);
+        
 
         CLASES.Movimientos.Select(con, Trip, fechaActual);
         MaskFormatter formatter = null;

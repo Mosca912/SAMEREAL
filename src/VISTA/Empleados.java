@@ -108,6 +108,24 @@ public class Empleados extends javax.swing.JFrame {
         CLASES.Empleados.jCombo(con, GS, Cargo, area);
 
         Tabla.setModel(tabla1);
+        Tabla.setRowHeight(30);
+        
+        Tabla.getTableHeader().setReorderingAllowed(false);
+        
+        Tabla.getColumnModel().getColumn(0).setMinWidth(40);
+        Tabla.getColumnModel().getColumn(0).setMaxWidth(40);
+
+        Tabla.getColumnModel().getColumn(1).setMinWidth(80);
+        Tabla.getColumnModel().getColumn(1).setMaxWidth(80);
+
+        Tabla.getColumnModel().getColumn(2).setMinWidth(70);
+        Tabla.getColumnModel().getColumn(2).setMaxWidth(70);
+        
+        Tabla.getColumnModel().getColumn(3).setMinWidth(100);
+        Tabla.getColumnModel().getColumn(3).setMaxWidth(100);
+        
+        Tabla.getColumnModel().getColumn(4).setMinWidth(100);
+        Tabla.getColumnModel().getColumn(4).setMaxWidth(100);
 
         //Mostrar tabla
         try {

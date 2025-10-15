@@ -86,6 +86,7 @@ public class Historial extends javax.swing.JFrame {
 
         Tabla.getColumnModel().getColumn(4).setMinWidth(100);
         Tabla.getColumnModel().getColumn(4).setMaxWidth(100);
+        
         Tabla.getTableHeader().setResizingAllowed(false);
         
         Tabla.addMouseListener(new MouseAdapter() {

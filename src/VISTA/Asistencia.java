@@ -8,6 +8,10 @@ package VISTA;
 import CLASES.Asistencia.Area;
 import CLASES.Asistencia.Empleado;
 import CONEXIONES.Conexiones;
+import com.itextpdf.text.DocumentException;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -84,7 +88,7 @@ public class Asistencia extends javax.swing.JFrame {
     //Metodos para editar
 
     //Tabla
-    ModeloEditablePorFila tabla1 = new ModeloEditablePorFila(new String[]{"Cod", "Apellido", "Cargo", "Base", "Entrada", "Salida", "Observación"}, 0) {
+    ModeloEditablePorFila tabla1 = new ModeloEditablePorFila(new String[]{"Cod", "Apellido", "Cargo", "Base", "Entrada", "Salida"}, 0) {
         private final int editableRow = -1;
     };
     //Tabla
@@ -98,6 +102,23 @@ public class Asistencia extends javax.swing.JFrame {
         CLASES.Asistencia.Select(con, area);
 
         Tabla.setModel(tabla1);
+        Tabla.setRowHeight(30);
+        Tabla.getTableHeader().setReorderingAllowed(false);
+
+        Tabla.getColumnModel().getColumn(0).setMinWidth(40);
+        Tabla.getColumnModel().getColumn(0).setMaxWidth(40);
+
+        Tabla.getColumnModel().getColumn(1).setMinWidth(80);
+        Tabla.getColumnModel().getColumn(1).setMaxWidth(80);
+
+        Tabla.getColumnModel().getColumn(2).setMinWidth(70);
+        Tabla.getColumnModel().getColumn(2).setMaxWidth(70);
+
+        Tabla.getColumnModel().getColumn(3).setMinWidth(60);
+        Tabla.getColumnModel().getColumn(3).setMaxWidth(60);
+
+        Tabla.getColumnModel().getColumn(4).setMinWidth(140);
+        Tabla.getColumnModel().getColumn(4).setMaxWidth(140);
 
         //Mostrar tabla
         try {
@@ -108,6 +129,26 @@ public class Asistencia extends javax.swing.JFrame {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "ERROR" + e);
         }
+
+        Tabla.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                // Detectar doble click
+                if (e.getClickCount() == 2 && Tabla.getSelectedRow() != -1) {
+                    int filaSeleccionada = Tabla.getSelectedRow();
+                    if (filaSeleccionada != -1) {
+                        int fila = Tabla.getSelectedRow();
+
+                        String fechaTexto = Tabla.getValueAt(fila, 4).toString();
+                        DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                        LocalDateTime fechaEntrada = LocalDateTime.parse(fechaTexto, formato);
+
+                        CLASES.Asistencia.iniciarContador(con, fechaEntrada, HORAS);
+                    }
+
+                }
+            }
+        });
     }
 
     /**
@@ -135,7 +176,6 @@ public class Asistencia extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JSeparator();
         jScrollPane1 = new javax.swing.JScrollPane();
         Tabla = new javax.swing.JTable();
-        consultar = new javax.swing.JButton();
         terminar = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
         jPanel9 = new javax.swing.JPanel();
@@ -383,15 +423,8 @@ public class Asistencia extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        Tabla.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jScrollPane1.setViewportView(Tabla);
-
-        consultar.setText("Consultar");
-        consultar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        consultar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                consultarActionPerformed(evt);
-            }
-        });
 
         terminar.setText("Terminar");
         terminar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -407,8 +440,7 @@ public class Asistencia extends javax.swing.JFrame {
                     .addComponent(jSeparator1)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 524, Short.MAX_VALUE)
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(consultar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(terminar)))
                 .addContainerGap())
         );
@@ -422,9 +454,7 @@ public class Asistencia extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 388, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(consultar)
-                    .addComponent(terminar))
+                .addComponent(terminar)
                 .addContainerGap())
         );
 
@@ -522,6 +552,11 @@ public class Asistencia extends javax.swing.JFrame {
 
         generar.setText("Generar");
         generar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        generar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                generarActionPerformed(evt);
+            }
+        });
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel8.setText("Area:");
@@ -558,7 +593,7 @@ public class Asistencia extends javax.swing.JFrame {
                                         .addGap(18, 18, 18)
                                         .addComponent(generar, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(jPanel6Layout.createSequentialGroup()
-                                        .addGap(35, 35, 35)
+                                        .addGap(31, 31, 31)
                                         .addComponent(jLabel7)))
                                 .addGap(0, 35, Short.MAX_VALUE)))
                         .addContainerGap())
@@ -893,6 +928,7 @@ public class Asistencia extends javax.swing.JFrame {
             id2 = dat.getId();
             veri2 = dat.getNombre();
             if (!veri2.equals("Opciones")) {
+                generar.setEnabled(false);
                 Menu.setEnabled(false);
                 Movimientos.setEnabled(false);
                 Asistencia.setEnabled(false);
@@ -902,18 +938,19 @@ public class Asistencia extends javax.swing.JFrame {
                 Configuracion.setEnabled(false);
                 Salir.setEnabled(false);
 
-                consultar.setEnabled(false);
                 terminar.setEnabled(false);
                 cargar.setEnabled(true);
+                
+                
                 try {
                     CLASES.Asistencia.Datos(con, nya, cya, doc, id2);
+                    //CLASES.Asistencia.Verificacion(con, cargar, generar, id2);
                 } catch (SQLException ex) {
                     Logger.getLogger(Asistencia.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
             } else {
                 cargar.setEnabled(false);
-                consultar.setEnabled(true);
                 terminar.setEnabled(true);
                 nya.setText("Empleado:");
                 cya.setText("Cargo:                  -    Area:");
@@ -926,13 +963,14 @@ public class Asistencia extends javax.swing.JFrame {
                 Estadisticas.setEnabled(true);
                 Ayuda.setEnabled(true);
                 Configuracion.setEnabled(true);
+                generar.setEnabled(false);
                 Salir.setEnabled(true);
             }
         }
     }//GEN-LAST:event_empleadoActionPerformed
 
     private void cargarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cargarActionPerformed
-        
+
         try {
             CLASES.Asistencia.Asistencia(con, id2);
         } catch (SQLException ex) {
@@ -944,9 +982,8 @@ public class Asistencia extends javax.swing.JFrame {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error al refrescar categorías");
         }
-        
+
         cargar.setEnabled(false);
-        consultar.setEnabled(true);
         terminar.setEnabled(true);
         nya.setText("Empleado:");
         cya.setText("Cargo:                  -    Area:");
@@ -965,18 +1002,18 @@ public class Asistencia extends javax.swing.JFrame {
         Salir.setEnabled(true);
     }//GEN-LAST:event_cargarActionPerformed
 
-    private void consultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consultarActionPerformed
-        int filaSeleccionada = Tabla.getSelectedRow();
-        if (filaSeleccionada != -1) {
-            int fila = Tabla.getSelectedRow();
-
-            String fechaTexto = Tabla.getValueAt(fila, 4).toString();
-            DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-            LocalDateTime fechaEntrada = LocalDateTime.parse(fechaTexto, formato);
-
-            CLASES.Asistencia.iniciarContador(con, fechaEntrada, HORAS);
+    private void generarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generarActionPerformed
+        String direccion="C:/db/PlanillaAsistencia.pdf";
+        try {
+            CLASES.Asistencia.GenerarPDF(con, 4, 10, direccion);
+        } catch (SQLException ex) {
+            Logger.getLogger(Asistencia.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Asistencia.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (DocumentException ex) {
+            Logger.getLogger(Asistencia.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_consultarActionPerformed
+    }//GEN-LAST:event_generarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1010,7 +1047,6 @@ public class Asistencia extends javax.swing.JFrame {
     private javax.swing.JTable Tabla;
     private javax.swing.JComboBox<Area> area;
     private javax.swing.JButton cargar;
-    private javax.swing.JButton consultar;
     private javax.swing.JLabel cya;
     private javax.swing.JLabel doc;
     private javax.swing.JComboBox<Empleado> empleado;
