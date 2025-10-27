@@ -18,6 +18,8 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.AbstractAction;
@@ -40,7 +42,7 @@ public class Asistencia1 extends javax.swing.JFrame {
     String emp = "";
     Connection con = Conexiones.Conexion();
     ResultSet rs;
-    int cont = 0;
+    int cont = 0, band = 0;
     String veri, veri2;
 
     public void refrescarCombo() {
@@ -49,16 +51,6 @@ public class Asistencia1 extends javax.swing.JFrame {
         }
     }
 
-    /*
-    public void refrescarTablaEmpleados() {
-        tabla1.setRowCount(0); // Limpia
-        try {
-            CLASES.Empleados.MostrarEmpleados(con, tabla1);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error al refrescar categorías");
-        }
-    }
-     */
     // Métodos para editar
     public class ModeloEditablePorFila extends DefaultTableModel {
 
@@ -116,7 +108,7 @@ public class Asistencia1 extends javax.swing.JFrame {
         // 🔒 Bloquear toda la edición
         public void bloquearEdicion() {
             this.editableRow = -1;
-            Actualizar.setEnabled(false); 
+            Actualizar.setEnabled(false);
             fireTableDataChanged();
         }
 
@@ -280,7 +272,18 @@ public class Asistencia1 extends javax.swing.JFrame {
                         if (val == 1) {
                             return;
                         }
+                        // Obtener fecha y hora actual
+                        LocalDateTime ahora = LocalDateTime.now();
+                        if (band==2){
+                            tabla2.bloquearEdicion();
+                        }
+                        // Formatear a "2025-10-14 23:14:14"
+                        DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                        String fechaHora = ahora.format(formato);
+                        band = 1;
                         Actualizar.setEnabled(true);
+                        Tabla.setValueAt(fechaHora, filaSeleccionada, 2);
+                        cargar.setEnabled(false);
                         tabla1.setEditableRow(filaSeleccionada); // ✅ habilita solo esa fila
                         Actualizar.setText("Guardar");
                     } catch (SQLException ex) {
@@ -300,8 +303,8 @@ public class Asistencia1 extends javax.swing.JFrame {
                     if (filaSeleccionada == -1) {
                         return;
                     }
-                    Object valEntrada = Tabla.getValueAt(filaSeleccionada, 1);
-                    Object valObserv = Tabla.getValueAt(filaSeleccionada, 3);
+                    Object valEntrada = Tabla2.getValueAt(filaSeleccionada, 1);
+                    Object valObserv = Tabla2.getValueAt(filaSeleccionada, 3);
 
                     String Entrada = (valEntrada != null) ? valEntrada.toString().trim() : "";
                     String Observ = (valObserv != null) ? valObserv.toString().trim() : "";
@@ -320,12 +323,24 @@ public class Asistencia1 extends javax.swing.JFrame {
                         if (val == 1) {
                             return;
                         }
+                        // Obtener fecha y hora actual
+                        LocalDateTime ahora = LocalDateTime.now();
+                        if (band==1){
+                            tabla1.bloquearEdicion();
+                        }
+                        // Formatear a "2025-10-14 23:14:14"
+                        DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                        String fechaHora = ahora.format(formato);
+                        band = 2;
                         Actualizar.setEnabled(true);
+                        Tabla2.setValueAt(fechaHora, filaSeleccionada, 2);
+                        cargar.setEnabled(false);
                         tabla2.setEditableRow(filaSeleccionada); // ✅ habilita solo esa fila
                         Actualizar.setText("Guardar");
                     } catch (SQLException ex) {
                         Logger.getLogger(Asistencia1.class.getName()).log(Level.SEVERE, null, ex);
                     }
+
                 }
             }
         });
@@ -338,8 +353,25 @@ public class Asistencia1 extends javax.swing.JFrame {
         actionMap.put("bloquearEdicion", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                tabla1.bloquearEdicion();
-                tabla2.bloquearEdicion();
+                if (band == 1) {
+                    int filaSeleccionada = Tabla.getSelectedRow();
+                    if (filaSeleccionada == -1) {
+                        return;
+                    } else {
+                        Tabla.setValueAt("", filaSeleccionada, 2);
+                    }
+                    tabla1.bloquearEdicion();
+                } else if (band == 2) {
+                    int filaSeleccionada = Tabla2.getSelectedRow();
+                    if (filaSeleccionada == -1) {
+                        return;
+                    } else {
+                        Tabla2.setValueAt("", filaSeleccionada, 2);
+                    }
+                    tabla2.bloquearEdicion();
+                }
+                cargar.setEnabled(true);
+                Actualizar.setEnabled(false);
             }
         });
     }
@@ -992,6 +1024,8 @@ public class Asistencia1 extends javax.swing.JFrame {
                 Actualizar.setEnabled(false);
                 refrescarCombo();
                 empleado.setSelectedIndex(0);
+                tabla1.bloquearEdicion();
+                tabla2.bloquearEdicion();
             }
         }
     }//GEN-LAST:event_areaActionPerformed
@@ -1013,7 +1047,7 @@ public class Asistencia1 extends javax.swing.JFrame {
                 Salir.setEnabled(false);
                 terminar.setEnabled(false);
                 cargar.setEnabled(true);
-                
+
                 try {
                     CLASES.Asistencia.Verificacion(con, id2);
                     //CLASES.Asistencia.Verificacion(con, cargar, generar, id2);
@@ -1024,7 +1058,7 @@ public class Asistencia1 extends javax.swing.JFrame {
                 }
 
                 try {
-                    CLASES.Asistencia.MostrarTabla(con, id2, Tabla);
+                    CLASES.Asistencia.MostrarTabla(con, id2, Tabla, Tabla2);
                     //CLASES.Asistencia.Verificacion(con, cargar, generar, id2);
                 } catch (SQLException ex) {
                     Logger.getLogger(Asistencia1.class.getName()).log(Level.SEVERE, null, ex);
@@ -1044,10 +1078,16 @@ public class Asistencia1 extends javax.swing.JFrame {
 
                 // Limpiar la tabla
                 tabla1.setRowCount(0);
+                tabla2.setRowCount(0);
 
                 // Primero agregás todos los días con vacío
                 for (int i = 1; i <= 15; i++) {
                     tabla1.addRow(new Object[]{i, "", "", ""});
+                }
+
+                // Primero agregás todos los días con vacío
+                for (int i = 16; i <= 31; i++) {
+                    tabla2.addRow(new Object[]{i, "", "", ""});
                 }
             }
         }
@@ -1061,34 +1101,61 @@ public class Asistencia1 extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "error principal" + ex);
         }
         try {
-            CLASES.Asistencia.MostrarTabla(con, id2, Tabla);
+            CLASES.Asistencia.MostrarTabla(con, id2, Tabla, Tabla2);
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error al refrescar categorías");
+            JOptionPane.showMessageDialog(null, "Error al refrescar categorías: " + e);
         }
     }//GEN-LAST:event_cargarActionPerformed
 
     private void ActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ActualizarActionPerformed
-        int filaSeleccionada = Tabla.getSelectedRow();
-        if (filaSeleccionada != -1) {
+        if (band == 1) {
+            int filaSeleccionada = Tabla.getSelectedRow();
+            if (filaSeleccionada != -1) {
 
-            int Dia = Integer.parseInt(Tabla.getValueAt(filaSeleccionada, 0).toString());
-            String Entrada = Tabla.getValueAt(filaSeleccionada, 1).toString();
-            String Observaciones = Tabla.getValueAt(filaSeleccionada, 3).toString();
+                int Dia = Integer.parseInt(Tabla.getValueAt(filaSeleccionada, 0).toString());
+                String Entrada = Tabla.getValueAt(filaSeleccionada, 1).toString();
+                String Observaciones = Tabla.getValueAt(filaSeleccionada, 3).toString();
 
-            try {
-                CLASES.Asistencia.ActualizarAsistencia(con, Dia, Entrada, Observaciones, id2);
-                JOptionPane.showMessageDialog(null, "Fila actualizada correctamente.");
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null, "⚠️ Error al actualizar: " + ex.getMessage());
+                try {
+                    CLASES.Asistencia.ActualizarAsistencia(con, Dia, Entrada, Observaciones, id2);
+                    JOptionPane.showMessageDialog(null, "Fila actualizada correctamente.");
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, "⚠️ Error al actualizar: " + ex.getMessage());
+                }
+                Actualizar.setText("Guardar");
+                Actualizar.setEnabled(false);
+                try {
+                    CLASES.Asistencia.MostrarTabla(con, id2, Tabla, Tabla2);
+                } catch (SQLException er) {
+                    JOptionPane.showMessageDialog(null, "Error al refrescar categorías");
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "No hay fila seleccionada.");
             }
-            Actualizar.setText("Actualizar");
-            try {
-                CLASES.Asistencia.MostrarTabla(con, id2, Tabla);
-            } catch (SQLException er) {
-                JOptionPane.showMessageDialog(null, "Error al refrescar categorías");
+        } else if (band == 2) {
+            int filaSeleccionada = Tabla2.getSelectedRow();
+            if (filaSeleccionada != -1) {
+
+                int Dia = Integer.parseInt(Tabla2.getValueAt(filaSeleccionada, 0).toString());
+                String Entrada = Tabla2.getValueAt(filaSeleccionada, 1).toString();
+                String Observaciones = Tabla2.getValueAt(filaSeleccionada, 3).toString();
+
+                try {
+                    CLASES.Asistencia.ActualizarAsistencia(con, Dia, Entrada, Observaciones, id2);
+                    JOptionPane.showMessageDialog(null, "Fila actualizada correctamente.");
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, "⚠️ Error al actualizar: " + ex.getMessage());
+                }
+                Actualizar.setText("Guardar");
+                Actualizar.setEnabled(false);
+                try {
+                    CLASES.Asistencia.MostrarTabla(con, id2, Tabla, Tabla2);
+                } catch (SQLException er) {
+                    JOptionPane.showMessageDialog(null, "Error al refrescar categorías");
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "No hay fila seleccionada.");
             }
-        } else {
-            JOptionPane.showMessageDialog(null, "No hay fila seleccionada.");
         }
     }//GEN-LAST:event_ActualizarActionPerformed
 

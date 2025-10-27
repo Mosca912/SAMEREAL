@@ -11,6 +11,7 @@ import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.ColumnText;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
@@ -173,7 +174,7 @@ public class Asistencia {
     }
     static int dia2, mesActual;
 
-    public static void MostrarTabla(Connection conexion, int id, JTable tabla) throws SQLException {
+    public static void MostrarTabla(Connection conexion, int id, JTable tabla, JTable tabla2) throws SQLException {
         mesActual = LocalDate.now().getMonthValue();
         dia2 = LocalDate.now().getDayOfMonth();
 
@@ -184,9 +185,10 @@ public class Asistencia {
         ResultSet rs = stm.executeQuery();
 
         DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
-
+        DefaultTableModel modelo2 = (DefaultTableModel) tabla2.getModel();
         // Limpiar la tabla
         modelo.setRowCount(0);
+        modelo2.setRowCount(0);
 
         // Primero agregás todos los días con vacío
         for (int i = 1; i <= 15; i++) {
@@ -199,6 +201,17 @@ public class Asistencia {
             }
         }
 
+        // Primero agregás todos los días con vacío
+        for (int r = 16; r <= 31; r++) {
+            if (r == dia2) {
+                modelo2.addRow(new Object[]{r, "", "", ""});
+            } else if (r < dia2) {
+                modelo2.addRow(new Object[]{r, "", "", "No asistió"});
+            } else {
+                modelo2.addRow(new Object[]{r, "", "", ""});
+            }
+        }
+
         // Ahora llenás los días con datos
         while (rs.next()) {
             int dia = rs.getInt("dia");
@@ -206,83 +219,137 @@ public class Asistencia {
             String salida = rs.getString("salida");
             String observ = rs.getString("observacion");
 
-            // Buscar la fila correspondiente al día y reemplazar los valores
-            modelo.setValueAt(entrada, dia - 1, 1);
-            modelo.setValueAt(salida, dia - 1, 2);
-            modelo.setValueAt(observ, dia - 1, 3);
+            if (dia <= 15) {
+                modelo.setValueAt(entrada, dia - 1, 1);
+                modelo.setValueAt(salida, dia - 1, 2);
+                modelo.setValueAt(observ, dia - 1, 3);
+            } else {
+                int fila = dia - 16; // Ajustar para la tabla derecha
+                modelo2.setValueAt(entrada, fila, 1);
+                modelo2.setValueAt(salida, fila, 2);
+                modelo2.setValueAt(observ, fila, 3);
+            }
         }
     }
 
     public static void Verificacion(Connection conexion, int id) throws Exception {
         int mes = LocalDate.now().getMonthValue();
-        PreparedStatement stm = conexion.prepareStatement("SELECT COUNT(idseguimientoasistencia) FROM seguimientoasistencia inner join asistencia on seguimientoasistencia.idAsistencia=asistencia.idAsistencia WHERE MONTH(entrada) != ? and asistencia.id_Empleado=? and asistencia.relevado=0;");
+        PreparedStatement stm = conexion.prepareStatement("SELECT COUNT(idseguimientoasistencia) FROM seguimientoasistencia inner join asistencia on seguimientoasistencia.idAsistencia=asistencia.idAsistencia WHERE asistencia.fecha != ? and asistencia.id_Empleado=? and asistencia.relevado=0;");
         stm.setInt(1, mes);
         stm.setInt(2, id);
         ResultSet rs = stm.executeQuery();
         if (rs.next()) {
             count = rs.getInt("COUNT(idseguimientoasistencia)");
-            if (count > 0) {
-                if (count == 1) {
-                    JOptionPane.showMessageDialog(null, "Este empleado tiene " + count + " mes sin relevar. Se generará el PDF correspondiente");
+            if (count == 1) {
+                JOptionPane.showMessageDialog(null, "Este empleado tiene " + count + " mes sin relevar. Se generará el PDF correspondiente");
 
-                    Document document = new Document(PageSize.A4);
-                    PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(""));
-                    document.open();
+                // 📄 Documento en horizontal
+                Document document = new Document(PageSize.A4.rotate());
+                PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("C:\\db\\asistencia_mes_" + mes + ".pdf"));
+                document.open();
 
-                    float pageHeight = PageSize.A4.getHeight();
+                // 📸 Cargar imagen (desde carpeta del proyecto o ruta absoluta)
+                com.itextpdf.text.Image img = com.itextpdf.text.Image.getInstance(Relevar.class.getResource("/IMAGENES/asistenciapdf.png"));
 
-                    document.add(new Paragraph("\n\n\n\n\n\n\n\n\n\n\n")); // 10 saltos de línea = ~180 pts de margen
+                // 📏 Ajustar tamaño y posición
+                img.scaleAbsolute(809, 140);
+                img.setAbsolutePosition(16, 450);
 
-                    // Ejecutar query
-                    PreparedStatement stm2 = con.prepareStatement("SELECT movimientos.salida, movimientos.llegada, movimientos.kilometrosdesalida, movimientos.destino, movimientos.num_servicio FROM movimientos WHERE idtripulacion=? AND borrado=0");
-                    stm2.setInt(1, id);
-                    ResultSet rs2 = stm2.executeQuery();
+                // 🧩 Agregar al documento
+                document.add(img);
 
-                    //primera hoja
-                    // 📌 Título
-                    com.itextpdf.text.Font tituloFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 16, BaseColor.BLACK);
-                    Paragraph titulo = new Paragraph("MES " + mes, tituloFont);
-                    titulo.setAlignment(Element.ALIGN_CENTER);
-                    document.add(titulo);
+                PdfContentByte canvas = writer.getDirectContent();
+                String sql = "SELECT empleado.nombre, empleado.apellido , area.area, cargo.Cargo, base.Base, empleado.dni FROM asistencia inner join empleado on asistencia.id_Empleado=empleado.id_Empleado inner join cargo on empleado.idCargo=cargo.idCargo inner join area on cargo.idArea=area.idArea inner join base on asistencia.idBase=base.idBase where asistencia.id_Empleado=9 and asistencia.idBase=2;";
+                try {
+                    PreparedStatement ps = con.prepareStatement(sql);
+                    //ps.setInt(1, id);
+                    ResultSet rs2 = ps.executeQuery();
+                    if (rs2.next()) {
+                        String emp = (rs2.getString("empleado.nombre") + (" ") + rs2.getString("empleado.apellido"));
+                        String are = rs2.getString("area.area");
+                        String car = rs2.getString("cargo.Cargo");
+                        String bas = rs2.getString("base.Base");
+                        String dni = rs2.getString("empleado.dni");
 
-                    // Crear una tabla de 3 columnas en el PDF
-                    PdfPTable pdfTable = new PdfPTable(4);
-                    pdfTable.setWidthPercentage(100);
-                    pdfTable.setHeaderRows(1); // primera fila = encabezado
+                        com.itextpdf.text.Font font = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 13);
 
-                    // Fuente para encabezado
-                    com.itextpdf.text.Font fontHeader = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12, BaseColor.WHITE);
+                        ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT,
+                                new Phrase(emp, font),
+                                235, 460, 0);
 
-                    // Encabezados
-                    String[] headers = {"Día", "Entrada", "Salida", "Observación"};
-                    for (String h : headers) {
-                        PdfPCell header = new PdfPCell(new Phrase(h, fontHeader));
-                        header.setBackgroundColor(BaseColor.DARK_GRAY);
-                        header.setHorizontalAlignment(Element.ALIGN_CENTER);
-                        header.setPadding(5);
-                        pdfTable.addCell(header);
+                        ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT,
+                                new Phrase(are, font),
+                                475, 565, 0);
+
+                        ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT,
+                                new Phrase(car, font),
+                                720, 515, 0);
+
+                        ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT,
+                                new Phrase(bas, font),
+                                580, 540, 0);
+                        ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT,
+                                new Phrase(dni, font),
+                                615, 460, 0);
+
                     }
-
-                    // Cargar filas
-                    com.itextpdf.text.Font fontFila = FontFactory.getFont(FontFactory.HELVETICA, 11, BaseColor.BLACK);
-                    while (rs.next()) {
-                        pdfTable.addCell(new Phrase(rs.getString("movimientos.salida"), fontFila));
-                        pdfTable.addCell(new Phrase(rs.getString("movimientos.llegada"), fontFila));
-                        pdfTable.addCell(new Phrase(rs.getString("movimientos.kilometrosdesalida"), fontFila));
-                        pdfTable.addCell(new Phrase(rs.getString("movimientos.destino"), fontFila));
-                        pdfTable.addCell(new Phrase(rs.getString("movimientos.num_servicio"), fontFila));
-                    }
-
-                    // Agregar la tabla al documento
-                    document.add(pdfTable);
-
-                } else if (count > 1) {
-                    JOptionPane.showMessageDialog(null, "Este empleado tiene " + count + " meses sin relevar. Se generará el PDF correspondiente");
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, "ERROR: " + ex.getMessage());
                 }
+
+                document.add(new Paragraph("\n\n\n\n\n\n"));
+                // 🧠 Título
+                Font tituloFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, BaseColor.BLACK);
+                Paragraph titulo = new Paragraph("PLANILLA DE ASISTENCIA - MES " + mes, tituloFont);
+                titulo.setAlignment(Element.ALIGN_CENTER);
+                document.add(titulo);
+                document.add(new Paragraph("\n"));
+
+                // 🎨 Fuente y colores
+                Font fontHeader = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12, BaseColor.WHITE);
+                Font fontNormal = FontFactory.getFont(FontFactory.HELVETICA, 10, BaseColor.BLACK);
+
+                // ⚙️ Query → traer los registros
+                PreparedStatement stm2 = con.prepareStatement("SELECT DAY(entrada) as dia, entrada, salida, observacion FROM seguimientoasistencia INNER JOIN asistencia ON seguimientoasistencia.idAsistencia = asistencia.idAsistencia WHERE asistencia.id_Empleado = 9 AND MONTH(entrada) = 10;");
+                //stm.setInt(1, idEmpleado);
+                //stm.setInt(2, mes);
+
+                ResultSet rs2 = stm2.executeQuery();
+
+                // 🗂️ Guardar los datos por día
+                Map<Integer, String[]> registros = new HashMap<>();
+                while (rs2.next()) {
+                    int dia = rs.getInt("dia");
+                    String entrada = rs2.getString("entrada") != null ? rs2.getString("entrada") : "";
+                    String salida = rs2.getString("salida") != null ? rs2.getString("salida") : "";
+                    String observ = rs2.getString("observacion") != null ? rs2.getString("observacion") : "";
+                    registros.put(dia, new String[]{entrada, salida, observ});
+                }
+
+                // 🧱 Crear dos tablas
+                PdfPTable tablaIzq = crearTablaAsistencia(1, 15, registros, fontHeader, fontNormal);
+                PdfPTable tablaDer = crearTablaAsistencia(16, 31, registros, fontHeader, fontNormal);
+
+                // ✅ Versión buena — usar tabla contenedora (no coordenadas absolutas)
+                PdfPTable contenedor = new PdfPTable(2);
+                contenedor.setWidthPercentage(105);
+                contenedor.addCell(tablaIzq);
+                contenedor.addCell(tablaDer);
+
+                document.add(contenedor);
+
+                document.close();
+                writer.close();
+
+                System.out.println("✅ PDF generado correctamente en horizontal: asistencia_mes_" + mes + ".pdf");
+
+            } else if (count > 1) {
+                JOptionPane.showMessageDialog(null, "Este empleado tiene " + count + " meses sin relevar. Se generará el PDF correspondiente");
             }
+
         }
-    } 
-    
+    }
+
     public static void Verificacion2(Connection conexion, int id) throws Exception {
         int mes = LocalDate.now().getMonthValue();
 
@@ -291,6 +358,56 @@ public class Asistencia {
         PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("C:\\db\\asistencia_mes_" + mes + ".pdf"));
         document.open();
 
+        // 📸 Cargar imagen (desde carpeta del proyecto o ruta absoluta)
+        com.itextpdf.text.Image img = com.itextpdf.text.Image.getInstance(Relevar.class.getResource("/IMAGENES/asistenciapdf.png"));
+
+        // 📏 Ajustar tamaño y posición
+        img.scaleAbsolute(809, 140);
+        img.setAbsolutePosition(16, 450);
+
+        // 🧩 Agregar al documento
+        document.add(img);
+
+        PdfContentByte canvas = writer.getDirectContent();
+        String sql = "SELECT empleado.nombre, empleado.apellido , area.area, cargo.Cargo, base.Base, empleado.dni FROM asistencia inner join empleado on asistencia.id_Empleado=empleado.id_Empleado inner join cargo on empleado.idCargo=cargo.idCargo inner join area on cargo.idArea=area.idArea inner join base on asistencia.idBase=base.idBase where asistencia.id_Empleado=9 and asistencia.idBase=2;";
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+            //ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                String emp = (rs.getString("empleado.nombre") + (" ") + rs.getString("empleado.apellido"));
+                String are = rs.getString("area.area");
+                String car = rs.getString("cargo.Cargo");
+                String bas = rs.getString("base.Base");
+                String dni = rs.getString("empleado.dni");
+
+                com.itextpdf.text.Font font = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 13);
+
+                ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT,
+                        new Phrase(emp, font),
+                        235, 460, 0);
+
+                ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT,
+                        new Phrase(are, font),
+                        475, 565, 0);
+
+                ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT,
+                        new Phrase(car, font),
+                        720, 515, 0);
+
+                ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT,
+                        new Phrase(bas, font),
+                        580, 540, 0);
+                ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT,
+                        new Phrase(dni, font),
+                        615, 460, 0);
+
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "ERROR: " + ex.getMessage());
+        }
+
+        document.add(new Paragraph("\n\n\n\n\n\n"));
         // 🧠 Título
         Font tituloFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, BaseColor.BLACK);
         Paragraph titulo = new Paragraph("PLANILLA DE ASISTENCIA - MES " + mes, tituloFont);
@@ -303,7 +420,7 @@ public class Asistencia {
         Font fontNormal = FontFactory.getFont(FontFactory.HELVETICA, 10, BaseColor.BLACK);
 
         // ⚙️ Query → traer los registros
-        PreparedStatement stm = con.prepareStatement("SELECT DAY(entrada) as dia, entrada, salida, observacion FROM seguimientoasistencia INNER JOIN asistencia ON seguimientoasistencia.idAsistencia = asistencia.idAsistencia WHERE asistencia.id_Empleado = 8 AND MONTH(entrada) = 10;");
+        PreparedStatement stm = con.prepareStatement("SELECT DAY(entrada) as dia, entrada, salida, observacion FROM seguimientoasistencia INNER JOIN asistencia ON seguimientoasistencia.idAsistencia = asistencia.idAsistencia WHERE asistencia.id_Empleado = 9 AND MONTH(entrada) = 10;");
         //stm.setInt(1, idEmpleado);
         //stm.setInt(2, mes);
 
@@ -325,7 +442,7 @@ public class Asistencia {
 
         // ✅ Versión buena — usar tabla contenedora (no coordenadas absolutas)
         PdfPTable contenedor = new PdfPTable(2);
-        contenedor.setWidthPercentage(100);
+        contenedor.setWidthPercentage(105);
         contenedor.addCell(tablaIzq);
         contenedor.addCell(tablaDer);
 
@@ -336,9 +453,8 @@ public class Asistencia {
 
         System.out.println("✅ PDF generado correctamente en horizontal: asistencia_mes_" + mes + ".pdf");
     }
-    
-    private static PdfPTable crearTablaAsistencia(int inicio, int fin, Map<Integer, String[]> registros,
-                                                 Font fontHeader, Font fontNormal) {
+
+    private static PdfPTable crearTablaAsistencia(int inicio, int fin, Map<Integer, String[]> registros, Font fontHeader, Font fontNormal) {
         PdfPTable tabla = new PdfPTable(4);
         tabla.setWidthPercentage(100);
         tabla.setHeaderRows(1);
@@ -351,18 +467,47 @@ public class Asistencia {
             header.setPadding(5);
             tabla.addCell(header);
         }
+// Define el valor de padding que quieres usar (ej: 5f para 5 puntos)
+        float paddingValue = 5f;
 
         for (int i = inicio; i <= fin; i++) {
-            tabla.addCell(new PdfPCell(new Phrase(String.valueOf(i), fontNormal)));
+            // Celda para el valor de 'i'
+            PdfPCell cellI = new PdfPCell(new Phrase(String.valueOf(i), fontNormal));
+            cellI.setPadding(paddingValue); // <--- APLICA EL RELLENO AQUÍ
+            tabla.addCell(cellI);
+
             if (registros.containsKey(i)) {
                 String[] datos = registros.get(i);
-                tabla.addCell(new Phrase(datos[0], fontNormal)); // Entrada
-                tabla.addCell(new Phrase(datos[1], fontNormal)); // Salida
-                tabla.addCell(new Phrase(datos[2], fontNormal)); // Observación
+
+                // Celda para Entrada
+                PdfPCell cellEntrada = new PdfPCell(new Phrase(datos[0], fontNormal));
+                cellEntrada.setPadding(paddingValue); // <--- APLICA EL RELLENO
+                tabla.addCell(cellEntrada);
+
+                // Celda para Salida
+                PdfPCell cellSalida = new PdfPCell(new Phrase(datos[1], fontNormal));
+                cellSalida.setPadding(paddingValue); // <--- APLICA EL RELLENO
+                tabla.addCell(cellSalida);
+
+                // Celda para Observación
+                PdfPCell cellObservacion = new PdfPCell(new Phrase(datos[2], fontNormal));
+                cellObservacion.setPadding(paddingValue); // <--- APLICA EL RELLENO
+                tabla.addCell(cellObservacion);
+
             } else {
-                tabla.addCell(new Phrase("", fontNormal));
-                tabla.addCell(new Phrase("", fontNormal));
-                tabla.addCell(new Phrase("", fontNormal));
+                // Celdas vacías
+
+                PdfPCell emptyCell1 = new PdfPCell(new Phrase("", fontNormal));
+                emptyCell1.setPadding(paddingValue); // <--- APLICA EL RELLENO
+                tabla.addCell(emptyCell1);
+
+                PdfPCell emptyCell2 = new PdfPCell(new Phrase("", fontNormal));
+                emptyCell2.setPadding(paddingValue); // <--- APLICA EL RELLENO
+                tabla.addCell(emptyCell2);
+
+                PdfPCell emptyCell3 = new PdfPCell(new Phrase("", fontNormal));
+                emptyCell3.setPadding(paddingValue); // <--- APLICA EL RELLENO
+                tabla.addCell(emptyCell3);
             }
         }
 

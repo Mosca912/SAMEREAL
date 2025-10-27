@@ -5,6 +5,14 @@
  */
 package VISTA;
 
+import java.awt.Color;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.BorderFactory;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.UIManager;
+
 /**
  *
  * @author Facuymayriver
@@ -15,8 +23,159 @@ public class Configuracion extends javax.swing.JFrame {
      * Creates new form Menu
      */
     public Configuracion() {
+        try {
+            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName()); // usa el clásico Metal
+            UIManager.put("MenuBar.background", new Color(52, 170, 121));
+            UIManager.put("Menu.foreground", Color.WHITE);
+            UIManager.put("MenuItem.background", new Color(52, 170, 121));
+            UIManager.put("MenuItem.foreground", Color.WHITE);
+            UIManager.put("Menu.selectionBackground", new Color(52, 170, 121));
+            UIManager.put("Menu.selectionForeground", Color.WHITE);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         initComponents();
         this.setLocationRelativeTo(null);
+        Icon iconNormal = new ImageIcon(getClass().getResource("/IMAGENES/movimiento.png"));
+        Icon iconHover = new ImageIcon(getClass().getResource("/IMAGENES/movimiento2.png"));
+
+        Icon iconNormal2 = new ImageIcon(getClass().getResource("/IMAGENES/menui.png"));
+        Icon iconHover2 = new ImageIcon(getClass().getResource("/IMAGENES/menui2.png"));
+
+        Icon iconNormal3 = new ImageIcon(getClass().getResource("/IMAGENES/asistencia.png"));
+        Icon iconHover3 = new ImageIcon(getClass().getResource("/IMAGENES/asistencia2.png"));
+
+        Icon iconNormal4 = new ImageIcon(getClass().getResource("/IMAGENES/empleado.png"));
+        Icon iconHover4 = new ImageIcon(getClass().getResource("/IMAGENES/empleado2.png"));
+
+        Icon iconNormal5 = new ImageIcon(getClass().getResource("/IMAGENES/estats.png"));
+        Icon iconHover5 = new ImageIcon(getClass().getResource("/IMAGENES/estats2.png"));
+
+        Icon iconNormal6 = new ImageIcon(getClass().getResource("/IMAGENES/ayuda.png"));
+        Icon iconHover6 = new ImageIcon(getClass().getResource("/IMAGENES/ayuda2.png"));
+
+        Icon iconNormal7 = new ImageIcon(getClass().getResource("/IMAGENES/config.png"));
+        Icon iconHover7 = new ImageIcon(getClass().getResource("/IMAGENES/config2.png"));
+
+        Icon iconNormal8 = new ImageIcon(getClass().getResource("/IMAGENES/salir.png"));
+        Icon iconHover8 = new ImageIcon(getClass().getResource("/IMAGENES/salir2.png"));
+
+        Movimientos.setBorder(BorderFactory.createLineBorder(new Color(52, 170, 121)));
+        Menu.setBorder(BorderFactory.createLineBorder(new Color(52, 170, 121)));
+        Asistencia.setBorder(BorderFactory.createLineBorder(new Color(52, 170, 121)));
+
+        Movimientos.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                Movimientos.setIcon(iconHover);
+                Movimientos.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                Movimientos.setIcon(iconNormal);
+                Movimientos.setBorder(BorderFactory.createLineBorder(new Color(52, 170, 121)));
+            }
+        });
+
+        Menu.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                Menu.setIcon(iconHover2);
+                Menu.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                Menu.setIcon(iconNormal2);
+                Menu.setBorder(BorderFactory.createLineBorder(new Color(52, 170, 121)));
+            }
+        });
+
+        Asistencia.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                Asistencia.setIcon(iconHover3);
+                Asistencia.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                Asistencia.setIcon(iconNormal3);
+                Asistencia.setBorder(BorderFactory.createLineBorder(new Color(52, 170, 121)));
+            }
+        });
+
+        Empleados.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                Empleados.setIcon(iconHover4);
+                Empleados.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                Empleados.setIcon(iconNormal4);
+                Empleados.setBorder(BorderFactory.createLineBorder(new Color(52, 170, 121)));
+            }
+        });
+
+        Estadisticas.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                Estadisticas.setIcon(iconHover5);
+                Estadisticas.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                Estadisticas.setIcon(iconNormal5);
+                Estadisticas.setBorder(BorderFactory.createLineBorder(new Color(52, 170, 121)));
+            }
+        });
+
+        Ayuda.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                Ayuda.setIcon(iconHover6);
+                Ayuda.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                Ayuda.setIcon(iconNormal6);
+                Ayuda.setBorder(BorderFactory.createLineBorder(new Color(52, 170, 121)));
+            }
+        });
+
+        Configuracion.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                Configuracion.setIcon(iconHover7);
+                Configuracion.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                Configuracion.setIcon(iconNormal7);
+                Configuracion.setBorder(BorderFactory.createLineBorder(new Color(52, 170, 121)));
+            }
+        });
+
+        Salir.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                Salir.setIcon(iconHover8);
+                Salir.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                Salir.setIcon(iconNormal8);
+                Salir.setBorder(BorderFactory.createLineBorder(new Color(52, 170, 121)));
+            }
+        });
     }
 
     /**
@@ -28,203 +187,38 @@ public class Configuracion extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
-        Menu = new javax.swing.JButton();
-        Movimiento = new javax.swing.JButton();
-        Asistencia = new javax.swing.JButton();
-        Salir = new javax.swing.JButton();
-        Empleados = new javax.swing.JButton();
-        Estadisticas = new javax.swing.JButton();
-        Ayuda = new javax.swing.JButton();
-        Configuracion = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         Max = new javax.swing.JButton();
-        jMenuBar1 = new javax.swing.JMenuBar();
-        Opciones2 = new javax.swing.JMenu();
-        Menu2 = new javax.swing.JMenuItem();
-        Movimientos = new javax.swing.JMenuItem();
-        Asistencia2 = new javax.swing.JMenuItem();
-        Empleados2 = new javax.swing.JMenuItem();
-        Estadisticas2 = new javax.swing.JMenuItem();
-        Ayuda2 = new javax.swing.JMenuItem();
-        Configuracion2 = new javax.swing.JMenuItem();
+        Barra = new javax.swing.JMenuBar();
+        Menu = new javax.swing.JMenu();
+        Movimientos = new javax.swing.JMenu();
+        iniciomov = new javax.swing.JMenuItem();
+        nuevtrip = new javax.swing.JMenuItem();
+        nuevovic = new javax.swing.JMenuItem();
+        historial = new javax.swing.JMenuItem();
+        Asistencia = new javax.swing.JMenu();
+        inicioas = new javax.swing.JMenuItem();
+        Empleados = new javax.swing.JMenu();
+        inicemp = new javax.swing.JMenuItem();
+        cargoemp = new javax.swing.JMenu();
+        nuev = new javax.swing.JMenuItem();
+        mod = new javax.swing.JMenuItem();
+        elim = new javax.swing.JMenuItem();
+        Estadisticas = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        Ayuda = new javax.swing.JMenu();
+        iniayu = new javax.swing.JMenuItem();
+        Configuracion = new javax.swing.JMenu();
+        iniconf = new javax.swing.JMenuItem();
+        Salir = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Configuración");
         setName("Ayuda"); // NOI18N
         setPreferredSize(new java.awt.Dimension(1200, 700));
         setResizable(false);
-
-        jPanel1.setBackground(new java.awt.Color(0, 102, 0));
-        jPanel1.setForeground(new java.awt.Color(153, 153, 0));
-
-        Menu.setBackground(new java.awt.Color(0, 102, 0));
-        Menu.setFont(new java.awt.Font("Dubai Medium", 1, 14)); // NOI18N
-        Menu.setForeground(new java.awt.Color(255, 255, 255));
-        Menu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/menui.png"))); // NOI18N
-        Menu.setText("Menu");
-        Menu.setToolTipText("ir al menu");
-        Menu.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 1, true));
-        Menu.setBorderPainted(false);
-        Menu.setContentAreaFilled(false);
-        Menu.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        Menu.setDefaultCapable(false);
-        Menu.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/menui2.png"))); // NOI18N
-        Menu.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                MenuActionPerformed(evt);
-            }
-        });
-
-        Movimiento.setBackground(new java.awt.Color(0, 102, 0));
-        Movimiento.setFont(new java.awt.Font("Dubai Medium", 1, 14)); // NOI18N
-        Movimiento.setForeground(new java.awt.Color(255, 255, 255));
-        Movimiento.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/movimiento.png"))); // NOI18N
-        Movimiento.setText("Movimientos");
-        Movimiento.setToolTipText("ir a movimientos");
-        Movimiento.setBorderPainted(false);
-        Movimiento.setContentAreaFilled(false);
-        Movimiento.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        Movimiento.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/movimiento2.png"))); // NOI18N
-        Movimiento.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                MovimientoActionPerformed(evt);
-            }
-        });
-
-        Asistencia.setBackground(new java.awt.Color(0, 102, 0));
-        Asistencia.setFont(new java.awt.Font("Dubai Medium", 1, 14)); // NOI18N
-        Asistencia.setForeground(new java.awt.Color(255, 255, 255));
-        Asistencia.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/asistencia.png"))); // NOI18N
-        Asistencia.setText("Asistencia");
-        Asistencia.setToolTipText("ir a asistencia");
-        Asistencia.setBorderPainted(false);
-        Asistencia.setContentAreaFilled(false);
-        Asistencia.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        Asistencia.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/asistencia2.png"))); // NOI18N
-        Asistencia.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                AsistenciaActionPerformed(evt);
-            }
-        });
-
-        Salir.setBackground(new java.awt.Color(0, 102, 0));
-        Salir.setFont(new java.awt.Font("Dubai Medium", 1, 14)); // NOI18N
-        Salir.setForeground(new java.awt.Color(255, 255, 255));
-        Salir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/salir.png"))); // NOI18N
-        Salir.setText("Salir");
-        Salir.setToolTipText("Salir del programa");
-        Salir.setBorderPainted(false);
-        Salir.setContentAreaFilled(false);
-        Salir.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        Salir.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/salir2.png"))); // NOI18N
-        Salir.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                SalirActionPerformed(evt);
-            }
-        });
-
-        Empleados.setBackground(new java.awt.Color(0, 102, 0));
-        Empleados.setFont(new java.awt.Font("Dubai Medium", 1, 14)); // NOI18N
-        Empleados.setForeground(new java.awt.Color(255, 255, 255));
-        Empleados.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/empleado.png"))); // NOI18N
-        Empleados.setText("Empleados");
-        Empleados.setToolTipText("ir a empleados");
-        Empleados.setBorderPainted(false);
-        Empleados.setContentAreaFilled(false);
-        Empleados.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        Empleados.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/empleado2.png"))); // NOI18N
-        Empleados.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                EmpleadosActionPerformed(evt);
-            }
-        });
-
-        Estadisticas.setBackground(new java.awt.Color(0, 102, 0));
-        Estadisticas.setFont(new java.awt.Font("Dubai Medium", 1, 14)); // NOI18N
-        Estadisticas.setForeground(new java.awt.Color(255, 255, 255));
-        Estadisticas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/estats.png"))); // NOI18N
-        Estadisticas.setText("Estadisticas");
-        Estadisticas.setToolTipText("ir a estadisticas");
-        Estadisticas.setBorderPainted(false);
-        Estadisticas.setContentAreaFilled(false);
-        Estadisticas.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        Estadisticas.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/estats2.png"))); // NOI18N
-        Estadisticas.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                EstadisticasActionPerformed(evt);
-            }
-        });
-
-        Ayuda.setBackground(new java.awt.Color(0, 102, 0));
-        Ayuda.setFont(new java.awt.Font("Dubai Medium", 1, 14)); // NOI18N
-        Ayuda.setForeground(new java.awt.Color(255, 255, 255));
-        Ayuda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/ayuda.png"))); // NOI18N
-        Ayuda.setText("Ayuda");
-        Ayuda.setToolTipText("ir a ayuda");
-        Ayuda.setBorderPainted(false);
-        Ayuda.setContentAreaFilled(false);
-        Ayuda.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        Ayuda.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/ayuda2.png"))); // NOI18N
-        Ayuda.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                AyudaActionPerformed(evt);
-            }
-        });
-
-        Configuracion.setBackground(new java.awt.Color(0, 102, 0));
-        Configuracion.setFont(new java.awt.Font("Dubai Medium", 1, 14)); // NOI18N
-        Configuracion.setForeground(new java.awt.Color(255, 255, 255));
-        Configuracion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/config.png"))); // NOI18N
-        Configuracion.setText("Configuración");
-        Configuracion.setToolTipText("ir a configuración");
-        Configuracion.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
-        Configuracion.setContentAreaFilled(false);
-        Configuracion.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        Configuracion.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/config2.png"))); // NOI18N
-        Configuracion.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ConfiguracionActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(Menu, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(Movimiento)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(Asistencia, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(Empleados)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(Estadisticas)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(Ayuda)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(Configuracion, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 61, Short.MAX_VALUE)
-                .addComponent(Salir))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                .addComponent(Movimiento, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(Menu)
-                .addComponent(Asistencia, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(Empleados, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(Estadisticas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(Ayuda, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(Salir)
-                .addComponent(Configuracion))
-        );
-
-        getContentPane().add(jPanel1, java.awt.BorderLayout.PAGE_START);
 
         jPanel2.setBackground(new java.awt.Color(102, 0, 0));
 
@@ -258,180 +252,253 @@ public class Configuracion extends javax.swing.JFrame {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(170, 170, 170)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(241, Short.MAX_VALUE)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 730, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(300, Short.MAX_VALUE))
+                .addGap(229, 229, 229))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(50, 50, 50)
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 480, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(70, Short.MAX_VALUE)
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 480, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(61, 61, 61))
         );
 
         getContentPane().add(jPanel3, java.awt.BorderLayout.CENTER);
 
-        Opciones2.setText("Opciones");
-        Opciones2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        Barra.setBackground(new java.awt.Color(52, 170, 121));
 
-        Menu2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.CTRL_MASK));
-        Menu2.setText("Menu");
-        Menu2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Menu2ActionPerformed(evt);
-            }
-        });
-        Opciones2.add(Menu2);
+        Menu.setBackground(new java.awt.Color(204, 255, 204));
+        Menu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/menui.png"))); // NOI18N
+        Menu.setText("Menu");
+        Menu.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        Menu.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        Barra.add(Menu);
 
-        Movimientos.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Y, java.awt.event.InputEvent.CTRL_MASK));
+        Movimientos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/movimiento.png"))); // NOI18N
         Movimientos.setText("Movimientos");
-        Movimientos.addActionListener(new java.awt.event.ActionListener() {
+        Movimientos.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        Movimientos.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+
+        iniciomov.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        iniciomov.setText("Inicio");
+        iniciomov.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                MovimientosActionPerformed(evt);
+                iniciomovActionPerformed(evt);
             }
         });
-        Opciones2.add(Movimientos);
+        Movimientos.add(iniciomov);
 
-        Asistencia2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_U, java.awt.event.InputEvent.CTRL_MASK));
-        Asistencia2.setText("Asistencia");
-        Asistencia2.addActionListener(new java.awt.event.ActionListener() {
+        nuevtrip.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        nuevtrip.setText("Nueva tripulación");
+        nuevtrip.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Asistencia2ActionPerformed(evt);
+                nuevtripActionPerformed(evt);
             }
         });
-        Opciones2.add(Asistencia2);
+        Movimientos.add(nuevtrip);
 
-        Empleados2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.CTRL_MASK));
-        Empleados2.setText("Empleados");
-        Empleados2.addActionListener(new java.awt.event.ActionListener() {
+        nuevovic.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        nuevovic.setText("Nuevo victor");
+        nuevovic.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Empleados2ActionPerformed(evt);
+                nuevovicActionPerformed(evt);
             }
         });
-        Opciones2.add(Empleados2);
+        Movimientos.add(nuevovic);
 
-        Estadisticas2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
-        Estadisticas2.setText("Estadisticas");
-        Estadisticas2.addActionListener(new java.awt.event.ActionListener() {
+        historial.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        historial.setText("Historial");
+        historial.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Estadisticas2ActionPerformed(evt);
+                historialActionPerformed(evt);
             }
         });
-        Opciones2.add(Estadisticas2);
+        Movimientos.add(historial);
 
-        Ayuda2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_MASK));
-        Ayuda2.setText("Ayuda");
-        Ayuda2.addActionListener(new java.awt.event.ActionListener() {
+        Barra.add(Movimientos);
+
+        Asistencia.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/asistencia.png"))); // NOI18N
+        Asistencia.setText("Asistencia");
+        Asistencia.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        Asistencia.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        Asistencia.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Ayuda2ActionPerformed(evt);
+                AsistenciaActionPerformed(evt);
             }
         });
-        Opciones2.add(Ayuda2);
 
-        Configuracion2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_K, java.awt.event.InputEvent.CTRL_MASK));
-        Configuracion2.setText("Configuracion");
-        Configuracion2.addActionListener(new java.awt.event.ActionListener() {
+        inicioas.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        inicioas.setText("Inicio");
+        inicioas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Configuracion2ActionPerformed(evt);
+                inicioasActionPerformed(evt);
             }
         });
-        Opciones2.add(Configuracion2);
+        Asistencia.add(inicioas);
 
-        jMenuBar1.add(Opciones2);
+        Barra.add(Asistencia);
 
-        setJMenuBar(jMenuBar1);
+        Empleados.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/empleado.png"))); // NOI18N
+        Empleados.setText("Empleados");
+        Empleados.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        Empleados.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+
+        inicemp.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        inicemp.setText("Inicio");
+        inicemp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                inicempActionPerformed(evt);
+            }
+        });
+        Empleados.add(inicemp);
+
+        cargoemp.setBackground(new java.awt.Color(52, 170, 121));
+        cargoemp.setText("Cargo");
+        cargoemp.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+
+        nuev.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        nuev.setText("Nuevo");
+        cargoemp.add(nuev);
+
+        mod.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        mod.setText("Modificar");
+        mod.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                modActionPerformed(evt);
+            }
+        });
+        cargoemp.add(mod);
+
+        elim.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        elim.setText("Eliminar");
+        elim.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                elimActionPerformed(evt);
+            }
+        });
+        cargoemp.add(elim);
+
+        Empleados.add(cargoemp);
+
+        Barra.add(Empleados);
+
+        Estadisticas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/estats.png"))); // NOI18N
+        Estadisticas.setText("Estadisticas");
+        Estadisticas.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        Estadisticas.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+
+        jMenuItem1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jMenuItem1.setText("Consultar");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        Estadisticas.add(jMenuItem1);
+
+        Barra.add(Estadisticas);
+
+        Ayuda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/ayuda.png"))); // NOI18N
+        Ayuda.setText("Ayuda");
+        Ayuda.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        Ayuda.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+
+        iniayu.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        iniayu.setText("Ayuda");
+        iniayu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                iniayuActionPerformed(evt);
+            }
+        });
+        Ayuda.add(iniayu);
+
+        Barra.add(Ayuda);
+
+        Configuracion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/config.png"))); // NOI18N
+        Configuracion.setText("Configuración");
+        Configuracion.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        Configuracion.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+
+        iniconf.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        iniconf.setText("Inicio");
+        Configuracion.add(iniconf);
+
+        Barra.add(Configuracion);
+
+        Salir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/salir.png"))); // NOI18N
+        Salir.setText("Salir");
+        Salir.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        Salir.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        Barra.add(Salir);
+
+        setJMenuBar(Barra);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void EstadisticasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EstadisticasActionPerformed
-        Estadisticas ventana=new Estadisticas();
+    private void MaxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MaxActionPerformed
+        this.setExtendedState(MAXIMIZED_BOTH);
+    }//GEN-LAST:event_MaxActionPerformed
+
+    private void iniciomovActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iniciomovActionPerformed
+        Movimiento ventana = new Movimiento();
         ventana.setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_EstadisticasActionPerformed
+    }//GEN-LAST:event_iniciomovActionPerformed
+
+    private void nuevtripActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevtripActionPerformed
+        AddTri ventana = new AddTri(0);
+        ventana.setVisible(true);
+    }//GEN-LAST:event_nuevtripActionPerformed
+
+    private void nuevovicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevovicActionPerformed
+        AddVic ventana = new AddVic();
+        ventana.setVisible(true);
+    }//GEN-LAST:event_nuevovicActionPerformed
+
+    private void historialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_historialActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_historialActionPerformed
+
+    private void inicioasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inicioasActionPerformed
+        Asistencia1 ventana=new Asistencia1();
+        ventana.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_inicioasActionPerformed
 
     private void AsistenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AsistenciaActionPerformed
-        Asistencia ventana=new Asistencia();
+        Asistencia1 ventana=new Asistencia1();
         ventana.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_AsistenciaActionPerformed
 
-    private void SalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SalirActionPerformed
-        System.exit(0);
-    }//GEN-LAST:event_SalirActionPerformed
-
-    private void ConfiguracionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ConfiguracionActionPerformed
-
-    }//GEN-LAST:event_ConfiguracionActionPerformed
-
-    private void MovimientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MovimientoActionPerformed
-        Movimiento ventana=new Movimiento();
-        ventana.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_MovimientoActionPerformed
-
-    private void MenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuActionPerformed
-        Menu ventana=new Menu();
-        ventana.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_MenuActionPerformed
-
-    private void EmpleadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EmpleadosActionPerformed
+    private void inicempActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inicempActionPerformed
         Empleados ventana=new Empleados();
         ventana.setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_EmpleadosActionPerformed
+    }//GEN-LAST:event_inicempActionPerformed
 
-    private void AyudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AyudaActionPerformed
-        Ayuda ventana=new Ayuda();
+    private void modActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modActionPerformed
+        ModElimCargo1 ventana = new ModElimCargo1(1);
         ventana.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_AyudaActionPerformed
+    }//GEN-LAST:event_modActionPerformed
 
-    private void Menu2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Menu2ActionPerformed
-        Menu ventana=new Menu();
+    private void elimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_elimActionPerformed
+        ModElimCargo1 ventana = new ModElimCargo1(0);
         ventana.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_Menu2ActionPerformed
+    }//GEN-LAST:event_elimActionPerformed
 
-    private void MovimientosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MovimientosActionPerformed
-        Movimiento ventana=new Movimiento();
-        ventana.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_MovimientosActionPerformed
-
-    private void Asistencia2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Asistencia2ActionPerformed
-        Asistencia ventana=new Asistencia();
-        ventana.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_Asistencia2ActionPerformed
-
-    private void Empleados2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Empleados2ActionPerformed
-        Empleados ventana=new Empleados();
-        ventana.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_Empleados2ActionPerformed
-
-    private void Estadisticas2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Estadisticas2ActionPerformed
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         Estadisticas ventana=new Estadisticas();
         ventana.setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_Estadisticas2ActionPerformed
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
-    private void Ayuda2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Ayuda2ActionPerformed
-        Ayuda ventana=new Ayuda();
-        ventana.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_Ayuda2ActionPerformed
-
-    private void Configuracion2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Configuracion2ActionPerformed
-
-    }//GEN-LAST:event_Configuracion2ActionPerformed
-
-    private void MaxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MaxActionPerformed
-        this.setExtendedState(MAXIMIZED_BOTH);
-    }//GEN-LAST:event_MaxActionPerformed
+    private void iniayuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iniayuActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_iniayuActionPerformed
 
     /**
      * @param args the command line arguments
@@ -470,27 +537,31 @@ public class Configuracion extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton Asistencia;
-    private javax.swing.JMenuItem Asistencia2;
-    private javax.swing.JButton Ayuda;
-    private javax.swing.JMenuItem Ayuda2;
-    private javax.swing.JButton Configuracion;
-    private javax.swing.JMenuItem Configuracion2;
-    private javax.swing.JButton Empleados;
-    private javax.swing.JMenuItem Empleados2;
-    private javax.swing.JButton Estadisticas;
-    private javax.swing.JMenuItem Estadisticas2;
+    private javax.swing.JMenu Asistencia;
+    private javax.swing.JMenu Ayuda;
+    private javax.swing.JMenuBar Barra;
+    private javax.swing.JMenu Configuracion;
+    private javax.swing.JMenu Empleados;
+    private javax.swing.JMenu Estadisticas;
     private javax.swing.JButton Max;
-    private javax.swing.JButton Menu;
-    private javax.swing.JMenuItem Menu2;
-    private javax.swing.JButton Movimiento;
-    private javax.swing.JMenuItem Movimientos;
-    private javax.swing.JMenu Opciones2;
-    private javax.swing.JButton Salir;
-    private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JMenu Menu;
+    private javax.swing.JMenu Movimientos;
+    private javax.swing.JMenu Salir;
+    private javax.swing.JMenu cargoemp;
+    private javax.swing.JMenuItem elim;
+    private javax.swing.JMenuItem historial;
+    private javax.swing.JMenuItem iniayu;
+    private javax.swing.JMenuItem inicemp;
+    private javax.swing.JMenuItem inicioas;
+    private javax.swing.JMenuItem iniciomov;
+    private javax.swing.JMenuItem iniconf;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JMenuItem mod;
+    private javax.swing.JMenuItem nuev;
+    private javax.swing.JMenuItem nuevovic;
+    private javax.swing.JMenuItem nuevtrip;
     // End of variables declaration//GEN-END:variables
 }

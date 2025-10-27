@@ -51,7 +51,6 @@ public class Ayuda extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Ayuda");
-        setPreferredSize(new java.awt.Dimension(1200, 700));
         setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(0, 102, 0));
@@ -326,50 +325,6 @@ public class Ayuda extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void EstadisticasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EstadisticasActionPerformed
-        Estadisticas ventana=new Estadisticas();
-        ventana.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_EstadisticasActionPerformed
-
-    private void AsistenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AsistenciaActionPerformed
-        Asistencia ventana=new Asistencia();
-        ventana.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_AsistenciaActionPerformed
-
-    private void SalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SalirActionPerformed
-        System.exit(0);
-    }//GEN-LAST:event_SalirActionPerformed
-
-    private void ConfiguracionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ConfiguracionActionPerformed
-        Configuracion ventana=new Configuracion();
-        ventana.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_ConfiguracionActionPerformed
-
-    private void MovimientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MovimientoActionPerformed
-        Movimiento ventana=new Movimiento();
-        ventana.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_MovimientoActionPerformed
-
-    private void MenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuActionPerformed
-        Menu ventana=new Menu();
-        ventana.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_MenuActionPerformed
-
-    private void EmpleadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EmpleadosActionPerformed
-        Empleados ventana=new Empleados();
-        ventana.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_EmpleadosActionPerformed
-
-    private void AyudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AyudaActionPerformed
-
-    }//GEN-LAST:event_AyudaActionPerformed
-
     private void Menu2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Menu2ActionPerformed
         Menu ventana=new Menu();
         ventana.setVisible(true);
@@ -383,7 +338,7 @@ public class Ayuda extends javax.swing.JFrame {
     }//GEN-LAST:event_MovimientosActionPerformed
 
     private void Asistencia2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Asistencia2ActionPerformed
-        Asistencia ventana=new Asistencia();
+        Asistencia1 ventana=new Asistencia1();
         ventana.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_Asistencia2ActionPerformed
@@ -409,6 +364,50 @@ public class Ayuda extends javax.swing.JFrame {
         ventana.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_Configuracion2ActionPerformed
+
+    private void ConfiguracionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ConfiguracionActionPerformed
+        Configuracion ventana=new Configuracion();
+        ventana.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_ConfiguracionActionPerformed
+
+    private void AyudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AyudaActionPerformed
+
+    }//GEN-LAST:event_AyudaActionPerformed
+
+    private void EstadisticasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EstadisticasActionPerformed
+        Estadisticas ventana=new Estadisticas();
+        ventana.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_EstadisticasActionPerformed
+
+    private void EmpleadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EmpleadosActionPerformed
+        Empleados ventana=new Empleados();
+        ventana.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_EmpleadosActionPerformed
+
+    private void SalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SalirActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_SalirActionPerformed
+
+    private void AsistenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AsistenciaActionPerformed
+        Asistencia1 ventana=new Asistencia1();
+        ventana.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_AsistenciaActionPerformed
+
+    private void MovimientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MovimientoActionPerformed
+        Movimiento ventana=new Movimiento();
+        ventana.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_MovimientoActionPerformed
+
+    private void MenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuActionPerformed
+        Menu ventana=new Menu();
+        ventana.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_MenuActionPerformed
 
     /**
      * @param args the command line arguments

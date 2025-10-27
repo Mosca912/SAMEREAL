@@ -930,7 +930,7 @@ public class Movimiento extends javax.swing.JFrame {
     }//GEN-LAST:event_EstadisticasActionPerformed
 
     private void AsistenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AsistenciaActionPerformed
-        Asistencia ventana = new Asistencia();
+        Asistencia1 ventana=new Asistencia1();
         ventana.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_AsistenciaActionPerformed
@@ -978,7 +978,7 @@ public class Movimiento extends javax.swing.JFrame {
     }//GEN-LAST:event_Movimientos1ActionPerformed
 
     private void Asistencia2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Asistencia2ActionPerformed
-        Asistencia ventana = new Asistencia();
+        Asistencia1 ventana=new Asistencia1();
         ventana.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_Asistencia2ActionPerformed

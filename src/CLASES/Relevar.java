@@ -163,6 +163,7 @@ public class Relevar {
 
         // 🧩 Agregar al documento
         document.add(img);
+        
         PdfContentByte canvas = writer.getDirectContent();
         String sql = "SELECT t.idtripulacion, CONCAT(e1.nombre, ' ', e1.apellido) AS cvs, CONCAT(e2.nombre, ' ', e2.apellido) AS medico, CONCAT(e3.nombre, ' ', e3.apellido) AS enfermero, a.victor FROM tripulacion t JOIN empleado e1 ON t.cvs = e1.id_Empleado JOIN empleado e2 ON t.medico = e2.id_Empleado JOIN empleado e3 ON t.enfermero = e3.id_Empleado INNER JOIN ambulancia a ON t.idAmbulancia=a.idAmbulancia WHERE idtripulacion=?;";
         try {

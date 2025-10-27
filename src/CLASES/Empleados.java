@@ -38,7 +38,7 @@ public class Empleados {
     
     public static void MostrarCargo(Connection conexion, DefaultTableModel modelo) throws SQLException {
 
-        PreparedStatement stm=conexion.prepareStatement ("SELECT cargo.idCargo, cargo.Cargo, area.area from cargo inner join area on cargo.idArea=area.idArea where borrado=0");
+        PreparedStatement stm=conexion.prepareStatement ("SELECT cargo.idCargo, cargo.Cargo, area.area from cargo inner join area on cargo.idArea=area.idArea where cargo.borrado=0;");
         ResultSet rs = stm.executeQuery();
         
          while (rs.next()){

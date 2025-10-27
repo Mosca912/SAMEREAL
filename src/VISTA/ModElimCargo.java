@@ -16,13 +16,14 @@ import javax.swing.table.DefaultTableModel;
  * @author Facuymayriver
  */
 public class ModElimCargo extends javax.swing.JFrame {
-private int band;
-   private Empleados ventanaPrincipal;
-   Connection con= Conexiones.Conexion();
-   
-   
-   //Metodos para editar
+
+    private int band;
+    private Empleados ventanaPrincipal;
+    Connection con = Conexiones.Conexion();
+
+    //Metodos para editar
     public class ModeloEditablePorFila extends DefaultTableModel {
+
         private final int editableRow = -1;
         private final int band;
 
@@ -32,32 +33,33 @@ private int band;
         }
 
         @Override
-public boolean isCellEditable(int row, int column) {
-    // Solo permitir editar la columna 1 (índice 1) y solo si band == 1
-    return band == 1 && column == 1;
-}
+        public boolean isCellEditable(int row, int column) {
+            // Solo permitir editar la columna 1 (índice 1) y solo si band == 1
+            return band == 1 && column == 1;
+        }
 
     }
     //Metodos para editar
     ModeloEditablePorFila tabla1 = new ModeloEditablePorFila(new String[]{"Cod", "Cargo", "Area"}, 0, band);
+
     public ModElimCargo(int band, Empleados ventanaPrincipal) {
         initComponents();
         this.setLocationRelativeTo(null);
-        this.band=band;
+        this.band = band;
         this.ventanaPrincipal = ventanaPrincipal;
         //Tabla
-    ModeloEditablePorFila tabla2 = new ModeloEditablePorFila(new String[]{"Cod", "Cargo", "Area"}, 0, band);
-    //Tabla
+        ModeloEditablePorFila tabla2 = new ModeloEditablePorFila(new String[]{"Cod", "Cargo", "Area"}, 0, band);
+        //Tabla
         tablamostrar.setModel(tabla2);
-        try{
+        try {
             CLASES.Empleados.MostrarCargo(con, tabla2);
             if (tablamostrar.getRowCount() == 0) {
                 JOptionPane.showMessageDialog(null, "No se encontró ningún Producto.");
             }
-            } catch (Exception e){
-                JOptionPane.showMessageDialog(null, "ERROR");
-            }
-        
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "ERROR" + e);
+        }
+
         if (band == 0) {
             titulo.setText("Eliminar");
             Leyenda.setText("Seleccione una opcion que desea eliminar");
@@ -170,96 +172,98 @@ public boolean isCellEditable(int row, int column) {
     }//GEN-LAST:event_CancelarActionPerformed
 
     private void BotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonActionPerformed
-        if (ModElimCargo.this.band == 0){
-        int filaSeleccionada = tablamostrar.getSelectedRow();
-        if (filaSeleccionada != -1) {
-            int opcion = JOptionPane.showConfirmDialog(
-                null,
-                "¿Deseás Eliminar?",
-                "Confirmar acción",
-                JOptionPane.OK_CANCEL_OPTION,
-                JOptionPane.QUESTION_MESSAGE
-            );
+        if (ModElimCargo.this.band == 0) {
+            int filaSeleccionada = tablamostrar.getSelectedRow();
+            if (filaSeleccionada != -1) {
+                int opcion = JOptionPane.showConfirmDialog(
+                        null,
+                        "¿Deseás Eliminar?",
+                        "Confirmar acción",
+                        JOptionPane.OK_CANCEL_OPTION,
+                        JOptionPane.QUESTION_MESSAGE
+                );
 
-            if (opcion == JOptionPane.OK_OPTION) {
-                int fila = tablamostrar.getSelectedRow();
-                int cod = Integer.parseInt(tablamostrar.getValueAt(fila, 0).toString());
-                try{
-                int veri=CLASES.Empleados.Validacion(con, cod);
-                int borrado = 1;
-                switch (veri) {
-                    case 1:
-                        try{
-                            CLASES.Empleados.EliminarCargo(con, cod, borrado); 
-                            JOptionPane.showMessageDialog(null, "Eliminao");
-                            tabla1.setRowCount(0);
-                            CLASES.Empleados.MostrarCargo(con, tabla1);
-                            tablamostrar.setModel(tabla1);
-                        }catch(SQLException ex){
-                            JOptionPane.showMessageDialog(null, "ERROR"+ex);
-                        }       break;
-                    case 0:
-                        try{
-                            CLASES.Empleados.EliminarCargo(con, cod, borrado);
-                            JOptionPane.showMessageDialog(null, "Eliminao");
-                            tabla1.setRowCount(0);
-                            CLASES.Empleados.MostrarCargo(con, tabla1);
-                            tablamostrar.setModel(tabla1);
-                        }catch(SQLException ex){
-                            JOptionPane.showMessageDialog(null, "ERROR"+ex);
-                        }       break;
-                    case 2:
-                        break;
+                if (opcion == JOptionPane.OK_OPTION) {
+                    int fila = tablamostrar.getSelectedRow();
+                    int cod = Integer.parseInt(tablamostrar.getValueAt(fila, 0).toString());
+                    try {
+                        int veri = CLASES.Empleados.Validacion(con, cod);
+                        int borrado = 1;
+                        switch (veri) {
+                            case 1:
+                                try {
+                                    CLASES.Empleados.EliminarCargo(con, cod, borrado);
+                                    JOptionPane.showMessageDialog(null, "Eliminao");
+                                    tabla1.setRowCount(0);
+                                    CLASES.Empleados.MostrarCargo(con, tabla1);
+                                    tablamostrar.setModel(tabla1);
+                                } catch (SQLException ex) {
+                                    JOptionPane.showMessageDialog(null, "ERROR" + ex);
+                                }
+                                break;
+                            case 0:
+                                try {
+                                    CLASES.Empleados.EliminarCargo(con, cod, borrado);
+                                    JOptionPane.showMessageDialog(null, "Eliminao");
+                                    tabla1.setRowCount(0);
+                                    CLASES.Empleados.MostrarCargo(con, tabla1);
+                                    tablamostrar.setModel(tabla1);
+                                } catch (SQLException ex) {
+                                    JOptionPane.showMessageDialog(null, "ERROR" + ex);
+                                }
+                                break;
+                            case 2:
+                                break;
+                        }
+                    } catch (SQLException ex) {
+                        JOptionPane.showMessageDialog(null, "ERROR" + ex);
+                    }
+                } else if (opcion == JOptionPane.CANCEL_OPTION || opcion == JOptionPane.CLOSED_OPTION) {
+                    // El usuario eligió "Cancelar" o cerró la ventana
+                    System.out.println("Cancelado");
                 }
-                }catch(SQLException ex){
-                   JOptionPane.showMessageDialog(null, "ERROR"+ex); 
-                }
-            } else if (opcion == JOptionPane.CANCEL_OPTION || opcion == JOptionPane.CLOSED_OPTION) {
-                // El usuario eligió "Cancelar" o cerró la ventana
-                System.out.println("Cancelado");
+            } else {
+                JOptionPane.showMessageDialog(null, "Seleccione una fila primero.");
             }
-        } else {
-            JOptionPane.showMessageDialog(null, "Seleccione una fila primero.");
-        }    
-        } else if (ModElimCargo.this.band == 1){
-            
-           for (int i = 0; i < tablamostrar.getRowCount(); i++) {
+        } else if (ModElimCargo.this.band == 1) {
+
+            for (int i = 0; i < tablamostrar.getRowCount(); i++) {
                 boolean filaCompleta = true;
                 // Recorremos todas las columnas
                 for (int j = 1; j < tablamostrar.getColumnCount(); j++) {
                     Object valor = tablamostrar.getValueAt(i, j);
-                    
+
                     if (valor == null || valor.toString().trim().isEmpty()) {
                         filaCompleta = false;
                         break;
                     }
                 }
-                
+
                 if (!filaCompleta) {
                     JOptionPane.showMessageDialog(null, "Hay filas nuevas con campos vacíos. Completá todos los datos antes de guardar.");
                     return; // Cancela el proceso de guardado
                 }
-            
+
             }
-            
+
             for (int i = 0; i < tablamostrar.getRowCount(); i++) {
                 // Obtener los datos actualizados desde la tabla
                 int cod = Integer.parseInt(tablamostrar.getValueAt(i, 0).toString());
                 String Zon = tablamostrar.getValueAt(i, 1).toString();
-                try{
-                    CLASES.Empleados.ActualizarCargo(con, cod, Zon); 
-                }catch(SQLException ex){
-                    JOptionPane.showMessageDialog(null, "ERROR"+ex);
+                try {
+                    CLASES.Empleados.ActualizarCargo(con, cod, Zon);
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, "ERROR" + ex);
                 }
             }
-           
+
             JOptionPane.showMessageDialog(null, "Actualizao");
-            try{
+            try {
                 tabla1.setRowCount(0);
                 CLASES.Empleados.MostrarCargo(con, tabla1);
-            } catch (SQLException ex){
-                JOptionPane.showMessageDialog(null,"ERROR1"+ex);
-            } 
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "ERROR1" + ex);
+            }
         }
     }//GEN-LAST:event_BotonActionPerformed
 
