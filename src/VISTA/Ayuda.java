@@ -326,9 +326,7 @@ public class Ayuda extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void Menu2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Menu2ActionPerformed
-        Menu ventana=new Menu();
-        ventana.setVisible(true);
-        this.dispose();
+
     }//GEN-LAST:event_Menu2ActionPerformed
 
     private void MovimientosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MovimientosActionPerformed
@@ -338,7 +336,7 @@ public class Ayuda extends javax.swing.JFrame {
     }//GEN-LAST:event_MovimientosActionPerformed
 
     private void Asistencia2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Asistencia2ActionPerformed
-        Asistencia1 ventana=new Asistencia1();
+        Asistencia ventana=new Asistencia();
         ventana.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_Asistencia2ActionPerformed
@@ -392,7 +390,7 @@ public class Ayuda extends javax.swing.JFrame {
     }//GEN-LAST:event_SalirActionPerformed
 
     private void AsistenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AsistenciaActionPerformed
-        Asistencia1 ventana=new Asistencia1();
+        Asistencia ventana=new Asistencia();
         ventana.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_AsistenciaActionPerformed
@@ -404,9 +402,7 @@ public class Ayuda extends javax.swing.JFrame {
     }//GEN-LAST:event_MovimientoActionPerformed
 
     private void MenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuActionPerformed
-        Menu ventana=new Menu();
-        ventana.setVisible(true);
-        this.dispose();
+
     }//GEN-LAST:event_MenuActionPerformed
 
     /**

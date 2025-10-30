@@ -8,22 +8,32 @@ package VISTA;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import CONEXIONES.Conexiones;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author Facuymayriver
  */
-public class Empleados extends javax.swing.JFrame {
+public class Empleados extends javax.swing.JFrame implements CLASES.IBlockableFrame {
+
+    @Override
+    public int getBlockState() {
+        return this.block;
+    }
 
     public int x = 0, c = 0, id;
     Connection con = Conexiones.Conexion();
     ResultSet rs;
     int cont = 0;
+    public int block = 0;
 
     public void refrescarTablaEmpleados() {
         tabla1.setRowCount(0); // Limpia
@@ -79,14 +89,20 @@ public class Empleados extends javax.swing.JFrame {
     //Metodos para editar
 
     //Tabla
-    ModeloEditablePorFila tabla1 = new ModeloEditablePorFila(new String[]{"Cod", "Nombre", "Apellido", "DNI", "Telefono", "Cargo"}, 0) {
+    ModeloEditablePorFila tabla1 = new ModeloEditablePorFila(new String[]{"Nº", "Nombre", "Apellido", "DNI", "Telefono", "Cargo"}, 0) {
         private final int editableRow = -1;
     };
     //Tabla
 
     public Empleados() {
+        CLASES.MenuClass.Configuracion();
+
         initComponents();
         this.setLocationRelativeTo(null);
+        CLASES.MenuClass menuHelper = new CLASES.MenuClass();
+        menuHelper.MenuConfig(Movimientos, Menu, Asistencia, Empleados, Estadisticas, Ayuda, Configuracion, Salir, this);
+
+        int ventana = CLASES.MenuClass.Ventana();
 
         Nombre.setEnabled(false);
         Apellido.setEnabled(false);
@@ -97,35 +113,60 @@ public class Empleados extends javax.swing.JFrame {
         Fecha.setEnabled(false);
         GS.setEnabled(false);
         Cargo.setEnabled(false);
-        nuevocargo.setEnabled(false);
-        GuardarCargo.setEnabled(false);
         Limpiar.setEnabled(false);
         Guardar.setEnabled(false);
-        area.setEnabled(false);
 
         Cargar.setText("Cargar");
 
-        CLASES.Empleados.jCombo(con, GS, Cargo, area);
+        CLASES.Empleados.jCombo(con, GS, Cargo);
 
         Tabla.setModel(tabla1);
-        Tabla.setRowHeight(30);
-        
+
         Tabla.getTableHeader().setReorderingAllowed(false);
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+        Tabla.setDefaultRenderer(Object.class, centerRenderer);
         
-        Tabla.getColumnModel().getColumn(0).setMinWidth(40);
-        Tabla.getColumnModel().getColumn(0).setMaxWidth(40);
+        if (ventana == 0) {
+            this.setExtendedState(NORMAL);
+            Tabla.setRowHeight(30);
+            Tabla.getColumnModel().getColumn(0).setMinWidth(40);
+            Tabla.getColumnModel().getColumn(0).setMaxWidth(40);
 
-        Tabla.getColumnModel().getColumn(1).setMinWidth(80);
-        Tabla.getColumnModel().getColumn(1).setMaxWidth(80);
+            Tabla.getColumnModel().getColumn(1).setMinWidth(80);
+            Tabla.getColumnModel().getColumn(1).setMaxWidth(80);
 
-        Tabla.getColumnModel().getColumn(2).setMinWidth(70);
-        Tabla.getColumnModel().getColumn(2).setMaxWidth(70);
-        
-        Tabla.getColumnModel().getColumn(3).setMinWidth(100);
-        Tabla.getColumnModel().getColumn(3).setMaxWidth(100);
-        
-        Tabla.getColumnModel().getColumn(4).setMinWidth(100);
-        Tabla.getColumnModel().getColumn(4).setMaxWidth(100);
+            Tabla.getColumnModel().getColumn(2).setMinWidth(70);
+            Tabla.getColumnModel().getColumn(2).setMaxWidth(70);
+
+            Tabla.getColumnModel().getColumn(3).setMinWidth(100);
+            Tabla.getColumnModel().getColumn(3).setMaxWidth(100);
+
+            Tabla.getColumnModel().getColumn(4).setMinWidth(100);
+            Tabla.getColumnModel().getColumn(4).setMaxWidth(100);
+
+        } else if (ventana == 1) {
+            this.setExtendedState(MAXIMIZED_BOTH);
+            Tabla.getTableHeader().setFont(new Font("Arial", Font.BOLD, 20));
+            Tabla.getTableHeader().setPreferredSize(new Dimension(0, 50));
+            Tabla.setRowHeight(60);
+
+            Tabla.setFont(new Font("Arial", Font.BOLD, 20));
+            Tabla.getColumnModel().getColumn(0).setMinWidth(40);
+            Tabla.getColumnModel().getColumn(0).setMaxWidth(40);
+
+            Tabla.getColumnModel().getColumn(1).setMinWidth(170);
+            Tabla.getColumnModel().getColumn(1).setMaxWidth(170);
+
+            Tabla.getColumnModel().getColumn(2).setMinWidth(170);
+            Tabla.getColumnModel().getColumn(2).setMaxWidth(170);
+
+            Tabla.getColumnModel().getColumn(3).setMinWidth(150);
+            Tabla.getColumnModel().getColumn(3).setMaxWidth(150);
+
+            Tabla.getColumnModel().getColumn(4).setMinWidth(150);
+            Tabla.getColumnModel().getColumn(4).setMaxWidth(150);
+        }
 
         //Mostrar tabla
         try {
@@ -134,7 +175,7 @@ public class Empleados extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "No se encontró ningún Cliente.");
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "ERROR13"+e);
+            JOptionPane.showMessageDialog(null, "ERROR13" + e);
         }
     }
 
@@ -147,366 +188,80 @@ public class Empleados extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
-        Menu = new javax.swing.JButton();
-        Movimiento = new javax.swing.JButton();
-        Asistencia = new javax.swing.JButton();
-        Salir = new javax.swing.JButton();
-        Empleados = new javax.swing.JButton();
-        Estadisticas = new javax.swing.JButton();
-        Ayuda = new javax.swing.JButton();
-        Configuracion = new javax.swing.JButton();
-        jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
-        jSeparator1 = new javax.swing.JSeparator();
-        jSeparator8 = new javax.swing.JSeparator();
-        jPanel5 = new javax.swing.JPanel();
-        jLabel8 = new javax.swing.JLabel();
-        jSeparator6 = new javax.swing.JSeparator();
-        Email = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
-        jSeparator5 = new javax.swing.JSeparator();
-        DNI = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
-        jSeparator3 = new javax.swing.JSeparator();
-        GS = new javax.swing.JComboBox<>();
-        jLabel9 = new javax.swing.JLabel();
-        Cargo = new javax.swing.JComboBox<>();
-        jLabel10 = new javax.swing.JLabel();
-        Telefono = new javax.swing.JTextField();
-        jLabel7 = new javax.swing.JLabel();
-        jSeparator2 = new javax.swing.JSeparator();
-        Domicilio = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
-        jSeparator7 = new javax.swing.JSeparator();
-        Apellido = new javax.swing.JTextField();
-        Nombre = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
+        Nombre = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jSeparator10 = new javax.swing.JSeparator();
+        Apellido = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        DNI = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        Domicilio = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        Email = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        Telefono = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
         Fecha = new com.toedter.calendar.JDateChooser();
-        jPanel6 = new javax.swing.JPanel();
-        jSeparator9 = new javax.swing.JSeparator();
-        Cargar = new javax.swing.JButton();
-        Limpiar = new javax.swing.JButton();
-        Guardar = new javax.swing.JButton();
-        jLabel11 = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
-        NewCargo = new javax.swing.JCheckBox();
-        nuevocargo = new javax.swing.JTextField();
-        jSeparator4 = new javax.swing.JSeparator();
-        opcCargo = new javax.swing.JComboBox<>();
-        GuardarCargo = new javax.swing.JButton();
-        area = new javax.swing.JComboBox<>();
-        jPanel7 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        GS = new javax.swing.JComboBox<>();
+        jLabel10 = new javax.swing.JLabel();
+        Cargo = new javax.swing.JComboBox<>();
         jPanel9 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         Tabla = new javax.swing.JTable();
+        Cargar = new javax.swing.JButton();
+        Limpiar = new javax.swing.JButton();
+        Guardar = new javax.swing.JButton();
+        jLabel12 = new javax.swing.JLabel();
+        opcCargo = new javax.swing.JComboBox<>();
+        jPanel7 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        Eliminar = new javax.swing.JButton();
+        Modificar = new javax.swing.JButton();
         jPanel8 = new javax.swing.JPanel();
         jLabel13 = new javax.swing.JLabel();
-        Modificar = new javax.swing.JButton();
-        Eliminar = new javax.swing.JButton();
-        jSeparator11 = new javax.swing.JSeparator();
-        jMenuBar1 = new javax.swing.JMenuBar();
-        Opciones2 = new javax.swing.JMenu();
-        Menu2 = new javax.swing.JMenuItem();
-        Movimientos = new javax.swing.JMenuItem();
-        Asistencia2 = new javax.swing.JMenuItem();
-        Empleados2 = new javax.swing.JMenuItem();
-        Estadisticas2 = new javax.swing.JMenuItem();
-        Ayuda2 = new javax.swing.JMenuItem();
-        Configuracion2 = new javax.swing.JMenuItem();
+        Barra = new javax.swing.JMenuBar();
+        Menu = new javax.swing.JMenu();
+        jMenuItem2 = new javax.swing.JMenuItem();
+        Movimientos = new javax.swing.JMenu();
+        iniciomov = new javax.swing.JMenuItem();
+        nuevtrip = new javax.swing.JMenuItem();
+        nuevovic = new javax.swing.JMenuItem();
+        historial = new javax.swing.JMenuItem();
+        Asistencia = new javax.swing.JMenu();
+        inicioas = new javax.swing.JMenuItem();
+        Empleados = new javax.swing.JMenu();
+        inicemp = new javax.swing.JMenuItem();
+        cargoemp = new javax.swing.JMenu();
+        mod = new javax.swing.JMenuItem();
+        elim = new javax.swing.JMenuItem();
+        Estadisticas = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        Ayuda = new javax.swing.JMenu();
+        Configuracion = new javax.swing.JMenu();
+        Salir = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Empleados");
+        setMaximumSize(new java.awt.Dimension(1200, 700));
+        setMinimumSize(new java.awt.Dimension(1200, 700));
         setName("Empleados"); // NOI18N
+        setUndecorated(true);
         setPreferredSize(new java.awt.Dimension(1200, 700));
         setResizable(false);
 
-        jPanel1.setBackground(new java.awt.Color(0, 102, 0));
-        jPanel1.setForeground(new java.awt.Color(153, 153, 0));
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        Menu.setBackground(new java.awt.Color(0, 102, 0));
-        Menu.setFont(new java.awt.Font("Dubai Medium", 1, 14)); // NOI18N
-        Menu.setForeground(new java.awt.Color(255, 255, 255));
-        Menu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/menui.png"))); // NOI18N
-        Menu.setText("Menu");
-        Menu.setToolTipText("ir al menu");
-        Menu.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 1, true));
-        Menu.setBorderPainted(false);
-        Menu.setContentAreaFilled(false);
-        Menu.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        Menu.setDefaultCapable(false);
-        Menu.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/menui2.png"))); // NOI18N
-        Menu.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                MenuActionPerformed(evt);
-            }
-        });
-
-        Movimiento.setBackground(new java.awt.Color(0, 102, 0));
-        Movimiento.setFont(new java.awt.Font("Dubai Medium", 1, 14)); // NOI18N
-        Movimiento.setForeground(new java.awt.Color(255, 255, 255));
-        Movimiento.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/movimiento.png"))); // NOI18N
-        Movimiento.setText("Movimientos");
-        Movimiento.setToolTipText("ir a movimientos");
-        Movimiento.setBorderPainted(false);
-        Movimiento.setContentAreaFilled(false);
-        Movimiento.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        Movimiento.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/movimiento2.png"))); // NOI18N
-        Movimiento.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                MovimientoActionPerformed(evt);
-            }
-        });
-
-        Asistencia.setBackground(new java.awt.Color(0, 102, 0));
-        Asistencia.setFont(new java.awt.Font("Dubai Medium", 1, 14)); // NOI18N
-        Asistencia.setForeground(new java.awt.Color(255, 255, 255));
-        Asistencia.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/asistencia.png"))); // NOI18N
-        Asistencia.setText("Asistencia");
-        Asistencia.setToolTipText("ir a asistencia");
-        Asistencia.setBorderPainted(false);
-        Asistencia.setContentAreaFilled(false);
-        Asistencia.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        Asistencia.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/asistencia2.png"))); // NOI18N
-        Asistencia.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                AsistenciaActionPerformed(evt);
-            }
-        });
-
-        Salir.setBackground(new java.awt.Color(0, 102, 0));
-        Salir.setFont(new java.awt.Font("Dubai Medium", 1, 14)); // NOI18N
-        Salir.setForeground(new java.awt.Color(255, 255, 255));
-        Salir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/salir.png"))); // NOI18N
-        Salir.setText("Salir");
-        Salir.setToolTipText("Salir del programa");
-        Salir.setBorderPainted(false);
-        Salir.setContentAreaFilled(false);
-        Salir.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        Salir.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/salir2.png"))); // NOI18N
-        Salir.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                SalirActionPerformed(evt);
-            }
-        });
-
-        Empleados.setBackground(new java.awt.Color(0, 102, 0));
-        Empleados.setFont(new java.awt.Font("Dubai Medium", 1, 14)); // NOI18N
-        Empleados.setForeground(new java.awt.Color(255, 255, 255));
-        Empleados.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/empleado.png"))); // NOI18N
-        Empleados.setText("Empleados");
-        Empleados.setToolTipText("ir a empleados");
-        Empleados.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
-        Empleados.setContentAreaFilled(false);
-        Empleados.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        Empleados.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/empleado2.png"))); // NOI18N
-        Empleados.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                EmpleadosActionPerformed(evt);
-            }
-        });
-
-        Estadisticas.setBackground(new java.awt.Color(0, 102, 0));
-        Estadisticas.setFont(new java.awt.Font("Dubai Medium", 1, 14)); // NOI18N
-        Estadisticas.setForeground(new java.awt.Color(255, 255, 255));
-        Estadisticas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/estats.png"))); // NOI18N
-        Estadisticas.setText("Estadisticas");
-        Estadisticas.setToolTipText("ir a estadisticas");
-        Estadisticas.setBorderPainted(false);
-        Estadisticas.setContentAreaFilled(false);
-        Estadisticas.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        Estadisticas.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/estats2.png"))); // NOI18N
-        Estadisticas.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                EstadisticasActionPerformed(evt);
-            }
-        });
-
-        Ayuda.setBackground(new java.awt.Color(0, 102, 0));
-        Ayuda.setFont(new java.awt.Font("Dubai Medium", 1, 14)); // NOI18N
-        Ayuda.setForeground(new java.awt.Color(255, 255, 255));
-        Ayuda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/ayuda.png"))); // NOI18N
-        Ayuda.setText("Ayuda");
-        Ayuda.setToolTipText("ir a ayuda");
-        Ayuda.setBorderPainted(false);
-        Ayuda.setContentAreaFilled(false);
-        Ayuda.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        Ayuda.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/ayuda2.png"))); // NOI18N
-        Ayuda.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                AyudaActionPerformed(evt);
-            }
-        });
-
-        Configuracion.setBackground(new java.awt.Color(0, 102, 0));
-        Configuracion.setFont(new java.awt.Font("Dubai Medium", 1, 14)); // NOI18N
-        Configuracion.setForeground(new java.awt.Color(255, 255, 255));
-        Configuracion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/config.png"))); // NOI18N
-        Configuracion.setText("Configuración");
-        Configuracion.setToolTipText("ir a configuración");
-        Configuracion.setBorderPainted(false);
-        Configuracion.setContentAreaFilled(false);
-        Configuracion.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        Configuracion.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/config2.png"))); // NOI18N
-        Configuracion.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ConfiguracionActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(Menu, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(Movimiento)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(Asistencia, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(Empleados, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(Estadisticas)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(Ayuda)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(Configuracion)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 70, Short.MAX_VALUE)
-                .addComponent(Salir))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                .addComponent(Movimiento, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(Menu)
-                .addComponent(Asistencia, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(Empleados, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(Estadisticas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(Ayuda, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(Salir)
-                .addComponent(Configuracion))
-        );
-
-        getContentPane().add(jPanel1, java.awt.BorderLayout.PAGE_START);
-
-        jPanel2.setBackground(new java.awt.Color(102, 0, 0));
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1200, Short.MAX_VALUE)
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 47, Short.MAX_VALUE)
-        );
-
-        getContentPane().add(jPanel2, java.awt.BorderLayout.PAGE_END);
-
-        jPanel3.setBackground(new java.awt.Color(153, 255, 204));
-
-        jPanel4.setBackground(new java.awt.Color(157, 157, 190));
+        jPanel4.setBackground(new java.awt.Color(204, 204, 204));
         jPanel4.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        jPanel4.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 390, 530, 20));
-        jPanel4.add(jSeparator8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 530, 20));
 
-        jPanel5.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel5.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel2.setText(">Nombres:");
 
-        jLabel8.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel8.setText(">Fecha de Nacimiento:");
-        jPanel5.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 260, -1, -1));
-        jPanel5.add(jSeparator6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 230, 210, 20));
-
-        Email.setBorder(null);
-        jPanel5.add(Email, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 200, 210, 20));
-
-        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel6.setText(">Email:");
-        jPanel5.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 180, -1, -1));
-        jPanel5.add(jSeparator5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 150, 210, 20));
-
-        DNI.setBorder(null);
-        DNI.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                DNIActionPerformed(evt);
-            }
-        });
-        DNI.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                DNIKeyTyped(evt);
-            }
-        });
-        jPanel5.add(DNI, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 120, 200, 20));
-
-        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel4.setText(">DNI:");
-        jPanel5.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, -1, -1));
-        jPanel5.add(jSeparator3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 180, 20));
-
-        GS.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Opciones" }));
-        GS.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jPanel5.add(GS, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 280, 110, -1));
-
-        jLabel9.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel9.setText(">Grupo sanguineo:");
-        jPanel5.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 260, -1, -1));
-
-        Cargo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Opciones" }));
-        Cargo.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jPanel5.add(Cargo, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 280, 100, -1));
-
-        jLabel10.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel10.setText(">Cargo:");
-        jPanel5.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 260, -1, -1));
-
-        Telefono.setBorder(null);
-        Telefono.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                TelefonoKeyTyped(evt);
-            }
-        });
-        jPanel5.add(Telefono, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 200, 210, 20));
-
-        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel7.setText(">Telefono:");
-        jPanel5.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 180, -1, -1));
-        jPanel5.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 150, 230, 20));
-
-        Domicilio.setBorder(null);
-        Domicilio.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                DomicilioKeyTyped(evt);
-            }
-        });
-        jPanel5.add(Domicilio, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 120, 222, 20));
-
-        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel5.setText(">Domicilio:");
-        jPanel5.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 100, -1, -1));
-        jPanel5.add(jSeparator7, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 60, 190, 20));
-
-        Apellido.setBorder(null);
-        Apellido.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ApellidoActionPerformed(evt);
-            }
-        });
-        Apellido.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                ApellidoKeyTyped(evt);
-            }
-        });
-        jPanel5.add(Apellido, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 30, 180, 20));
-
-        Nombre.setBorder(null);
+        Nombre.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         Nombre.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 NombreActionPerformed(evt);
@@ -517,116 +272,179 @@ public class Empleados extends javax.swing.JFrame {
                 NombreKeyTyped(evt);
             }
         });
-        jPanel5.add(Nombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 180, 20));
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel2.setText(">Nombres:");
-        jPanel5.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, -1, -1));
-
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel3.setText(">Apellido:");
-        jPanel5.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 10, -1, -1));
-        jPanel5.add(jSeparator10, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 230, 210, 20));
-        jPanel5.add(Fecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 280, 220, -1));
 
-        jPanel4.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, 530, 320));
-
-        jPanel6.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel6.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jSeparator9.setOrientation(javax.swing.SwingConstants.VERTICAL);
-        jPanel6.add(jSeparator9, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 10, 30, 90));
-
-        Cargar.setText("boton");
-        Cargar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        Cargar.addActionListener(new java.awt.event.ActionListener() {
+        Apellido.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        Apellido.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                CargarActionPerformed(evt);
+                ApellidoActionPerformed(evt);
             }
         });
-        jPanel6.add(Cargar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, -1, -1));
-
-        Limpiar.setText("Limpiar");
-        Limpiar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        Limpiar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                LimpiarActionPerformed(evt);
+        Apellido.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                ApellidoKeyTyped(evt);
             }
         });
-        jPanel6.add(Limpiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 50, 80, -1));
 
-        Guardar.setText("Guardar");
-        Guardar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        Guardar.addActionListener(new java.awt.event.ActionListener() {
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel4.setText(">DNI:");
+
+        DNI.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        DNI.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                GuardarActionPerformed(evt);
+                DNIActionPerformed(evt);
             }
         });
-        jPanel6.add(Guardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 50, -1, -1));
-
-        jLabel11.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel11.setText("Opciones");
-        jPanel6.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 10, -1, -1));
-
-        jLabel12.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel12.setText("Opciones de cargo:");
-        jPanel6.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 10, -1, 20));
-
-        NewCargo.setBackground(new java.awt.Color(255, 255, 255));
-        NewCargo.setText("Nuevo cargo");
-        NewCargo.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        NewCargo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                NewCargoActionPerformed(evt);
+        DNI.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                DNIKeyTyped(evt);
             }
         });
-        jPanel6.add(NewCargo, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 40, -1, -1));
 
-        nuevocargo.setBorder(null);
-        nuevocargo.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-        nuevocargo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                nuevocargoActionPerformed(evt);
+        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel5.setText(">Domicilio:");
+
+        Domicilio.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        Domicilio.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                DomicilioKeyTyped(evt);
             }
         });
-        jPanel6.add(nuevocargo, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 40, 140, 20));
-        jPanel6.add(jSeparator4, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 60, 140, 20));
 
-        opcCargo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Opciones", "Modificar", "Eliminar" }));
-        opcCargo.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        opcCargo.addActionListener(new java.awt.event.ActionListener() {
+        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel6.setText(">Email:");
+
+        Email.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        Email.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                opcCargoActionPerformed(evt);
+                EmailActionPerformed(evt);
             }
         });
-        jPanel6.add(opcCargo, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 10, 120, -1));
 
-        GuardarCargo.setText("Guardar");
-        GuardarCargo.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        GuardarCargo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                GuardarCargoActionPerformed(evt);
+        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel7.setText(">Telefono:");
+
+        Telefono.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        Telefono.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                TelefonoKeyTyped(evt);
             }
         });
-        jPanel6.add(GuardarCargo, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 80, -1, -1));
 
-        area.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Area" }));
-        jPanel6.add(area, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 80, 120, -1));
+        jLabel8.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel8.setText(">Fecha de Nacimiento:");
 
-        jPanel4.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 400, 530, 110));
+        jLabel9.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel9.setText(">Grupo sanguineo:");
 
-        jPanel7.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel7.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        GS.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Opciones" }));
+        GS.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel1.setText("Cargar nuevo empleado");
-        jPanel7.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 0, 170, 30));
+        jLabel10.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel10.setText(">Cargo:");
 
-        jPanel4.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 10, 300, 30));
+        Cargo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Opciones" }));
+        Cargo.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        Cargo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CargoActionPerformed(evt);
+            }
+        });
 
-        jPanel9.setBackground(new java.awt.Color(157, 157, 190));
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(Apellido, javax.swing.GroupLayout.DEFAULT_SIZE, 409, Short.MAX_VALUE)
+                                    .addComponent(Nombre)))
+                            .addComponent(jLabel8)
+                            .addComponent(Fecha, javax.swing.GroupLayout.PREFERRED_SIZE, 324, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(DNI, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel4Layout.createSequentialGroup()
+                                    .addComponent(jLabel10)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(Cargo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel4Layout.createSequentialGroup()
+                                    .addComponent(jLabel9)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(GS, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 79, Short.MAX_VALUE)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(Domicilio, javax.swing.GroupLayout.PREFERRED_SIZE, 406, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(Email, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(Telefono, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 31, Short.MAX_VALUE))))
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Nombre, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                        .addGap(19, 19, 19)
+                        .addComponent(Apellido, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(24, 24, 24)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(DNI, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(25, 25, 25)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Domicilio, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(31, 31, 31)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Email, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE))
+                .addGap(24, 24, 24)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Telefono, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(Fecha, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel9)
+                    .addComponent(GS, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel10)
+                    .addComponent(Cargo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(16, Short.MAX_VALUE))
+        );
+
+        jPanel9.setBackground(new java.awt.Color(204, 204, 204));
         jPanel9.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jPanel9.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         Tabla.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
         Tabla.setModel(new javax.swing.table.DefaultTableModel(
@@ -642,26 +460,76 @@ public class Empleados extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(Tabla);
 
-        jPanel9.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 504, 420));
+        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
+        jPanel9.setLayout(jPanel9Layout);
+        jPanel9Layout.setHorizontalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel9Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1)
+                .addContainerGap())
+        );
+        jPanel9Layout.setVerticalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel9Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1)
+                .addContainerGap())
+        );
 
-        jPanel8.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel8.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel13.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel13.setText("Tabla de empleados");
-        jPanel8.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 0, -1, 30));
-
-        jPanel9.add(jPanel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(103, 11, 331, 30));
-
-        Modificar.setText("Modificar");
-        Modificar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        Modificar.addActionListener(new java.awt.event.ActionListener() {
+        Cargar.setBackground(new java.awt.Color(78, 247, 177));
+        Cargar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        Cargar.setText("boton");
+        Cargar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        Cargar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ModificarActionPerformed(evt);
+                CargarActionPerformed(evt);
             }
         });
-        jPanel9.add(Modificar, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 490, 100, 30));
 
+        Limpiar.setBackground(new java.awt.Color(78, 247, 177));
+        Limpiar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        Limpiar.setText("Limpiar");
+        Limpiar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        Limpiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                LimpiarActionPerformed(evt);
+            }
+        });
+
+        Guardar.setBackground(new java.awt.Color(78, 247, 177));
+        Guardar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        Guardar.setText("Guardar");
+        Guardar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        Guardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GuardarActionPerformed(evt);
+            }
+        });
+
+        jLabel12.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel12.setText("Opciones de cargo:");
+
+        opcCargo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Opciones", "Modificar", "Eliminar" }));
+        opcCargo.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        opcCargo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                opcCargoActionPerformed(evt);
+            }
+        });
+
+        jPanel7.setBackground(new java.awt.Color(52, 170, 121));
+        jPanel7.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jPanel7.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/empleado.png"))); // NOI18N
+        jLabel1.setText("Cargar nuevo empleado");
+        jPanel7.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 10, 340, 40));
+
+        Eliminar.setBackground(new java.awt.Color(78, 247, 177));
+        Eliminar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         Eliminar.setText("Eliminar");
         Eliminar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         Eliminar.addActionListener(new java.awt.event.ActionListener() {
@@ -669,188 +537,262 @@ public class Empleados extends javax.swing.JFrame {
                 EliminarActionPerformed(evt);
             }
         });
-        jPanel9.add(Eliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 490, 101, 27));
-        jPanel9.add(jSeparator11, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 46, 504, 10));
+
+        Modificar.setBackground(new java.awt.Color(78, 247, 177));
+        Modificar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        Modificar.setText("Modificar");
+        Modificar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        Modificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ModificarActionPerformed(evt);
+            }
+        });
+
+        jPanel8.setBackground(new java.awt.Color(52, 170, 121));
+        jPanel8.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+
+        jLabel13.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel13.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel13.setText("Tabla de empleados");
+
+        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
+        jPanel8.setLayout(jPanel8Layout);
+        jPanel8Layout.setHorizontalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel13)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel8Layout.setVerticalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+            .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(20, 20, 20)
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 553, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 61, Short.MAX_VALUE)
-                .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, 544, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(Cargar, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(Limpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(32, 32, 32)
+                        .addComponent(Guardar)
+                        .addGap(66, 66, 66)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(opcCargo, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel12)))
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(jPanel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(0, 383, Short.MAX_VALUE)
+                        .addComponent(Eliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(Modificar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel9, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(22, 22, 22))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, 70, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 531, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, 531, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(41, Short.MAX_VALUE))
+                    .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(Eliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(Modificar, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(Guardar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(Limpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(Cargar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(opcCargo, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
 
         getContentPane().add(jPanel3, java.awt.BorderLayout.CENTER);
 
-        Opciones2.setText("Opciones");
-        Opciones2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        Barra.setBackground(new java.awt.Color(52, 170, 121));
+        Barra.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        Menu2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.CTRL_MASK));
-        Menu2.setText("Menu");
-        Menu2.addActionListener(new java.awt.event.ActionListener() {
+        Menu.setBackground(new java.awt.Color(204, 255, 204));
+        Menu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/menui.png"))); // NOI18N
+        Menu.setText("Menu");
+        Menu.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        Menu.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+
+        jMenuItem2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jMenuItem2.setText("Inicio");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Menu2ActionPerformed(evt);
+                jMenuItem2ActionPerformed(evt);
             }
         });
-        Opciones2.add(Menu2);
+        Menu.add(jMenuItem2);
 
-        Movimientos.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Y, java.awt.event.InputEvent.CTRL_MASK));
+        Barra.add(Menu);
+
+        Movimientos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/movimiento.png"))); // NOI18N
         Movimientos.setText("Movimientos");
-        Movimientos.addActionListener(new java.awt.event.ActionListener() {
+        Movimientos.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        Movimientos.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+
+        iniciomov.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        iniciomov.setText("Inicio");
+        iniciomov.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                MovimientosActionPerformed(evt);
+                iniciomovActionPerformed(evt);
             }
         });
-        Opciones2.add(Movimientos);
+        Movimientos.add(iniciomov);
 
-        Asistencia2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_U, java.awt.event.InputEvent.CTRL_MASK));
-        Asistencia2.setText("Asistencia");
-        Asistencia2.addActionListener(new java.awt.event.ActionListener() {
+        nuevtrip.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        nuevtrip.setText("Nueva tripulación");
+        nuevtrip.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Asistencia2ActionPerformed(evt);
+                nuevtripActionPerformed(evt);
             }
         });
-        Opciones2.add(Asistencia2);
+        Movimientos.add(nuevtrip);
 
-        Empleados2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.CTRL_MASK));
-        Empleados2.setText("Empleados");
-        Empleados2.addActionListener(new java.awt.event.ActionListener() {
+        nuevovic.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        nuevovic.setText("Nuevo victor");
+        nuevovic.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Empleados2ActionPerformed(evt);
+                nuevovicActionPerformed(evt);
             }
         });
-        Opciones2.add(Empleados2);
+        Movimientos.add(nuevovic);
 
-        Estadisticas2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
-        Estadisticas2.setText("Estadisticas");
-        Estadisticas2.addActionListener(new java.awt.event.ActionListener() {
+        historial.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        historial.setText("Historial");
+        historial.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Estadisticas2ActionPerformed(evt);
+                historialActionPerformed(evt);
             }
         });
-        Opciones2.add(Estadisticas2);
+        Movimientos.add(historial);
 
-        Ayuda2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_MASK));
-        Ayuda2.setText("Ayuda");
-        Ayuda2.addActionListener(new java.awt.event.ActionListener() {
+        Barra.add(Movimientos);
+
+        Asistencia.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/asistencia.png"))); // NOI18N
+        Asistencia.setText("Asistencia");
+        Asistencia.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        Asistencia.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        Asistencia.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Ayuda2ActionPerformed(evt);
+                AsistenciaActionPerformed(evt);
             }
         });
-        Opciones2.add(Ayuda2);
 
-        Configuracion2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_K, java.awt.event.InputEvent.CTRL_MASK));
-        Configuracion2.setText("Configuracion");
-        Configuracion2.addActionListener(new java.awt.event.ActionListener() {
+        inicioas.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        inicioas.setText("Inicio");
+        inicioas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Configuracion2ActionPerformed(evt);
+                inicioasActionPerformed(evt);
             }
         });
-        Opciones2.add(Configuracion2);
+        Asistencia.add(inicioas);
 
-        jMenuBar1.add(Opciones2);
+        Barra.add(Asistencia);
 
-        setJMenuBar(jMenuBar1);
+        Empleados.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/empleado.png"))); // NOI18N
+        Empleados.setText("Empleados");
+        Empleados.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        Empleados.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+
+        inicemp.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        inicemp.setText("Inicio");
+        inicemp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                inicempActionPerformed(evt);
+            }
+        });
+        Empleados.add(inicemp);
+
+        cargoemp.setBackground(new java.awt.Color(52, 170, 121));
+        cargoemp.setText("Cargo");
+        cargoemp.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+
+        mod.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        mod.setText("Modificar");
+        mod.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                modActionPerformed(evt);
+            }
+        });
+        cargoemp.add(mod);
+
+        elim.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        elim.setText("Eliminar");
+        elim.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                elimActionPerformed(evt);
+            }
+        });
+        cargoemp.add(elim);
+
+        Empleados.add(cargoemp);
+
+        Barra.add(Empleados);
+
+        Estadisticas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/estats.png"))); // NOI18N
+        Estadisticas.setText("Estadisticas");
+        Estadisticas.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        Estadisticas.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+
+        jMenuItem1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jMenuItem1.setText("Consultar");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        Estadisticas.add(jMenuItem1);
+
+        Barra.add(Estadisticas);
+
+        Ayuda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/ayuda.png"))); // NOI18N
+        Ayuda.setText("Ayuda");
+        Ayuda.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        Ayuda.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        Barra.add(Ayuda);
+
+        Configuracion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/config.png"))); // NOI18N
+        Configuracion.setText("Configuración");
+        Configuracion.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        Configuracion.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        Barra.add(Configuracion);
+
+        Salir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/salir.png"))); // NOI18N
+        Salir.setText("Salir");
+        Salir.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        Salir.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        Barra.add(Salir);
+
+        setJMenuBar(Barra);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void EstadisticasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EstadisticasActionPerformed
-        Estadisticas ventana = new Estadisticas();
-        ventana.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_EstadisticasActionPerformed
-
-    private void AsistenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AsistenciaActionPerformed
-        Asistencia1 ventana=new Asistencia1();
-        ventana.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_AsistenciaActionPerformed
-
-    private void SalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SalirActionPerformed
-        System.exit(0);
-    }//GEN-LAST:event_SalirActionPerformed
-
-    private void ConfiguracionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ConfiguracionActionPerformed
-        Configuracion ventana = new Configuracion();
-        ventana.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_ConfiguracionActionPerformed
-
-    private void MovimientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MovimientoActionPerformed
-        Movimiento ventana = new Movimiento();
-        ventana.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_MovimientoActionPerformed
-
-    private void MenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuActionPerformed
-        Menu ventana = new Menu();
-        ventana.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_MenuActionPerformed
-
-    private void EmpleadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EmpleadosActionPerformed
-
-    }//GEN-LAST:event_EmpleadosActionPerformed
-
-    private void AyudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AyudaActionPerformed
-        Ayuda ventana = new Ayuda();
-        ventana.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_AyudaActionPerformed
-
-    private void Menu2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Menu2ActionPerformed
-        Menu ventana = new Menu();
-        ventana.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_Menu2ActionPerformed
-
-    private void MovimientosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MovimientosActionPerformed
-        Movimiento ventana = new Movimiento();
-        ventana.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_MovimientosActionPerformed
-
-    private void Asistencia2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Asistencia2ActionPerformed
-        Asistencia1 ventana=new Asistencia1();
-        ventana.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_Asistencia2ActionPerformed
-
-    private void Empleados2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Empleados2ActionPerformed
-
-    }//GEN-LAST:event_Empleados2ActionPerformed
-
-    private void Estadisticas2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Estadisticas2ActionPerformed
-        Estadisticas ventana = new Estadisticas();
-        ventana.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_Estadisticas2ActionPerformed
-
-    private void Ayuda2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Ayuda2ActionPerformed
-        Ayuda ventana = new Ayuda();
-        ventana.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_Ayuda2ActionPerformed
-
-    private void Configuracion2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Configuracion2ActionPerformed
-        Configuracion ventana = new Configuracion();
-        ventana.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_Configuracion2ActionPerformed
 
     private void DNIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DNIActionPerformed
         // TODO add your handling code here:
@@ -879,19 +821,20 @@ public class Empleados extends javax.swing.JFrame {
             Guardar.setEnabled(true);
             GS.setEnabled(true);
             Cargo.setEnabled(true);
-            NewCargo.setEnabled(false);
             opcCargo.setEnabled(false);
             Eliminar.setEnabled(false);
             Modificar.setEnabled(false);
 
             Menu.setEnabled(false);
-            Movimiento.setEnabled(false);
+            Movimientos.setEnabled(false);
             Asistencia.setEnabled(false);
             Empleados.setEnabled(false);
             Estadisticas.setEnabled(false);
             Ayuda.setEnabled(false);
             Configuracion.setEnabled(false);
             Salir.setEnabled(false);
+
+            block = 1;
 
             Cargar.setText("Cancelar");
         } else if (x == 1) {
@@ -904,8 +847,6 @@ public class Empleados extends javax.swing.JFrame {
             Fecha.setEnabled(false);
             GS.setEnabled(false);
             Cargo.setEnabled(false);
-            NewCargo.setEnabled(true);
-            GuardarCargo.setEnabled(false);
             Limpiar.setEnabled(false);
             Guardar.setEnabled(false);
             opcCargo.setEnabled(true);
@@ -913,7 +854,7 @@ public class Empleados extends javax.swing.JFrame {
             Modificar.setEnabled(true);
 
             Menu.setEnabled(true);
-            Movimiento.setEnabled(true);
+            Movimientos.setEnabled(true);
             Asistencia.setEnabled(true);
             Empleados.setEnabled(true);
             Estadisticas.setEnabled(true);
@@ -930,7 +871,7 @@ public class Empleados extends javax.swing.JFrame {
             GS.setSelectedIndex(0);
             Cargo.setSelectedIndex(0);
             Fecha.setDate(null);
-
+            block = 0;
             Cargar.setText("Cargar");
             x = 0;
         }
@@ -1050,8 +991,6 @@ public class Empleados extends javax.swing.JFrame {
                     Fecha.setEnabled(false);
                     GS.setEnabled(false);
                     Cargo.setEnabled(false);
-                    NewCargo.setEnabled(true);
-                    GuardarCargo.setEnabled(false);
                     Limpiar.setEnabled(false);
                     Guardar.setEnabled(false);
                     opcCargo.setEnabled(true);
@@ -1059,7 +998,7 @@ public class Empleados extends javax.swing.JFrame {
                     Modificar.setEnabled(true);
 
                     Menu.setEnabled(true);
-                    Movimiento.setEnabled(true);
+                    Movimientos.setEnabled(true);
                     Asistencia.setEnabled(true);
                     Empleados.setEnabled(true);
                     Estadisticas.setEnabled(true);
@@ -1221,70 +1160,6 @@ public class Empleados extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_EliminarActionPerformed
 
-    private void NewCargoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewCargoActionPerformed
-        Cargar.setEnabled(!NewCargo.isSelected());
-        Eliminar.setEnabled(!NewCargo.isSelected());
-        Modificar.setEnabled(!NewCargo.isSelected());
-        opcCargo.setEnabled(!NewCargo.isSelected());
-        nuevocargo.setEnabled(NewCargo.isSelected());
-        GuardarCargo.setEnabled(NewCargo.isSelected());
-        area.setEnabled(NewCargo.isSelected());
-
-        Menu.setEnabled(!NewCargo.isSelected());
-        Movimiento.setEnabled(!NewCargo.isSelected());
-        Asistencia.setEnabled(!NewCargo.isSelected());
-        Empleados.setEnabled(!NewCargo.isSelected());
-        Estadisticas.setEnabled(!NewCargo.isSelected());
-        Ayuda.setEnabled(!NewCargo.isSelected());
-        Configuracion.setEnabled(!NewCargo.isSelected());
-        Salir.setEnabled(!NewCargo.isSelected());
-    }//GEN-LAST:event_NewCargoActionPerformed
-
-    private void GuardarCargoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GuardarCargoActionPerformed
-        String cargo = (nuevocargo.getText());
-        String ar = (String) area.getSelectedItem();
-        int borrado = 0;
-        if (!cargo.trim().isEmpty() && !ar.equals("Area")) {
-            try {
-                CLASES.Empleados.AgregarCargo(con, cargo, ar, borrado);
-                JOptionPane.showMessageDialog(null, "Cargao");
-
-                NewCargo.setSelected(false);
-                opcCargo.setEnabled(false);
-                GuardarCargo.setEnabled(false);
-                nuevocargo.setText("");
-                tabla1.setRowCount(0);
-                Cargar.setEnabled(true);
-                Modificar.setEnabled(true);
-                Eliminar.setEnabled(true);
-                area.setEnabled(false);
-
-                Menu.setEnabled(true);
-                Movimiento.setEnabled(true);
-                Asistencia.setEnabled(true);
-                Empleados.setEnabled(true);
-                Estadisticas.setEnabled(true);
-                Ayuda.setEnabled(true);
-                Configuracion.setEnabled(true);
-                Salir.setEnabled(true);
-                opcCargo.setEnabled(true);
-
-                CLASES.Empleados.MostrarEmpleados(con, tabla1);
-                refrescarCombo();
-                Tabla.setModel(tabla1);
-
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, "ERROR13");
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "¡HAY CAMPOS VACIOS! Por favor, revise");
-        }
-    }//GEN-LAST:event_GuardarCargoActionPerformed
-
-    private void nuevocargoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevocargoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_nuevocargoActionPerformed
-
     private void ModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ModificarActionPerformed
         x = 1;
         c = 1;
@@ -1308,12 +1183,11 @@ public class Empleados extends javax.swing.JFrame {
                 Guardar.setEnabled(true);
                 GS.setEnabled(true);
                 Cargo.setEnabled(true);
-                NewCargo.setEnabled(false);
                 opcCargo.setEnabled(false);
                 Eliminar.setEnabled(false);
 
                 Menu.setEnabled(false);
-                Movimiento.setEnabled(false);
+                Movimientos.setEnabled(false);
                 Asistencia.setEnabled(false);
                 Empleados.setEnabled(false);
                 Estadisticas.setEnabled(false);
@@ -1348,6 +1222,75 @@ public class Empleados extends javax.swing.JFrame {
 
         opcCargo.setSelectedIndex(0);
     }//GEN-LAST:event_opcCargoActionPerformed
+
+    private void iniciomovActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iniciomovActionPerformed
+        Movimiento ventana = new Movimiento();
+        ventana.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_iniciomovActionPerformed
+
+    private void nuevtripActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevtripActionPerformed
+        AddTri ventana = new AddTri(0, this);
+        ventana.setVisible(true);
+    }//GEN-LAST:event_nuevtripActionPerformed
+
+    private void nuevovicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevovicActionPerformed
+        AddVic ventana = new AddVic(this);
+        ventana.setVisible(true);
+    }//GEN-LAST:event_nuevovicActionPerformed
+
+    private void historialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_historialActionPerformed
+        Historial ventana = new Historial(this);
+        ventana.setVisible(true);
+    }//GEN-LAST:event_historialActionPerformed
+
+    private void inicioasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inicioasActionPerformed
+        Asistencia ventana = new Asistencia();
+        ventana.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_inicioasActionPerformed
+
+    private void AsistenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AsistenciaActionPerformed
+        Asistencia ventana = new Asistencia();
+        ventana.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_AsistenciaActionPerformed
+
+    private void inicempActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inicempActionPerformed
+        Empleados ventana = new Empleados();
+        ventana.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_inicempActionPerformed
+
+    private void modActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modActionPerformed
+        ModElimCargo ventana = new ModElimCargo(1, this);
+        ventana.setVisible(true);
+    }//GEN-LAST:event_modActionPerformed
+
+    private void elimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_elimActionPerformed
+        ModElimCargo ventana = new ModElimCargo(1, this);
+        ventana.setVisible(true);
+    }//GEN-LAST:event_elimActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        Estadisticas ventana = new Estadisticas();
+        ventana.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        Menu ventana = new Menu();
+        ventana.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void CargoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CargoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_CargoActionPerformed
+
+    private void EmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EmailActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_EmailActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -1384,42 +1327,37 @@ public class Empleados extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField Apellido;
-    private javax.swing.JButton Asistencia;
-    private javax.swing.JMenuItem Asistencia2;
-    private javax.swing.JButton Ayuda;
-    private javax.swing.JMenuItem Ayuda2;
+    private javax.swing.JMenu Asistencia;
+    private javax.swing.JMenu Ayuda;
+    private javax.swing.JMenuBar Barra;
     private javax.swing.JButton Cargar;
     private javax.swing.JComboBox<String> Cargo;
-    private javax.swing.JButton Configuracion;
-    private javax.swing.JMenuItem Configuracion2;
+    private javax.swing.JMenu Configuracion;
     private javax.swing.JTextField DNI;
     private javax.swing.JTextField Domicilio;
     private javax.swing.JButton Eliminar;
     private javax.swing.JTextField Email;
-    private javax.swing.JButton Empleados;
-    private javax.swing.JMenuItem Empleados2;
-    private javax.swing.JButton Estadisticas;
-    private javax.swing.JMenuItem Estadisticas2;
+    private javax.swing.JMenu Empleados;
+    private javax.swing.JMenu Estadisticas;
     private com.toedter.calendar.JDateChooser Fecha;
     private javax.swing.JComboBox<String> GS;
     private javax.swing.JButton Guardar;
-    private javax.swing.JButton GuardarCargo;
     private javax.swing.JButton Limpiar;
-    private javax.swing.JButton Menu;
-    private javax.swing.JMenuItem Menu2;
+    private javax.swing.JMenu Menu;
     private javax.swing.JButton Modificar;
-    private javax.swing.JButton Movimiento;
-    private javax.swing.JMenuItem Movimientos;
-    private javax.swing.JCheckBox NewCargo;
+    private javax.swing.JMenu Movimientos;
     private javax.swing.JTextField Nombre;
-    private javax.swing.JMenu Opciones2;
-    private javax.swing.JButton Salir;
+    private javax.swing.JMenu Salir;
     private javax.swing.JTable Tabla;
     private javax.swing.JTextField Telefono;
-    private javax.swing.JComboBox<String> area;
+    private javax.swing.JMenu cargoemp;
+    private javax.swing.JMenuItem elim;
+    private javax.swing.JMenuItem historial;
+    private javax.swing.JMenuItem inicemp;
+    private javax.swing.JMenuItem inicioas;
+    private javax.swing.JMenuItem iniciomov;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
@@ -1430,29 +1368,18 @@ public class Empleados extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JSeparator jSeparator10;
-    private javax.swing.JSeparator jSeparator11;
-    private javax.swing.JSeparator jSeparator2;
-    private javax.swing.JSeparator jSeparator3;
-    private javax.swing.JSeparator jSeparator4;
-    private javax.swing.JSeparator jSeparator5;
-    private javax.swing.JSeparator jSeparator6;
-    private javax.swing.JSeparator jSeparator7;
-    private javax.swing.JSeparator jSeparator8;
-    private javax.swing.JSeparator jSeparator9;
-    private javax.swing.JTextField nuevocargo;
+    private javax.swing.JMenuItem mod;
+    private javax.swing.JMenuItem nuevovic;
+    private javax.swing.JMenuItem nuevtrip;
     private javax.swing.JComboBox<String> opcCargo;
     // End of variables declaration//GEN-END:variables
+
 }

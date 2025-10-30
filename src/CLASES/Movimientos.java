@@ -7,15 +7,18 @@ package CLASES;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Desktop;
+import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -188,19 +191,29 @@ public class Movimientos {
 
     }
 
-    public static void Carga(Connection conexion, int id, int id2, int id3, int id4, String fecha) {
+    public static void Carga(Connection conexion, int id, int id2, int id3, int id4, String fecha) throws SQLException {
 
-        String sql = "INSERT into tripulacion (cvs, medico, enfermero, idAmbulancia, Fecha, relevado) VALUES (?,?,?,?,?,0) ";
-        try {
-            PreparedStatement ps = conexion.prepareStatement(sql);
-            ps.setInt(1, id);
-            ps.setInt(2, id2);
-            ps.setInt(3, id3);
-            ps.setInt(4, id4);
-            ps.setString(5, fecha);
-            ps.execute();
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "ERROR12");
+        String sql2 = "SELECT idtripulacion from Tripulacion WHERE idAmbulancia=? AND relevado=0 AND Fecha AND DATE(Fecha) = CURDATE();";
+        PreparedStatement stm = conexion.prepareStatement(sql2);
+        stm.setInt(1, id4);
+        ResultSet rs = stm.executeQuery();
+
+        if (rs.next()) {
+            JOptionPane.showMessageDialog(null, "Ya hay una tripulación con este victor!");
+        } else {
+            String sql = "INSERT into tripulacion (cvs, medico, enfermero, idAmbulancia, Fecha, relevado) VALUES (?,?,?,?,?,0) ";
+            try {
+                PreparedStatement ps = conexion.prepareStatement(sql);
+                ps.setInt(1, id);
+                ps.setInt(2, id2);
+                ps.setInt(3, id3);
+                ps.setInt(4, id4);
+                ps.setString(5, fecha);
+                ps.execute();
+                JOptionPane.showMessageDialog(null, "Cargao");
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, "ERROR12");
+            }
         }
 
     }
@@ -445,18 +458,39 @@ public class Movimientos {
         }
     }
 
+    public static void abrirPDF(String rutaArchivo) {
+        try {
+            File file = new File(rutaArchivo);
+            if (file.exists()) {
+                Desktop.getDesktop().open(file);
+            } else {
+                JOptionPane.showMessageDialog(null, "El archivo no existe en: " + rutaArchivo);
+            }
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Error al abrir el PDF: " + e.getMessage());
+        }
+    }
+
     //Historial
     public static void MostrarHist(Connection conexion, DefaultTableModel modelo, JTable tabla) throws SQLException {
         //BASE
 
-        PreparedStatement stm = conexion.prepareStatement("SELECT t.idtripulacion, CONCAT(e1.nombre, ' ', e1.apellido) AS cvs, CONCAT(e2.nombre, ' ', e2.apellido) AS medico, CONCAT(e3.nombre, ' ', e3.apellido) AS enfermero, a.victor, t.Fecha, COUNT(m.idMovimientos) AS cantidad_movimientos FROM tripulacion t JOIN empleado e1 ON t.cvs = e1.id_Empleado JOIN empleado e2 ON t.medico = e2.id_Empleado JOIN empleado e3 ON t.enfermero = e3.id_Empleado INNER JOIN ambulancia a ON t.idAmbulancia=a.idAmbulancia LEFT JOIN movimientos m ON t.idtripulacion = m.idtripulacion WHERE e1.borrado=0 and e2.borrado=0 and e3.borrado=0 GROUP BY t.idtripulacion, cvs, medico, enfermero, a.victor, t.Fecha, t.relevado;");
+        PreparedStatement stm = conexion.prepareStatement("SELECT t.idtripulacion, CONCAT(e1.nombre, ' ', e1.apellido) AS cvs, CONCAT(e2.nombre, ' ', e2.apellido) AS medico, CONCAT(e3.nombre, ' ', e3.apellido) AS enfermero, a.victor, t.fecharelevado, COUNT(m.idMovimientos) AS cantidad_movimientos FROM tripulacion t JOIN empleado e1 ON t.cvs = e1.id_Empleado JOIN empleado e2 ON t.medico = e2.id_Empleado JOIN empleado e3 ON t.enfermero = e3.id_Empleado INNER JOIN ambulancia a ON t.idAmbulancia=a.idAmbulancia LEFT JOIN movimientos m ON t.idtripulacion = m.idtripulacion WHERE e1.borrado=0 and e2.borrado=0 and e3.borrado=0 and m.borrado=0 GROUP BY t.idtripulacion, cvs, medico, enfermero, a.victor, t.Fecha, t.relevado ORDER BY fecharelevado;");
         ResultSet rs = stm.executeQuery();
         while (rs.next()) {
             Object[] fila = new Object[5];
             fila[0] = rs.getInt("t.idtripulacion");
-            fila[1] = rs.getString("cvs") + " " + rs.getString("medico") + " " + rs.getString("enfermero");
+            fila[1] = rs.getString("cvs") + "-" + rs.getString("medico") + "-" + rs.getString("enfermero");
             fila[2] = rs.getString("a.victor");
-            fila[3] = rs.getString("t.Fecha");
+            LocalDate fecha = rs.getObject("t.fecharelevado", LocalDate.class);
+            DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            String fechaActual;
+            if (fecha != null) {
+                fechaActual = fecha.format(formato);
+            } else {
+                fechaActual = "S/F";
+            }
+            fila[3] = fechaActual;
             fila[4] = rs.getString("cantidad_movimientos");
             modelo.addRow(fila);
         }
@@ -480,7 +514,7 @@ public class Movimientos {
                     if (rs2.next()) {
                         int relevado = rs2.getInt("relevado");
                         if (relevado == 0) {
-                            c.setBackground(new Color(255,153,153));
+                            c.setBackground(new Color(255, 153, 153));
                             c.setForeground(Color.BLACK);
                         } else if (relevado == 1) {
                             c.setBackground(new Color(144, 238, 144));

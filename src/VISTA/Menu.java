@@ -5,55 +5,41 @@
  */
 package VISTA;
 
-import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import javax.swing.BorderFactory;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import static javax.swing.JFrame.EXIT_ON_CLOSE;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.UIManager;
 
 /**
  *
  * @author Facuymayriver
  */
-public class Menu extends javax.swing.JFrame {
-    /*
-    private JMenu crearMenu(String texto, String rutaIcono, Color fondo, Color textoColor, int tamañoFuente) {
-        JMenu menu = new JMenu(texto);
-        if (rutaIcono != null)
-            menu.setIcon(new ImageIcon(getClass().getResource(rutaIcono)));
-        menu.setForeground(textoColor);
-        menu.setOpaque(true);
-        menu.setBackground(fondo);
-        menu.setFont(new Font("Segoe UI", Font.BOLD, tamañoFuente));
-        return menu;
+public class Menu extends javax.swing.JFrame implements CLASES.IBlockableFrame {
+    public int block=0;
+    
+    public void botones() {
+        Barra.setEnabled(true);
+        Menu.setEnabled(true);
+        Movimientos.setEnabled(true);
+        Asistencia.setEnabled(true);
+        Empleados.setEnabled(true);
+        Estadisticas.setEnabled(true);
+        Ayuda.setEnabled(true);
+        Configuracion.setEnabled(true);
+        Salir.setEnabled(true);
+        block=0;
     }
-
-    // 🔸 Método para crear un JMenuItem con estilo
-    private JMenuItem crearItem(String texto, Color fondo, Color textoColor, int tamañoFuente) {
-        JMenuItem item = new JMenuItem(texto);
-        item.setBackground(fondo);
-        item.setForeground(textoColor);
-        item.setFont(new Font("Segoe UI", Font.PLAIN, tamañoFuente));
-        item.setOpaque(true);
-        return item;
+    
+    @Override
+    public int getBlockState(){
+        return this.block;
     }
-    */
-
+    
     class FondoInicio extends JPanel {
 
-        private Image imagen5;
-        
-        public FondoInicio(String rutaImagen){
+        private final Image imagen5;
+
+        public FondoInicio(String rutaImagen) {
             imagen5 = new ImageIcon(getClass().getResource(rutaImagen)).getImage();
         }
 
@@ -72,42 +58,20 @@ public class Menu extends javax.swing.JFrame {
     }
 
     public Menu() {
+
+        CLASES.MenuClass.Configuracion();
+
         initComponents();
         this.setLocationRelativeTo(null);
-       
-        /*
-        // 🔹 Crear la barra de menú
-        JMenuBar menuBar = new JMenuBar();
-        menuBar.setBackground(new Color(52, 170, 121)); // Fondo oscuro
-        menuBar.setBorder(BorderFactory.createLineBorder(new Color(52, 170, 121), 2)); // borde decorativo
-        //[52,170,121]
-        // 🔹 Crear menús
-        JMenu Menu = crearMenu("Menu", "/IMAGENES/menui.png", new Color(52, 170, 121), Color.WHITE, 16);
-        JMenu Movimientos = crearMenu("Movimientos", "/IMAGENES/movimiento.png",new Color(52, 170, 121), Color.WHITE, 16);
-        JMenu Asistencia = crearMenu("Asistencia", "/IMAGENES/asistencia.png",new Color(52, 170, 121), Color.WHITE, 16);
-        JMenu Empleados = crearMenu("Empleados", "/IMAGENES/empleado.png",new Color(52, 170, 121), Color.WHITE, 16);
-        JMenu Estadisticas = crearMenu("Estadisticas", "/IMAGENES/estats.png",new Color(52, 170, 121), Color.WHITE, 16);
-        JMenu Ayuda = crearMenu("Ayuda", "/IMAGENES/ayuda.png",new Color(52, 170, 121), Color.WHITE, 16);
-        JMenu Configuracion = crearMenu("Configuración", "/IMAGENES/config.png",new Color(52, 170, 121), Color.WHITE, 16);
+        CLASES.MenuClass menuHelper = new CLASES.MenuClass();
+        menuHelper.MenuConfig(Movimientos, Menu, Asistencia, Empleados, Estadisticas, Ayuda, Configuracion, Salir, this);
         
-        // 🔹 Agregar ítems a los menús
-        menuFile.add(crearItem("Nuevo", new Color(80, 80, 80), Color.WHITE, 14));
-        menuFile.add(crearItem("Abrir", new Color(80, 80, 80), Color.WHITE, 14));
-        menuEdit.add(crearItem("Copiar", new Color(80, 80, 80), Color.WHITE, 14));
-        menuEdit.add(crearItem("Pegar", new Color(80, 80, 80), Color.WHITE, 14));
-        
-        // 🔹 Agregar menús a la barra
-        menuBar.add(Menu);
-        menuBar.add(Movimientos);
-        menuBar.add(Asistencia);
-        menuBar.add(Empleados);
-        menuBar.add(Estadisticas);
-        menuBar.add(Ayuda);
-        menuBar.add(Configuracion);
-        
-        this.setJMenuBar(menuBar);
-        */
-
+        int ventana=CLASES.MenuClass.Ventana();
+        if (ventana==0){
+            this.setExtendedState(NORMAL);
+        } else if (ventana == 1){
+            this.setExtendedState(MAXIMIZED_BOTH);
+        }
     }
 
     /**
@@ -119,325 +83,386 @@ public class Menu extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jMenuBar2 = new javax.swing.JMenuBar();
+        jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
-        jMenuBar3 = new javax.swing.JMenuBar();
-        jMenu3 = new javax.swing.JMenu();
-        jMenu4 = new javax.swing.JMenu();
-        jMenuBar4 = new javax.swing.JMenuBar();
-        jMenu5 = new javax.swing.JMenu();
-        jMenu6 = new javax.swing.JMenu();
-        jMenuBar5 = new javax.swing.JMenuBar();
         jMenu7 = new javax.swing.JMenu();
-        jMenu8 = new javax.swing.JMenu();
-        jMenuBar6 = new javax.swing.JMenuBar();
-        jMenu9 = new javax.swing.JMenu();
-        jMenu10 = new javax.swing.JMenu();
-        jMenuBar7 = new javax.swing.JMenuBar();
-        jMenu11 = new javax.swing.JMenu();
-        jMenu12 = new javax.swing.JMenu();
-        jPanel1 = new javax.swing.JPanel();
-        Menu = new javax.swing.JButton();
-        Movimiento = new javax.swing.JButton();
-        Asistencia = new javax.swing.JButton();
-        Salir = new javax.swing.JButton();
-        Empleados = new javax.swing.JButton();
-        Estadisticas = new javax.swing.JButton();
-        Ayuda = new javax.swing.JButton();
-        Configuracion = new javax.swing.JButton();
-        jPanel3 = new FondoInicio("/IMAGENES/AmbulanciaPartes.png");
-        Fondo = new FondoInicio("/IMAGENES/iniciosesion.png");
-        jMenuBar1 = new javax.swing.JMenuBar();
+        Fondo = new FondoInicio("/IMAGENES/fondoamb.png");
+        menuinicio = new FondoInicio("/IMAGENES/iniciosesion.png");
+        jSeparator1 = new javax.swing.JSeparator();
+        Usuario = new javax.swing.JTextField();
+        Contraseña = new javax.swing.JPasswordField();
+        registrarse = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        iniciarsesion1 = new javax.swing.JButton();
+        olvide = new javax.swing.JLabel();
+        Ayudin = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        Barra = new javax.swing.JMenuBar();
+        Menu = new javax.swing.JMenu();
+        incmen = new javax.swing.JMenuItem();
+        Movimientos = new javax.swing.JMenu();
+        iniciomov = new javax.swing.JMenuItem();
+        nuevtrip = new javax.swing.JMenuItem();
+        nuevovic = new javax.swing.JMenuItem();
+        historial = new javax.swing.JMenuItem();
+        Asistencia = new javax.swing.JMenu();
+        inicioas = new javax.swing.JMenuItem();
+        Empleados = new javax.swing.JMenu();
+        inicemp = new javax.swing.JMenuItem();
+        cargoemp = new javax.swing.JMenu();
+        mod = new javax.swing.JMenuItem();
+        elim = new javax.swing.JMenuItem();
+        Estadisticas = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        Ayuda = new javax.swing.JMenu();
+        Configuracion = new javax.swing.JMenu();
+        Salir = new javax.swing.JMenu();
 
         jMenu1.setText("File");
-        jMenuBar2.add(jMenu1);
+        jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Edit");
-        jMenuBar2.add(jMenu2);
+        jMenuBar1.add(jMenu2);
 
-        jMenu3.setText("File");
-        jMenuBar3.add(jMenu3);
+        jMenu7.setText("jMenu7");
 
-        jMenu4.setText("Edit");
-        jMenuBar3.add(jMenu4);
-
-        jMenu5.setText("File");
-        jMenuBar4.add(jMenu5);
-
-        jMenu6.setText("Edit");
-        jMenuBar4.add(jMenu6);
-
-        jMenu7.setText("File");
-        jMenuBar5.add(jMenu7);
-
-        jMenu8.setText("Edit");
-        jMenuBar5.add(jMenu8);
-
-        jMenu9.setText("File");
-        jMenuBar6.add(jMenu9);
-
-        jMenu10.setText("Edit");
-        jMenuBar6.add(jMenu10);
-
-        jMenu11.setText("File");
-        jMenuBar7.add(jMenu11);
-
-        jMenu12.setText("Edit");
-        jMenuBar7.add(jMenu12);
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-        setTitle("Menu");
-        setPreferredSize(new java.awt.Dimension(1200, 700));
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Bienvenido al sistema de SAME 107");
+        setUndecorated(true);
         setResizable(false);
 
-        jPanel1.setBackground(new java.awt.Color(52, 170, 121));
-        jPanel1.setForeground(new java.awt.Color(153, 153, 0));
+        Fondo.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        Menu.setBackground(new java.awt.Color(0, 102, 0));
-        Menu.setFont(new java.awt.Font("Dubai Medium", 1, 14)); // NOI18N
-        Menu.setForeground(new java.awt.Color(255, 255, 255));
+        menuinicio.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jSeparator1.setOrientation(javax.swing.SwingConstants.VERTICAL);
+        menuinicio.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 50, 20, 250));
+
+        Usuario.setBackground(new java.awt.Color(204, 204, 204));
+        Usuario.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)), "Usuario", javax.swing.border.TitledBorder.LEADING, javax.swing.border.TitledBorder.ABOVE_TOP, new java.awt.Font("Tahoma", 1, 14))); // NOI18N
+        Usuario.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        menuinicio.add(Usuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 90, 270, 40));
+
+        Contraseña.setBackground(new java.awt.Color(204, 204, 204));
+        Contraseña.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)), "Contraseña", javax.swing.border.TitledBorder.LEADING, javax.swing.border.TitledBorder.ABOVE_TOP, new java.awt.Font("Tahoma", 1, 14))); // NOI18N
+        Contraseña.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        menuinicio.add(Contraseña, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 160, 270, 40));
+
+        registrarse.setBackground(new java.awt.Color(52, 170, 121));
+        registrarse.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        registrarse.setForeground(new java.awt.Color(255, 255, 255));
+        registrarse.setText("Registrarse");
+        registrarse.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        registrarse.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        menuinicio.add(registrarse, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 140, 120, 40));
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/asistencia.png"))); // NOI18N
+        jLabel1.setText("Login");
+        menuinicio.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 30, 100, 50));
+
+        iniciarsesion1.setBackground(new java.awt.Color(52, 170, 121));
+        iniciarsesion1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        iniciarsesion1.setForeground(new java.awt.Color(255, 255, 255));
+        iniciarsesion1.setText("Iniciar Sesión");
+        iniciarsesion1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        iniciarsesion1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        menuinicio.add(iniciarsesion1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 220, 120, 40));
+
+        olvide.setBackground(new java.awt.Color(52, 170, 121));
+        olvide.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        olvide.setForeground(new java.awt.Color(52, 170, 121));
+        olvide.setText("¿Olvidaste la contraseña?");
+        menuinicio.add(olvide, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 270, 180, 50));
+
+        Ayudin.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        Ayudin.setForeground(new java.awt.Color(52, 170, 121));
+        Ayudin.setText("Ayuda");
+        menuinicio.add(Ayudin, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 290, -1, -1));
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/empleado.png"))); // NOI18N
+        jLabel2.setText("Nuevo Usuario");
+        menuinicio.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 90, 150, -1));
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
+        jLabel3.setText("SAME TRANSPORTE");
+
+        javax.swing.GroupLayout FondoLayout = new javax.swing.GroupLayout(Fondo);
+        Fondo.setLayout(FondoLayout);
+        FondoLayout.setHorizontalGroup(
+            FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(FondoLayout.createSequentialGroup()
+                .addContainerGap(237, Short.MAX_VALUE)
+                .addGroup(FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3)
+                    .addComponent(menuinicio, javax.swing.GroupLayout.PREFERRED_SIZE, 656, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(307, Short.MAX_VALUE))
+        );
+        FondoLayout.setVerticalGroup(
+            FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(FondoLayout.createSequentialGroup()
+                .addContainerGap(108, Short.MAX_VALUE)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(menuinicio, javax.swing.GroupLayout.PREFERRED_SIZE, 342, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(158, Short.MAX_VALUE))
+        );
+
+        Barra.setBackground(new java.awt.Color(52, 170, 121));
+        Barra.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        Menu.setBackground(new java.awt.Color(204, 255, 204));
         Menu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/menui.png"))); // NOI18N
         Menu.setText("Menu");
-        Menu.setToolTipText("ir al menu");
-        Menu.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 1, true));
-        Menu.setContentAreaFilled(false);
         Menu.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        Menu.setDefaultCapable(false);
-        Menu.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/menui2.png"))); // NOI18N
-        Menu.addActionListener(new java.awt.event.ActionListener() {
+        Menu.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+
+        incmen.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        incmen.setText("Inicio");
+        incmen.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                MenuActionPerformed(evt);
+                incmenActionPerformed(evt);
+            }
+        });
+        Menu.add(incmen);
+
+        Barra.add(Menu);
+
+        Movimientos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/movimiento.png"))); // NOI18N
+        Movimientos.setText("Movimientos");
+        Movimientos.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        Movimientos.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        Movimientos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MovimientosActionPerformed(evt);
             }
         });
 
-        Movimiento.setBackground(new java.awt.Color(0, 102, 0));
-        Movimiento.setFont(new java.awt.Font("Dubai Medium", 1, 14)); // NOI18N
-        Movimiento.setForeground(new java.awt.Color(255, 255, 255));
-        Movimiento.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/movimiento.png"))); // NOI18N
-        Movimiento.setText("Movimientos");
-        Movimiento.setToolTipText("ir a movimientos");
-        Movimiento.setBorderPainted(false);
-        Movimiento.setContentAreaFilled(false);
-        Movimiento.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        Movimiento.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/movimiento2.png"))); // NOI18N
-        Movimiento.addActionListener(new java.awt.event.ActionListener() {
+        iniciomov.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        iniciomov.setText("Inicio");
+        iniciomov.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                MovimientoActionPerformed(evt);
+                iniciomovActionPerformed(evt);
             }
         });
+        Movimientos.add(iniciomov);
 
-        Asistencia.setBackground(new java.awt.Color(0, 102, 0));
-        Asistencia.setFont(new java.awt.Font("Dubai Medium", 1, 14)); // NOI18N
-        Asistencia.setForeground(new java.awt.Color(255, 255, 255));
+        nuevtrip.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        nuevtrip.setText("Nueva tripulación");
+        nuevtrip.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nuevtripActionPerformed(evt);
+            }
+        });
+        Movimientos.add(nuevtrip);
+
+        nuevovic.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        nuevovic.setText("Nuevo victor");
+        nuevovic.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nuevovicActionPerformed(evt);
+            }
+        });
+        Movimientos.add(nuevovic);
+
+        historial.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        historial.setText("Historial");
+        historial.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                historialActionPerformed(evt);
+            }
+        });
+        Movimientos.add(historial);
+
+        Barra.add(Movimientos);
+
         Asistencia.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/asistencia.png"))); // NOI18N
         Asistencia.setText("Asistencia");
-        Asistencia.setToolTipText("ir a asistencia");
-        Asistencia.setBorderPainted(false);
-        Asistencia.setContentAreaFilled(false);
         Asistencia.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        Asistencia.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/asistencia2.png"))); // NOI18N
+        Asistencia.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         Asistencia.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 AsistenciaActionPerformed(evt);
             }
         });
 
-        Salir.setBackground(new java.awt.Color(0, 102, 0));
-        Salir.setFont(new java.awt.Font("Dubai Medium", 1, 14)); // NOI18N
-        Salir.setForeground(new java.awt.Color(255, 255, 255));
+        inicioas.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        inicioas.setText("Inicio");
+        inicioas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                inicioasActionPerformed(evt);
+            }
+        });
+        Asistencia.add(inicioas);
+
+        Barra.add(Asistencia);
+
+        Empleados.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/empleado.png"))); // NOI18N
+        Empleados.setText("Empleados");
+        Empleados.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        Empleados.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+
+        inicemp.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        inicemp.setText("Inicio");
+        inicemp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                inicempActionPerformed(evt);
+            }
+        });
+        Empleados.add(inicemp);
+
+        cargoemp.setBackground(new java.awt.Color(52, 170, 121));
+        cargoemp.setText("Cargo");
+        cargoemp.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+
+        mod.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        mod.setText("Modificar");
+        mod.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                modActionPerformed(evt);
+            }
+        });
+        cargoemp.add(mod);
+
+        elim.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        elim.setText("Eliminar");
+        elim.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                elimActionPerformed(evt);
+            }
+        });
+        cargoemp.add(elim);
+
+        Empleados.add(cargoemp);
+
+        Barra.add(Empleados);
+
+        Estadisticas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/estats.png"))); // NOI18N
+        Estadisticas.setText("Estadisticas");
+        Estadisticas.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        Estadisticas.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+
+        jMenuItem1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jMenuItem1.setText("Consultar");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        Estadisticas.add(jMenuItem1);
+
+        Barra.add(Estadisticas);
+
+        Ayuda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/ayuda.png"))); // NOI18N
+        Ayuda.setText("Ayuda");
+        Ayuda.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        Ayuda.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        Barra.add(Ayuda);
+
+        Configuracion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/config.png"))); // NOI18N
+        Configuracion.setText("Configuración");
+        Configuracion.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        Configuracion.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        Barra.add(Configuracion);
+
         Salir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/salir.png"))); // NOI18N
         Salir.setText("Salir");
-        Salir.setToolTipText("Salir del programa");
-        Salir.setBorderPainted(false);
-        Salir.setContentAreaFilled(false);
         Salir.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        Salir.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/salir2.png"))); // NOI18N
+        Salir.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         Salir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 SalirActionPerformed(evt);
             }
         });
+        Barra.add(Salir);
 
-        Empleados.setBackground(new java.awt.Color(0, 102, 0));
-        Empleados.setFont(new java.awt.Font("Dubai Medium", 1, 14)); // NOI18N
-        Empleados.setForeground(new java.awt.Color(255, 255, 255));
-        Empleados.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/empleado.png"))); // NOI18N
-        Empleados.setText("Empleados");
-        Empleados.setToolTipText("ir a empleados");
-        Empleados.setBorderPainted(false);
-        Empleados.setContentAreaFilled(false);
-        Empleados.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        Empleados.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/empleado2.png"))); // NOI18N
-        Empleados.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                EmpleadosActionPerformed(evt);
-            }
-        });
+        setJMenuBar(Barra);
 
-        Estadisticas.setBackground(new java.awt.Color(0, 102, 0));
-        Estadisticas.setFont(new java.awt.Font("Dubai Medium", 1, 14)); // NOI18N
-        Estadisticas.setForeground(new java.awt.Color(255, 255, 255));
-        Estadisticas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/estats.png"))); // NOI18N
-        Estadisticas.setText("Estadisticas");
-        Estadisticas.setToolTipText("ir a estadisticas");
-        Estadisticas.setBorderPainted(false);
-        Estadisticas.setContentAreaFilled(false);
-        Estadisticas.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        Estadisticas.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/estats2.png"))); // NOI18N
-        Estadisticas.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                EstadisticasActionPerformed(evt);
-            }
-        });
-
-        Ayuda.setBackground(new java.awt.Color(0, 102, 0));
-        Ayuda.setFont(new java.awt.Font("Dubai Medium", 1, 14)); // NOI18N
-        Ayuda.setForeground(new java.awt.Color(255, 255, 255));
-        Ayuda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/ayuda.png"))); // NOI18N
-        Ayuda.setText("Ayuda");
-        Ayuda.setToolTipText("ir a ayuda");
-        Ayuda.setBorderPainted(false);
-        Ayuda.setContentAreaFilled(false);
-        Ayuda.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        Ayuda.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/ayuda2.png"))); // NOI18N
-        Ayuda.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                AyudaActionPerformed(evt);
-            }
-        });
-
-        Configuracion.setBackground(new java.awt.Color(0, 102, 0));
-        Configuracion.setFont(new java.awt.Font("Dubai Medium", 1, 14)); // NOI18N
-        Configuracion.setForeground(new java.awt.Color(255, 255, 255));
-        Configuracion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/config.png"))); // NOI18N
-        Configuracion.setText("Configuración");
-        Configuracion.setToolTipText("ir a configuración");
-        Configuracion.setBorderPainted(false);
-        Configuracion.setContentAreaFilled(false);
-        Configuracion.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        Configuracion.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/config2.png"))); // NOI18N
-        Configuracion.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ConfiguracionActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(Menu, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(Movimiento)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(Asistencia, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(Empleados)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(Estadisticas)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(Ayuda)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(Configuracion)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 57, Short.MAX_VALUE)
-                .addComponent(Salir))
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(Fondo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                .addComponent(Movimiento, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(Menu)
-                .addComponent(Asistencia, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(Empleados, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(Estadisticas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(Ayuda, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(Salir)
-                .addComponent(Configuracion))
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(Fondo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
-
-        getContentPane().add(jPanel1, java.awt.BorderLayout.PAGE_START);
-
-        jPanel3.setBackground(new java.awt.Color(153, 255, 204));
-
-        javax.swing.GroupLayout FondoLayout = new javax.swing.GroupLayout(Fondo);
-        Fondo.setLayout(FondoLayout);
-        FondoLayout.setHorizontalGroup(
-            FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 633, Short.MAX_VALUE)
-        );
-        FondoLayout.setVerticalGroup(
-            FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 337, Short.MAX_VALUE)
-        );
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(278, 278, 278)
-                .addComponent(Fondo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(289, Short.MAX_VALUE))
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(118, 118, 118)
-                .addComponent(Fondo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(194, Short.MAX_VALUE))
-        );
-
-        getContentPane().add(jPanel3, java.awt.BorderLayout.CENTER);
-        setJMenuBar(jMenuBar1);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void EstadisticasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EstadisticasActionPerformed
-        Estadisticas ventana = new Estadisticas();
+    private void iniciomovActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iniciomovActionPerformed
+        Movimiento ventana = new Movimiento();
         ventana.setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_EstadisticasActionPerformed
+    }//GEN-LAST:event_iniciomovActionPerformed
+
+    private void nuevtripActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevtripActionPerformed
+        AddTri ventana = new AddTri(0, this);
+        ventana.setVisible(true);
+    }//GEN-LAST:event_nuevtripActionPerformed
+
+    private void historialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_historialActionPerformed
+        Historial ventana = new Historial(this);
+        ventana.setVisible(true);
+    }//GEN-LAST:event_historialActionPerformed
+
+    private void nuevovicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevovicActionPerformed
+        AddVic ventana = new AddVic(this);
+        ventana.setVisible(true);
+    }//GEN-LAST:event_nuevovicActionPerformed
+
+    private void modActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modActionPerformed
+        ModElimCargo1 ventana = new ModElimCargo1(1, this);
+        ventana.setVisible(true);
+    }//GEN-LAST:event_modActionPerformed
 
     private void AsistenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AsistenciaActionPerformed
-        Asistencia1 ventana = new Asistencia1();
+        Asistencia ventana = new Asistencia();
         ventana.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_AsistenciaActionPerformed
 
-    private void SalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SalirActionPerformed
-        System.exit(0);
-    }//GEN-LAST:event_SalirActionPerformed
-
-    private void ConfiguracionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ConfiguracionActionPerformed
-        Configuracion ventana = new Configuracion();
-        ventana.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_ConfiguracionActionPerformed
-
-    private void MovimientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MovimientoActionPerformed
-        Movimiento ventana = new Movimiento();
-        ventana.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_MovimientoActionPerformed
-
-    private void MenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_MenuActionPerformed
-
-    private void EmpleadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EmpleadosActionPerformed
+    private void inicempActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inicempActionPerformed
         Empleados ventana = new Empleados();
         ventana.setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_EmpleadosActionPerformed
+    }//GEN-LAST:event_inicempActionPerformed
 
-    private void AyudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AyudaActionPerformed
-        Ayuda ventana = new Ayuda();
+    private void elimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_elimActionPerformed
+        ModElimCargo1 ventana = new ModElimCargo1(0, this);
+        ventana.setVisible(true);
+    }//GEN-LAST:event_elimActionPerformed
+
+    private void inicioasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inicioasActionPerformed
+        Asistencia ventana = new Asistencia();
         ventana.setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_AyudaActionPerformed
+    }//GEN-LAST:event_inicioasActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        Estadisticas ventana = new Estadisticas();
+        ventana.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void incmenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_incmenActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_incmenActionPerformed
+
+    private void MovimientosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MovimientosActionPerformed
+        Movimiento ventana= new Movimiento();
+        ventana.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_MovimientosActionPerformed
+
+    private void SalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SalirActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_SalirActionPerformed
 
     /**
      * @param args the command line arguments
@@ -465,6 +490,7 @@ public class Menu extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(Menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -475,35 +501,41 @@ public class Menu extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton Asistencia;
-    private javax.swing.JButton Ayuda;
-    private javax.swing.JButton Configuracion;
-    private javax.swing.JButton Empleados;
-    private javax.swing.JButton Estadisticas;
+    private javax.swing.JMenu Asistencia;
+    private javax.swing.JMenu Ayuda;
+    private javax.swing.JLabel Ayudin;
+    private javax.swing.JMenuBar Barra;
+    private javax.swing.JMenu Configuracion;
+    private javax.swing.JPasswordField Contraseña;
+    private javax.swing.JMenu Empleados;
+    private javax.swing.JMenu Estadisticas;
     private javax.swing.JPanel Fondo;
-    private javax.swing.JButton Menu;
-    private javax.swing.JButton Movimiento;
-    private javax.swing.JButton Salir;
+    private javax.swing.JMenu Menu;
+    private javax.swing.JMenu Movimientos;
+    private javax.swing.JMenu Salir;
+    private javax.swing.JTextField Usuario;
+    private javax.swing.JMenu cargoemp;
+    private javax.swing.JMenuItem elim;
+    private javax.swing.JMenuItem historial;
+    private javax.swing.JMenuItem incmen;
+    private javax.swing.JMenuItem inicemp;
+    private javax.swing.JButton iniciarsesion1;
+    private javax.swing.JMenuItem inicioas;
+    private javax.swing.JMenuItem iniciomov;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu10;
-    private javax.swing.JMenu jMenu11;
-    private javax.swing.JMenu jMenu12;
     private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenu jMenu3;
-    private javax.swing.JMenu jMenu4;
-    private javax.swing.JMenu jMenu5;
-    private javax.swing.JMenu jMenu6;
     private javax.swing.JMenu jMenu7;
-    private javax.swing.JMenu jMenu8;
-    private javax.swing.JMenu jMenu9;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuBar jMenuBar2;
-    private javax.swing.JMenuBar jMenuBar3;
-    private javax.swing.JMenuBar jMenuBar4;
-    private javax.swing.JMenuBar jMenuBar5;
-    private javax.swing.JMenuBar jMenuBar6;
-    private javax.swing.JMenuBar jMenuBar7;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel3;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JPanel menuinicio;
+    private javax.swing.JMenuItem mod;
+    private javax.swing.JMenuItem nuevovic;
+    private javax.swing.JMenuItem nuevtrip;
+    private javax.swing.JLabel olvide;
+    private javax.swing.JButton registrarse;
     // End of variables declaration//GEN-END:variables
 }

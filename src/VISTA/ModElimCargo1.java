@@ -8,6 +8,7 @@ package VISTA;
 import CONEXIONES.Conexiones;
 import java.sql.Connection;
 import java.sql.SQLException;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -15,9 +16,10 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Facuymayriver
  */
-public class ModElimCargo1 extends javax.swing.JFrame {
+public class ModElimCargo1 extends javax.swing.JDialog {
 
     static int band;
+
     Connection con = Conexiones.Conexion();
 
     //Metodos para editar
@@ -39,14 +41,16 @@ public class ModElimCargo1 extends javax.swing.JFrame {
 
     }
     //Metodos para editar
-    ModeloEditablePorFila tabla1 = new ModeloEditablePorFila(new String[]{"Cod", "Cargo", "Area"}, 0, band);
+    ModeloEditablePorFila tabla1 = new ModeloEditablePorFila(new String[]{"Nº", "Cargo", "Area"}, 0, band);
 
-    public ModElimCargo1(int band) {
+    public ModElimCargo1(int band, JFrame ventanaPrincipal) {
+        super(ventanaPrincipal,true);
         initComponents();
         this.setLocationRelativeTo(null);
         ModElimCargo1.band = band;
+
         //Tabla
-        ModeloEditablePorFila tabla2 = new ModeloEditablePorFila(new String[]{"Cod", "Cargo", "Area"}, 0, band);
+        ModeloEditablePorFila tabla2 = new ModeloEditablePorFila(new String[]{"Nº", "Cargo", "Area"}, 0, band);
         //Tabla
         tablamostrar.setModel(tabla2);
         try {
@@ -73,16 +77,24 @@ public class ModElimCargo1 extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tablamostrar = new javax.swing.JTable();
-        Boton = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
         titulo = new javax.swing.JLabel();
         Leyenda = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tablamostrar = new javax.swing.JTable();
         Cancelar = new javax.swing.JButton();
+        Boton = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Opciones");
         setUndecorated(true);
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        titulo.setText("Titulo");
+
+        Leyenda.setText("jLabel1");
 
         tablamostrar.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -97,19 +109,11 @@ public class ModElimCargo1 extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(tablamostrar);
 
-        Boton.setText("Boton");
-        Boton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        Boton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BotonActionPerformed(evt);
-            }
-        });
-
-        titulo.setText("Titulo");
-
-        Leyenda.setText("jLabel1");
-
+        Cancelar.setBackground(new java.awt.Color(52, 170, 121));
+        Cancelar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        Cancelar.setForeground(new java.awt.Color(255, 255, 255));
         Cancelar.setText("Cancelar");
+        Cancelar.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         Cancelar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         Cancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -117,42 +121,63 @@ public class ModElimCargo1 extends javax.swing.JFrame {
             }
         });
 
+        Boton.setBackground(new java.awt.Color(52, 170, 121));
+        Boton.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        Boton.setForeground(new java.awt.Color(255, 255, 255));
+        Boton.setText("Boton");
+        Boton.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        Boton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        Boton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BotonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(28, 28, 28)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addComponent(Cancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(Boton, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 428, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(Leyenda, javax.swing.GroupLayout.PREFERRED_SIZE, 419, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(26, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(titulo, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(91, 91, 91))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(titulo)
+                .addGap(29, 29, 29)
+                .addComponent(Leyenda)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 372, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Cancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Boton, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(25, 25, 25))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap(22, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(Cancelar)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(Boton))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 434, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(28, 28, 28))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(Leyenda, javax.swing.GroupLayout.PREFERRED_SIZE, 356, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(40, 40, 40))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(titulo, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(69, 69, 69))))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(titulo)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(Leyenda)
-                .addGap(34, 34, 34)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 358, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Boton)
-                    .addComponent(Cancelar))
-                .addContainerGap(12, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -289,7 +314,7 @@ public class ModElimCargo1 extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ModElimCargo1(band).setVisible(true);
+                new ModElimCargo1(0, null).setVisible(true);
             }
         });
     }
@@ -298,6 +323,7 @@ public class ModElimCargo1 extends javax.swing.JFrame {
     private javax.swing.JButton Boton;
     private javax.swing.JButton Cancelar;
     private javax.swing.JLabel Leyenda;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tablamostrar;
     private javax.swing.JLabel titulo;

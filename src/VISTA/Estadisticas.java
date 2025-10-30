@@ -5,125 +5,57 @@
  */
 package VISTA;
 
-import CLASES.Asistencia;
 import CONEXIONES.Conexiones;
 import java.awt.BorderLayout;
 import CLASES.Estadisticas.Victor1;
 import java.awt.Color;
 import java.awt.Cursor;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.util.List;
-import java.util.ArrayList; 
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import javax.swing.JPanel;
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
-import org.jfree.data.general.DefaultPieDataset;
-import org.jfree.chart.plot.PiePlot;
-import org.jfree.data.category.DefaultCategoryDataset;
-
 
 /**
  *
  * @author Facuymayriver
  */
-public class Estadisticas extends javax.swing.JFrame{
+public class Estadisticas extends javax.swing.JFrame {
+
     public int x = 0, c = 0, id, id2;
     String emp = "";
     Connection con = Conexiones.Conexion();
     ResultSet rs;
-    int cont = 0, band = 0, indice;
+    int cont = 0, band = 0, indice, block=0;
     String veri, veri2;
-    
+
     public Estadisticas() {
+        CLASES.MenuClass.Configuracion();
+
         initComponents();
-        panelEst.setLayout(new BorderLayout());
         this.setLocationRelativeTo(null);
+        CLASES.MenuClass menuHelper = new CLASES.MenuClass();
+        menuHelper.MenuConfig(Movimientos, Menu, Asistencia, Empleados, Estadisticas, Ayuda, Configuracion, Salir, this);
+        
+        int ventana=CLASES.MenuClass.Ventana();
+        if (ventana==0){
+            this.setExtendedState(NORMAL);
+        } else if (ventana == 1){
+            this.setExtendedState(MAXIMIZED_BOTH);
+        }
+        
+        panelEst.setLayout(new BorderLayout());
         CLASES.Estadisticas.victor(con, victor);
+        
+        
         mes.setEnabled(false);
         CLASES.Estadisticas.estadisticageneral(con, panelEst);
-        /*
-        // Dataset (datos del gráfico)
-        DefaultPieDataset dataset = new DefaultPieDataset();
-        dataset.setValue("Jose", 50);
-        dataset.setValue("Pedro", 20);
-        dataset.setValue("Milton", 10);
-        dataset.setValue("Juan", 20);
-        
-        DefaultCategoryDataset dataset2 = new DefaultCategoryDataset();
-        dataset2.addValue(8, "Ventas", "Enero");
-        dataset2.addValue(12, "Gastos", "Febrero");
-        dataset2.addValue(5, "Reparaciones", "Marzo");
-
-        // Crear gráfico tipo pastel
-        JFreeChart chart = ChartFactory.createPieChart(
-                "Asistencia", // Título
-                dataset,                // Datos
-                true,                   // Mostrar leyenda
-                true,                   // Mostrar tooltips
-                false                   // URLs
-        );
-        
-
-        
-        
-        // Acceder al plot (parte visual del gráfico)
-        PiePlot plot = (PiePlot) chart.getPlot();
-        
-        // Mostrar porcentajes en las etiquetas
-        plot.setLabelGenerator(new org.jfree.chart.labels.StandardPieSectionLabelGenerator(
-                "{0}: ({2})", NumberFormat.getNumberInstance(), NumberFormat.getPercentInstance()
-        ));
-        
-        /*
-        {0} = nombre (ej: Tacos)
-
-        {1} = valor (ej: 40)
-
-        {2} = porcentaje (ej: 40%)
-        
-        ChartPanel chartPanel = new ChartPanel(chart);
-        chartPanel.setPreferredSize(new Dimension(panelEst.getWidth(), panelEst.getHeight()));
-        chartPanel.setMouseWheelEnabled(true); // (opcional) para zoom con scroll
-
-        panelEst.setLayout(new BorderLayout());
-        panelEst.add(chartPanel, BorderLayout.CENTER);
-        panelEst.revalidate();
-        panelEst.repaint();
-        
-                JFreeChart chart2 = ChartFactory.createBarChart(
-                "Asistencia", // Título
-                "Mes",              // Eje X
-                "Cantidad",         // Eje Y
-                dataset2
-        );
-        
-        ChartPanel chartPanel2 = new ChartPanel(chart2);
-        chartPanel2.setPreferredSize(new Dimension(panelEst2.getWidth(), panelEst2.getHeight()));
-
-        panelEst2.setLayout(new BorderLayout());
-        panelEst2.add(chartPanel2, BorderLayout.CENTER);
-        panelEst2.revalidate();
-        panelEst2.repaint();
-        
-        PanelDibujo dibujo = new PanelDibujo();
-        dibujo.setPreferredSize(panelDibujoSwing.getSize()); // Opcional
-        panelDibujoSwing.setLayout(new BorderLayout());
-        panelDibujoSwing.add(dibujo, BorderLayout.CENTER);
-        panelDibujoSwing.revalidate();
-        panelDibujoSwing.repaint();
-        */
-
     }
 
     /**
@@ -137,22 +69,13 @@ public class Estadisticas extends javax.swing.JFrame{
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jPanel1 = new javax.swing.JPanel();
-        Menu = new javax.swing.JButton();
-        Movimiento = new javax.swing.JButton();
-        Asistencia = new javax.swing.JButton();
-        Salir = new javax.swing.JButton();
-        Empleados = new javax.swing.JButton();
-        Estadisticas = new javax.swing.JButton();
-        Ayuda = new javax.swing.JButton();
-        Configuracion = new javax.swing.JButton();
-        jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jPanel9 = new javax.swing.JPanel();
         panelEst = new javax.swing.JPanel();
         jButton7 = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
         marca = new javax.swing.JLabel();
         kmtl = new javax.swing.JLabel();
         relevol = new javax.swing.JLabel();
@@ -162,15 +85,27 @@ public class Estadisticas extends javax.swing.JFrame{
         victor = new javax.swing.JComboBox<>();
         jPanel11 = new javax.swing.JPanel();
         mes = new javax.swing.JComboBox<>();
-        jMenuBar1 = new javax.swing.JMenuBar();
-        Opciones2 = new javax.swing.JMenu();
-        Menu2 = new javax.swing.JMenuItem();
-        Movimientos = new javax.swing.JMenuItem();
-        Asistencia2 = new javax.swing.JMenuItem();
-        Empleados2 = new javax.swing.JMenuItem();
-        Estadisticas2 = new javax.swing.JMenuItem();
-        Ayuda2 = new javax.swing.JMenuItem();
-        Configuracion2 = new javax.swing.JMenuItem();
+        jLabel2 = new javax.swing.JLabel();
+        Barra = new javax.swing.JMenuBar();
+        Menu = new javax.swing.JMenu();
+        incmen = new javax.swing.JMenuItem();
+        Movimientos = new javax.swing.JMenu();
+        iniciomov = new javax.swing.JMenuItem();
+        nuevtrip = new javax.swing.JMenuItem();
+        nuevovic = new javax.swing.JMenuItem();
+        historial = new javax.swing.JMenuItem();
+        Asistencia = new javax.swing.JMenu();
+        inicioas = new javax.swing.JMenuItem();
+        Empleados = new javax.swing.JMenu();
+        inicemp = new javax.swing.JMenuItem();
+        cargoemp = new javax.swing.JMenu();
+        mod = new javax.swing.JMenuItem();
+        elim = new javax.swing.JMenuItem();
+        Estadisticas = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        Ayuda = new javax.swing.JMenu();
+        Configuracion = new javax.swing.JMenu();
+        Salir = new javax.swing.JMenu();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -187,197 +122,19 @@ public class Estadisticas extends javax.swing.JFrame{
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Estadisticas");
+        setMaximumSize(new java.awt.Dimension(1200, 700));
+        setMinimumSize(new java.awt.Dimension(1200, 700));
         setName("Estadisticas"); // NOI18N
+        setUndecorated(true);
         setPreferredSize(new java.awt.Dimension(1200, 700));
         setResizable(false);
 
-        jPanel1.setBackground(new java.awt.Color(0, 102, 0));
-        jPanel1.setForeground(new java.awt.Color(153, 153, 0));
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel3.setMinimumSize(new java.awt.Dimension(1200, 700));
+        jPanel3.setPreferredSize(new java.awt.Dimension(1200, 700));
 
-        Menu.setBackground(new java.awt.Color(0, 102, 0));
-        Menu.setFont(new java.awt.Font("Dubai Medium", 1, 14)); // NOI18N
-        Menu.setForeground(new java.awt.Color(255, 255, 255));
-        Menu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/menui.png"))); // NOI18N
-        Menu.setText("Menu");
-        Menu.setToolTipText("ir al menu");
-        Menu.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 1, true));
-        Menu.setBorderPainted(false);
-        Menu.setContentAreaFilled(false);
-        Menu.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        Menu.setDefaultCapable(false);
-        Menu.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/menui2.png"))); // NOI18N
-        Menu.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                MenuActionPerformed(evt);
-            }
-        });
-
-        Movimiento.setBackground(new java.awt.Color(0, 102, 0));
-        Movimiento.setFont(new java.awt.Font("Dubai Medium", 1, 14)); // NOI18N
-        Movimiento.setForeground(new java.awt.Color(255, 255, 255));
-        Movimiento.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/movimiento.png"))); // NOI18N
-        Movimiento.setText("Movimientos");
-        Movimiento.setToolTipText("ir a movimientos");
-        Movimiento.setBorderPainted(false);
-        Movimiento.setContentAreaFilled(false);
-        Movimiento.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        Movimiento.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/movimiento2.png"))); // NOI18N
-        Movimiento.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                MovimientoActionPerformed(evt);
-            }
-        });
-
-        Asistencia.setBackground(new java.awt.Color(0, 102, 0));
-        Asistencia.setFont(new java.awt.Font("Dubai Medium", 1, 14)); // NOI18N
-        Asistencia.setForeground(new java.awt.Color(255, 255, 255));
-        Asistencia.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/asistencia.png"))); // NOI18N
-        Asistencia.setText("Asistencia");
-        Asistencia.setToolTipText("ir a asistencia");
-        Asistencia.setBorderPainted(false);
-        Asistencia.setContentAreaFilled(false);
-        Asistencia.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        Asistencia.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/asistencia2.png"))); // NOI18N
-        Asistencia.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                AsistenciaActionPerformed(evt);
-            }
-        });
-
-        Salir.setBackground(new java.awt.Color(0, 102, 0));
-        Salir.setFont(new java.awt.Font("Dubai Medium", 1, 14)); // NOI18N
-        Salir.setForeground(new java.awt.Color(255, 255, 255));
-        Salir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/salir.png"))); // NOI18N
-        Salir.setText("Salir");
-        Salir.setToolTipText("Salir del programa");
-        Salir.setBorderPainted(false);
-        Salir.setContentAreaFilled(false);
-        Salir.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        Salir.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/salir2.png"))); // NOI18N
-        Salir.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                SalirActionPerformed(evt);
-            }
-        });
-
-        Empleados.setBackground(new java.awt.Color(0, 102, 0));
-        Empleados.setFont(new java.awt.Font("Dubai Medium", 1, 14)); // NOI18N
-        Empleados.setForeground(new java.awt.Color(255, 255, 255));
-        Empleados.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/empleado.png"))); // NOI18N
-        Empleados.setText("Empleados");
-        Empleados.setToolTipText("ir a empleados");
-        Empleados.setBorderPainted(false);
-        Empleados.setContentAreaFilled(false);
-        Empleados.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        Empleados.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/empleado2.png"))); // NOI18N
-        Empleados.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                EmpleadosActionPerformed(evt);
-            }
-        });
-
-        Estadisticas.setBackground(new java.awt.Color(0, 102, 0));
-        Estadisticas.setFont(new java.awt.Font("Dubai Medium", 1, 14)); // NOI18N
-        Estadisticas.setForeground(new java.awt.Color(255, 255, 255));
-        Estadisticas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/estats.png"))); // NOI18N
-        Estadisticas.setText("Estadisticas");
-        Estadisticas.setToolTipText("ir a estadisticas");
-        Estadisticas.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
-        Estadisticas.setContentAreaFilled(false);
-        Estadisticas.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        Estadisticas.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/estats2.png"))); // NOI18N
-        Estadisticas.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                EstadisticasActionPerformed(evt);
-            }
-        });
-
-        Ayuda.setBackground(new java.awt.Color(0, 102, 0));
-        Ayuda.setFont(new java.awt.Font("Dubai Medium", 1, 14)); // NOI18N
-        Ayuda.setForeground(new java.awt.Color(255, 255, 255));
-        Ayuda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/ayuda.png"))); // NOI18N
-        Ayuda.setText("Ayuda");
-        Ayuda.setToolTipText("ir a ayuda");
-        Ayuda.setBorderPainted(false);
-        Ayuda.setContentAreaFilled(false);
-        Ayuda.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        Ayuda.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/ayuda2.png"))); // NOI18N
-        Ayuda.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                AyudaActionPerformed(evt);
-            }
-        });
-
-        Configuracion.setBackground(new java.awt.Color(0, 102, 0));
-        Configuracion.setFont(new java.awt.Font("Dubai Medium", 1, 14)); // NOI18N
-        Configuracion.setForeground(new java.awt.Color(255, 255, 255));
-        Configuracion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/config.png"))); // NOI18N
-        Configuracion.setText("Configuración");
-        Configuracion.setToolTipText("ir a configuración");
-        Configuracion.setBorderPainted(false);
-        Configuracion.setContentAreaFilled(false);
-        Configuracion.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        Configuracion.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/config2.png"))); // NOI18N
-        Configuracion.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ConfiguracionActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(Menu, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(Movimiento)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(Asistencia, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(Empleados)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(Estadisticas, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(Ayuda)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(Configuracion)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 67, Short.MAX_VALUE)
-                .addComponent(Salir))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                .addComponent(Movimiento, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(Menu)
-                .addComponent(Asistencia, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(Empleados, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(Estadisticas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(Ayuda, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(Salir)
-                .addComponent(Configuracion))
-        );
-
-        getContentPane().add(jPanel1, java.awt.BorderLayout.PAGE_START);
-
-        jPanel2.setBackground(new java.awt.Color(102, 0, 0));
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1200, Short.MAX_VALUE)
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 47, Short.MAX_VALUE)
-        );
-
-        getContentPane().add(jPanel2, java.awt.BorderLayout.PAGE_END);
-
-        jPanel3.setBackground(new java.awt.Color(153, 255, 204));
-
-        jPanel9.setBackground(new java.awt.Color(129, 129, 164));
+        jPanel9.setBackground(new java.awt.Color(52, 170, 121));
         jPanel9.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         panelEst.setBackground(new java.awt.Color(255, 255, 255));
@@ -388,42 +145,91 @@ public class Estadisticas extends javax.swing.JFrame{
         panelEst.setLayout(panelEstLayout);
         panelEstLayout.setHorizontalGroup(
             panelEstLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 609, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
         panelEstLayout.setVerticalGroup(
             panelEstLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 391, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
 
         jButton7.setText("Generar PDF");
         jButton7.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
-        jPanel4.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanel4.setBackground(new java.awt.Color(204, 204, 204));
+        jPanel4.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel1.setText("Información");
-        jPanel4.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(196, 11, -1, -1));
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
         marca.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         marca.setText("Marca: -");
-        jPanel4.add(marca, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 71, -1, -1));
 
         kmtl.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         kmtl.setText("Kilometraje Total: -");
-        jPanel4.add(kmtl, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 126, -1, -1));
 
         relevol.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         relevol.setText("Relevos: -");
-        jPanel4.add(relevol, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 195, -1, -1));
 
         nmovl.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         nmovl.setText("Nº De Movimientos: -");
-        jPanel4.add(nmovl, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 262, -1, -1));
 
         Dominio.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         Dominio.setText("Dominio: -");
-        jPanel4.add(Dominio, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 71, -1, -1));
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(marca)
+                    .addComponent(kmtl)
+                    .addComponent(relevol)
+                    .addComponent(nmovl)
+                    .addComponent(Dominio))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(49, 49, 49)
+                .addComponent(marca, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(33, 33, 33)
+                .addComponent(kmtl)
+                .addGap(64, 64, 64)
+                .addComponent(relevol)
+                .addGap(59, 59, 59)
+                .addComponent(nmovl)
+                .addGap(55, 55, 55)
+                .addComponent(Dominio)
+                .addGap(48, 48, 48))
+        );
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(128, 128, 128)
+                .addComponent(jLabel1)
+                .addGap(107, 139, Short.MAX_VALUE))
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(8, 8, 8)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(8, 8, 8)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
 
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
         jPanel9.setLayout(jPanel9Layout);
@@ -432,13 +238,13 @@ public class Estadisticas extends javax.swing.JFrame{
             .addGroup(jPanel9Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel9Layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel9Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jButton7))
-                    .addGroup(jPanel9Layout.createSequentialGroup()
-                        .addComponent(panelEst, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel9Layout.createSequentialGroup()
+                        .addComponent(panelEst, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(18, 18, 18)
-                        .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, 527, Short.MAX_VALUE)))
+                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel9Layout.setVerticalGroup(
@@ -453,7 +259,7 @@ public class Estadisticas extends javax.swing.JFrame{
                 .addContainerGap())
         );
 
-        jPanel10.setBackground(new java.awt.Color(0, 102, 255));
+        jPanel10.setBackground(new java.awt.Color(52, 170, 121));
         jPanel10.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Seleccionar victor", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Tahoma", 1, 14))); // NOI18N
         jPanel10.addAncestorListener(new javax.swing.event.AncestorListener() {
             public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
@@ -489,7 +295,7 @@ public class Estadisticas extends javax.swing.JFrame{
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel11.setBackground(new java.awt.Color(0, 102, 255));
+        jPanel11.setBackground(new java.awt.Color(52, 170, 121));
         jPanel11.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Seleccionar mes", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Tahoma", 1, 14))); // NOI18N
 
         mes.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Opciones", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" }));
@@ -517,6 +323,11 @@ public class Estadisticas extends javax.swing.JFrame{
                 .addContainerGap(20, Short.MAX_VALUE))
         );
 
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 48)); // NOI18N
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/estats.png"))); // NOI18N
+        jLabel2.setText("Estadísticas de Vehiculos");
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -529,7 +340,8 @@ public class Estadisticas extends javax.swing.JFrame{
                         .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(42, 42, 42)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 754, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -538,170 +350,177 @@ public class Estadisticas extends javax.swing.JFrame{
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
-                .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         getContentPane().add(jPanel3, java.awt.BorderLayout.CENTER);
 
-        Opciones2.setText("Opciones");
-        Opciones2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        Barra.setBackground(new java.awt.Color(52, 170, 121));
+        Barra.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        Menu2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.CTRL_MASK));
-        Menu2.setText("Menu");
-        Menu2.addActionListener(new java.awt.event.ActionListener() {
+        Menu.setBackground(new java.awt.Color(204, 255, 204));
+        Menu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/menui.png"))); // NOI18N
+        Menu.setText("Menu");
+        Menu.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        Menu.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+
+        incmen.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        incmen.setText("Inicio");
+        incmen.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Menu2ActionPerformed(evt);
+                incmenActionPerformed(evt);
             }
         });
-        Opciones2.add(Menu2);
+        Menu.add(incmen);
 
-        Movimientos.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Y, java.awt.event.InputEvent.CTRL_MASK));
+        Barra.add(Menu);
+
+        Movimientos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/movimiento.png"))); // NOI18N
         Movimientos.setText("Movimientos");
-        Movimientos.addActionListener(new java.awt.event.ActionListener() {
+        Movimientos.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        Movimientos.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+
+        iniciomov.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        iniciomov.setText("Inicio");
+        iniciomov.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                MovimientosActionPerformed(evt);
+                iniciomovActionPerformed(evt);
             }
         });
-        Opciones2.add(Movimientos);
+        Movimientos.add(iniciomov);
 
-        Asistencia2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_U, java.awt.event.InputEvent.CTRL_MASK));
-        Asistencia2.setText("Asistencia");
-        Asistencia2.addActionListener(new java.awt.event.ActionListener() {
+        nuevtrip.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        nuevtrip.setText("Nueva tripulación");
+        nuevtrip.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Asistencia2ActionPerformed(evt);
+                nuevtripActionPerformed(evt);
             }
         });
-        Opciones2.add(Asistencia2);
+        Movimientos.add(nuevtrip);
 
-        Empleados2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.CTRL_MASK));
-        Empleados2.setText("Empleados");
-        Empleados2.addActionListener(new java.awt.event.ActionListener() {
+        nuevovic.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        nuevovic.setText("Nuevo victor");
+        nuevovic.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Empleados2ActionPerformed(evt);
+                nuevovicActionPerformed(evt);
             }
         });
-        Opciones2.add(Empleados2);
+        Movimientos.add(nuevovic);
 
-        Estadisticas2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
-        Estadisticas2.setText("Estadisticas");
-        Estadisticas2.addActionListener(new java.awt.event.ActionListener() {
+        historial.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        historial.setText("Historial");
+        historial.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Estadisticas2ActionPerformed(evt);
+                historialActionPerformed(evt);
             }
         });
-        Opciones2.add(Estadisticas2);
+        Movimientos.add(historial);
 
-        Ayuda2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_MASK));
-        Ayuda2.setText("Ayuda");
-        Ayuda2.addActionListener(new java.awt.event.ActionListener() {
+        Barra.add(Movimientos);
+
+        Asistencia.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/asistencia.png"))); // NOI18N
+        Asistencia.setText("Asistencia");
+        Asistencia.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        Asistencia.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        Asistencia.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Ayuda2ActionPerformed(evt);
+                AsistenciaActionPerformed(evt);
             }
         });
-        Opciones2.add(Ayuda2);
 
-        Configuracion2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_K, java.awt.event.InputEvent.CTRL_MASK));
-        Configuracion2.setText("Configuracion");
-        Configuracion2.addActionListener(new java.awt.event.ActionListener() {
+        inicioas.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        inicioas.setText("Inicio");
+        inicioas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Configuracion2ActionPerformed(evt);
+                inicioasActionPerformed(evt);
             }
         });
-        Opciones2.add(Configuracion2);
+        Asistencia.add(inicioas);
 
-        jMenuBar1.add(Opciones2);
+        Barra.add(Asistencia);
 
-        setJMenuBar(jMenuBar1);
+        Empleados.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/empleado.png"))); // NOI18N
+        Empleados.setText("Empleados");
+        Empleados.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        Empleados.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+
+        inicemp.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        inicemp.setText("Inicio");
+        inicemp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                inicempActionPerformed(evt);
+            }
+        });
+        Empleados.add(inicemp);
+
+        cargoemp.setBackground(new java.awt.Color(52, 170, 121));
+        cargoemp.setText("Cargo");
+        cargoemp.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+
+        mod.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        mod.setText("Modificar");
+        mod.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                modActionPerformed(evt);
+            }
+        });
+        cargoemp.add(mod);
+
+        elim.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        elim.setText("Eliminar");
+        elim.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                elimActionPerformed(evt);
+            }
+        });
+        cargoemp.add(elim);
+
+        Empleados.add(cargoemp);
+
+        Barra.add(Empleados);
+
+        Estadisticas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/estats.png"))); // NOI18N
+        Estadisticas.setText("Estadisticas");
+        Estadisticas.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        Estadisticas.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+
+        jMenuItem1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jMenuItem1.setText("Consultar");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        Estadisticas.add(jMenuItem1);
+
+        Barra.add(Estadisticas);
+
+        Ayuda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/ayuda.png"))); // NOI18N
+        Ayuda.setText("Ayuda");
+        Ayuda.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        Ayuda.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        Barra.add(Ayuda);
+
+        Configuracion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/config.png"))); // NOI18N
+        Configuracion.setText("Configuración");
+        Configuracion.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        Configuracion.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        Barra.add(Configuracion);
+
+        Salir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/salir.png"))); // NOI18N
+        Salir.setText("Salir");
+        Salir.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        Salir.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        Barra.add(Salir);
+
+        setJMenuBar(Barra);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void EstadisticasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EstadisticasActionPerformed
-
-    }//GEN-LAST:event_EstadisticasActionPerformed
-
-    private void AsistenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AsistenciaActionPerformed
-        Asistencia1 ventana=new Asistencia1();
-        ventana.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_AsistenciaActionPerformed
-
-    private void SalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SalirActionPerformed
-        System.exit(0);
-    }//GEN-LAST:event_SalirActionPerformed
-
-    private void ConfiguracionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ConfiguracionActionPerformed
-        Configuracion ventana=new Configuracion();
-        ventana.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_ConfiguracionActionPerformed
-
-    private void MovimientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MovimientoActionPerformed
-        Movimiento ventana=new Movimiento();
-        ventana.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_MovimientoActionPerformed
-
-    private void MenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuActionPerformed
-       Menu ventana=new Menu();
-        ventana.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_MenuActionPerformed
-
-    private void EmpleadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EmpleadosActionPerformed
-        Empleados ventana=new Empleados();
-        ventana.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_EmpleadosActionPerformed
-
-    private void AyudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AyudaActionPerformed
-        Ayuda ventana=new Ayuda();
-        ventana.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_AyudaActionPerformed
-
-    private void Menu2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Menu2ActionPerformed
-       Menu ventana=new Menu();
-        ventana.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_Menu2ActionPerformed
-
-    private void MovimientosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MovimientosActionPerformed
-        Movimiento ventana=new Movimiento();
-        ventana.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_MovimientosActionPerformed
-
-    private void Asistencia2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Asistencia2ActionPerformed
-        Asistencia1 ventana=new Asistencia1();
-        ventana.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_Asistencia2ActionPerformed
-
-    private void Empleados2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Empleados2ActionPerformed
-        Empleados ventana=new Empleados();
-        ventana.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_Empleados2ActionPerformed
-
-    private void Estadisticas2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Estadisticas2ActionPerformed
-
-    }//GEN-LAST:event_Estadisticas2ActionPerformed
-
-    private void Ayuda2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Ayuda2ActionPerformed
-        Ayuda ventana=new Ayuda();
-        ventana.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_Ayuda2ActionPerformed
-
-    private void Configuracion2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Configuracion2ActionPerformed
-        Configuracion ventana=new Configuracion();
-        ventana.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_Configuracion2ActionPerformed
 
     private void victorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_victorActionPerformed
         Object value = victor.getSelectedItem();
@@ -728,7 +547,7 @@ public class Estadisticas extends javax.swing.JFrame{
 
     private void mesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mesActionPerformed
         indice = mes.getSelectedIndex();
-        if (indice!=0){
+        if (indice != 0) {
             CLASES.Estadisticas.estadisticavictormes(con, panelEst, id, veri, indice, marca, kmtl, relevol, nmovl, Dominio);
         } else {
             CLASES.Estadisticas.estadisticavictor(con, panelEst, id, veri, marca, kmtl, relevol, nmovl, Dominio);
@@ -739,48 +558,109 @@ public class Estadisticas extends javax.swing.JFrame{
         // TODO add your handling code here:
     }//GEN-LAST:event_jPanel10AncestorAdded
 
+    private void incmenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_incmenActionPerformed
+        Menu ventana = new Menu();
+        ventana.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_incmenActionPerformed
+
+    private void iniciomovActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iniciomovActionPerformed
+        Movimiento ventana = new Movimiento();
+        ventana.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_iniciomovActionPerformed
+
+    private void nuevtripActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevtripActionPerformed
+        AddTri ventana = new AddTri(0, this);
+        ventana.setVisible(true);
+    }//GEN-LAST:event_nuevtripActionPerformed
+
+    private void nuevovicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevovicActionPerformed
+        AddVic ventana = new AddVic(this);
+        ventana.setVisible(true);
+    }//GEN-LAST:event_nuevovicActionPerformed
+
+    private void historialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_historialActionPerformed
+        Historial ventana = new Historial(this);
+        ventana.setVisible(true);
+    }//GEN-LAST:event_historialActionPerformed
+
+    private void inicioasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inicioasActionPerformed
+        Asistencia ventana = new Asistencia();
+        ventana.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_inicioasActionPerformed
+
+    private void AsistenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AsistenciaActionPerformed
+        Asistencia ventana = new Asistencia();
+        ventana.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_AsistenciaActionPerformed
+
+    private void inicempActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inicempActionPerformed
+        Empleados ventana = new Empleados();
+        ventana.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_inicempActionPerformed
+
+    private void modActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modActionPerformed
+        ModElimCargo1 ventana = new ModElimCargo1(1, this);
+        ventana.setVisible(true);
+    }//GEN-LAST:event_modActionPerformed
+
+    private void elimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_elimActionPerformed
+        ModElimCargo1 ventana = new ModElimCargo1(0, this);
+        ventana.setVisible(true);
+    }//GEN-LAST:event_elimActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        Estadisticas ventana = new Estadisticas();
+        ventana.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
     public class PanelDibujo extends JPanel implements MouseMotionListener {
 
-    private final List<Point> puntos = new ArrayList<>();
+        private final List<Point> puntos = new ArrayList<>();
 
-    public PanelDibujo() {
-        this.addMouseMotionListener(this);
-        this.setOpaque(true);                    // 🔥 Fondo opaco = real
-        this.setBackground(Color.WHITE);         // 🔥 Fondo blanco
-        
-        // 🎨 Cargar imagen del cursor personalizado (debe ser 32x32 o menos)
-        Toolkit toolkit = Toolkit.getDefaultToolkit();
-        Image cursorImg = toolkit.getImage(getClass().getResource("/IMAGENES/lapiz.png"));
+        public PanelDibujo() {
+            this.addMouseMotionListener(this);
+            this.setOpaque(true);                    // 🔥 Fondo opaco = real
+            this.setBackground(Color.WHITE);         // 🔥 Fondo blanco
 
-        // 📍 Crear cursor
-        Point hotspot = new Point(0, 0); // Donde está la punta del lápiz
-        Cursor cursorPersonalizado = toolkit.createCustomCursor(cursorImg, hotspot, "Lapiz");
+            // 🎨 Cargar imagen del cursor personalizado (debe ser 32x32 o menos)
+            Toolkit toolkit = Toolkit.getDefaultToolkit();
+            Image cursorImg = toolkit.getImage(getClass().getResource("/IMAGENES/lapiz.png"));
 
-        // 🔁 Aplicar cursor al panel
-        this.setCursor(cursorPersonalizado);
-    }
+            // 📍 Crear cursor
+            Point hotspot = new Point(0, 0); // Donde está la punta del lápiz
+            Cursor cursorPersonalizado = toolkit.createCustomCursor(cursorImg, hotspot, "Lapiz");
 
-    
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);                 // 🔥 Limpia lo anterior
-        g.setColor(Color.BLACK);                 // 🔥 Color de dibujo
-        for (Point p : puntos) {
-            g.fillOval(p.x, p.y, 4, 4);   // 🔥 Dibujo real
+            // 🔁 Aplicar cursor al panel
+            this.setCursor(cursorPersonalizado);
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);                 // 🔥 Limpia lo anterior
+            g.setColor(Color.BLACK);                 // 🔥 Color de dibujo
+            for (Point p : puntos) {
+                g.fillOval(p.x, p.y, 4, 4);   // 🔥 Dibujo real
+            }
+        }
+
+        @Override
+        public void mouseDragged(MouseEvent e) {
+            puntos.add(e.getPoint());
+            repaint();
+        }
+
+        @Override
+        public void mouseMoved(MouseEvent e) {
+            // No se usa en este caso
         }
     }
 
-    @Override
-    public void mouseDragged(MouseEvent e) {
-        puntos.add(e.getPoint());
-        repaint();
-    }
-
-    @Override
-    public void mouseMoved(MouseEvent e) {
-        // No se usa en este caso
-    }
-}
     /**
      * @param args the command line arguments
      */
@@ -818,30 +698,30 @@ public class Estadisticas extends javax.swing.JFrame{
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton Asistencia;
-    private javax.swing.JMenuItem Asistencia2;
-    private javax.swing.JButton Ayuda;
-    private javax.swing.JMenuItem Ayuda2;
-    private javax.swing.JButton Configuracion;
-    private javax.swing.JMenuItem Configuracion2;
+    private javax.swing.JMenu Asistencia;
+    private javax.swing.JMenu Ayuda;
+    private javax.swing.JMenuBar Barra;
+    private javax.swing.JMenu Configuracion;
     private javax.swing.JLabel Dominio;
-    private javax.swing.JButton Empleados;
-    private javax.swing.JMenuItem Empleados2;
-    private javax.swing.JButton Estadisticas;
-    private javax.swing.JMenuItem Estadisticas2;
-    private javax.swing.JButton Menu;
-    private javax.swing.JMenuItem Menu2;
-    private javax.swing.JButton Movimiento;
-    private javax.swing.JMenuItem Movimientos;
-    private javax.swing.JMenu Opciones2;
-    private javax.swing.JButton Salir;
+    private javax.swing.JMenu Empleados;
+    private javax.swing.JMenu Estadisticas;
+    private javax.swing.JMenu Menu;
+    private javax.swing.JMenu Movimientos;
+    private javax.swing.JMenu Salir;
+    private javax.swing.JMenu cargoemp;
+    private javax.swing.JMenuItem elim;
+    private javax.swing.JMenuItem historial;
+    private javax.swing.JMenuItem incmen;
+    private javax.swing.JMenuItem inicemp;
+    private javax.swing.JMenuItem inicioas;
+    private javax.swing.JMenuItem iniciomov;
     private javax.swing.JButton jButton7;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel9;
@@ -850,7 +730,10 @@ public class Estadisticas extends javax.swing.JFrame{
     private javax.swing.JLabel kmtl;
     private javax.swing.JLabel marca;
     private javax.swing.JComboBox<String> mes;
+    private javax.swing.JMenuItem mod;
     private javax.swing.JLabel nmovl;
+    private javax.swing.JMenuItem nuevovic;
+    private javax.swing.JMenuItem nuevtrip;
     private javax.swing.JPanel panelEst;
     private javax.swing.JLabel relevol;
     private javax.swing.JComboBox<Victor1> victor;

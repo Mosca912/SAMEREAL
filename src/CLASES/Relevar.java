@@ -31,6 +31,8 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.io.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 /**
  *
@@ -41,7 +43,9 @@ public class Relevar {
     static Connection con = Conexiones.Conexion();
 
     public static void Insert(Connection conexion, int luzpos, int luzdir, int luzalt, int luzdest, int luzbaj, int luzfre, int luztras, int limpara, int fren, int indictemp, int testserv, int indcom, int indac, int carbat, int calair, int bal, int ant, int sir, int eqcom, int cint, int rueda, int lla, int gan, int cat, int lavadero2, int entregaypf, int liquidfreno, int refrigerante, int matafuego, String texto, String fecha, int id) {
-
+        LocalDate hoy = LocalDate.now();
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String fechaActual = hoy.format(formato);
         String sql = "INSERT INTO observaciones (idtripulacion, observacion) VALUES (?,?);";
         String sql2 = "INSERT INTO estado(idtripulacion, Matafuego, Liquido_freno, Agua_Refrigerante) VALUES (?,?,?,?)";
         String sql3 = "INSERT INTO partes (idtripulacion, cinturones, ruedaaux, llave, gancho, gato, lavuni, guardsig) VALUES (?,?,?,?,?,?,?,?)";
@@ -119,10 +123,11 @@ public class Relevar {
             JOptionPane.showMessageDialog(null, "ERROR: " + ex.getMessage());
         }
 
-        String sql6 = "UPDATE tripulacion SET relevado=1 WHERE idtripulacion=?";
+        String sql6 = "UPDATE tripulacion SET relevado=1, fecharelevado=? WHERE idtripulacion=?";
         try {
             PreparedStatement ps6 = conexion.prepareStatement(sql6);
-            ps6.setInt(1, id);
+            ps6.setString(1, fechaActual);
+            ps6.setInt(2, id);
             ps6.execute();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, e);
@@ -298,7 +303,8 @@ public class Relevar {
         document.close();
     }
 
-    public static void Relevo(Connection conexion, JLabel victor, JLabel anterior, JLabel saliente, JLabel entrante, JLabel kmi, JLabel kmf, JLabel turno, JLabel serie, int id) {
+    public static void Relevo(Connection conexion, JLabel victor, JLabel anterior, JLabel saliente, JLabel kmi, JLabel kmf, JLabel turno, JLabel serie, int id) {
+        int idamb=0;
         String sql = "SELECT SEC_TO_TIME(TIME_TO_SEC(CASE WHEN MAX(llegada) < MIN(salida) THEN ADDTIME(MAX(llegada), '24:00:00') ELSE MAX(llegada) END) - TIME_TO_SEC(MIN(salida))) AS tiempo_total FROM movimientos WHERE idtripulacion = ? GROUP BY idtripulacion;";
         try {
             PreparedStatement ps = conexion.prepareStatement(sql);
@@ -324,23 +330,25 @@ public class Relevar {
             JOptionPane.showMessageDialog(null, "ERROR: " + ex.getMessage());
         }
 
-        String sql3 = "SELECT ambulancia.victor from tripulacion inner join ambulancia on tripulacion.idAmbulancia=ambulancia.idAmbulancia where tripulacion.idtripulacion=?;";
+        String sql3 = "SELECT ambulancia.victor, tripulacion.idAmbulancia from tripulacion inner join ambulancia on tripulacion.idAmbulancia=ambulancia.idAmbulancia where tripulacion.idtripulacion=?;";
         try {
             PreparedStatement ps3 = conexion.prepareStatement(sql3);
             ps3.setInt(1, id);
             ResultSet rs3 = ps3.executeQuery();
             if (rs3.next()) {
                 victor.setText(rs3.getString("ambulancia.victor"));
+                idamb=rs3.getInt("tripulacion.idAmbulancia");
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "ERROR: " + ex.getMessage());
         }
 
-        String sql4 = "SELECT ? AS id_actual, (SELECT MAX(idtripulacion) FROM movimientos WHERE idtripulacion < ?) AS id_anterior;";
+        String sql4 = "SELECT ? AS id_actual, (SELECT MAX(idtripulacion) FROM tripulacion WHERE tripulacion.idtripulacion < ? AND tripulacion.idAmbulancia=?) AS id_anterior;";
         try {
             PreparedStatement ps4 = conexion.prepareStatement(sql4);
             ps4.setInt(1, id);
             ps4.setInt(2, id);
+            ps4.setInt(3, idamb);
             ResultSet rs4 = ps4.executeQuery();
             if (rs4.next()) {
                 int idact = rs4.getInt("id_actual");

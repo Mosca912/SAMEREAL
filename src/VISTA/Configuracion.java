@@ -5,13 +5,10 @@
  */
 package VISTA;
 
-import java.awt.Color;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import javax.swing.BorderFactory;
-import javax.swing.Icon;
+import java.awt.Graphics;
+import java.awt.Image;
 import javax.swing.ImageIcon;
-import javax.swing.UIManager;
+import javax.swing.JPanel;
 
 /**
  *
@@ -19,163 +16,46 @@ import javax.swing.UIManager;
  */
 public class Configuracion extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Menu
-     */
-    public Configuracion() {
-        try {
-            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName()); // usa el clásico Metal
-            UIManager.put("MenuBar.background", new Color(52, 170, 121));
-            UIManager.put("Menu.foreground", Color.WHITE);
-            UIManager.put("MenuItem.background", new Color(52, 170, 121));
-            UIManager.put("MenuItem.foreground", Color.WHITE);
-            UIManager.put("Menu.selectionBackground", new Color(52, 170, 121));
-            UIManager.put("Menu.selectionForeground", Color.WHITE);
-        } catch (Exception e) {
-            e.printStackTrace();
+
+    int block=0;
+    int band;
+    class FondoInicio extends JPanel {
+
+        private final Image imagen5;
+
+        public FondoInicio(String rutaImagen) {
+            imagen5 = new ImageIcon(getClass().getResource(rutaImagen)).getImage();
         }
+
+        public void paint(Graphics g) {
+            g.drawImage(imagen5, 0, 0, getWidth(), getHeight(), this);
+            setOpaque(false);
+            super.paint(g);
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            // Dibuja la imagen escalada al tamaño del JPanel
+            g.drawImage(imagen5, 0, 0, getWidth(), getHeight(), this);
+        }
+    }
+    
+    public Configuracion() {
+        CLASES.MenuClass.Configuracion();
 
         initComponents();
         this.setLocationRelativeTo(null);
-        Icon iconNormal = new ImageIcon(getClass().getResource("/IMAGENES/movimiento.png"));
-        Icon iconHover = new ImageIcon(getClass().getResource("/IMAGENES/movimiento2.png"));
-
-        Icon iconNormal2 = new ImageIcon(getClass().getResource("/IMAGENES/menui.png"));
-        Icon iconHover2 = new ImageIcon(getClass().getResource("/IMAGENES/menui2.png"));
-
-        Icon iconNormal3 = new ImageIcon(getClass().getResource("/IMAGENES/asistencia.png"));
-        Icon iconHover3 = new ImageIcon(getClass().getResource("/IMAGENES/asistencia2.png"));
-
-        Icon iconNormal4 = new ImageIcon(getClass().getResource("/IMAGENES/empleado.png"));
-        Icon iconHover4 = new ImageIcon(getClass().getResource("/IMAGENES/empleado2.png"));
-
-        Icon iconNormal5 = new ImageIcon(getClass().getResource("/IMAGENES/estats.png"));
-        Icon iconHover5 = new ImageIcon(getClass().getResource("/IMAGENES/estats2.png"));
-
-        Icon iconNormal6 = new ImageIcon(getClass().getResource("/IMAGENES/ayuda.png"));
-        Icon iconHover6 = new ImageIcon(getClass().getResource("/IMAGENES/ayuda2.png"));
-
-        Icon iconNormal7 = new ImageIcon(getClass().getResource("/IMAGENES/config.png"));
-        Icon iconHover7 = new ImageIcon(getClass().getResource("/IMAGENES/config2.png"));
-
-        Icon iconNormal8 = new ImageIcon(getClass().getResource("/IMAGENES/salir.png"));
-        Icon iconHover8 = new ImageIcon(getClass().getResource("/IMAGENES/salir2.png"));
-
-        Movimientos.setBorder(BorderFactory.createLineBorder(new Color(52, 170, 121)));
-        Menu.setBorder(BorderFactory.createLineBorder(new Color(52, 170, 121)));
-        Asistencia.setBorder(BorderFactory.createLineBorder(new Color(52, 170, 121)));
-
-        Movimientos.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                Movimientos.setIcon(iconHover);
-                Movimientos.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                Movimientos.setIcon(iconNormal);
-                Movimientos.setBorder(BorderFactory.createLineBorder(new Color(52, 170, 121)));
-            }
-        });
-
-        Menu.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                Menu.setIcon(iconHover2);
-                Menu.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                Menu.setIcon(iconNormal2);
-                Menu.setBorder(BorderFactory.createLineBorder(new Color(52, 170, 121)));
-            }
-        });
-
-        Asistencia.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                Asistencia.setIcon(iconHover3);
-                Asistencia.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                Asistencia.setIcon(iconNormal3);
-                Asistencia.setBorder(BorderFactory.createLineBorder(new Color(52, 170, 121)));
-            }
-        });
-
-        Empleados.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                Empleados.setIcon(iconHover4);
-                Empleados.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                Empleados.setIcon(iconNormal4);
-                Empleados.setBorder(BorderFactory.createLineBorder(new Color(52, 170, 121)));
-            }
-        });
-
-        Estadisticas.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                Estadisticas.setIcon(iconHover5);
-                Estadisticas.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                Estadisticas.setIcon(iconNormal5);
-                Estadisticas.setBorder(BorderFactory.createLineBorder(new Color(52, 170, 121)));
-            }
-        });
-
-        Ayuda.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                Ayuda.setIcon(iconHover6);
-                Ayuda.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                Ayuda.setIcon(iconNormal6);
-                Ayuda.setBorder(BorderFactory.createLineBorder(new Color(52, 170, 121)));
-            }
-        });
-
-        Configuracion.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                Configuracion.setIcon(iconHover7);
-                Configuracion.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                Configuracion.setIcon(iconNormal7);
-                Configuracion.setBorder(BorderFactory.createLineBorder(new Color(52, 170, 121)));
-            }
-        });
-
-        Salir.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                Salir.setIcon(iconHover8);
-                Salir.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                Salir.setIcon(iconNormal8);
-                Salir.setBorder(BorderFactory.createLineBorder(new Color(52, 170, 121)));
-            }
-        });
+        CLASES.MenuClass menuHelper = new CLASES.MenuClass();
+        menuHelper.MenuConfig(Movimientos, Menu, Asistencia, Empleados, Estadisticas, Ayuda, Configuracion, Salir, this);
+        int ventana=CLASES.MenuClass.Ventana();
+        if (ventana==0){
+            this.setExtendedState(NORMAL);
+            Min.setEnabled(false);
+        } else if (ventana == 1){
+            this.setExtendedState(MAXIMIZED_BOTH);
+            Max.setEnabled(false);
+        }
     }
 
     /**
@@ -187,10 +67,18 @@ public class Configuracion extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel2 = new javax.swing.JPanel();
-        jPanel3 = new javax.swing.JPanel();
-        jPanel4 = new javax.swing.JPanel();
+        jPanel3 = new FondoInicio("/IMAGENES/fondoamb.png");
+        jPanel1 = new javax.swing.JPanel();
+        Min = new javax.swing.JButton();
         Max = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jPanel4 = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        jPanel5 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
         Barra = new javax.swing.JMenuBar();
         Menu = new javax.swing.JMenu();
         Movimientos = new javax.swing.JMenu();
@@ -203,13 +91,11 @@ public class Configuracion extends javax.swing.JFrame {
         Empleados = new javax.swing.JMenu();
         inicemp = new javax.swing.JMenuItem();
         cargoemp = new javax.swing.JMenu();
-        nuev = new javax.swing.JMenuItem();
         mod = new javax.swing.JMenuItem();
         elim = new javax.swing.JMenuItem();
         Estadisticas = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         Ayuda = new javax.swing.JMenu();
-        iniayu = new javax.swing.JMenuItem();
         Configuracion = new javax.swing.JMenu();
         iniconf = new javax.swing.JMenuItem();
         Salir = new javax.swing.JMenu();
@@ -217,57 +103,177 @@ public class Configuracion extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Configuración");
         setName("Ayuda"); // NOI18N
+        setUndecorated(true);
         setPreferredSize(new java.awt.Dimension(1200, 700));
         setResizable(false);
 
-        jPanel2.setBackground(new java.awt.Color(102, 0, 0));
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1200, Short.MAX_VALUE)
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 47, Short.MAX_VALUE)
-        );
+        jPanel1.setBackground(new java.awt.Color(52, 170, 121));
+        jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
-        getContentPane().add(jPanel2, java.awt.BorderLayout.PAGE_END);
+        Min.setBackground(new java.awt.Color(255, 255, 255));
+        Min.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        Min.setText("Minimizar");
+        Min.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        Min.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MinActionPerformed(evt);
+            }
+        });
 
-        jPanel3.setBackground(new java.awt.Color(153, 255, 204));
-
-        jPanel4.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
+        Max.setBackground(new java.awt.Color(255, 255, 255));
+        Max.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         Max.setText("Maximizar");
+        Max.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         Max.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 MaxActionPerformed(evt);
             }
         });
-        jPanel4.add(Max, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 170, 180, 50));
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(47, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(Min, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Max, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(46, 46, 46))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(Max, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
+                .addComponent(Min, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        jPanel2.setBackground(new java.awt.Color(204, 204, 204));
+        jPanel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel1.setText("Resolución");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(103, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(97, 97, 97))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jPanel4.setBackground(new java.awt.Color(52, 170, 121));
+        jPanel4.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+
+        jButton1.setText("Guardar");
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel3.setText("Ultimo guardado: 09/12/2018");
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(67, 67, 67))
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(jLabel3)
+                .addContainerGap(25, Short.MAX_VALUE))
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        jPanel5.setBackground(new java.awt.Color(204, 204, 204));
+        jPanel5.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel2.setText("Copia de seguridad");
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGap(55, 55, 55)
+                .addComponent(jLabel2)
+                .addContainerGap(75, Short.MAX_VALUE))
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel2)
+                .addContainerGap())
+        );
+
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 48)); // NOI18N
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/config.png"))); // NOI18N
+        jLabel4.setText("CONFIGURACIONES");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(241, Short.MAX_VALUE)
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 730, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(229, 229, 229))
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap(242, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 663, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(119, 119, 119)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(293, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(70, Short.MAX_VALUE)
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 480, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(61, 61, 61))
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(89, 89, 89)
+                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(56, 56, 56)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(252, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel3, java.awt.BorderLayout.CENTER);
 
         Barra.setBackground(new java.awt.Color(52, 170, 121));
+        Barra.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         Menu.setBackground(new java.awt.Color(204, 255, 204));
         Menu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/menui.png"))); // NOI18N
@@ -358,10 +364,6 @@ public class Configuracion extends javax.swing.JFrame {
         cargoemp.setText("Cargo");
         cargoemp.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
 
-        nuev.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        nuev.setText("Nuevo");
-        cargoemp.add(nuev);
-
         mod.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         mod.setText("Modificar");
         mod.addActionListener(new java.awt.event.ActionListener() {
@@ -404,16 +406,6 @@ public class Configuracion extends javax.swing.JFrame {
         Ayuda.setText("Ayuda");
         Ayuda.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         Ayuda.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-
-        iniayu.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        iniayu.setText("Ayuda");
-        iniayu.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                iniayuActionPerformed(evt);
-            }
-        });
-        Ayuda.add(iniayu);
-
         Barra.add(Ayuda);
 
         Configuracion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/config.png"))); // NOI18N
@@ -440,6 +432,10 @@ public class Configuracion extends javax.swing.JFrame {
 
     private void MaxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MaxActionPerformed
         this.setExtendedState(MAXIMIZED_BOTH);
+        band=1;
+        Max.setEnabled(false);
+        Min.setEnabled(true);
+        CLASES.MenuClass.VentanaOpc(band);
     }//GEN-LAST:event_MaxActionPerformed
 
     private void iniciomovActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iniciomovActionPerformed
@@ -449,56 +445,61 @@ public class Configuracion extends javax.swing.JFrame {
     }//GEN-LAST:event_iniciomovActionPerformed
 
     private void nuevtripActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevtripActionPerformed
-        AddTri ventana = new AddTri(0);
+        AddTri ventana = new AddTri(0, this);
         ventana.setVisible(true);
     }//GEN-LAST:event_nuevtripActionPerformed
 
     private void nuevovicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevovicActionPerformed
-        AddVic ventana = new AddVic();
+        AddVic ventana = new AddVic(this);
         ventana.setVisible(true);
     }//GEN-LAST:event_nuevovicActionPerformed
 
     private void historialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_historialActionPerformed
-        // TODO add your handling code here:
+        Historial ventana = new Historial(this);
+        ventana.setVisible(true);
     }//GEN-LAST:event_historialActionPerformed
 
     private void inicioasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inicioasActionPerformed
-        Asistencia1 ventana=new Asistencia1();
+        Asistencia ventana = new Asistencia();
         ventana.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_inicioasActionPerformed
 
     private void AsistenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AsistenciaActionPerformed
-        Asistencia1 ventana=new Asistencia1();
+        Asistencia ventana = new Asistencia();
         ventana.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_AsistenciaActionPerformed
 
     private void inicempActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inicempActionPerformed
-        Empleados ventana=new Empleados();
+        Empleados ventana = new Empleados();
         ventana.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_inicempActionPerformed
 
     private void modActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modActionPerformed
-        ModElimCargo1 ventana = new ModElimCargo1(1);
+        ModElimCargo1 ventana = new ModElimCargo1(1, this);
         ventana.setVisible(true);
     }//GEN-LAST:event_modActionPerformed
 
     private void elimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_elimActionPerformed
-        ModElimCargo1 ventana = new ModElimCargo1(0);
+        ModElimCargo1 ventana = new ModElimCargo1(0, this);
         ventana.setVisible(true);
     }//GEN-LAST:event_elimActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        Estadisticas ventana=new Estadisticas();
+        Estadisticas ventana = new Estadisticas();
         ventana.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
-    private void iniayuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iniayuActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_iniayuActionPerformed
+    private void MinActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MinActionPerformed
+        this.setExtendedState(NORMAL);
+        band=0;
+        Max.setEnabled(true);
+        Min.setEnabled(false);
+        CLASES.MenuClass.VentanaOpc(band);
+    }//GEN-LAST:event_MinActionPerformed
 
     /**
      * @param args the command line arguments
@@ -545,22 +546,28 @@ public class Configuracion extends javax.swing.JFrame {
     private javax.swing.JMenu Estadisticas;
     private javax.swing.JButton Max;
     private javax.swing.JMenu Menu;
+    private javax.swing.JButton Min;
     private javax.swing.JMenu Movimientos;
     private javax.swing.JMenu Salir;
     private javax.swing.JMenu cargoemp;
     private javax.swing.JMenuItem elim;
     private javax.swing.JMenuItem historial;
-    private javax.swing.JMenuItem iniayu;
     private javax.swing.JMenuItem inicemp;
     private javax.swing.JMenuItem inicioas;
     private javax.swing.JMenuItem iniciomov;
     private javax.swing.JMenuItem iniconf;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JMenuItem mod;
-    private javax.swing.JMenuItem nuev;
     private javax.swing.JMenuItem nuevovic;
     private javax.swing.JMenuItem nuevtrip;
     // End of variables declaration//GEN-END:variables

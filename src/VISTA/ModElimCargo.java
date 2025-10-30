@@ -40,7 +40,7 @@ public class ModElimCargo extends javax.swing.JFrame {
 
     }
     //Metodos para editar
-    ModeloEditablePorFila tabla1 = new ModeloEditablePorFila(new String[]{"Cod", "Cargo", "Area"}, 0, band);
+    ModeloEditablePorFila tabla1 = new ModeloEditablePorFila(new String[]{"Nº", "Cargo", "Area"}, 0, band);
 
     public ModElimCargo(int band, Empleados ventanaPrincipal) {
         initComponents();
@@ -48,7 +48,7 @@ public class ModElimCargo extends javax.swing.JFrame {
         this.band = band;
         this.ventanaPrincipal = ventanaPrincipal;
         //Tabla
-        ModeloEditablePorFila tabla2 = new ModeloEditablePorFila(new String[]{"Cod", "Cargo", "Area"}, 0, band);
+        ModeloEditablePorFila tabla2 = new ModeloEditablePorFila(new String[]{"Nº", "Cargo", "Area"}, 0, band);
         //Tabla
         tablamostrar.setModel(tabla2);
         try {

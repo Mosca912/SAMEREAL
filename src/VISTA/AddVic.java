@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.text.MaskFormatter;
 
@@ -19,13 +20,15 @@ import javax.swing.text.MaskFormatter;
  *
  * @author Facuymayriver
  */
-public class AddVic extends javax.swing.JFrame {
+public class AddVic extends javax.swing.JDialog {
 
     Connection con = Conexiones.Conexion();
     ResultSet rs;
 
-    public AddVic() {
+    public AddVic(JFrame ventanaPrincipal) {
+        super(ventanaPrincipal,true);
         initComponents();
+        
         this.setLocationRelativeTo(null);
     }
 
@@ -57,32 +60,48 @@ public class AddVic extends javax.swing.JFrame {
             Patente = new javax.swing.JFormattedTextField(formatter);
             Marca = new javax.swing.JTextField();
 
-            setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+            setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+            setMaximumSize(new java.awt.Dimension(431, 243));
+            setMinimumSize(new java.awt.Dimension(431, 243));
             setUndecorated(true);
+            setPreferredSize(new java.awt.Dimension(431, 243));
             getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+            jPanel1.setBackground(new java.awt.Color(255, 255, 255));
             jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
+            jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
             jLabel1.setText("Nueva ambulancia");
 
+            jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
             jLabel2.setText("Victor");
 
+            jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
             jLabel3.setText("Patente");
 
+            jLabel4.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
             jLabel4.setText("Modelo");
 
+            jLabel5.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
             jLabel5.setText("Marca");
 
+            jLabel6.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
             jLabel6.setText("Numero de serie (matafuego):");
 
+            Volver.setBackground(new java.awt.Color(78, 247, 177));
+            Volver.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
             Volver.setText("Volver");
+            Volver.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
             Volver.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
                     VolverActionPerformed(evt);
                 }
             });
 
+            Cargar.setBackground(new java.awt.Color(78, 247, 177));
+            Cargar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
             Cargar.setText("Cargar");
+            Cargar.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
             Cargar.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
                     CargarActionPerformed(evt);
@@ -108,22 +127,21 @@ public class AddVic extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(Patente, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(VictorT, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 84, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4)
                             .addComponent(jLabel5))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(Modelo, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(Marca, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 77, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addComponent(Volver)
-                            .addGap(281, 281, 281)
-                            .addComponent(Cargar))
-                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 409, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(Marca, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(Volver, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(224, 224, 224)
+                        .addComponent(Cargar, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(23, 23, 23))
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 409, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 9, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -132,7 +150,7 @@ public class AddVic extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(matafuego, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(165, 165, 165)
+                        .addGap(148, 148, 148)
                         .addComponent(jLabel1)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -165,12 +183,10 @@ public class AddVic extends javax.swing.JFrame {
                             .addComponent(matafuego, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(Volver)
-                            .addComponent(Cargar))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(Marca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(Volver, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(Cargar, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(Marca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 430, 240));
@@ -231,7 +247,7 @@ public class AddVic extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new AddVic().setVisible(true);
+                new AddVic(null).setVisible(true);
             }
         });
     }

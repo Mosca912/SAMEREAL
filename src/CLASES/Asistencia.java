@@ -29,7 +29,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -174,7 +176,7 @@ public class Asistencia {
     }
     static int dia2, mesActual;
 
-    public static void MostrarTabla(Connection conexion, int id, JTable tabla, JTable tabla2) throws SQLException {
+    public static void MostrarTabla(Connection conexion, int id, JTable tabla) throws SQLException {
         mesActual = LocalDate.now().getMonthValue();
         dia2 = LocalDate.now().getDayOfMonth();
 
@@ -185,30 +187,17 @@ public class Asistencia {
         ResultSet rs = stm.executeQuery();
 
         DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
-        DefaultTableModel modelo2 = (DefaultTableModel) tabla2.getModel();
         // Limpiar la tabla
         modelo.setRowCount(0);
-        modelo2.setRowCount(0);
 
         // Primero agregás todos los días con vacío
-        for (int i = 1; i <= 15; i++) {
+        for (int i = 1; i <= 31; i++) {
             if (i == dia2) {
                 modelo.addRow(new Object[]{i, "", "", ""});
             } else if (i < dia2) {
                 modelo.addRow(new Object[]{i, "", "", "No asistió"});
             } else {
                 modelo.addRow(new Object[]{i, "", "", ""});
-            }
-        }
-
-        // Primero agregás todos los días con vacío
-        for (int r = 16; r <= 31; r++) {
-            if (r == dia2) {
-                modelo2.addRow(new Object[]{r, "", "", ""});
-            } else if (r < dia2) {
-                modelo2.addRow(new Object[]{r, "", "", "No asistió"});
-            } else {
-                modelo2.addRow(new Object[]{r, "", "", ""});
             }
         }
 
@@ -219,132 +208,292 @@ public class Asistencia {
             String salida = rs.getString("salida");
             String observ = rs.getString("observacion");
 
-            if (dia <= 15) {
+            if (dia <= 31) {
                 modelo.setValueAt(entrada, dia - 1, 1);
                 modelo.setValueAt(salida, dia - 1, 2);
                 modelo.setValueAt(observ, dia - 1, 3);
-            } else {
-                int fila = dia - 16; // Ajustar para la tabla derecha
-                modelo2.setValueAt(entrada, fila, 1);
-                modelo2.setValueAt(salida, fila, 2);
-                modelo2.setValueAt(observ, fila, 3);
             }
         }
     }
 
+    public static List<String> obtenerFechasFaltantes(Connection con, int mes, int id) throws SQLException {
+
+        // Usaremos una lista de String para guardar las fechas
+        List<String> fechasFaltantes = new ArrayList<>();
+
+        PreparedStatement pstmt = con.prepareStatement("SELECT asistencia.fecha FROM asistencia WHERE asistencia.fecha != ? and asistencia.id_Empleado=? and asistencia.relevado=0;");
+        pstmt.setInt(1, mes);
+        pstmt.setInt(2, id);
+        ResultSet rs = pstmt.executeQuery();
+        try {
+            while (rs.next()) {
+                int fechaInt = rs.getInt("fecha");
+                if (!rs.wasNull()) {
+                    String fechaString = String.valueOf(fechaInt);
+                    fechasFaltantes.add(fechaString);
+
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return fechasFaltantes;
+    }
+
     public static void Verificacion(Connection conexion, int id) throws Exception {
         int mes = LocalDate.now().getMonthValue();
-        PreparedStatement stm = conexion.prepareStatement("SELECT COUNT(idseguimientoasistencia) FROM seguimientoasistencia inner join asistencia on seguimientoasistencia.idAsistencia=asistencia.idAsistencia WHERE asistencia.fecha != ? and asistencia.id_Empleado=? and asistencia.relevado=0;");
+        String nombre;
+        String apellido;
+        PreparedStatement stm = conexion.prepareStatement("SELECT COUNT(asistencia.idasistencia), empleado.nombre, empleado.apellido FROM asistencia inner join empleado on asistencia.id_Empleado=empleado.id_Empleado WHERE asistencia.fecha != ? and asistencia.id_Empleado=? and asistencia.relevado=0;");
         stm.setInt(1, mes);
         stm.setInt(2, id);
         ResultSet rs = stm.executeQuery();
         if (rs.next()) {
-            count = rs.getInt("COUNT(idseguimientoasistencia)");
+            count = rs.getInt("COUNT(asistencia.idasistencia)");
+            nombre = rs.getString("empleado.nombre");
+            apellido = rs.getString("empleado.apellido");
             if (count == 1) {
                 JOptionPane.showMessageDialog(null, "Este empleado tiene " + count + " mes sin relevar. Se generará el PDF correspondiente");
 
-                // 📄 Documento en horizontal
-                Document document = new Document(PageSize.A4.rotate());
-                PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("C:\\db\\asistencia_mes_" + mes + ".pdf"));
-                document.open();
+                // Llamar al método
+                List<String> misFechas = obtenerFechasFaltantes(con, mes, id);
+                int cantidad = misFechas.size();
+                System.out.println("Cantidad de registros encontrados: " + cantidad);
 
-                // 📸 Cargar imagen (desde carpeta del proyecto o ruta absoluta)
-                com.itextpdf.text.Image img = com.itextpdf.text.Image.getInstance(Relevar.class.getResource("/IMAGENES/asistenciapdf.png"));
+                // Para ver cada fecha:
+                for (String fecha : misFechas) {
+                    System.out.println("Fecha faltante: " + fecha);
+                    // 📄 Documento en horizontal
+                    Document document = new Document(PageSize.A4.rotate());
+                    PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("C:\\db\\asistencia_mes_" + fecha + "_" + nombre + " " + apellido + ".pdf"));
+                    document.open();
 
-                // 📏 Ajustar tamaño y posición
-                img.scaleAbsolute(809, 140);
-                img.setAbsolutePosition(16, 450);
+                    // 📸 Cargar imagen (desde carpeta del proyecto o ruta absoluta)
+                    com.itextpdf.text.Image img = com.itextpdf.text.Image.getInstance(Relevar.class.getResource("/IMAGENES/asistenciapdf.png"));
 
-                // 🧩 Agregar al documento
-                document.add(img);
+                    // 📏 Ajustar tamaño y posición
+                    img.scaleAbsolute(809, 140);
+                    img.setAbsolutePosition(16, 450);
 
-                PdfContentByte canvas = writer.getDirectContent();
-                String sql = "SELECT empleado.nombre, empleado.apellido , area.area, cargo.Cargo, base.Base, empleado.dni FROM asistencia inner join empleado on asistencia.id_Empleado=empleado.id_Empleado inner join cargo on empleado.idCargo=cargo.idCargo inner join area on cargo.idArea=area.idArea inner join base on asistencia.idBase=base.idBase where asistencia.id_Empleado=9 and asistencia.idBase=2;";
-                try {
-                    PreparedStatement ps = con.prepareStatement(sql);
-                    //ps.setInt(1, id);
-                    ResultSet rs2 = ps.executeQuery();
-                    if (rs2.next()) {
-                        String emp = (rs2.getString("empleado.nombre") + (" ") + rs2.getString("empleado.apellido"));
-                        String are = rs2.getString("area.area");
-                        String car = rs2.getString("cargo.Cargo");
-                        String bas = rs2.getString("base.Base");
-                        String dni = rs2.getString("empleado.dni");
+                    // 🧩 Agregar al documento
+                    document.add(img);
 
-                        com.itextpdf.text.Font font = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 13);
+                    PdfContentByte canvas = writer.getDirectContent();
+                    String sql = "SELECT empleado.nombre, empleado.apellido , area.area, cargo.Cargo, base.Base, empleado.dni FROM asistencia inner join empleado on asistencia.id_Empleado=empleado.id_Empleado inner join cargo on empleado.idCargo=cargo.idCargo inner join area on cargo.idArea=area.idArea inner join base on asistencia.idBase=base.idBase where asistencia.id_Empleado=? and asistencia.idBase=2;";
+                    try {
+                        PreparedStatement ps = con.prepareStatement(sql);
+                        ps.setInt(1, id);
+                        ResultSet rs2 = ps.executeQuery();
+                        if (rs2.next()) {
+                            String emp = (rs2.getString("empleado.nombre") + (" ") + rs2.getString("empleado.apellido"));
+                            String are = rs2.getString("area.area");
+                            String car = rs2.getString("cargo.Cargo");
+                            String bas = rs2.getString("base.Base");
+                            String dni = rs2.getString("empleado.dni");
 
-                        ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT,
-                                new Phrase(emp, font),
-                                235, 460, 0);
+                            com.itextpdf.text.Font font = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 13);
 
-                        ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT,
-                                new Phrase(are, font),
-                                475, 565, 0);
+                            ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT,
+                                    new Phrase(emp, font),
+                                    235, 460, 0);
 
-                        ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT,
-                                new Phrase(car, font),
-                                720, 515, 0);
+                            ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT,
+                                    new Phrase(are, font),
+                                    475, 565, 0);
 
-                        ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT,
-                                new Phrase(bas, font),
-                                580, 540, 0);
-                        ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT,
-                                new Phrase(dni, font),
-                                615, 460, 0);
+                            ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT,
+                                    new Phrase(car, font),
+                                    720, 515, 0);
 
+                            ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT,
+                                    new Phrase(bas, font),
+                                    580, 540, 0);
+                            ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT,
+                                    new Phrase(dni, font),
+                                    615, 460, 0);
+
+                        }
+                    } catch (SQLException ex) {
+                        JOptionPane.showMessageDialog(null, "ERROR: " + ex.getMessage());
                     }
-                } catch (SQLException ex) {
-                    JOptionPane.showMessageDialog(null, "ERROR: " + ex.getMessage());
+
+                    document.add(new Paragraph("\n\n\n\n\n\n"));
+                    // 🧠 Título
+                    Font tituloFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, BaseColor.BLACK);
+                    Paragraph titulo = new Paragraph("PLANILLA DE ASISTENCIA - MES " + fecha, tituloFont);
+                    titulo.setAlignment(Element.ALIGN_CENTER);
+                    document.add(titulo);
+                    document.add(new Paragraph("\n"));
+
+                    // 🎨 Fuente y colores
+                    Font fontHeader = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12, BaseColor.WHITE);
+                    Font fontNormal = FontFactory.getFont(FontFactory.HELVETICA, 10, BaseColor.BLACK);
+
+                    // ⚙️ Query → traer los registros
+                    PreparedStatement stm2 = con.prepareStatement("SELECT DAY(entrada) as dia, entrada, salida, observacion FROM seguimientoasistencia INNER JOIN asistencia ON seguimientoasistencia.idAsistencia = asistencia.idAsistencia WHERE asistencia.id_Empleado = ? AND MONTH(entrada) = ?;");
+                    stm2.setInt(1, id);
+                    stm2.setString(2, fecha);
+
+                    ResultSet rs2 = stm2.executeQuery();
+
+                    // 🗂️ Guardar los datos por día
+                    Map<Integer, String[]> registros = new HashMap<>();
+                    while (rs2.next()) {
+                        int dia = rs2.getInt("dia");
+                        String entrada = rs2.getString("entrada") != null ? rs2.getString("entrada") : "";
+                        String salida = rs2.getString("salida") != null ? rs2.getString("salida") : "";
+                        String observ = rs2.getString("observacion") != null ? rs2.getString("observacion") : "";
+                        registros.put(dia, new String[]{entrada, salida, observ});
+                    }
+
+                    // 🧱 Crear dos tablas
+                    PdfPTable tablaIzq = crearTablaAsistencia(1, 15, registros, fontHeader, fontNormal);
+                    PdfPTable tablaDer = crearTablaAsistencia(16, 31, registros, fontHeader, fontNormal);
+
+                    // ✅ Versión buena — usar tabla contenedora (no coordenadas absolutas)
+                    PdfPTable contenedor = new PdfPTable(2);
+                    contenedor.setWidthPercentage(105);
+                    contenedor.addCell(tablaIzq);
+                    contenedor.addCell(tablaDer);
+
+                    document.add(contenedor);
+
+                    document.close();
+                    writer.close();
+
+                    System.out.println("✅ PDF generado correctamente en horizontal: asistencia_mes_" + mes + ".pdf");
+
+                    PreparedStatement stm3 = conexion.prepareStatement("UPDATE asistencia SET relevado = 1 WHERE fecha= ? and id_Empleado=?;");
+                    stm3.setString(1, fecha);
+                    stm3.setInt(2, id);
+                    try {
+                        stm3.executeUpdate();
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(null, "ERROR12");
+                    }
                 }
-
-                document.add(new Paragraph("\n\n\n\n\n\n"));
-                // 🧠 Título
-                Font tituloFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, BaseColor.BLACK);
-                Paragraph titulo = new Paragraph("PLANILLA DE ASISTENCIA - MES " + mes, tituloFont);
-                titulo.setAlignment(Element.ALIGN_CENTER);
-                document.add(titulo);
-                document.add(new Paragraph("\n"));
-
-                // 🎨 Fuente y colores
-                Font fontHeader = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12, BaseColor.WHITE);
-                Font fontNormal = FontFactory.getFont(FontFactory.HELVETICA, 10, BaseColor.BLACK);
-
-                // ⚙️ Query → traer los registros
-                PreparedStatement stm2 = con.prepareStatement("SELECT DAY(entrada) as dia, entrada, salida, observacion FROM seguimientoasistencia INNER JOIN asistencia ON seguimientoasistencia.idAsistencia = asistencia.idAsistencia WHERE asistencia.id_Empleado = 9 AND MONTH(entrada) = 10;");
-                //stm.setInt(1, idEmpleado);
-                //stm.setInt(2, mes);
-
-                ResultSet rs2 = stm2.executeQuery();
-
-                // 🗂️ Guardar los datos por día
-                Map<Integer, String[]> registros = new HashMap<>();
-                while (rs2.next()) {
-                    int dia = rs.getInt("dia");
-                    String entrada = rs2.getString("entrada") != null ? rs2.getString("entrada") : "";
-                    String salida = rs2.getString("salida") != null ? rs2.getString("salida") : "";
-                    String observ = rs2.getString("observacion") != null ? rs2.getString("observacion") : "";
-                    registros.put(dia, new String[]{entrada, salida, observ});
-                }
-
-                // 🧱 Crear dos tablas
-                PdfPTable tablaIzq = crearTablaAsistencia(1, 15, registros, fontHeader, fontNormal);
-                PdfPTable tablaDer = crearTablaAsistencia(16, 31, registros, fontHeader, fontNormal);
-
-                // ✅ Versión buena — usar tabla contenedora (no coordenadas absolutas)
-                PdfPTable contenedor = new PdfPTable(2);
-                contenedor.setWidthPercentage(105);
-                contenedor.addCell(tablaIzq);
-                contenedor.addCell(tablaDer);
-
-                document.add(contenedor);
-
-                document.close();
-                writer.close();
-
-                System.out.println("✅ PDF generado correctamente en horizontal: asistencia_mes_" + mes + ".pdf");
-
             } else if (count > 1) {
                 JOptionPane.showMessageDialog(null, "Este empleado tiene " + count + " meses sin relevar. Se generará el PDF correspondiente");
+
+                // Llamar al método
+                List<String> misFechas = obtenerFechasFaltantes(con, mes, id);
+                int cantidad = misFechas.size();
+                System.out.println("Cantidad de registros encontrados: " + cantidad);
+
+                // Para ver cada fecha:
+                for (String fecha : misFechas) {
+                    System.out.println("Fecha faltante: " + fecha);
+                    // 📄 Documento en horizontal
+                    Document document = new Document(PageSize.A4.rotate());
+                    PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("C:\\db\\asistencia_mes_" + fecha + "_" + nombre + " " + apellido + ".pdf"));
+                    document.open();
+
+                    // 📸 Cargar imagen (desde carpeta del proyecto o ruta absoluta)
+                    com.itextpdf.text.Image img = com.itextpdf.text.Image.getInstance(Relevar.class.getResource("/IMAGENES/asistenciapdf.png"));
+
+                    // 📏 Ajustar tamaño y posición
+                    img.scaleAbsolute(809, 140);
+                    img.setAbsolutePosition(16, 450);
+
+                    // 🧩 Agregar al documento
+                    document.add(img);
+
+                    PdfContentByte canvas = writer.getDirectContent();
+                    String sql = "SELECT empleado.nombre, empleado.apellido , area.area, cargo.Cargo, base.Base, empleado.dni FROM asistencia inner join empleado on asistencia.id_Empleado=empleado.id_Empleado inner join cargo on empleado.idCargo=cargo.idCargo inner join area on cargo.idArea=area.idArea inner join base on asistencia.idBase=base.idBase where asistencia.id_Empleado=? and asistencia.idBase=2;";
+                    try {
+                        PreparedStatement ps = con.prepareStatement(sql);
+                        ps.setInt(1, id);
+                        ResultSet rs2 = ps.executeQuery();
+                        if (rs2.next()) {
+                            String emp = (rs2.getString("empleado.nombre") + (" ") + rs2.getString("empleado.apellido"));
+                            String are = rs2.getString("area.area");
+                            String car = rs2.getString("cargo.Cargo");
+                            String bas = rs2.getString("base.Base");
+                            String dni = rs2.getString("empleado.dni");
+
+                            com.itextpdf.text.Font font = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 13);
+
+                            ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT,
+                                    new Phrase(emp, font),
+                                    235, 460, 0);
+
+                            ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT,
+                                    new Phrase(are, font),
+                                    475, 565, 0);
+
+                            ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT,
+                                    new Phrase(car, font),
+                                    720, 515, 0);
+
+                            ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT,
+                                    new Phrase(bas, font),
+                                    580, 540, 0);
+                            ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT,
+                                    new Phrase(dni, font),
+                                    615, 460, 0);
+
+                        }
+                    } catch (SQLException ex) {
+                        JOptionPane.showMessageDialog(null, "ERROR: " + ex.getMessage());
+                    }
+
+                    document.add(new Paragraph("\n\n\n\n\n\n"));
+                    // 🧠 Título
+                    Font tituloFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, BaseColor.BLACK);
+                    Paragraph titulo = new Paragraph("PLANILLA DE ASISTENCIA - MES " + fecha, tituloFont);
+                    titulo.setAlignment(Element.ALIGN_CENTER);
+                    document.add(titulo);
+                    document.add(new Paragraph("\n"));
+
+                    // 🎨 Fuente y colores
+                    Font fontHeader = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12, BaseColor.WHITE);
+                    Font fontNormal = FontFactory.getFont(FontFactory.HELVETICA, 10, BaseColor.BLACK);
+
+                    // ⚙️ Query → traer los registros
+                    PreparedStatement stm2 = con.prepareStatement("SELECT DAY(entrada) as dia, entrada, salida, observacion FROM seguimientoasistencia INNER JOIN asistencia ON seguimientoasistencia.idAsistencia = asistencia.idAsistencia WHERE asistencia.id_Empleado = ? AND MONTH(entrada) = ?;");
+                    stm2.setInt(1, id);
+                    stm2.setString(2, fecha);
+
+                    ResultSet rs2 = stm2.executeQuery();
+
+                    // 🗂️ Guardar los datos por día
+                    Map<Integer, String[]> registros = new HashMap<>();
+                    while (rs2.next()) {
+                        int dia = rs2.getInt("dia");
+                        String entrada = rs2.getString("entrada") != null ? rs2.getString("entrada") : "";
+                        String salida = rs2.getString("salida") != null ? rs2.getString("salida") : "";
+                        String observ = rs2.getString("observacion") != null ? rs2.getString("observacion") : "";
+                        registros.put(dia, new String[]{entrada, salida, observ});
+                    }
+
+                    // 🧱 Crear dos tablas
+                    PdfPTable tablaIzq = crearTablaAsistencia(1, 15, registros, fontHeader, fontNormal);
+                    PdfPTable tablaDer = crearTablaAsistencia(16, 31, registros, fontHeader, fontNormal);
+
+                    // ✅ Versión buena — usar tabla contenedora (no coordenadas absolutas)
+                    PdfPTable contenedor = new PdfPTable(2);
+                    contenedor.setWidthPercentage(105);
+                    contenedor.addCell(tablaIzq);
+                    contenedor.addCell(tablaDer);
+
+                    document.add(contenedor);
+
+                    document.close();
+                    writer.close();
+
+                    System.out.println("✅ PDF generado correctamente en horizontal: asistencia_mes_" + mes + ".pdf");
+
+                    PreparedStatement stm3 = conexion.prepareStatement("UPDATE asistencia SET relevado = 1 WHERE fecha= ? and id_Empleado=?;");
+                    stm3.setString(1, fecha);
+                    stm3.setInt(2, id);
+                    try {
+                        stm3.executeUpdate();
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(null, "ERROR12");
+                    }
+                }
             }
 
         }
@@ -514,44 +663,8 @@ public class Asistencia {
         return tabla;
     }
 
-    public static void Asistencia(Connection conexion, int id) throws SQLException {
-        int ida = 0;
-        PreparedStatement stm5 = conexion.prepareStatement("SELECT idAsistencia from asistencia where id_Empleado=? and activo=1");
-        stm5.setInt(1, id);
-        ResultSet rs5 = stm5.executeQuery();
-
-        if (rs5.next()) {
-            JOptionPane.showMessageDialog(null, "YA ESTA ACTIVO EL EMPLEADO");
-        } else {
-
-            PreparedStatement stm2 = conexion.prepareStatement("INSERT INTO asistencia (id_Empleado, idBase, activo, relevado) values (?,2,1,0)");
-            stm2.setInt(1, id);
-            try {
-                stm2.execute();
-            } catch (SQLException e) {
-                JOptionPane.showMessageDialog(null, "Primer Error:" + e);
-            }
-
-            PreparedStatement stm3 = conexion.prepareStatement("SELECT idAsistencia from asistencia where id_Empleado=? and activo=1");
-            stm3.setInt(1, id);
-            ResultSet rs3 = stm3.executeQuery();
-
-            if (rs3.next()) {
-                ida = rs3.getInt("idAsistencia");
-
-            }
-
-            PreparedStatement stm4 = conexion.prepareStatement("INSERT INTO seguimientoasistencia (entrada, idAsistencia) values (NOW(),?)");
-            stm4.setInt(1, ida);
-            try {
-                stm4.execute();
-            } catch (SQLException e) {
-                JOptionPane.showMessageDialog(null, "Segundo Error:" + e);
-            }
-        }
-    }
-
     public static void AsistenciaReal(Connection conexion, int id) throws SQLException {
+        mesActual = LocalDate.now().getMonthValue();
         int ida = 0;
 
         PreparedStatement stm5 = conexion.prepareStatement("SELECT entrada from seguimientoasistencia inner join asistencia on seguimientoasistencia.idAsistencia=asistencia.idAsistencia WHERE DAY(entrada)=? and MONTH(entrada)=? and asistencia.id_Empleado=?;");
@@ -569,8 +682,9 @@ public class Asistencia {
             if (rs.next()) {
                 ida = rs.getInt("idAsistencia");
             } else {
-                PreparedStatement stm2 = conexion.prepareStatement("INSERT INTO asistencia (id_Empleado, idBase, activo, relevado) values (?,2,1,0)");
+                PreparedStatement stm2 = conexion.prepareStatement("INSERT INTO asistencia (id_Empleado, idBase, activo, relevado, fecha) values (?,2,1,0,?)");
                 stm2.setInt(1, id);
+                stm2.setInt(2, mesActual);
                 try {
                     stm2.execute();
                 } catch (SQLException e) {

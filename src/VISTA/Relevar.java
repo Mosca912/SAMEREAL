@@ -10,8 +10,6 @@ import CONEXIONES.Conexiones;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.*;
-import java.io.*;
 import java.sql.*;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
@@ -28,7 +26,7 @@ import javax.swing.plaf.basic.BasicSliderUI;
  *
  * @author Facuymayriver
  */
-public class Relevar extends javax.swing.JFrame {
+public class Relevar extends javax.swing.JDialog {
 
     private boolean marcado = true;
     Connection con = Conexiones.Conexion();
@@ -44,51 +42,6 @@ public class Relevar extends javax.swing.JFrame {
     private double angulo = Math.toRadians(225); // ángulo inicial 
     private final int radio = 75;        // largo de la aguja
     private boolean arrastrando = false;
-
-    /*
-    public class PanelDibujo2 extends JPanel {
-
-        public PanelDibujo2(String ruta) throws IOException {
-
-            Toolkit toolkit = Toolkit.getDefaultToolkit();
-            Image cursorImg = toolkit.getImage(getClass().getResource("/IMAGENES/lapiz.png"));
-
-            // 📍 Crear cursor
-            Point hotspot = new Point(0, 0); // Donde está la punta del lápiz
-            Cursor cursorPersonalizado = toolkit.createCustomCursor(cursorImg, hotspot, "Lapiz");
-
-            // 🔁 Aplicar cursor al panel
-            this.setCursor(cursorPersonalizado);
-
-            imagen3 = ImageIO.read(
-                    getClass().getResource(ruta)
-            );
-
-            imagenOriginal3 = ImageIO.read(getClass().getResource(ruta));
-
-            addMouseMotionListener(new MouseMotionAdapter() {
-                @Override
-                public void mouseDragged(MouseEvent e) {
-                    Graphics2D g2d = imagen3.createGraphics();
-                    g2d.setColor(Color.RED);
-                    g2d.fillOval(e.getX(), e.getY(), 5, 5);
-                    g2d.dispose();
-                    repaint();
-                }
-            });
-        }
-
-        @Override
-        protected void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            g.drawImage(imagen3, 0, 0, (ImageObserver) this);
-        }
-
-        public void guardar(String ruta) throws IOException {
-            ImageIO.write(imagen3, "png", new File(ruta));
-        }
-    }
-     */
     //AMBULANCIA
     public class PanelDibujo extends JPanel {
 
@@ -269,9 +222,9 @@ public class Relevar extends javax.swing.JFrame {
         }
     }
 
-    public Relevar(int idtrip) {
+    public Relevar(int idtrip, JFrame ventanaPrincipal) {
+        super(ventanaPrincipal,true);
         this.idtrip2 = idtrip;
-
         initComponents();
         this.setLocationRelativeTo(null);
         setSize(1570, 860);
@@ -280,7 +233,7 @@ public class Relevar extends javax.swing.JFrame {
         DateTimeFormatter formato2 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         fechaActual2 = hoy.format(formato);
         fechaActual = hoy.format(formato2);
-        CLASES.Relevar.Relevo(con, Victor, anterior1, saliente1, entrante1, kmi1, kmf, turno, serie, idtrip);
+        CLASES.Relevar.Relevo(con, Victor, anterior1, saliente1, kmi1, kmf, turno, serie, idtrip);
         Fecha1.setText(fechaActual2);
 
         // Le quitamos los ticks y labels si querés
@@ -418,10 +371,8 @@ public class Relevar extends javax.swing.JFrame {
         anterior1 = new javax.swing.JLabel();
         jLabel183 = new javax.swing.JLabel();
         saliente1 = new javax.swing.JLabel();
-        jLabel184 = new javax.swing.JLabel();
         jLabel185 = new javax.swing.JLabel();
         turno = new javax.swing.JLabel();
-        entrante1 = new javax.swing.JLabel();
         jLabel19 = new javax.swing.JLabel();
         Victor = new javax.swing.JLabel();
         Marcarext = new javax.swing.JPanel();
@@ -907,7 +858,7 @@ public class Relevar extends javax.swing.JFrame {
                             entrante.setText("-");
                             jPanel2.add(entrante, new org.netbeans.lib.awtextra.AbsoluteConstraints(653, 74, 262, -1));
 
-                            setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+                            setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
                             setTitle("Relevar");
                             setMaximumSize(new java.awt.Dimension(1550, 840));
                             setMinimumSize(new java.awt.Dimension(1550, 840));
@@ -948,7 +899,7 @@ public class Relevar extends javax.swing.JFrame {
                             kmi1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
                             kmi1.setForeground(new java.awt.Color(255, 255, 255));
                             kmi1.setText("0");
-                            Grande.add(kmi1, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 50, 59, -1));
+                            Grande.add(kmi1, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 50, 110, -1));
 
                             jLabel180.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
                             jLabel180.setForeground(new java.awt.Color(255, 255, 255));
@@ -958,12 +909,12 @@ public class Relevar extends javax.swing.JFrame {
                             kmf.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
                             kmf.setForeground(new java.awt.Color(255, 255, 255));
                             kmf.setText("0");
-                            Grande.add(kmf, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 80, 64, -1));
+                            Grande.add(kmf, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 80, 120, -1));
 
                             jLabel182.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
                             jLabel182.setForeground(new java.awt.Color(255, 255, 255));
                             jLabel182.setText(">CVS Anterior:");
-                            Grande.add(jLabel182, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 20, -1, -1));
+                            Grande.add(jLabel182, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 20, -1, -1));
 
                             anterior1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
                             anterior1.setForeground(new java.awt.Color(255, 255, 255));
@@ -974,18 +925,12 @@ public class Relevar extends javax.swing.JFrame {
                             jLabel183.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
                             jLabel183.setForeground(new java.awt.Color(255, 255, 255));
                             jLabel183.setText(">CVS Saliente:");
-                            Grande.add(jLabel183, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 50, -1, -1));
+                            Grande.add(jLabel183, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 70, -1, -1));
 
                             saliente1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
                             saliente1.setForeground(new java.awt.Color(255, 255, 255));
                             saliente1.setText("-");
-                            Grande.add(saliente1, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 50, 390, -1));
-
-                            jLabel184.setBackground(new java.awt.Color(255, 255, 255));
-                            jLabel184.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-                            jLabel184.setForeground(new java.awt.Color(255, 255, 255));
-                            jLabel184.setText(">CVS Entrante:");
-                            Grande.add(jLabel184, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 80, -1, -1));
+                            Grande.add(saliente1, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 70, 390, -1));
 
                             jLabel185.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
                             jLabel185.setForeground(new java.awt.Color(255, 255, 255));
@@ -996,11 +941,6 @@ public class Relevar extends javax.swing.JFrame {
                             turno.setForeground(new java.awt.Color(255, 255, 255));
                             turno.setText("00:00hrs");
                             Grande.add(turno, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 70, -1, -1));
-
-                            entrante1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-                            entrante1.setForeground(new java.awt.Color(255, 255, 255));
-                            entrante1.setText("-");
-                            Grande.add(entrante1, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 80, 380, -1));
 
                             jLabel19.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
                             jLabel19.setForeground(new java.awt.Color(255, 51, 51));
@@ -1944,7 +1884,7 @@ public class Relevar extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Relevar(idtrip2).setVisible(true);
+                new Relevar(idtrip2, null).setVisible(true);
             }
         });
     }
@@ -1986,7 +1926,6 @@ public class Relevar extends javax.swing.JFrame {
     private javax.swing.JToggleButton balizas;
     private javax.swing.JToggleButton cinturones;
     private javax.swing.JLabel entrante;
-    private javax.swing.JLabel entrante1;
     private javax.swing.JToggleButton equipcom;
     private javax.swing.JPanel extint;
     private javax.swing.JToggleButton gancho;
@@ -2012,7 +1951,6 @@ public class Relevar extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel180;
     private javax.swing.JLabel jLabel182;
     private javax.swing.JLabel jLabel183;
-    private javax.swing.JLabel jLabel184;
     private javax.swing.JLabel jLabel185;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
