@@ -46,13 +46,17 @@ public class Asistencia extends javax.swing.JFrame implements CLASES.IBlockableF
     Connection con = Conexiones.Conexion();
     ResultSet rs;
     int cont = 0, band = 0;
-    public int block = 0;
+    public int block = 0, block2=0;
     String veri, veri2;
 
     public void refrescarCombo() {
         while (empleado.getItemCount() > 1) {
             empleado.removeItemAt(1); // Siempre elimina el segundo, el resto se va corriendo
         }
+    }
+    
+    public int getBlockStateSalir() {
+        return this.block2;
     }
 
     // Métodos para editar
@@ -339,7 +343,6 @@ public class Asistencia extends javax.swing.JFrame implements CLASES.IBlockableF
         setMaximumSize(new java.awt.Dimension(1200, 700));
         setMinimumSize(new java.awt.Dimension(1200, 700));
         setUndecorated(true);
-        setPreferredSize(new java.awt.Dimension(1200, 700));
         setResizable(false);
 
         PanelBlanco.setBackground(new java.awt.Color(255, 255, 255));
@@ -700,6 +703,7 @@ public class Asistencia extends javax.swing.JFrame implements CLASES.IBlockableF
                 empleado.setSelectedIndex(0);
                 tabla1.bloquearEdicion();
                 block = 0;
+                block2=0;
             }
         }
     }//GEN-LAST:event_areaActionPerformed
@@ -721,6 +725,7 @@ public class Asistencia extends javax.swing.JFrame implements CLASES.IBlockableF
                 Salir.setEnabled(false);
                 cargar.setEnabled(true);
                 block = 1;
+                block2 = 1;
 
                 try {
                     CLASES.Asistencia.Verificacion(con, id2);
@@ -749,6 +754,7 @@ public class Asistencia extends javax.swing.JFrame implements CLASES.IBlockableF
                 Configuracion.setEnabled(true);
                 Salir.setEnabled(true);
                 block = 0;
+                block = 1;
                 // Limpiar la tabla
                 tabla1.setRowCount(0);
 

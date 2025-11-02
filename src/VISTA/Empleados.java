@@ -28,12 +28,17 @@ public class Empleados extends javax.swing.JFrame implements CLASES.IBlockableFr
     public int getBlockState() {
         return this.block;
     }
+    
+    @Override
+    public int getBlockStateSalir() {
+        return this.block2;
+    }
 
     public int x = 0, c = 0, id;
     Connection con = Conexiones.Conexion();
     ResultSet rs;
     int cont = 0;
-    public int block = 0;
+    public int block = 0, block2=0;
 
     public void refrescarTablaEmpleados() {
         tabla1.setRowCount(0); // Limpia
@@ -43,6 +48,8 @@ public class Empleados extends javax.swing.JFrame implements CLASES.IBlockableFr
             JOptionPane.showMessageDialog(null, "Error al refrescar categorías");
         }
     }
+    
+    
 
     public void refrescarCombo() {
         while (Cargo.getItemCount() > 1) {

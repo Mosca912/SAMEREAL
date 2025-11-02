@@ -5,9 +5,16 @@
  */
 package VISTA;
 
+import CONEXIONES.Conexiones;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /**
@@ -15,8 +22,13 @@ import javax.swing.JPanel;
  * @author Facuymayriver
  */
 public class Menu extends javax.swing.JFrame implements CLASES.IBlockableFrame {
-    public int block=0;
-    
+
+    public int block, block2 = 0;
+    Connection con = Conexiones.Conexion();
+    ResultSet rs;
+    int id = 0, valid;
+    String veri = "Opciones", fechaFormateada;
+
     public void botones() {
         Barra.setEnabled(true);
         Menu.setEnabled(true);
@@ -27,14 +39,18 @@ public class Menu extends javax.swing.JFrame implements CLASES.IBlockableFrame {
         Ayuda.setEnabled(true);
         Configuracion.setEnabled(true);
         Salir.setEnabled(true);
-        block=0;
+        block = 0;
     }
-    
+
     @Override
-    public int getBlockState(){
+    public int getBlockState() {
         return this.block;
     }
-    
+
+    public int getBlockStateSalir() {
+        return this.block2;
+    }
+
     class FondoInicio extends JPanel {
 
         private final Image imagen5;
@@ -62,15 +78,34 @@ public class Menu extends javax.swing.JFrame implements CLASES.IBlockableFrame {
         CLASES.MenuClass.Configuracion();
 
         initComponents();
+        block = 1;
+        Barra.setEnabled(false);
+        Menu.setEnabled(false);
+        Movimientos.setEnabled(false);
+        Asistencia.setEnabled(false);
+        Empleados.setEnabled(false);
+        Estadisticas.setEnabled(false);
+        Ayuda.setEnabled(false);
+        Configuracion.setEnabled(false);
+
+        labelnu.setVisible(false);
+        registrarse.setVisible(false);
+        Ayudin.setVisible(false);
+
         this.setLocationRelativeTo(null);
         CLASES.MenuClass menuHelper = new CLASES.MenuClass();
         menuHelper.MenuConfig(Movimientos, Menu, Asistencia, Empleados, Estadisticas, Ayuda, Configuracion, Salir, this);
-        
-        int ventana=CLASES.MenuClass.Ventana();
-        if (ventana==0){
+
+        int ventana = CLASES.MenuClass.Ventana();
+        if (ventana == 0) {
             this.setExtendedState(NORMAL);
-        } else if (ventana == 1){
+        } else if (ventana == 1) {
             this.setExtendedState(MAXIMIZED_BOTH);
+        }
+
+        valid = CLASES.Usuario.verificacion();
+        if (valid == 1) {
+            botones();
         }
     }
 
@@ -90,14 +125,14 @@ public class Menu extends javax.swing.JFrame implements CLASES.IBlockableFrame {
         Fondo = new FondoInicio("/IMAGENES/fondoamb.png");
         menuinicio = new FondoInicio("/IMAGENES/iniciosesion.png");
         jSeparator1 = new javax.swing.JSeparator();
-        Usuario = new javax.swing.JTextField();
-        Contraseña = new javax.swing.JPasswordField();
+        DNI = new javax.swing.JTextField();
+        contrasena = new javax.swing.JPasswordField();
         registrarse = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
+        labelogin = new javax.swing.JLabel();
         iniciarsesion1 = new javax.swing.JButton();
-        olvide = new javax.swing.JLabel();
         Ayudin = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        labelnu = new javax.swing.JLabel();
+        cambiarcont = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         Barra = new javax.swing.JMenuBar();
         Menu = new javax.swing.JMenu();
@@ -140,15 +175,15 @@ public class Menu extends javax.swing.JFrame implements CLASES.IBlockableFrame {
         jSeparator1.setOrientation(javax.swing.SwingConstants.VERTICAL);
         menuinicio.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 50, 20, 250));
 
-        Usuario.setBackground(new java.awt.Color(204, 204, 204));
-        Usuario.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)), "Usuario", javax.swing.border.TitledBorder.LEADING, javax.swing.border.TitledBorder.ABOVE_TOP, new java.awt.Font("Tahoma", 1, 14))); // NOI18N
-        Usuario.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-        menuinicio.add(Usuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 90, 270, 40));
+        DNI.setBackground(new java.awt.Color(204, 204, 204));
+        DNI.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)), "DNI", javax.swing.border.TitledBorder.LEADING, javax.swing.border.TitledBorder.ABOVE_TOP, new java.awt.Font("Tahoma", 1, 14))); // NOI18N
+        DNI.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        menuinicio.add(DNI, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 90, 270, 40));
 
-        Contraseña.setBackground(new java.awt.Color(204, 204, 204));
-        Contraseña.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)), "Contraseña", javax.swing.border.TitledBorder.LEADING, javax.swing.border.TitledBorder.ABOVE_TOP, new java.awt.Font("Tahoma", 1, 14))); // NOI18N
-        Contraseña.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-        menuinicio.add(Contraseña, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 160, 270, 40));
+        contrasena.setBackground(new java.awt.Color(204, 204, 204));
+        contrasena.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)), "Contraseña", javax.swing.border.TitledBorder.LEADING, javax.swing.border.TitledBorder.ABOVE_TOP, new java.awt.Font("Tahoma", 1, 14))); // NOI18N
+        contrasena.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        menuinicio.add(contrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 160, 270, 40));
 
         registrarse.setBackground(new java.awt.Color(52, 170, 121));
         registrarse.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -156,12 +191,17 @@ public class Menu extends javax.swing.JFrame implements CLASES.IBlockableFrame {
         registrarse.setText("Registrarse");
         registrarse.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         registrarse.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        registrarse.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                registrarseActionPerformed(evt);
+            }
+        });
         menuinicio.add(registrarse, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 140, 120, 40));
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/asistencia.png"))); // NOI18N
-        jLabel1.setText("Login");
-        menuinicio.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 30, 100, 50));
+        labelogin.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        labelogin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/asistencia.png"))); // NOI18N
+        labelogin.setText("Login");
+        menuinicio.add(labelogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 30, 100, 50));
 
         iniciarsesion1.setBackground(new java.awt.Color(52, 170, 121));
         iniciarsesion1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -169,23 +209,34 @@ public class Menu extends javax.swing.JFrame implements CLASES.IBlockableFrame {
         iniciarsesion1.setText("Iniciar Sesión");
         iniciarsesion1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         iniciarsesion1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        iniciarsesion1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                iniciarsesion1ActionPerformed(evt);
+            }
+        });
         menuinicio.add(iniciarsesion1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 220, 120, 40));
-
-        olvide.setBackground(new java.awt.Color(52, 170, 121));
-        olvide.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        olvide.setForeground(new java.awt.Color(52, 170, 121));
-        olvide.setText("¿Olvidaste la contraseña?");
-        menuinicio.add(olvide, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 270, 180, 50));
 
         Ayudin.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         Ayudin.setForeground(new java.awt.Color(52, 170, 121));
         Ayudin.setText("Ayuda");
         menuinicio.add(Ayudin, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 290, -1, -1));
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/empleado.png"))); // NOI18N
-        jLabel2.setText("Nuevo Usuario");
-        menuinicio.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 90, 150, -1));
+        labelnu.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        labelnu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/empleado.png"))); // NOI18N
+        labelnu.setText("Nuevo Usuario");
+        menuinicio.add(labelnu, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 90, 150, -1));
+
+        cambiarcont.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        cambiarcont.setForeground(new java.awt.Color(52, 170, 121));
+        cambiarcont.setText("¿Olvidaste la contraseña?");
+        cambiarcont.setBorder(null);
+        cambiarcont.setContentAreaFilled(false);
+        cambiarcont.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cambiarcontActionPerformed(evt);
+            }
+        });
+        menuinicio.add(cambiarcont, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 280, 150, -1));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
         jLabel3.setText("SAME TRANSPORTE");
@@ -455,7 +506,7 @@ public class Menu extends javax.swing.JFrame implements CLASES.IBlockableFrame {
     }//GEN-LAST:event_incmenActionPerformed
 
     private void MovimientosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MovimientosActionPerformed
-        Movimiento ventana= new Movimiento();
+        Movimiento ventana = new Movimiento();
         ventana.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_MovimientosActionPerformed
@@ -463,6 +514,42 @@ public class Menu extends javax.swing.JFrame implements CLASES.IBlockableFrame {
     private void SalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SalirActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_SalirActionPerformed
+
+    private void registrarseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registrarseActionPerformed
+        RegistrarFrm ventana = new RegistrarFrm(this);
+        ventana.setVisible(true);
+    }//GEN-LAST:event_registrarseActionPerformed
+
+    private void iniciarsesion1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iniciarsesion1ActionPerformed
+        String dni = DNI.getText();
+        String cont = contrasena.getText();
+        if (!dni.trim().isEmpty() && !cont.trim().isEmpty()) {
+            try {
+                valid = CLASES.Usuario.IniciarSesion(con, dni, cont);
+                if (valid == 1) {
+                    botones();
+                    DNI.setVisible(false);
+                    contrasena.setVisible(false);
+                    labelogin.setVisible(false);
+                    iniciarsesion1.setVisible(false);
+                    cambiarcont.setVisible(false);
+
+                    labelnu.setVisible(true);
+                    registrarse.setVisible(true);
+                    Ayudin.setVisible(true);
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "¡HAY CAMPOS VACIOS! Por favor, revise");
+        }
+    }//GEN-LAST:event_iniciarsesion1ActionPerformed
+
+    private void cambiarcontActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cambiarcontActionPerformed
+        CambCont ventana = new CambCont(this);
+        ventana.setVisible(true);
+    }//GEN-LAST:event_cambiarcontActionPerformed
 
     /**
      * @param args the command line arguments
@@ -506,15 +593,16 @@ public class Menu extends javax.swing.JFrame implements CLASES.IBlockableFrame {
     private javax.swing.JLabel Ayudin;
     private javax.swing.JMenuBar Barra;
     private javax.swing.JMenu Configuracion;
-    private javax.swing.JPasswordField Contraseña;
+    private javax.swing.JTextField DNI;
     private javax.swing.JMenu Empleados;
     private javax.swing.JMenu Estadisticas;
     private javax.swing.JPanel Fondo;
     private javax.swing.JMenu Menu;
     private javax.swing.JMenu Movimientos;
     private javax.swing.JMenu Salir;
-    private javax.swing.JTextField Usuario;
+    private javax.swing.JButton cambiarcont;
     private javax.swing.JMenu cargoemp;
+    private javax.swing.JPasswordField contrasena;
     private javax.swing.JMenuItem elim;
     private javax.swing.JMenuItem historial;
     private javax.swing.JMenuItem incmen;
@@ -522,8 +610,6 @@ public class Menu extends javax.swing.JFrame implements CLASES.IBlockableFrame {
     private javax.swing.JButton iniciarsesion1;
     private javax.swing.JMenuItem inicioas;
     private javax.swing.JMenuItem iniciomov;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
@@ -531,11 +617,12 @@ public class Menu extends javax.swing.JFrame implements CLASES.IBlockableFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JLabel labelnu;
+    private javax.swing.JLabel labelogin;
     private javax.swing.JPanel menuinicio;
     private javax.swing.JMenuItem mod;
     private javax.swing.JMenuItem nuevovic;
     private javax.swing.JMenuItem nuevtrip;
-    private javax.swing.JLabel olvide;
     private javax.swing.JButton registrarse;
     // End of variables declaration//GEN-END:variables
 }

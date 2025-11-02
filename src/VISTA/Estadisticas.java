@@ -126,7 +126,6 @@ public class Estadisticas extends javax.swing.JFrame {
         setMinimumSize(new java.awt.Dimension(1200, 700));
         setName("Estadisticas"); // NOI18N
         setUndecorated(true);
-        setPreferredSize(new java.awt.Dimension(1200, 700));
         setResizable(false);
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));

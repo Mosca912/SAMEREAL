@@ -40,6 +40,7 @@ public class Movimiento extends javax.swing.JFrame {
     public void refrescarCombo() {
         try {
             CLASES.Movimientos.Select(con, Trip, fechaActual);
+            tabla1.setRowCount(0);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error al refrescar categorías");
         }

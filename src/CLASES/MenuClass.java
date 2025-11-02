@@ -60,6 +60,16 @@ public class MenuClass {
         // Si la ventana no implementa la interfaz, asumimos que no hay bloqueo
         return false;
     }
+    
+    private boolean isBlocked2() {
+        // Chequea si la ventanaAnterior es una IBlockableFrame
+        if (ventanaAnterior instanceof IBlockableFrame) {
+            // Si lo es, llama al método que debe existir en la interfaz.
+            return ((IBlockableFrame) ventanaAnterior).getBlockStateSalir() == 1;
+        }
+        // Si la ventana no implementa la interfaz, asumimos que no hay bloqueo
+        return false;
+    }
 
     public void MenuConfig(JMenu Movimientos, JMenu Menu, JMenu Asistencia, JMenu Empleados, JMenu Estadisticas, JMenu Ayuda, JMenu Configuracion, JMenu Salir, JFrame ventanaAnterior) {
 
@@ -324,7 +334,7 @@ public class MenuClass {
 
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
-                    if (!isBlocked()) { 
+                    if (!isBlocked2()) { 
                         System.exit(0);
                     }
                 }

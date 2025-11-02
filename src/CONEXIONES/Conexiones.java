@@ -12,8 +12,7 @@ public class Conexiones {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             conexion=(Connection)DriverManager.getConnection(Servidor,Usuario,pass);
-        } catch (ClassNotFoundException ex){
-        } catch (Exception ex){
+        } catch (ClassNotFoundException | SQLException ex){
         }
         
         finally {
