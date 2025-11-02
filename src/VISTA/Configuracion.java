@@ -8,6 +8,7 @@ package VISTA;
 import java.awt.Graphics;
 import java.awt.Image;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /**
@@ -17,7 +18,7 @@ import javax.swing.JPanel;
 public class Configuracion extends javax.swing.JFrame {
 
 
-    int block=0;
+    int block=0, rango=0;
     int band;
     class FondoInicio extends JPanel {
 
@@ -45,6 +46,10 @@ public class Configuracion extends javax.swing.JFrame {
         CLASES.MenuClass.Configuracion();
 
         initComponents();
+        rango=CLASES.Usuario.rango();
+        if (rango==2){
+            GuardarDump.setEnabled(false);
+        }
         this.setLocationRelativeTo(null);
         CLASES.MenuClass menuHelper = new CLASES.MenuClass();
         menuHelper.MenuConfig(Movimientos, Menu, Asistencia, Empleados, Estadisticas, Ayuda, Configuracion, Salir, this);
@@ -74,7 +79,7 @@ public class Configuracion extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        GuardarDump = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -180,7 +185,7 @@ public class Configuracion extends javax.swing.JFrame {
         jPanel4.setBackground(new java.awt.Color(52, 170, 121));
         jPanel4.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
-        jButton1.setText("Guardar");
+        GuardarDump.setText("Guardar");
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel3.setText("Ultimo guardado: 09/12/2018");
@@ -191,7 +196,7 @@ public class Configuracion extends javax.swing.JFrame {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(GuardarDump, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(67, 67, 67))
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(25, 25, 25)
@@ -204,7 +209,7 @@ public class Configuracion extends javax.swing.JFrame {
                 .addGap(25, 25, 25)
                 .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(GuardarDump, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -446,12 +451,20 @@ public class Configuracion extends javax.swing.JFrame {
 
     private void nuevtripActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevtripActionPerformed
         AddTri ventana = new AddTri(0, this);
-        ventana.setVisible(true);
+        if (rango == 1) {
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
     }//GEN-LAST:event_nuevtripActionPerformed
 
     private void nuevovicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevovicActionPerformed
         AddVic ventana = new AddVic(this);
-        ventana.setVisible(true);
+        if (rango == 1) {
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
     }//GEN-LAST:event_nuevovicActionPerformed
 
     private void historialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_historialActionPerformed
@@ -479,12 +492,20 @@ public class Configuracion extends javax.swing.JFrame {
 
     private void modActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modActionPerformed
         ModElimCargo1 ventana = new ModElimCargo1(1, this);
-        ventana.setVisible(true);
+        if (rango == 1) {
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
     }//GEN-LAST:event_modActionPerformed
 
     private void elimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_elimActionPerformed
         ModElimCargo1 ventana = new ModElimCargo1(0, this);
-        ventana.setVisible(true);
+        if (rango == 1) {
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
     }//GEN-LAST:event_elimActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
@@ -544,6 +565,7 @@ public class Configuracion extends javax.swing.JFrame {
     private javax.swing.JMenu Configuracion;
     private javax.swing.JMenu Empleados;
     private javax.swing.JMenu Estadisticas;
+    private javax.swing.JButton GuardarDump;
     private javax.swing.JButton Max;
     private javax.swing.JMenu Menu;
     private javax.swing.JButton Min;
@@ -556,7 +578,6 @@ public class Configuracion extends javax.swing.JFrame {
     private javax.swing.JMenuItem inicioas;
     private javax.swing.JMenuItem iniciomov;
     private javax.swing.JMenuItem iniconf;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

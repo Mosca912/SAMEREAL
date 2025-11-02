@@ -7,6 +7,7 @@ package VISTA;
 
 import CLASES.Movimientos;
 import CLASES.Usuario;
+import CLASES.Usuario.Base;
 import CLASES.Usuario.Rango;
 import CONEXIONES.Conexiones;
 import java.sql.Connection;
@@ -22,14 +23,14 @@ public class RegistrarFrm extends javax.swing.JDialog {
 
     Connection con = Conexiones.Conexion();
     ResultSet rs;
-    int id=0, band;
-    String veri="Opciones", fechaFormateada;
+    int id=0, band, idbase=0;
+    String veri="Opciones", fechaFormateada, veribase="Opciones";
 
     public RegistrarFrm(JFrame ventanaPrincipal) {
         super(ventanaPrincipal, true);
         initComponents();
         this.setLocationRelativeTo(null);
-        CLASES.Usuario.jRango(con, Rango);
+        CLASES.Usuario.jCombo(con, Rango, Base);
     }
 
     /**
@@ -49,6 +50,7 @@ public class RegistrarFrm extends javax.swing.JDialog {
         Contrasena = new javax.swing.JPasswordField();
         volver = new javax.swing.JButton();
         guardar = new javax.swing.JButton();
+        Base = new javax.swing.JComboBox<>();
         Rango = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -91,6 +93,13 @@ public class RegistrarFrm extends javax.swing.JDialog {
             }
         });
 
+        Base.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)), "Base", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 14))); // NOI18N
+        Base.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BaseActionPerformed(evt);
+            }
+        });
+
         Rango.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)), "Rango", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 14))); // NOI18N
         Rango.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -118,6 +127,7 @@ public class RegistrarFrm extends javax.swing.JDialog {
                                 .addComponent(Apellido)
                                 .addComponent(DNI)
                                 .addComponent(Nombre))
+                            .addComponent(Base, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(Rango, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 95, Short.MAX_VALUE)))
                 .addContainerGap())
@@ -135,9 +145,11 @@ public class RegistrarFrm extends javax.swing.JDialog {
                 .addComponent(Correo, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(Contrasena, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
                 .addComponent(Rango, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 85, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(Base, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(27, 27, 27)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(volver)
                     .addComponent(guardar))
@@ -169,10 +181,10 @@ public class RegistrarFrm extends javax.swing.JDialog {
         String em = Correo.getText();
         String cont = Contrasena.getText();
 
-        if (!nomb.trim().isEmpty() && !ap.trim().isEmpty() && !dni.trim().isEmpty() && !em.trim().isEmpty() && !cont.trim().isEmpty() && !veri.equals("Opciones")) {
+        if (!nomb.trim().isEmpty() && !ap.trim().isEmpty() && !dni.trim().isEmpty() && !em.trim().isEmpty() && !cont.trim().isEmpty() && !veri.equals("Opciones") && !veribase.equals("Opciones")) {
             if (em.contains("@") && em.contains(".")) {
                 try {
-                    CLASES.Usuario.AgregarNuevoUsuario(con, nomb, ap, dni, em, cont, id);
+                    CLASES.Usuario.AgregarNuevoUsuario(con, nomb, ap, dni, em, cont, id, idbase);
                     this.dispose();
                 } catch (Exception e) {
                     JOptionPane.showMessageDialog(null, "ERROR1");
@@ -185,6 +197,15 @@ public class RegistrarFrm extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(null, "¡HAY CAMPOS VACIOS! Por favor, revise");
         }
     }//GEN-LAST:event_guardarActionPerformed
+
+    private void BaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BaseActionPerformed
+        Object value = Base.getSelectedItem();
+        if (value instanceof Usuario.Base) {
+            Usuario.Base dat = (Usuario.Base) value;
+            idbase = dat.getId();
+            veribase = dat.getNombre();
+        }
+    }//GEN-LAST:event_BaseActionPerformed
 
     private void RangoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RangoActionPerformed
         Object value = Rango.getSelectedItem();
@@ -232,6 +253,7 @@ public class RegistrarFrm extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField Apellido;
+    private javax.swing.JComboBox<Base> Base;
     private javax.swing.JPasswordField Contrasena;
     private javax.swing.JTextField Correo;
     private javax.swing.JTextField DNI;

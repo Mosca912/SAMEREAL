@@ -34,7 +34,7 @@ public class Movimiento extends javax.swing.JFrame {
 
     Connection con = Conexiones.Conexion();
     ResultSet rs;
-    int id = 0, band, cont = 0, idtrip, block = 0;
+    int id = 0, band, cont = 0, idtrip, block = 0, rango, valid;
     String veri, fechaActual;
 
     public void refrescarCombo() {
@@ -100,6 +100,13 @@ public class Movimiento extends javax.swing.JFrame {
 
         Tabla.setModel(tabla1);
 
+        rango = CLASES.Usuario.rango();
+        if (rango == 2) {
+            AddT.setEnabled(false);
+            AddV.setEnabled(false);
+            Editar.setEnabled(false);
+        }
+        Relevar.setEnabled(false);
         Nuevo.setEnabled(false);
         Actualizar.setEnabled(false);
         Eliminar.setEnabled(false);
@@ -113,7 +120,7 @@ public class Movimiento extends javax.swing.JFrame {
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
         Tabla.setDefaultRenderer(Object.class, centerRenderer);
-        
+
         int ventana = CLASES.MenuClass.Ventana();
         if (ventana == 0) {
             Tabla.setRowHeight(30);
@@ -142,7 +149,7 @@ public class Movimiento extends javax.swing.JFrame {
             Tabla.setRowHeight(70);
 
             Tabla.setFont(new Font("Arial", Font.BOLD, 25));
-            
+
             Tabla.getColumnModel().getColumn(0).setMinWidth(100);
             Tabla.getColumnModel().getColumn(0).setMaxWidth(100);
 
@@ -173,6 +180,7 @@ public class Movimiento extends javax.swing.JFrame {
         DefaultCellEditor editor = new DefaultCellEditor(horaField);
         Tabla.getColumnModel().getColumn(1).setCellEditor(editor); // salida
         Tabla.getColumnModel().getColumn(2).setCellEditor(editor); // llegada
+
     }
 
     /**
@@ -991,13 +999,16 @@ public class Movimiento extends javax.swing.JFrame {
                 } catch (HeadlessException | SQLException e) {
                     JOptionPane.showMessageDialog(null, e);
                 }
-                Nuevo.setEnabled(true);
-                Actualizar.setEnabled(true);
-                Eliminar.setEnabled(true);
-
+                if (rango == 1) {
+                    Relevar.setEnabled(true);
+                    Nuevo.setEnabled(true);
+                    Actualizar.setEnabled(true);
+                    Eliminar.setEnabled(true);
+                }
             } else {
                 tabla1.setRowCount(0);
                 Nuevo.setEnabled(false);
+                Relevar.setEnabled(false);
                 Actualizar.setEnabled(false);
                 Eliminar.setEnabled(false);
                 Terminar.setEnabled(false);
@@ -1268,12 +1279,20 @@ public class Movimiento extends javax.swing.JFrame {
 
     private void nuevtripActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevtripActionPerformed
         AddTri ventana = new AddTri(0, this);
-        ventana.setVisible(true);
+        if (rango == 1){
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
     }//GEN-LAST:event_nuevtripActionPerformed
 
     private void nuevovicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevovicActionPerformed
         AddVic ventana = new AddVic(this);
-        ventana.setVisible(true);
+        if (rango == 1){
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
     }//GEN-LAST:event_nuevovicActionPerformed
 
     private void historialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_historialActionPerformed
@@ -1301,12 +1320,20 @@ public class Movimiento extends javax.swing.JFrame {
 
     private void modActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modActionPerformed
         ModElimCargo1 ventana = new ModElimCargo1(1, this);
-        ventana.setVisible(true);
+        if (rango == 1){
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
     }//GEN-LAST:event_modActionPerformed
 
     private void elimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_elimActionPerformed
         ModElimCargo1 ventana = new ModElimCargo1(0, this);
-        ventana.setVisible(true);
+        if (rango == 1){
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
     }//GEN-LAST:event_elimActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed

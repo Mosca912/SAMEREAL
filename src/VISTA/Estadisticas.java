@@ -20,6 +20,7 @@ import java.awt.event.MouseMotionListener;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /**
@@ -32,13 +33,17 @@ public class Estadisticas extends javax.swing.JFrame {
     String emp = "";
     Connection con = Conexiones.Conexion();
     ResultSet rs;
-    int cont = 0, band = 0, indice, block=0;
+    int cont = 0, band = 0, indice, block=0, rango=0;
     String veri, veri2;
 
     public Estadisticas() {
         CLASES.MenuClass.Configuracion();
 
         initComponents();
+        
+        rango=CLASES.Usuario.rango();
+        
+        
         this.setLocationRelativeTo(null);
         CLASES.MenuClass menuHelper = new CLASES.MenuClass();
         menuHelper.MenuConfig(Movimientos, Menu, Asistencia, Empleados, Estadisticas, Ayuda, Configuracion, Salir, this);
@@ -571,12 +576,20 @@ public class Estadisticas extends javax.swing.JFrame {
 
     private void nuevtripActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevtripActionPerformed
         AddTri ventana = new AddTri(0, this);
-        ventana.setVisible(true);
+        if (rango == 1) {
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
     }//GEN-LAST:event_nuevtripActionPerformed
 
     private void nuevovicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevovicActionPerformed
         AddVic ventana = new AddVic(this);
-        ventana.setVisible(true);
+        if (rango == 1) {
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
     }//GEN-LAST:event_nuevovicActionPerformed
 
     private void historialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_historialActionPerformed
@@ -604,12 +617,20 @@ public class Estadisticas extends javax.swing.JFrame {
 
     private void modActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modActionPerformed
         ModElimCargo1 ventana = new ModElimCargo1(1, this);
-        ventana.setVisible(true);
+        if (rango == 1) {
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
     }//GEN-LAST:event_modActionPerformed
 
     private void elimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_elimActionPerformed
         ModElimCargo1 ventana = new ModElimCargo1(0, this);
-        ventana.setVisible(true);
+        if (rango == 1) {
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
     }//GEN-LAST:event_elimActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed

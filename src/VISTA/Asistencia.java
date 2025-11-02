@@ -46,7 +46,7 @@ public class Asistencia extends javax.swing.JFrame implements CLASES.IBlockableF
     Connection con = Conexiones.Conexion();
     ResultSet rs;
     int cont = 0, band = 0;
-    public int block = 0, block2=0;
+    public int block = 0, block2 = 0, rango = 0, valid = 0;
     String veri, veri2;
 
     public void refrescarCombo() {
@@ -54,7 +54,7 @@ public class Asistencia extends javax.swing.JFrame implements CLASES.IBlockableF
             empleado.removeItemAt(1); // Siempre elimina el segundo, el resto se va corriendo
         }
     }
-    
+
     public int getBlockStateSalir() {
         return this.block2;
     }
@@ -136,6 +136,7 @@ public class Asistencia extends javax.swing.JFrame implements CLASES.IBlockableF
         CLASES.MenuClass.Configuracion();
 
         initComponents();
+        rango = CLASES.Usuario.rango();
         this.setLocationRelativeTo(null);
         CLASES.MenuClass menuHelper = new CLASES.MenuClass();
         menuHelper.MenuConfig(Movimientos, Menu, Asistencia, Empleados, Estadisticas, Ayuda, Configuracion, Salir, this);
@@ -215,85 +216,87 @@ public class Asistencia extends javax.swing.JFrame implements CLASES.IBlockableF
                 return c;
             }
         });
+        
+        if (rango == 1) {
+            Tabla.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    // Detectar doble click
+                    if (e.getClickCount() == 2 && Tabla.getSelectedRow() != -1) {
+                        int filaSeleccionada = Tabla.getSelectedRow();
+                        if (filaSeleccionada == -1) {
+                            return;
+                        }
+                        Object valEntrada = Tabla.getValueAt(filaSeleccionada, 1);
+                        Object valObserv = Tabla.getValueAt(filaSeleccionada, 3);
 
-        Tabla.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                // Detectar doble click
-                if (e.getClickCount() == 2 && Tabla.getSelectedRow() != -1) {
+                        String Entrada = (valEntrada != null) ? valEntrada.toString().trim() : "";
+                        String Observ = (valObserv != null) ? valObserv.toString().trim() : "";
+
+                        if (Entrada.isEmpty() && Observ.isEmpty()) {
+                            JOptionPane.showMessageDialog(null, "No se puede editar esta fila (vacía o sin asistencia).");
+                            return;
+                        }
+
+                        if (Observ.equalsIgnoreCase("No asistió")) {
+                            JOptionPane.showMessageDialog(null, "No se puede modificar un registro de 'No asistió'.");
+                            return;
+                        }
+                        try {
+                            int val = CLASES.Asistencia.VerificacionClick(con, Entrada, id2);
+                            if (val == 1) {
+                                return;
+                            }
+                            // Obtener fecha y hora actual
+                            LocalDateTime ahora = LocalDateTime.now();
+                            // Formatear a "2025-10-14 23:14:14"
+                            DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                            String fechaHora = ahora.format(formato);
+                            band = 1;
+                            Actualizar.setEnabled(true);
+                            Tabla.setValueAt(fechaHora, filaSeleccionada, 2);
+                            cargar.setEnabled(false);
+                            tabla1.setEditableRow(filaSeleccionada); // ✅ habilita solo esa fila
+                            Actualizar.setText("Guardar");
+                        } catch (SQLException ex) {
+                            Logger.getLogger(Asistencia.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+
+                    }
+                }
+            });
+
+            InputMap inputMap = Tabla.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+            ActionMap actionMap = Tabla.getActionMap();
+
+            inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "bloquearEdicion");
+
+            actionMap.put("bloquearEdicion", new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
                     int filaSeleccionada = Tabla.getSelectedRow();
                     if (filaSeleccionada == -1) {
                         return;
-                    }
-                    Object valEntrada = Tabla.getValueAt(filaSeleccionada, 1);
-                    Object valObserv = Tabla.getValueAt(filaSeleccionada, 3);
-
-                    String Entrada = (valEntrada != null) ? valEntrada.toString().trim() : "";
-                    String Observ = (valObserv != null) ? valObserv.toString().trim() : "";
-
-                    if (Entrada.isEmpty() && Observ.isEmpty()) {
-                        JOptionPane.showMessageDialog(null, "No se puede editar esta fila (vacía o sin asistencia).");
-                        return;
-                    }
-
-                    if (Observ.equalsIgnoreCase("No asistió")) {
-                        JOptionPane.showMessageDialog(null, "No se puede modificar un registro de 'No asistió'.");
-                        return;
-                    }
-                    try {
-                        int val = CLASES.Asistencia.VerificacionClick(con, Entrada, id2);
-                        if (val == 1) {
-                            return;
+                    } else {
+                        Object valEntrada = Tabla.getValueAt(filaSeleccionada, 1);
+                        String Entrada = (valEntrada != null) ? valEntrada.toString().trim() : "";
+                        try {
+                            int val = CLASES.Asistencia.VerificacionClick(con, Entrada, id2);
+                            if (val == 1) {
+                                return;
+                            } else {
+                                Tabla.setValueAt("", filaSeleccionada, 2);
+                            }
+                        } catch (SQLException ex) {
+                            Logger.getLogger(Asistencia.class.getName()).log(Level.SEVERE, null, ex);
                         }
-                        // Obtener fecha y hora actual
-                        LocalDateTime ahora = LocalDateTime.now();
-                        // Formatear a "2025-10-14 23:14:14"
-                        DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-                        String fechaHora = ahora.format(formato);
-                        band = 1;
-                        Actualizar.setEnabled(true);
-                        Tabla.setValueAt(fechaHora, filaSeleccionada, 2);
-                        cargar.setEnabled(false);
-                        tabla1.setEditableRow(filaSeleccionada); // ✅ habilita solo esa fila
-                        Actualizar.setText("Guardar");
-                    } catch (SQLException ex) {
-                        Logger.getLogger(Asistencia.class.getName()).log(Level.SEVERE, null, ex);
                     }
-
+                    tabla1.bloquearEdicion();
+                    cargar.setEnabled(true);
+                    Actualizar.setEnabled(false);
                 }
-            }
-        });
-
-        InputMap inputMap = Tabla.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
-        ActionMap actionMap = Tabla.getActionMap();
-
-        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "bloquearEdicion");
-
-        actionMap.put("bloquearEdicion", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int filaSeleccionada = Tabla.getSelectedRow();
-                if (filaSeleccionada == -1) {
-                    return;
-                } else {
-                    Object valEntrada = Tabla.getValueAt(filaSeleccionada, 1);
-                    String Entrada = (valEntrada != null) ? valEntrada.toString().trim() : "";
-                    try {
-                        int val = CLASES.Asistencia.VerificacionClick(con, Entrada, id2);
-                        if (val == 1) {
-                            return;
-                        } else {
-                            Tabla.setValueAt("", filaSeleccionada, 2);
-                        }
-                    } catch (SQLException ex) {
-                        Logger.getLogger(Asistencia.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-                tabla1.bloquearEdicion();
-                cargar.setEnabled(true);
-                Actualizar.setEnabled(false);
-            }
-        });
+            });
+        }
     }
 
     /**
@@ -703,7 +706,7 @@ public class Asistencia extends javax.swing.JFrame implements CLASES.IBlockableF
                 empleado.setSelectedIndex(0);
                 tabla1.bloquearEdicion();
                 block = 0;
-                block2=0;
+                block2 = 0;
             }
         }
     }//GEN-LAST:event_areaActionPerformed
@@ -715,21 +718,21 @@ public class Asistencia extends javax.swing.JFrame implements CLASES.IBlockableF
             id2 = dat.getId();
             veri2 = dat.getNombre();
             if (!veri2.equals("Opciones")) {
-                Menu.setEnabled(false);
-                Movimientos.setEnabled(false);
-                Asistencia.setEnabled(false);
-                Empleados.setEnabled(false);
-                Estadisticas.setEnabled(false);
-                Ayuda.setEnabled(false);
-                Configuracion.setEnabled(false);
-                Salir.setEnabled(false);
-                cargar.setEnabled(true);
-                block = 1;
-                block2 = 1;
-
+                if (rango == 1) {
+                    Menu.setEnabled(false);
+                    Movimientos.setEnabled(false);
+                    Asistencia.setEnabled(false);
+                    Empleados.setEnabled(false);
+                    Estadisticas.setEnabled(false);
+                    Ayuda.setEnabled(false);
+                    Configuracion.setEnabled(false);
+                    Salir.setEnabled(false);
+                    cargar.setEnabled(true);
+                    block = 1;
+                    block2 = 1;
+                }
                 try {
                     CLASES.Asistencia.Verificacion(con, id2);
-                    //CLASES.Asistencia.Verificacion(con, cargar, generar, id2);
                 } catch (SQLException ex) {
                     Logger.getLogger(Asistencia.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (Exception ex) {
@@ -754,7 +757,7 @@ public class Asistencia extends javax.swing.JFrame implements CLASES.IBlockableF
                 Configuracion.setEnabled(true);
                 Salir.setEnabled(true);
                 block = 0;
-                block = 1;
+                block2 = 0;
                 // Limpiar la tabla
                 tabla1.setRowCount(0);
 
@@ -822,12 +825,20 @@ public class Asistencia extends javax.swing.JFrame implements CLASES.IBlockableF
 
     private void nuevtripActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevtripActionPerformed
         AddTri ventana = new AddTri(0, this);
-        ventana.setVisible(true);
+        if (rango == 1) {
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
     }//GEN-LAST:event_nuevtripActionPerformed
 
     private void nuevovicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevovicActionPerformed
         AddVic ventana = new AddVic(this);
-        ventana.setVisible(true);
+        if (rango == 1) {
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
     }//GEN-LAST:event_nuevovicActionPerformed
 
     private void historialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_historialActionPerformed
@@ -855,12 +866,20 @@ public class Asistencia extends javax.swing.JFrame implements CLASES.IBlockableF
 
     private void modActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modActionPerformed
         ModElimCargo1 ventana = new ModElimCargo1(1, this);
-        ventana.setVisible(true);
+        if (rango == 1) {
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
     }//GEN-LAST:event_modActionPerformed
 
     private void elimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_elimActionPerformed
         ModElimCargo1 ventana = new ModElimCargo1(0, this);
-        ventana.setVisible(true);
+        if (rango == 1) {
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
     }//GEN-LAST:event_elimActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed

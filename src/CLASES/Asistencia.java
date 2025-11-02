@@ -250,6 +250,7 @@ public class Asistencia {
         stm.setInt(1, mes);
         stm.setInt(2, id);
         ResultSet rs = stm.executeQuery();
+        int base = CLASES.Usuario.base();
         if (rs.next()) {
             count = rs.getInt("COUNT(asistencia.idasistencia)");
             nombre = rs.getString("empleado.nombre");
@@ -281,10 +282,11 @@ public class Asistencia {
                     document.add(img);
 
                     PdfContentByte canvas = writer.getDirectContent();
-                    String sql = "SELECT empleado.nombre, empleado.apellido , area.area, cargo.Cargo, base.Base, empleado.dni FROM asistencia inner join empleado on asistencia.id_Empleado=empleado.id_Empleado inner join cargo on empleado.idCargo=cargo.idCargo inner join area on cargo.idArea=area.idArea inner join base on asistencia.idBase=base.idBase where asistencia.id_Empleado=? and asistencia.idBase=2;";
+                    String sql = "SELECT empleado.nombre, empleado.apellido , area.area, cargo.Cargo, base.Base, empleado.dni FROM asistencia inner join empleado on asistencia.id_Empleado=empleado.id_Empleado inner join cargo on empleado.idCargo=cargo.idCargo inner join area on cargo.idArea=area.idArea inner join base on asistencia.idBase=base.idBase where asistencia.id_Empleado=? and asistencia.idBase=?;";
                     try {
                         PreparedStatement ps = con.prepareStatement(sql);
                         ps.setInt(1, id);
+                        ps.setInt(2, base);
                         ResultSet rs2 = ps.executeQuery();
                         if (rs2.next()) {
                             String emp = (rs2.getString("empleado.nombre") + (" ") + rs2.getString("empleado.apellido"));
@@ -401,10 +403,11 @@ public class Asistencia {
                     document.add(img);
 
                     PdfContentByte canvas = writer.getDirectContent();
-                    String sql = "SELECT empleado.nombre, empleado.apellido , area.area, cargo.Cargo, base.Base, empleado.dni FROM asistencia inner join empleado on asistencia.id_Empleado=empleado.id_Empleado inner join cargo on empleado.idCargo=cargo.idCargo inner join area on cargo.idArea=area.idArea inner join base on asistencia.idBase=base.idBase where asistencia.id_Empleado=? and asistencia.idBase=2;";
+                    String sql = "SELECT empleado.nombre, empleado.apellido , area.area, cargo.Cargo, base.Base, empleado.dni FROM asistencia inner join empleado on asistencia.id_Empleado=empleado.id_Empleado inner join cargo on empleado.idCargo=cargo.idCargo inner join area on cargo.idArea=area.idArea inner join base on asistencia.idBase=base.idBase where asistencia.id_Empleado=? and asistencia.idBase=?;";
                     try {
                         PreparedStatement ps = con.prepareStatement(sql);
                         ps.setInt(1, id);
+                        ps.setInt(2, base);
                         ResultSet rs2 = ps.executeQuery();
                         if (rs2.next()) {
                             String emp = (rs2.getString("empleado.nombre") + (" ") + rs2.getString("empleado.apellido"));

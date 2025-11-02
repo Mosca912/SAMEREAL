@@ -38,7 +38,7 @@ public class Empleados extends javax.swing.JFrame implements CLASES.IBlockableFr
     Connection con = Conexiones.Conexion();
     ResultSet rs;
     int cont = 0;
-    public int block = 0, block2=0;
+    public int block = 0, block2=0, rango=0;
 
     public void refrescarTablaEmpleados() {
         tabla1.setRowCount(0); // Limpia
@@ -110,6 +110,14 @@ public class Empleados extends javax.swing.JFrame implements CLASES.IBlockableFr
         menuHelper.MenuConfig(Movimientos, Menu, Asistencia, Empleados, Estadisticas, Ayuda, Configuracion, Salir, this);
 
         int ventana = CLASES.MenuClass.Ventana();
+        
+        rango=CLASES.Usuario.rango();
+        if (rango==2){
+            Cargar.setEnabled(false);
+            Eliminar.setEnabled(false);
+            Modificar.setEnabled(false);
+            opcCargo.setEnabled(false);
+        }
 
         Nombre.setEnabled(false);
         Apellido.setEnabled(false);
@@ -1238,12 +1246,20 @@ public class Empleados extends javax.swing.JFrame implements CLASES.IBlockableFr
 
     private void nuevtripActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevtripActionPerformed
         AddTri ventana = new AddTri(0, this);
-        ventana.setVisible(true);
+        if (rango == 1) {
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
     }//GEN-LAST:event_nuevtripActionPerformed
 
     private void nuevovicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevovicActionPerformed
         AddVic ventana = new AddVic(this);
-        ventana.setVisible(true);
+        if (rango == 1) {
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
     }//GEN-LAST:event_nuevovicActionPerformed
 
     private void historialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_historialActionPerformed
@@ -1271,12 +1287,20 @@ public class Empleados extends javax.swing.JFrame implements CLASES.IBlockableFr
 
     private void modActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modActionPerformed
         ModElimCargo ventana = new ModElimCargo(1, this);
-        ventana.setVisible(true);
+        if (rango == 1) {
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
     }//GEN-LAST:event_modActionPerformed
 
     private void elimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_elimActionPerformed
         ModElimCargo ventana = new ModElimCargo(1, this);
-        ventana.setVisible(true);
+        if (rango == 1) {
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
     }//GEN-LAST:event_elimActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed

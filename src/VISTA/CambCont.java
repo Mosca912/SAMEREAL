@@ -137,12 +137,15 @@ public class CambCont extends javax.swing.JDialog {
         String dni = DNI.getText();
         String em = Correo.getText();
         String cont = Contrasena.getText();
+        int veri;
 
         if (!dni.trim().isEmpty() && !em.trim().isEmpty() && !cont.trim().isEmpty()) {
             if (em.contains("@") && em.contains(".")) {
                 try {
-                    CLASES.Usuario.CambiarCont(con, dni, em, cont);
-                    this.dispose();
+                    veri=CLASES.Usuario.CambiarCont(con, dni, em, cont);
+                    if (veri==1){
+                     this.dispose();   
+                    }
                 } catch (Exception e) {
                     JOptionPane.showMessageDialog(null, "ERROR1");
                 }
