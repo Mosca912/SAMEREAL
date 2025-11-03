@@ -210,6 +210,17 @@ public class Usuario {
         base=0;
     }
     
+    public static void CerrarSesion2() {
+        valid = 0;
+        rango = 0;
+        iduser = 0;
+        base=0;
+    }
+    
+    public static int iduser(){
+        return iduser;
+    }
+    
     public static int base() {
         return base;
     }

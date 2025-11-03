@@ -159,6 +159,7 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
             botones();
             validado();
             CLASES.Usuario.nombre(labelogin);
+            Salir.setText("Cerrar Sesión");
         }
 
         rango = CLASES.Usuario.rango();
@@ -635,6 +636,7 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
                 validado();
                 DNI.setText("");
                 contrasena.setText("");
+                Salir.setText("Cerrar Sesión");
             }
             rango = CLASES.Usuario.rango();
             if (rango == 1) {

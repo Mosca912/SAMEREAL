@@ -38,7 +38,7 @@ public class Empleados extends javax.swing.JFrame implements CLASES.IBlockableFr
     Connection con = Conexiones.Conexion();
     ResultSet rs;
     int cont = 0;
-    public int block = 0, block2=0, rango=0;
+    public int block = 0, block2=0, rango=0, iduser;
 
     public void refrescarTablaEmpleados() {
         tabla1.setRowCount(0); // Limpia
@@ -118,6 +118,8 @@ public class Empleados extends javax.swing.JFrame implements CLASES.IBlockableFr
             Modificar.setEnabled(false);
             opcCargo.setEnabled(false);
         }
+        
+        iduser=CLASES.Usuario.iduser();
 
         Nombre.setEnabled(false);
         Apellido.setEnabled(false);
@@ -799,7 +801,7 @@ public class Empleados extends javax.swing.JFrame implements CLASES.IBlockableFr
         Barra.add(Configuracion);
 
         Salir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/salir.png"))); // NOI18N
-        Salir.setText("Salir");
+        Salir.setText("Cerrar Sesión");
         Salir.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         Salir.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         Barra.add(Salir);
@@ -926,7 +928,7 @@ public class Empleados extends javax.swing.JFrame implements CLASES.IBlockableFr
             if (!nomb.trim().isEmpty() && !ap.trim().isEmpty() && !dni.trim().isEmpty() && !dom.trim().isEmpty() && !em.trim().isEmpty() && !tel.trim().isEmpty() && !gs.equals("Opciones") && !car.equals("Opciones")) {
                 if (em.contains("@") && em.contains(".")) {
                     try {
-                        CLASES.Empleados.AgregarEmpleados(con, nomb, ap, dni, dom, em, tel, fe, gs, car);
+                        CLASES.Empleados.AgregarEmpleados(con, nomb, ap, dni, dom, em, tel, fe, gs, car, iduser);
                         JOptionPane.showMessageDialog(null, "Guardado");
                     } catch (Exception e) {
                         JOptionPane.showMessageDialog(null, "ERROR1");
@@ -978,7 +980,7 @@ public class Empleados extends javax.swing.JFrame implements CLASES.IBlockableFr
             if (!nomb.trim().isEmpty() && !ap.trim().isEmpty() && !dni.trim().isEmpty() && !dom.trim().isEmpty() && !em.trim().isEmpty() && !tel.trim().isEmpty() && !gs.equals("Opciones") && !car.equals("Opciones")) {
                 if (em.contains("@") && em.contains(".")) {
                     try {
-                        CLASES.Empleados.ModificarEmpleados(con, id, nomb, ap, dni, dom, em, tel, fe, gs, car);
+                        CLASES.Empleados.ModificarEmpleados(con, id, nomb, ap, dni, dom, em, tel, fe, gs, car, iduser);
                         JOptionPane.showMessageDialog(null, "Actualizado");
                     } catch (Exception e) {
                         JOptionPane.showMessageDialog(null, "ERROR1");
@@ -1159,7 +1161,7 @@ public class Empleados extends javax.swing.JFrame implements CLASES.IBlockableFr
                 int cod = Integer.parseInt(Tabla.getValueAt(fila, 0).toString());
                 int borrado = 1;
                 try {
-                    CLASES.Empleados.EliminarEmpleados(con, cod, borrado);
+                    CLASES.Empleados.EliminarEmpleados(con, cod, borrado, iduser);
                     JOptionPane.showMessageDialog(null, "Eliminao");
                     tabla1.setRowCount(0); // Limpia
                     CLASES.Empleados.MostrarEmpleados(con, tabla1);

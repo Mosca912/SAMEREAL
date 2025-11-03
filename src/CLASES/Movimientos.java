@@ -87,7 +87,7 @@ public class Movimientos {
         }
     }
 
-    public static void jChofer(Connection conexion, JComboBox<Cliente> combo1, JComboBox<Cliente> combo2, JComboBox<Cliente> combo3, JComboBox<Cliente> combo4) {
+    public static void jChofer(Connection conexion, JComboBox<Cliente> combo1, JComboBox<Cliente> combo2, JComboBox<Cliente> combo3, JComboBox<Cliente> combo4, int band) {
         String sql = "SELECT id_Empleado, nombre, apellido FROM empleado WHERE borrado=0 AND idCargo=3";
         try {
             PreparedStatement ps = conexion.prepareStatement(sql);
@@ -142,23 +142,44 @@ public class Movimientos {
             JOptionPane.showMessageDialog(null, "ERROR: " + ex.getMessage());
         }
 
-        String sql4 = "SELECT idAmbulancia, victor FROM ambulancia";
-        try {
-            PreparedStatement ps = conexion.prepareStatement(sql4);
-            ResultSet rs = ps.executeQuery();
-            model4 = new DefaultComboBoxModel<>();
-            while (rs.next()) {
-                int id = rs.getInt("idAmbulancia");
-                String nombreCompleto = rs.getString("victor");
-                model4.addElement(new Cliente(id, nombreCompleto));
+        if (band == 0) {
+            String sql4 = "SELECT a.idAmbulancia, a.Victor FROM ambulancia a LEFT JOIN tripulacion t ON a.idAmbulancia = t.idAmbulancia AND t.relevado = 0 WHERE t.idAmbulancia IS NULL AND a.borrado=0;";
+            try {
+                PreparedStatement ps = conexion.prepareStatement(sql4);
+                ResultSet rs = ps.executeQuery();
+                model4 = new DefaultComboBoxModel<>();
+                while (rs.next()) {
+                    int id = rs.getInt("a.idAmbulancia");
+                    String nombreCompleto = rs.getString("a.victor");
+                    model4.addElement(new Cliente(id, nombreCompleto));
+                }
+
+                combo4.setModel(model4);
+                AutoCompleteDecorator.decorate(combo4);
+
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "ERROR: " + ex.getMessage());
             }
+        } else if (band == 1) {
+            String sql4 = "SELECT idAmbulancia, victor FROM ambulancia WHERE borrado=0;";
+            try {
+                PreparedStatement ps = conexion.prepareStatement(sql4);
+                ResultSet rs = ps.executeQuery();
+                model4 = new DefaultComboBoxModel<>();
+                while (rs.next()) {
+                    int id = rs.getInt("idAmbulancia");
+                    String nombreCompleto = rs.getString("victor");
+                    model4.addElement(new Cliente(id, nombreCompleto));
+                }
 
-            combo4.setModel(model4);
-            AutoCompleteDecorator.decorate(combo4);
+                combo4.setModel(model4);
+                AutoCompleteDecorator.decorate(combo4);
 
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "ERROR: " + ex.getMessage());
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "ERROR: " + ex.getMessage());
+            }
         }
+
     }
 
     public static void Select(Connection conexion, JComboBox<Trip> combo1, String fecha) {
@@ -219,7 +240,9 @@ public class Movimientos {
     }
 
     public static void ActualizarTrip(Connection conexion, int id, int id2, int id3, int id4, int id5) {
+        if (id4 != amb) {
 
+        }
         String sql = "UPDATE tripulacion SET cvs=?, medico=?, enfermero=?, idAmbulancia=? WHERE idtripulacion=?";
         try {
             PreparedStatement ps = conexion.prepareStatement(sql);
@@ -385,9 +408,10 @@ public class Movimientos {
             JOptionPane.showMessageDialog(null, "ERROR12");
         }
     }
+    static int amb;
 
     public static void EditarTrip(Connection conexion, int id, JComboBox<Cliente> combo1, JComboBox<Cliente> combo2, JComboBox<Cliente> combo3, JComboBox<Cliente> combo4) {
-        int cvs, med, enf, amb;
+        int cvs, med, enf;
         String sql = "SELECT cvs, medico, enfermero, idAmbulancia FROM tripulacion where idtripulacion=?";
         try {
             PreparedStatement ps = conexion.prepareStatement(sql);

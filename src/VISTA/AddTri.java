@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-public class AddTri extends javax.swing.JDialog{
+public class AddTri extends javax.swing.JDialog {
 
     Connection con = Conexiones.Conexion();
     ResultSet rs;
@@ -28,7 +28,7 @@ public class AddTri extends javax.swing.JDialog{
     String fechaActual, veri;
 
     public AddTri(int idband, JFrame ventanaPrincipal) {
-        super(ventanaPrincipal,true);
+        super(ventanaPrincipal, true);
         AddTri.idband = idband;
         initComponents();
         this.setLocationRelativeTo(null);
@@ -37,10 +37,10 @@ public class AddTri extends javax.swing.JDialog{
         fechaActual = hoy.format(formato);
 
         fechaActual = hoy.format(formato);
-        CLASES.Movimientos.jChofer(con, ChoferCB, EnfermeroCB, MedicoCB, victor);
         if (idband == 0) {
             tripla.setVisible(false);
             Tripulacion.setVisible(false);
+            CLASES.Movimientos.jChofer(con, ChoferCB, EnfermeroCB, MedicoCB, victor, idband);
         } else {
             carga.setText("Actualizar");
             CLASES.Movimientos.Select(con, Tripulacion, fechaActual);
@@ -48,6 +48,7 @@ public class AddTri extends javax.swing.JDialog{
             EnfermeroCB.setEnabled(false);
             MedicoCB.setEnabled(false);
             victor.setEnabled(false);
+            CLASES.Movimientos.jChofer(con, ChoferCB, EnfermeroCB, MedicoCB, victor, idband);
         }
     }
 
@@ -244,12 +245,22 @@ public class AddTri extends javax.swing.JDialog{
                 Logger.getLogger(AddTri.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
-            try {
-                CLASES.Movimientos.ActualizarTrip(con, idChofer, idEnfermero, idMedico, idvictor, idtrip);
-                JOptionPane.showMessageDialog(null, "Cargao");
-                this.dispose();
-            } catch (HeadlessException e) {
-                JOptionPane.showMessageDialog(null, "ERROR1");
+            int opcion = JOptionPane.showConfirmDialog(
+                    null,
+                    "¿Deseás Actualizar?",
+                    "Confirmar acción",
+                    JOptionPane.OK_CANCEL_OPTION,
+                    JOptionPane.QUESTION_MESSAGE
+            );
+
+            if (opcion == JOptionPane.OK_OPTION) {
+                try {
+                    CLASES.Movimientos.ActualizarTrip(con, idChofer, idEnfermero, idMedico, idvictor, idtrip);
+                    JOptionPane.showMessageDialog(null, "Cargao");
+                    this.dispose();
+                } catch (HeadlessException e) {
+                    JOptionPane.showMessageDialog(null, "ERROR1");
+                }
             }
         }
     }//GEN-LAST:event_cargaActionPerformed

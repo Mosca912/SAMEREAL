@@ -11,6 +11,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
@@ -120,7 +121,7 @@ public class Empleados {
 
     }
 
-    public static void AgregarEmpleados(Connection conexion, String Nombre, String Apellido, String DNI, String Domicilio, String Email, String Telefono, String Fecha, String Grupo, String Cargo) throws SQLException {
+    public static void AgregarEmpleados(Connection conexion, String Nombre, String Apellido, String DNI, String Domicilio, String Email, String Telefono, String Fecha, String Grupo, String Cargo, int iduser) throws SQLException {
 
         int gs = 0;
         int car = 0;
@@ -139,7 +140,11 @@ public class Empleados {
             car = rs3.getInt("idCargo");
         }
 
-        PreparedStatement stm = conexion.prepareStatement("INSERT INTO empleado (nombre, apellido, dni, domicilio, email, telefono, fecha_nac, borrado, idGrupoSanguineo, idCargo) VALUES (?,?,?,?,?,?,?,?,?,?)");
+        PreparedStatement stm = conexion.prepareStatement(
+                "INSERT INTO empleado (nombre, apellido, dni, domicilio, email, telefono, fecha_nac, borrado, idGrupoSanguineo, idCargo, idUsuario) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
+                // Usa la constante RETURN_GENERATED_KEYS
+                Statement.RETURN_GENERATED_KEYS
+        );
         stm.setString(1, Nombre);
         stm.setString(2, Apellido);
         stm.setString(3, DNI);
@@ -150,24 +155,73 @@ public class Empleados {
         stm.setInt(8, 0);
         stm.setInt(9, gs);
         stm.setInt(10, car);
-
+        stm.setInt(11, iduser);
+        int nuevoId = 0;
         try {
-            stm.execute();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "ERROR12" + e);
+            int filasAfectadas = stm.executeUpdate();
+            if (filasAfectadas > 0) {
+                try (java.sql.ResultSet rs = stm.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        int nuevoIdEmpleado = rs.getInt(1);
+                        PreparedStatement stm4 = conexion.prepareStatement("INSERT INTO auditoria_empleado (evento, id_empleado, id_usuario) VALUES (?, ?, ?)");
+                        stm4.setString(1, "NUEVO_USUARIO");
+                        stm4.setInt(2, nuevoIdEmpleado);
+                        stm4.setInt(3, iduser);
+                        try {
+                            stm4.execute();
+                        } catch (Exception e) {
+                            JOptionPane.showMessageDialog(null, "ERROR12" + e);
+                        }
+                    } else {
+                        System.out.println("⚠️ Insertado, pero no se pudo obtener el ID.");
+                    }
+                }
+            } else {
+                System.out.println("❌ Error: No se insertó ninguna fila.");
+            }
+        } catch (java.sql.SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error en la inserción: " + e.getMessage());
         }
     }
 
-    public static void EliminarEmpleados(Connection conexion, int Codigo, int borrado) throws SQLException {
+    public static void EliminarEmpleados(Connection conexion, int Codigo, int borrado, int iduser) throws SQLException {
 
-        PreparedStatement stm = conexion.prepareStatement("UPDATE empleado SET Borrado= ? WHERE id_Empleado = ?");
-        stm.setInt(1, borrado);
-        stm.setInt(2, Codigo);
+        boolean autoCommit = conexion.getAutoCommit();
+        conexion.setAutoCommit(false);
 
-        try {
-            stm.executeUpdate();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "ERROR12");
+        String sqlUpdate = "UPDATE empleado SET Borrado = ? WHERE id_Empleado = ?";
+        String sqlAuditoria = "INSERT INTO auditoria_empleado (evento, id_empleado, id_usuario) VALUES (?, ?, ?)";
+
+        try (PreparedStatement stm = conexion.prepareStatement(sqlUpdate);
+                PreparedStatement psAudit = conexion.prepareStatement(sqlAuditoria)) {
+            stm.setInt(1, borrado);
+            stm.setInt(2, Codigo);
+            int filasActualizadas = stm.executeUpdate();
+
+            if (filasActualizadas > 0) {
+
+                psAudit.setString(1, "BORRADO_LOGICO");
+                psAudit.setInt(2, Codigo);
+                psAudit.setInt(3, iduser);
+                psAudit.executeUpdate();
+
+                // 3. Confirmar la Transacción solo si AMBAS operaciones fueron exitosas
+                conexion.commit();
+                JOptionPane.showMessageDialog(null, "✅ Borrado lógico y auditoría registrados con éxito.");
+            } else {
+                // Si no se actualizó ninguna fila (el empleado no existía), hacemos rollback y notificamos.
+                conexion.rollback();
+                JOptionPane.showMessageDialog(null, "⚠️ No se encontró al empleado para el borrado.");
+            }
+
+        } catch (SQLException e) {
+            // 4. Si algo falla (el UPDATE o el INSERT), deshacer todo
+            conexion.rollback();
+            JOptionPane.showMessageDialog(null, "❌ Error al procesar la operación. Transacción deshecha: " + e.getMessage());
+            throw e;
+
+        } finally {
+            conexion.setAutoCommit(autoCommit);
         }
     }
 
@@ -256,7 +310,7 @@ public class Empleados {
         }
     }
 
-    public static void ModificarEmpleados(Connection conexion, int id, String Nombre, String Apellido, String DNI, String Domicilio, String Email, String Telefono, String Fecha, String Grupo, String Cargo) throws SQLException {
+    public static void ModificarEmpleados(Connection conexion, int id, String Nombre, String Apellido, String DNI, String Domicilio, String Email, String Telefono, String Fecha, String Grupo, String Cargo, int iduser) throws SQLException {
 
         int gs = 0;
         int car = 0;
@@ -289,6 +343,15 @@ public class Empleados {
 
         try {
             stm.execute();
+            PreparedStatement stm4 = conexion.prepareStatement("INSERT INTO auditoria_empleado (evento, id_empleado, id_usuario) VALUES (?, ?, ?)");
+            stm4.setString(1, "ACTUALIZACIÓN_USUARIO");
+            stm4.setInt(2, id);
+            stm4.setInt(3, iduser);
+            try {
+                stm4.execute();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "ERROR12" + e);
+            }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "ERROR12" + e);
         }
@@ -302,7 +365,7 @@ public class Empleados {
         if (rs.next()) {
             int opcion = JOptionPane.showConfirmDialog(
                     null,
-                    "¿Deseás Eliminar todos los clientes con esta zona?",
+                    "¿Deseás Eliminar todos los clientes con esta Cargo?",
                     "Confirmar acción",
                     JOptionPane.OK_CANCEL_OPTION,
                     JOptionPane.QUESTION_MESSAGE

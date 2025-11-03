@@ -60,7 +60,7 @@ public class MenuClass {
         // Si la ventana no implementa la interfaz, asumimos que no hay bloqueo
         return false;
     }
-    
+
     private boolean isBlocked2() {
         // Chequea si la ventanaAnterior es una IBlockableFrame
         if (ventanaAnterior instanceof IBlockableFrame) {
@@ -143,8 +143,8 @@ public class MenuClass {
             }
 
             public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) { 
-                    if (!isBlocked()) { 
+                if (e.getClickCount() == 2) {
+                    if (!isBlocked()) {
 
                         VISTA.Menu ventana = new VISTA.Menu();
 
@@ -176,7 +176,7 @@ public class MenuClass {
 
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
-                    if (!isBlocked()) { 
+                    if (!isBlocked()) {
 
                         VISTA.Asistencia ventana = new VISTA.Asistencia();
 
@@ -209,7 +209,7 @@ public class MenuClass {
 
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
-                    if (!isBlocked()) { 
+                    if (!isBlocked()) {
 
                         VISTA.Empleados ventana = new VISTA.Empleados();
 
@@ -241,7 +241,7 @@ public class MenuClass {
 
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
-                    if (!isBlocked()) { 
+                    if (!isBlocked()) {
 
                         VISTA.Estadisticas ventana = new VISTA.Estadisticas();
 
@@ -273,7 +273,7 @@ public class MenuClass {
 
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
-                    if (!isBlocked()) { 
+                    if (!isBlocked()) {
 
                         VISTA.Ayuda ventana = new VISTA.Ayuda();
 
@@ -302,7 +302,7 @@ public class MenuClass {
 
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
-                    if (!isBlocked()) { 
+                    if (!isBlocked()) {
 
                         VISTA.Configuracion ventana = new VISTA.Configuracion();
 
@@ -334,8 +334,30 @@ public class MenuClass {
 
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
-                    if (!isBlocked2()) { 
-                        System.exit(0);
+                    if (!isBlocked2()) {
+                        int valid = CLASES.Usuario.verificacion();
+                        if (valid == 0) {
+                            System.exit(0);
+                        } else {
+                            int opcion = JOptionPane.showConfirmDialog(
+                                    null,
+                                    "¿Deseás Cerrar sesión?",
+                                    "Confirmar acción",
+                                    JOptionPane.OK_CANCEL_OPTION,
+                                    JOptionPane.QUESTION_MESSAGE
+                            );
+
+                            if (opcion == JOptionPane.OK_OPTION) {
+                                CLASES.Usuario.CerrarSesion2();
+                                Menu ventana = new Menu();
+                                ventana.setVisible(true);
+                                if (ventanaAnterior != null) {
+                                    ventanaAnterior.dispose();
+                                }
+                            } else if (opcion == JOptionPane.CANCEL_OPTION || opcion == JOptionPane.CLOSED_OPTION) {
+                                System.out.println("Cancelado");
+                            }
+                        }
                     }
                 }
             }

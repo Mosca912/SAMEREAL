@@ -676,7 +676,7 @@ public class Asistencia extends javax.swing.JFrame implements CLASES.IBlockableF
         Barra.add(Configuracion);
 
         Salir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/salir.png"))); // NOI18N
-        Salir.setText("Salir");
+        Salir.setText("Cerrar Sesión");
         Salir.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         Salir.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         Barra.add(Salir);
