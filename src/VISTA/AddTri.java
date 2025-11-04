@@ -35,8 +35,8 @@ public class AddTri extends javax.swing.JDialog {
         LocalDate hoy = LocalDate.now();
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy/MM/dd");
         fechaActual = hoy.format(formato);
-        
-        iduser=CLASES.Usuario.iduser();
+
+        iduser = CLASES.Usuario.iduser();
 
         fechaActual = hoy.format(formato);
         if (idband == 0) {

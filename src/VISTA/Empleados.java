@@ -28,7 +28,7 @@ public class Empleados extends javax.swing.JFrame implements CLASES.IBlockableFr
     public int getBlockState() {
         return this.block;
     }
-    
+
     @Override
     public int getBlockStateSalir() {
         return this.block2;
@@ -38,7 +38,7 @@ public class Empleados extends javax.swing.JFrame implements CLASES.IBlockableFr
     Connection con = Conexiones.Conexion();
     ResultSet rs;
     int cont = 0;
-    public int block = 0, block2=0, rango=0, iduser;
+    public int block = 0, block2 = 0, rango = 0, iduser;
 
     public void refrescarTablaEmpleados() {
         tabla1.setRowCount(0); // Limpia
@@ -48,8 +48,6 @@ public class Empleados extends javax.swing.JFrame implements CLASES.IBlockableFr
             JOptionPane.showMessageDialog(null, "Error al refrescar categorías");
         }
     }
-    
-    
 
     public void refrescarCombo() {
         while (Cargo.getItemCount() > 1) {
@@ -110,16 +108,16 @@ public class Empleados extends javax.swing.JFrame implements CLASES.IBlockableFr
         menuHelper.MenuConfig(Movimientos, Menu, Asistencia, Empleados, Estadisticas, Ayuda, Configuracion, Salir, this);
 
         int ventana = CLASES.MenuClass.Ventana();
-        
-        rango=CLASES.Usuario.rango();
-        if (rango==2){
+
+        rango = CLASES.Usuario.rango();
+        if (rango == 2) {
             Cargar.setEnabled(false);
             Eliminar.setEnabled(false);
             Modificar.setEnabled(false);
             opcCargo.setEnabled(false);
         }
-        
-        iduser=CLASES.Usuario.iduser();
+
+        iduser = CLASES.Usuario.iduser();
 
         Nombre.setEnabled(false);
         Apellido.setEnabled(false);
@@ -143,7 +141,7 @@ public class Empleados extends javax.swing.JFrame implements CLASES.IBlockableFr
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
         Tabla.setDefaultRenderer(Object.class, centerRenderer);
-        
+
         if (ventana == 0) {
             this.setExtendedState(NORMAL);
             Tabla.setRowHeight(30);
@@ -1247,7 +1245,7 @@ public class Empleados extends javax.swing.JFrame implements CLASES.IBlockableFr
 
         switch (seleccion) {
             case "Nuevo":
-                AddAreaCargo ventana3 = new AddAreaCargo (this, 1);
+                AddAreaCargo ventana3 = new AddAreaCargo(this, 1);
                 ventana3.setVisible(true);
                 refrescarCombo();
                 break;
@@ -1285,8 +1283,8 @@ public class Empleados extends javax.swing.JFrame implements CLASES.IBlockableFr
     }//GEN-LAST:event_nuevtripActionPerformed
 
     private void nuevovicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevovicActionPerformed
-        int ban=0;
-        AddVic ventana = new AddVic(this,ban);
+        int ban = 0;
+        AddVic ventana = new AddVic(this, ban);
         if (rango == 1) {
             ventana.setVisible(true);
         } else {
@@ -1360,8 +1358,8 @@ public class Empleados extends javax.swing.JFrame implements CLASES.IBlockableFr
 
         switch (seleccion) {
             case "Nuevo":
-                AddAreaCargo ventana3 = new AddAreaCargo (this, 0);
-                ventana3.setVisible(true);   
+                AddAreaCargo ventana3 = new AddAreaCargo(this, 0);
+                ventana3.setVisible(true);
                 refrescarCombo();
                 break;
             case "Modificar":

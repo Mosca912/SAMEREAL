@@ -195,7 +195,7 @@ public class AddAreaCargo extends javax.swing.JDialog {
             } else {
                 JOptionPane.showMessageDialog(null, "¡HAY CAMPOS VACIOS! Por favor, revise");
             }
-        } else if (ban==0){
+        } else if (ban == 0) {
             if (!nomb.trim().isEmpty()) {
                 try {
                     CLASES.Empleados.AgregarArea(con, nomb, id);

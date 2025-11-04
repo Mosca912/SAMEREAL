@@ -340,7 +340,7 @@ public class Movimiento extends javax.swing.JFrame {
 
         AddT.setBackground(new java.awt.Color(78, 247, 177));
         AddT.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        AddT.setText("Añadir tripulación");
+        AddT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/mas.png"))); // NOI18N
         AddT.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         AddT.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         AddT.addActionListener(new java.awt.event.ActionListener() {
@@ -351,7 +351,7 @@ public class Movimiento extends javax.swing.JFrame {
 
         Editar.setBackground(new java.awt.Color(78, 247, 177));
         Editar.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        Editar.setText("Editar Tripulacion");
+        Editar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/edit.png"))); // NOI18N
         Editar.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         Editar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         Editar.addActionListener(new java.awt.event.ActionListener() {
@@ -361,7 +361,7 @@ public class Movimiento extends javax.swing.JFrame {
         });
 
         Eliminartrip.setBackground(new java.awt.Color(78, 247, 177));
-        Eliminartrip.setText("Eliminar");
+        Eliminartrip.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/x.png"))); // NOI18N
         Eliminartrip.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         Eliminartrip.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -383,9 +383,12 @@ public class Movimiento extends javax.swing.JFrame {
         );
         jPanel15Layout.setVerticalGroup(
             jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(AddT, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(Editar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(Eliminartrip, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel15Layout.createSequentialGroup()
+                .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(AddT, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(Editar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(Eliminartrip, javax.swing.GroupLayout.PREFERRED_SIZE, 45, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         jPanel17.setBackground(new java.awt.Color(255, 255, 255));
@@ -394,7 +397,7 @@ public class Movimiento extends javax.swing.JFrame {
 
         AddV.setBackground(new java.awt.Color(78, 247, 177));
         AddV.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        AddV.setText("Añadir victor");
+        AddV.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/mas.png"))); // NOI18N
         AddV.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         AddV.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         AddV.addActionListener(new java.awt.event.ActionListener() {
@@ -405,7 +408,7 @@ public class Movimiento extends javax.swing.JFrame {
 
         Eliminarvic.setBackground(new java.awt.Color(78, 247, 177));
         Eliminarvic.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        Eliminarvic.setText("Eliminar victor");
+        Eliminarvic.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/x.png"))); // NOI18N
         Eliminarvic.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         Eliminarvic.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -414,7 +417,7 @@ public class Movimiento extends javax.swing.JFrame {
         });
 
         EditarVic.setBackground(new java.awt.Color(78, 247, 177));
-        EditarVic.setText("Eliminar");
+        EditarVic.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/edit.png"))); // NOI18N
         EditarVic.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         EditarVic.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -502,7 +505,7 @@ public class Movimiento extends javax.swing.JFrame {
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 446, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 435, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
