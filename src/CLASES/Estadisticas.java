@@ -65,7 +65,7 @@ public class Estadisticas {
 
     public static void victor(Connection conexion, JComboBox<Estadisticas.Victor1> combo) {
 
-        String sql4 = "SELECT idAmbulancia, victor FROM ambulancia";
+        String sql4 = "SELECT idAmbulancia, victor FROM ambulancia where borrado=0";
         try {
             PreparedStatement ps = conexion.prepareStatement(sql4);
             ResultSet rs = ps.executeQuery();
@@ -91,7 +91,7 @@ public class Estadisticas {
         List<Integer> victor = new ArrayList<>();
 
         // 1️⃣ Obtener todos los idAmbulancia y victor
-        String sqlAmbulancias = "SELECT idAmbulancia, victor FROM ambulancia;";
+        String sqlAmbulancias = "SELECT idAmbulancia, victor FROM ambulancia where borrado=0;";
         try (PreparedStatement ps = conexion.prepareStatement(sqlAmbulancias);
                 ResultSet rs = ps.executeQuery()) {
 
@@ -109,11 +109,7 @@ public class Estadisticas {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
         // 2️⃣ Recorrer cada ambulancia y contar sus movimientos por mes
-        String sqlMovimientos = "SELECT MONTH(movimientos.fecha) AS mes, COUNT(*) AS cantidad_movimientos "
-                + "FROM movimientos "
-                + "INNER JOIN tripulacion ON movimientos.idtripulacion = tripulacion.idtripulacion "
-                + "WHERE tripulacion.idAmbulancia = ? "
-                + "GROUP BY MONTH(fecha) ORDER BY mes;";
+        String sqlMovimientos = "SELECT MONTH(movimientos.fecha) AS mes, COUNT(*) AS cantidad_movimientos FROM movimientos INNER JOIN tripulacion ON movimientos.idtripulacion = tripulacion.idtripulacion WHERE tripulacion.idAmbulancia = ? and tripulacion.borrado=0 GROUP BY MONTH(fecha) ORDER BY mes;";
 
         for (int i = 0; i < ambulancias.size(); i++) {
             int idAmb = ambulancias.get(i);

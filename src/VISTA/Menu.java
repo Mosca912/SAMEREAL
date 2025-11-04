@@ -38,7 +38,7 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
         cerrarsesion.setVisible(true);
         MostOcPass.setVisible(false);
     }
-    
+
     public void cerrado() {
         DNI.setVisible(true);
         contrasena.setVisible(true);
@@ -61,7 +61,7 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
         Salir.setEnabled(true);
         block = 0;
     }
-    
+
     public void botonesblock() {
         block = 1;
         Barra.setEnabled(false);
@@ -73,11 +73,11 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
         Ayuda.setEnabled(false);
         Configuracion.setEnabled(false);
         cerrarsesion.setVisible(false);
-        
+
         labelnu.setVisible(false);
         registrarse.setVisible(false);
         Ayudin.setVisible(false);
-        
+
         DNI.setVisible(true);
         contrasena.setVisible(true);
         labelogin.setVisible(true);
@@ -125,7 +125,7 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
         CLASES.MenuClass.Configuracion();
 
         initComponents();
-        
+
         block = 1;
         Barra.setEnabled(false);
         Menu.setEnabled(false);
@@ -240,6 +240,11 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
         DNI.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         DNI.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)), "DNI", javax.swing.border.TitledBorder.LEADING, javax.swing.border.TitledBorder.ABOVE_TOP, new java.awt.Font("Tahoma", 1, 14))); // NOI18N
         DNI.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        DNI.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                DNIKeyTyped(evt);
+            }
+        });
         menuinicio.add(DNI, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 90, 100, 40));
 
         contrasena.setBackground(new java.awt.Color(204, 204, 204));
@@ -316,7 +321,6 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
         MostOcPass.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/ojoabierto.png"))); // NOI18N
         MostOcPass.setBorder(null);
         MostOcPass.setContentAreaFilled(false);
-        MostOcPass.setOpaque(false);
         MostOcPass.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 MostOcPassActionPerformed(evt);
@@ -540,7 +544,7 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
 
     private void nuevtripActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevtripActionPerformed
         AddTri ventana = new AddTri(0, this);
-        if (rango == 1){
+        if (rango == 1) {
             ventana.setVisible(true);
         } else {
             JOptionPane.showMessageDialog(null, "Es un usuario lector!");
@@ -553,8 +557,9 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
     }//GEN-LAST:event_historialActionPerformed
 
     private void nuevovicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevovicActionPerformed
-        AddVic ventana = new AddVic(this);
-        if (rango == 1){
+        int ban=0;
+        AddVic ventana = new AddVic(this,ban);
+        if (rango == 1) {
             ventana.setVisible(true);
         } else {
             JOptionPane.showMessageDialog(null, "Es un usuario lector!");
@@ -563,7 +568,7 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
 
     private void modActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modActionPerformed
         ModElimCargo1 ventana = new ModElimCargo1(1, this);
-        if (rango == 1){
+        if (rango == 1) {
             ventana.setVisible(true);
         } else {
             JOptionPane.showMessageDialog(null, "Es un usuario lector!");
@@ -584,7 +589,7 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
 
     private void elimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_elimActionPerformed
         ModElimCargo1 ventana = new ModElimCargo1(0, this);
-        if (rango == 1){
+        if (rango == 1) {
             ventana.setVisible(true);
         } else {
             JOptionPane.showMessageDialog(null, "Es un usuario lector!");
@@ -678,15 +683,34 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
         );
 
         if (opcion == JOptionPane.OK_OPTION) {
-            CLASES.Usuario.CerrarSesion(labelogin);
+            try {
+                CLASES.Usuario.CerrarSesion(con, labelogin);
+            } catch (SQLException ex) {
+                Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+            }
             valid = CLASES.Usuario.verificacion();
             rango = CLASES.Usuario.rango();
             botonesblock();
-            
+            Salir.setText("Salir");
+
         } else if (opcion == JOptionPane.CANCEL_OPTION || opcion == JOptionPane.CLOSED_OPTION) {
             System.out.println("Cancelado");
         }
     }//GEN-LAST:event_cerrarsesionActionPerformed
+
+    private void DNIKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_DNIKeyTyped
+        char r = evt.getKeyChar();
+
+        if (Character.isISOControl(r)) {
+            return; // permite borrar, mover, etc.
+        }
+
+        //Solo permite letras, numeros y signos no
+        if (!Character.isDigit(r)) {
+            getToolkit().beep();
+            evt.consume();
+        }
+    }//GEN-LAST:event_DNIKeyTyped
 
     /**
      * @param args the command line arguments

@@ -32,7 +32,7 @@ public class Relevar extends javax.swing.JDialog {
     Connection con = Conexiones.Conexion();
     ResultSet rs;
     int idChofer, idMedico, idEnfermero, idvictor;
-    static int idtrip2;
+    static int idtrip2, iduser;
     String fechaActual, fechaActual2, veri;
 
     private BufferedImage imagen;      // la imagen de fondo
@@ -235,6 +235,8 @@ public class Relevar extends javax.swing.JDialog {
         fechaActual = hoy.format(formato2);
         CLASES.Relevar.Relevo(con, Victor, anterior1, saliente1, kmi1, kmf, turno, serie, idtrip);
         Fecha1.setText(fechaActual2);
+        
+        iduser = CLASES.Usuario.iduser();
 
         // Le quitamos los ticks y labels si querés
         slider.setPaintTicks(false);
@@ -1834,7 +1836,7 @@ public class Relevar extends javax.swing.JDialog {
             String texto = observations.getText();
 
             try {
-                CLASES.Relevar.Insert(con, luzpos, luzdir, luzalt, luzdest, luzbaj, luzfre, luztras, limpara, fren, indictemp, testserv, indcom, indac, carbat, calair, bal, ant, sir, eqcom, cint, rueda, lla, gan, cat, lavadero2, entregaypf, liquidfreno, refrigerante, matafuego, texto, fechaActual, idtrip2);
+                CLASES.Relevar.Insert(con, luzpos, luzdir, luzalt, luzdest, luzbaj, luzfre, luztras, limpara, fren, indictemp, testserv, indcom, indac, carbat, calair, bal, ant, sir, eqcom, cint, rueda, lla, gan, cat, lavadero2, entregaypf, liquidfreno, refrigerante, matafuego, texto, fechaActual, idtrip2, iduser);
             } catch (Exception ex) {
                 Logger.getLogger(Relevar.class.getName()).log(Level.SEVERE, null, ex);
             }

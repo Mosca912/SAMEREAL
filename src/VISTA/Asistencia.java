@@ -41,7 +41,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class Asistencia extends javax.swing.JFrame implements CLASES.IBlockableFrame {
 
-    public int x = 0, c = 0, id, id2;
+    public int x = 0, c = 0, id, id2, iduser;
     String emp = "";
     Connection con = Conexiones.Conexion();
     ResultSet rs;
@@ -158,6 +158,8 @@ public class Asistencia extends javax.swing.JFrame implements CLASES.IBlockableF
         cargar.setEnabled(false);
         CLASES.Asistencia.Select(con, area);
         Actualizar.setEnabled(false);
+        
+        iduser=CLASES.Usuario.iduser();
 
         for (int i = 1; i <= 31; i++) {
             Object[] fila = {i, "", "", ""};
@@ -216,7 +218,7 @@ public class Asistencia extends javax.swing.JFrame implements CLASES.IBlockableF
                 return c;
             }
         });
-        
+
         if (rango == 1) {
             Tabla.addMouseListener(new MouseAdapter() {
                 @Override
@@ -411,11 +413,10 @@ public class Asistencia extends javax.swing.JFrame implements CLASES.IBlockableF
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(area)
-                        .addComponent(empleado)
-                        .addComponent(cargar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE))
+                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
+                    .addComponent(cargar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(empleado)
+                    .addComponent(area))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -732,7 +733,7 @@ public class Asistencia extends javax.swing.JFrame implements CLASES.IBlockableF
                     block2 = 1;
                 }
                 try {
-                    CLASES.Asistencia.Verificacion(con, id2);
+                    CLASES.Asistencia.Verificacion(con, id2, iduser);
                 } catch (SQLException ex) {
                     Logger.getLogger(Asistencia.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (Exception ex) {
@@ -770,9 +771,8 @@ public class Asistencia extends javax.swing.JFrame implements CLASES.IBlockableF
     }//GEN-LAST:event_empleadoActionPerformed
 
     private void cargarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cargarActionPerformed
-
         try {
-            CLASES.Asistencia.AsistenciaReal(con, id2);
+            CLASES.Asistencia.AsistenciaReal(con, id2, iduser);
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "error principal" + ex);
         }
@@ -793,7 +793,7 @@ public class Asistencia extends javax.swing.JFrame implements CLASES.IBlockableF
             String Observaciones = Tabla.getValueAt(filaSeleccionada, 3).toString();
 
             try {
-                CLASES.Asistencia.ActualizarAsistencia(con, Dia, Entrada, Observaciones, id2);
+                CLASES.Asistencia.ActualizarAsistencia(con, Dia, Entrada, Observaciones, id2, iduser);
                 JOptionPane.showMessageDialog(null, "Fila actualizada correctamente.");
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, "⚠️ Error al actualizar: " + ex.getMessage());
@@ -833,7 +833,8 @@ public class Asistencia extends javax.swing.JFrame implements CLASES.IBlockableF
     }//GEN-LAST:event_nuevtripActionPerformed
 
     private void nuevovicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevovicActionPerformed
-        AddVic ventana = new AddVic(this);
+        int ban=0;
+        AddVic ventana = new AddVic(this,ban);
         if (rango == 1) {
             ventana.setVisible(true);
         } else {

@@ -5,7 +5,9 @@
  */
 package VISTA;
 
+import CLASES.Movimientos.Victor;
 import CONEXIONES.Conexiones;
+import java.awt.HeadlessException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -24,12 +26,26 @@ public class AddVic extends javax.swing.JDialog {
 
     Connection con = Conexiones.Conexion();
     ResultSet rs;
+    static int ban, idvic;
+    static String veri;
 
-    public AddVic(JFrame ventanaPrincipal) {
-        super(ventanaPrincipal,true);
+    public AddVic(JFrame ventanaPrincipal, int ban) {
+        super(ventanaPrincipal, true);
         initComponents();
-        
+        AddVic.ban = ban;
         this.setLocationRelativeTo(null);
+        selcvic.setVisible(false);
+        labelvic.setVisible(false);
+        if (ban == 1) {
+            selcvic.setVisible(true);
+            VictorT.setEnabled(false);
+            Modelo.setEnabled(false);
+            Patente.setEnabled(false);
+            Marca.setEnabled(false);
+            matafuego.setEnabled(false);
+            labelvic.setVisible(true);
+            CLASES.Movimientos.victorcomb(con, selcvic);
+        }
     }
 
     /**
@@ -59,10 +75,12 @@ public class AddVic extends javax.swing.JDialog {
             formatter.setPlaceholderCharacter('_');
             Patente = new javax.swing.JFormattedTextField(formatter);
             Marca = new javax.swing.JTextField();
+            labelvic = new javax.swing.JLabel();
+            selcvic = new javax.swing.JComboBox<>();
 
             setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-            setMaximumSize(new java.awt.Dimension(431, 243));
-            setMinimumSize(new java.awt.Dimension(431, 243));
+            setMaximumSize(new java.awt.Dimension(430, 270));
+            setMinimumSize(new java.awt.Dimension(430, 270));
             setUndecorated(true);
             setPreferredSize(new java.awt.Dimension(431, 243));
             getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -75,6 +93,12 @@ public class AddVic extends javax.swing.JDialog {
 
             jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
             jLabel2.setText("Victor");
+
+            VictorT.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyTyped(java.awt.event.KeyEvent evt) {
+                    VictorTKeyTyped(evt);
+                }
+            });
 
             jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
             jLabel3.setText("Patente");
@@ -112,36 +136,19 @@ public class AddVic extends javax.swing.JDialog {
             e.printStackTrace();
         }
 
+        labelvic.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        labelvic.setText("Seleccione un victor:");
+
+        selcvic.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                selcvicActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(Patente, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(VictorT, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel5))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(Modelo, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(Marca, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(Volver, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(224, 224, 224)
-                        .addComponent(Cargar, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(23, 23, 23))
-                    .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 409, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 9, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -153,6 +160,41 @@ public class AddVic extends javax.swing.JDialog {
                         .addGap(148, 148, 148)
                         .addComponent(jLabel1)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel2)
+                                            .addComponent(jLabel3))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(Patente, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(VictorT, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel4)
+                                            .addComponent(jLabel5))
+                                        .addGap(18, 18, 18)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(Modelo, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(Marca, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 409, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(Volver, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(Cargar, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 9, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(labelvic)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(selcvic, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -180,16 +222,20 @@ public class AddVic extends javax.swing.JDialog {
                         .addGap(30, 30, 30)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel6)
-                            .addComponent(matafuego, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(Volver, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(Cargar, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(matafuego, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(Marca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(labelvic)
+                    .addComponent(selcvic, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Volver, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Cargar, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 430, 240));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 430, 270));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -205,17 +251,81 @@ public class AddVic extends javax.swing.JDialog {
         String marca = Marca.getText();
         String matafueg = matafuego.getText();
         if (!vic.trim().isEmpty() && !model.trim().isEmpty() && !pat.equals("__-___-__") && !marca.trim().isEmpty() && !matafueg.trim().isEmpty()) {
-            try {
-                CLASES.Movimientos.CargaVic(con, vic, model, pat, marca, matafueg);
-                JOptionPane.showMessageDialog(null, "Cargao");
-                this.dispose();;
-            } catch (SQLException ex) {
-                Logger.getLogger(AddVic.class.getName()).log(Level.SEVERE, null, ex);
+            if (ban == 0) {
+                try {
+                    CLASES.Movimientos.CargaVic(con, vic, model, pat, marca, matafueg);
+                    JOptionPane.showMessageDialog(null, "Cargao");
+                    this.dispose();;
+                } catch (SQLException ex) {
+                    Logger.getLogger(AddVic.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else if (ban == 1) {
+                try {
+                    CLASES.Movimientos.actVic(con, vic, model, pat, marca, matafueg, idvic);
+                    JOptionPane.showMessageDialog(null, "Cargao");
+                    this.dispose();;
+                } catch (SQLException ex) {
+                    Logger.getLogger(AddVic.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         } else {
             JOptionPane.showMessageDialog(null, "¡HAY CAMPOS VACIOS! Por favor, revise");
         }
     }//GEN-LAST:event_CargarActionPerformed
+
+    private void selcvicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selcvicActionPerformed
+        Object value = selcvic.getSelectedItem();
+        if (value instanceof Victor) {
+            Victor vic = (Victor) value;
+            idvic = vic.getId();
+            veri = vic.getNombre();
+
+            if (!veri.equals("Opciones")) {
+                try {
+                    VictorT.setText("");
+                    Modelo.setText("");
+                    Patente.setText("__-___-__");
+                    Marca.setText("");
+                    matafuego.setText("");
+                    VictorT.setEnabled(true);
+                    Modelo.setEnabled(true);
+                    Patente.setEnabled(true);
+                    Marca.setEnabled(true);
+                    matafuego.setEnabled(true);
+                    CLASES.Movimientos.EditarVic(con, VictorT, Modelo, Patente, Marca, matafuego, idvic);
+                } catch (HeadlessException e) {
+                    JOptionPane.showMessageDialog(null, e);
+                } catch (SQLException ex) {
+                    Logger.getLogger(AddVic.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else {
+                VictorT.setEnabled(false);
+                Modelo.setEnabled(false);
+                Patente.setEnabled(false);
+                Marca.setEnabled(false);
+                matafuego.setEnabled(false);
+                VictorT.setText("");
+                Modelo.setText("");
+                Patente.setText("");
+                Marca.setText("");
+                matafuego.setText("");
+            }
+        }
+    }//GEN-LAST:event_selcvicActionPerformed
+
+    private void VictorTKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_VictorTKeyTyped
+        char r = evt.getKeyChar();
+
+        if (Character.isISOControl(r)) {
+            return; // permite borrar, mover, etc.
+        }
+
+        //Solo permite letras, numeros y signos no
+        if (!Character.isDigit(r)) {
+            getToolkit().beep();
+            evt.consume();
+        }
+    }//GEN-LAST:event_VictorTKeyTyped
 
     /**
      * @param args the command line arguments
@@ -247,7 +357,7 @@ public class AddVic extends javax.swing.JDialog {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new AddVic(null).setVisible(true);
+                new AddVic(null, ban).setVisible(true);
             }
         });
     }
@@ -267,6 +377,8 @@ public class AddVic extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JLabel labelvic;
     private javax.swing.JTextField matafuego;
+    private javax.swing.JComboBox<Victor> selcvic;
     // End of variables declaration//GEN-END:variables
 }

@@ -35,7 +35,7 @@ public class Movimiento extends javax.swing.JFrame {
 
     Connection con = Conexiones.Conexion();
     ResultSet rs;
-    int id = 0, band, cont = 0, idtrip, block = 0, rango, valid;
+    int id = 0, band, cont = 0, idtrip, block = 0, rango, valid, iduser;
     String veri, fechaActual;
 
     public void refrescarCombo() {
@@ -113,6 +113,8 @@ public class Movimiento extends javax.swing.JFrame {
         Eliminar.setEnabled(false);
         Terminar.setEnabled(false);
         Cancelar.setEnabled(false);
+
+        iduser = CLASES.Usuario.iduser();
 
         LocalDate hoy = LocalDate.now();
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -198,9 +200,7 @@ public class Movimiento extends javax.swing.JFrame {
             Font fuenteGrande = new Font("Arial", Font.BOLD, 25);
             horaField.setFont(fuenteGrande);
 
-
             horaField.setHorizontalAlignment(JTextField.CENTER);
-
 
             DefaultCellEditor editor = new DefaultCellEditor(horaField);
             Tabla.getColumnModel().getColumn(1).setCellEditor(editor); // salida
@@ -243,10 +243,14 @@ public class Movimiento extends javax.swing.JFrame {
         jPanel4 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         Trip = new javax.swing.JComboBox<>();
+        jPanel15 = new javax.swing.JPanel();
         AddT = new javax.swing.JButton();
-        AddV = new javax.swing.JButton();
         Editar = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        Eliminartrip = new javax.swing.JButton();
+        jPanel17 = new javax.swing.JPanel();
+        AddV = new javax.swing.JButton();
+        Eliminarvic = new javax.swing.JButton();
+        EditarVic = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         Tabla = new javax.swing.JTable();
@@ -322,12 +326,17 @@ public class Movimiento extends javax.swing.JFrame {
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/movimiento.png"))); // NOI18N
         jLabel1.setText("Selección:");
 
+        Trip.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         Trip.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         Trip.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 TripActionPerformed(evt);
             }
         });
+
+        jPanel15.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel15.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Tripulación", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
+        jPanel15.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
 
         AddT.setBackground(new java.awt.Color(78, 247, 177));
         AddT.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
@@ -337,17 +346,6 @@ public class Movimiento extends javax.swing.JFrame {
         AddT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 AddTActionPerformed(evt);
-            }
-        });
-
-        AddV.setBackground(new java.awt.Color(78, 247, 177));
-        AddV.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        AddV.setText("Añadir victor");
-        AddV.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        AddV.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        AddV.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                AddVActionPerformed(evt);
             }
         });
 
@@ -362,15 +360,86 @@ public class Movimiento extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setBackground(new java.awt.Color(78, 247, 177));
-        jButton1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jButton1.setText("Eliminar victor");
-        jButton1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        Eliminartrip.setBackground(new java.awt.Color(78, 247, 177));
+        Eliminartrip.setText("Eliminar");
+        Eliminartrip.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        Eliminartrip.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                EliminartripActionPerformed(evt);
             }
         });
+
+        javax.swing.GroupLayout jPanel15Layout = new javax.swing.GroupLayout(jPanel15);
+        jPanel15.setLayout(jPanel15Layout);
+        jPanel15Layout.setHorizontalGroup(
+            jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel15Layout.createSequentialGroup()
+                .addComponent(AddT, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(37, 37, 37)
+                .addComponent(Editar, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(37, 37, 37)
+                .addComponent(Eliminartrip, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        jPanel15Layout.setVerticalGroup(
+            jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(AddT, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(Editar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(Eliminartrip, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        jPanel17.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel17.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Victor", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
+        jPanel17.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+
+        AddV.setBackground(new java.awt.Color(78, 247, 177));
+        AddV.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        AddV.setText("Añadir victor");
+        AddV.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        AddV.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        AddV.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AddVActionPerformed(evt);
+            }
+        });
+
+        Eliminarvic.setBackground(new java.awt.Color(78, 247, 177));
+        Eliminarvic.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        Eliminarvic.setText("Eliminar victor");
+        Eliminarvic.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        Eliminarvic.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                EliminarvicActionPerformed(evt);
+            }
+        });
+
+        EditarVic.setBackground(new java.awt.Color(78, 247, 177));
+        EditarVic.setText("Eliminar");
+        EditarVic.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        EditarVic.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                EditarVicActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel17Layout = new javax.swing.GroupLayout(jPanel17);
+        jPanel17.setLayout(jPanel17Layout);
+        jPanel17Layout.setHorizontalGroup(
+            jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel17Layout.createSequentialGroup()
+                .addComponent(AddV, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
+                .addComponent(EditarVic, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(33, 33, 33)
+                .addComponent(Eliminarvic, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        jPanel17Layout.setVerticalGroup(
+            jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(Eliminarvic, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(AddV, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(EditarVic, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -381,33 +450,27 @@ public class Movimiento extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(Trip, javax.swing.GroupLayout.PREFERRED_SIZE, 396, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(AddT, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(Editar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(AddV, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jPanel17, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(13, 13, 13)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(Trip, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(AddT, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(Editar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(AddV, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(13, 13, 13)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(Trip, javax.swing.GroupLayout.Alignment.TRAILING)))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel15, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap())
         );
 
         jPanel6.setBackground(new java.awt.Color(204, 204, 204));
@@ -439,7 +502,7 @@ public class Movimiento extends javax.swing.JFrame {
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 446, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -524,11 +587,11 @@ public class Movimiento extends javax.swing.JFrame {
         jPanel13Layout.setVerticalGroup(
             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel13Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap()
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -536,7 +599,7 @@ public class Movimiento extends javax.swing.JFrame {
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel14.setBackground(new java.awt.Color(204, 204, 204));
@@ -593,9 +656,12 @@ public class Movimiento extends javax.swing.JFrame {
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addComponent(jPanel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(117, 117, 117))
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addComponent(jPanel13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
         jPanel9.setBackground(new java.awt.Color(204, 204, 204));
@@ -740,7 +806,7 @@ public class Movimiento extends javax.swing.JFrame {
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         Cancelar.setBackground(new java.awt.Color(78, 247, 177));
@@ -842,15 +908,14 @@ public class Movimiento extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(10, 10, 10)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, 279, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 31, Short.MAX_VALUE))
+                        .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(Terminar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1038,7 +1103,8 @@ public class Movimiento extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void AddVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddVActionPerformed
-        AddVic ventana = new AddVic(this);
+        int ban = 0;
+        AddVic ventana = new AddVic(this, ban);
         ventana.setVisible(true);
     }//GEN-LAST:event_AddVActionPerformed
 
@@ -1176,7 +1242,7 @@ public class Movimiento extends javax.swing.JFrame {
                     String Destino = Tabla.getValueAt(i, 4).toString();
                     String NumServicio = Tabla.getValueAt(i, 5).toString();
                     try {
-                        CLASES.Movimientos.movimientos(con, cod, Salida, Llegada, Km, Destino, NumServicio, band, id, fechaActual);
+                        CLASES.Movimientos.movimientos(con, cod, Salida, Llegada, Km, Destino, NumServicio, band, id, fechaActual, iduser);
                     } catch (SQLException e) {
                         JOptionPane.showMessageDialog(null, "ERROR1");
                     }
@@ -1239,7 +1305,7 @@ public class Movimiento extends javax.swing.JFrame {
                 String Destino = Tabla.getValueAt(i, 4).toString();
                 String NumServicio = Tabla.getValueAt(i, 5).toString();
                 try {
-                    CLASES.Movimientos.movimientos(con, cod, Salida, Llegada, Km, Destino, NumServicio, band, id, fechaActual);
+                    CLASES.Movimientos.movimientos(con, cod, Salida, Llegada, Km, Destino, NumServicio, band, id, fechaActual, iduser);
                 } catch (SQLException ex) {
                     JOptionPane.showMessageDialog(null, "ERROR");
                 }
@@ -1284,7 +1350,7 @@ public class Movimiento extends javax.swing.JFrame {
                 int fila = Tabla.getSelectedRow();
                 int cod = Integer.parseInt(Tabla.getValueAt(fila, 0).toString());
                 try {
-                    CLASES.Movimientos.EliminarMovimiento(con, cod);
+                    CLASES.Movimientos.EliminarMovimiento(con, cod, iduser, id);
                     JOptionPane.showMessageDialog(null, "Eliminao");
                     tabla1.setRowCount(0);
                     CLASES.Movimientos.MostrarMov(con, tabla1, fechaActual, id);
@@ -1356,7 +1422,8 @@ public class Movimiento extends javax.swing.JFrame {
     }//GEN-LAST:event_nuevtripActionPerformed
 
     private void nuevovicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevovicActionPerformed
-        AddVic ventana = new AddVic(this);
+        int ban = 0;
+        AddVic ventana = new AddVic(this, ban);
         if (rango == 1) {
             ventana.setVisible(true);
         } else {
@@ -1421,13 +1488,42 @@ public class Movimiento extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_MenuActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void EliminarvicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EliminarvicActionPerformed
+        int ban = 0;
+        AddDelVicTrip ventana = new AddDelVicTrip(this, ban);
+        if (rango == 1) {
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
+        this.refrescarCombo();
+    }//GEN-LAST:event_EliminarvicActionPerformed
 
     private void SalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SalirActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_SalirActionPerformed
+
+    private void EditarVicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditarVicActionPerformed
+        int ban = 1;
+        AddVic ventana = new AddVic(this, ban);
+        if (rango == 1) {
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
+        this.refrescarCombo();
+    }//GEN-LAST:event_EditarVicActionPerformed
+
+    private void EliminartripActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EliminartripActionPerformed
+        int ban = 1;
+        AddDelVicTrip ventana = new AddDelVicTrip(this, ban);
+        if (rango == 1) {
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
+        this.refrescarCombo();
+    }//GEN-LAST:event_EliminartripActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1475,7 +1571,10 @@ public class Movimiento extends javax.swing.JFrame {
     private javax.swing.JButton Cancelar;
     private javax.swing.JMenu Configuracion;
     private javax.swing.JButton Editar;
+    private javax.swing.JButton EditarVic;
     private javax.swing.JButton Eliminar;
+    private javax.swing.JButton Eliminartrip;
+    private javax.swing.JButton Eliminarvic;
     private javax.swing.JMenu Empleados;
     private javax.swing.JMenu Estadisticas;
     private javax.swing.JMenu Menu;
@@ -1495,7 +1594,6 @@ public class Movimiento extends javax.swing.JFrame {
     private javax.swing.JMenuItem inicemp;
     private javax.swing.JMenuItem inicioas;
     private javax.swing.JMenuItem iniciomov;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1515,6 +1613,8 @@ public class Movimiento extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel13;
     private javax.swing.JPanel jPanel14;
+    private javax.swing.JPanel jPanel15;
+    private javax.swing.JPanel jPanel17;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;

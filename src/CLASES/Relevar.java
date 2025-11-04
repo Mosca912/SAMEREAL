@@ -42,7 +42,7 @@ public class Relevar {
 
     static Connection con = Conexiones.Conexion();
 
-    public static void Insert(Connection conexion, int luzpos, int luzdir, int luzalt, int luzdest, int luzbaj, int luzfre, int luztras, int limpara, int fren, int indictemp, int testserv, int indcom, int indac, int carbat, int calair, int bal, int ant, int sir, int eqcom, int cint, int rueda, int lla, int gan, int cat, int lavadero2, int entregaypf, int liquidfreno, int refrigerante, int matafuego, String texto, String fecha, int id) {
+    public static void Insert(Connection conexion, int luzpos, int luzdir, int luzalt, int luzdest, int luzbaj, int luzfre, int luztras, int limpara, int fren, int indictemp, int testserv, int indcom, int indac, int carbat, int calair, int bal, int ant, int sir, int eqcom, int cint, int rueda, int lla, int gan, int cat, int lavadero2, int entregaypf, int liquidfreno, int refrigerante, int matafuego, String texto, String fecha, int id, int iduser) {
         LocalDate hoy = LocalDate.now();
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String fechaActual = hoy.format(formato);
@@ -129,6 +129,16 @@ public class Relevar {
             ps6.setString(1, fechaActual);
             ps6.setInt(2, id);
             ps6.execute();
+            
+            PreparedStatement stm9 = conexion.prepareStatement("INSERT INTO auditoria_movimientos (evento, id_tripulacion, id_usuario) VALUES (?, ?, ?)");
+                stm9.setString(1, "RELEVO_COMPLETADO");
+                stm9.setInt(2, id);
+                stm9.setInt(3, iduser);
+                try {
+                    stm9.execute();
+                } catch (SQLException e) {
+                    JOptionPane.showMessageDialog(null, "ERROR: " + e);
+                }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, e);
         }
@@ -300,7 +310,7 @@ public class Relevar {
         document.add(imgInferior);
 
         //segunda pagina
-        document.close();
+        document.close();   
     }
 
     public static void Relevo(Connection conexion, JLabel victor, JLabel anterior, JLabel saliente, JLabel kmi, JLabel kmf, JLabel turno, JLabel serie, int id) {
@@ -397,6 +407,7 @@ public class Relevar {
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "ERROR: " + ex.getMessage());
         }
+        
     }
 
 }

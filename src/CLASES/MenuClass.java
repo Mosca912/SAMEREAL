@@ -5,12 +5,15 @@
  */
 package CLASES;
 
-import VISTA.Asistencia;
+import CONEXIONES.Conexiones;
 import VISTA.Menu;
-import VISTA.Movimiento;
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -24,7 +27,7 @@ import javax.swing.UIManager;
  * @author Facuymayriver
  */
 public class MenuClass {
-
+    Connection con = Conexiones.Conexion();
     static int ventana = 0;
 
     private JFrame ventanaAnterior;
@@ -332,6 +335,7 @@ public class MenuClass {
                 Salir.setBorder(BorderFactory.createLineBorder(new Color(52, 170, 121)));
             }
 
+            @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
                     if (!isBlocked2()) {
@@ -348,7 +352,11 @@ public class MenuClass {
                             );
 
                             if (opcion == JOptionPane.OK_OPTION) {
-                                CLASES.Usuario.CerrarSesion2();
+                                try {
+                                    CLASES.Usuario.CerrarSesion2(con);
+                                } catch (SQLException ex) {
+                                    Logger.getLogger(MenuClass.class.getName()).log(Level.SEVERE, null, ex);
+                                }
                                 Menu ventana = new Menu();
                                 ventana.setVisible(true);
                                 if (ventanaAnterior != null) {

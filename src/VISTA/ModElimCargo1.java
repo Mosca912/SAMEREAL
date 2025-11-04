@@ -44,7 +44,7 @@ public class ModElimCargo1 extends javax.swing.JDialog {
     ModeloEditablePorFila tabla1 = new ModeloEditablePorFila(new String[]{"Nº", "Cargo", "Area"}, 0, band);
 
     public ModElimCargo1(int band, JFrame ventanaPrincipal) {
-        super(ventanaPrincipal,true);
+        super(ventanaPrincipal, true);
         initComponents();
         this.setLocationRelativeTo(null);
         ModElimCargo1.band = band;
@@ -71,6 +71,10 @@ public class ModElimCargo1 extends javax.swing.JDialog {
             Leyenda.setText("Seleccione una opcion que desea modificar");
             Boton.setText("Modificar");
         }
+
+        tablamostrar.setRowHeight(30);
+        tablamostrar.getTableHeader().setReorderingAllowed(false);
+        tablamostrar.getTableHeader().setResizingAllowed(false);
     }
 
     @SuppressWarnings("unchecked")
@@ -151,7 +155,7 @@ public class ModElimCargo1 extends javax.swing.JDialog {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(titulo, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(91, 91, 91))
+                .addGap(100, 100, 100))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

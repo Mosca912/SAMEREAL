@@ -23,7 +23,7 @@ public class AddTri extends javax.swing.JDialog {
 
     Connection con = Conexiones.Conexion();
     ResultSet rs;
-    int idChofer, idMedico, idEnfermero, idvictor, idtrip;
+    int idChofer, idMedico, idEnfermero, idvictor, idtrip, iduser;
     static int idband;
     String fechaActual, veri;
 
@@ -35,6 +35,8 @@ public class AddTri extends javax.swing.JDialog {
         LocalDate hoy = LocalDate.now();
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy/MM/dd");
         fechaActual = hoy.format(formato);
+        
+        iduser=CLASES.Usuario.iduser();
 
         fechaActual = hoy.format(formato);
         if (idband == 0) {
@@ -237,7 +239,7 @@ public class AddTri extends javax.swing.JDialog {
 
         if (idband == 0) {
             try {
-                CLASES.Movimientos.Carga(con, idChofer, idEnfermero, idMedico, idvictor, fechaActual);
+                CLASES.Movimientos.Carga(con, idChofer, idEnfermero, idMedico, idvictor, fechaActual, iduser);
                 this.dispose();
             } catch (HeadlessException e) {
                 JOptionPane.showMessageDialog(null, "ERROR1");
@@ -255,7 +257,7 @@ public class AddTri extends javax.swing.JDialog {
 
             if (opcion == JOptionPane.OK_OPTION) {
                 try {
-                    CLASES.Movimientos.ActualizarTrip(con, idChofer, idEnfermero, idMedico, idvictor, idtrip);
+                    CLASES.Movimientos.ActualizarTrip(con, idChofer, idEnfermero, idMedico, idvictor, idtrip, iduser);
                     JOptionPane.showMessageDialog(null, "Cargao");
                     this.dispose();
                 } catch (HeadlessException e) {

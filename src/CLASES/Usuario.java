@@ -5,12 +5,10 @@
  */
 package CLASES;
 
-import java.awt.Label;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -169,6 +167,7 @@ public class Usuario {
     static int iduser;
     static String nomb;
     static int base;
+    static String correo;
 
     public static int IniciarSesion(Connection conexion, String dni, String contrasena, JLabel login) throws SQLException {
         valid = 0;
@@ -184,10 +183,19 @@ public class Usuario {
                 rango = rs.getInt("rango");
                 iduser = rs.getInt("idUsuario");
                 base = rs.getInt("base");
+                correo = rs.getString("correo");
                 if (BCrypt.checkpw(contrasena, contrasenadb)) {
                     valid = 1;
                     login.setText("Bienvenido/a " + nomb);
                     JOptionPane.showMessageDialog(null, "INICIO DE SESION CORRECTO, " + nomb);
+                    PreparedStatement stm9 = conexion.prepareStatement("INSERT INTO auditoria (evento, usuario_afectado) VALUES (?, ?)");
+                    stm9.setString(1, "LOGIN_USUARIO");
+                    stm9.setString(2, correo);
+                    try {
+                        stm9.execute();
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(null, "ERROR: " + e);
+                    }
                 } else {
                     valid = 0;
                     rango = 0;
@@ -202,25 +210,43 @@ public class Usuario {
         return valid;
     }
 
-    public static void CerrarSesion(JLabel login) {
+    public static void CerrarSesion(Connection conexion, JLabel login) throws SQLException {
         login.setText("Login");
         valid = 0;
         rango = 0;
         iduser = 0;
-        base=0;
+        base = 0;
+        PreparedStatement stm9 = conexion.prepareStatement("INSERT INTO auditoria (evento, usuario_afectado) VALUES (?, ?)");
+        stm9.setString(1, "LOGOUT_USUARIO");
+        stm9.setString(2, correo);
+        try {
+            stm9.execute();
+            correo="";
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "ERROR: " + e);
+        }
     }
-    
-    public static void CerrarSesion2() {
+
+    public static void CerrarSesion2(Connection conexion) throws SQLException {
         valid = 0;
         rango = 0;
         iduser = 0;
-        base=0;
+        base = 0;
+        PreparedStatement stm9 = conexion.prepareStatement("INSERT INTO auditoria (evento, usuario_afectado) VALUES (?, ?)");
+        stm9.setString(1, "LOGOUT_USUARIO");
+        stm9.setString(2, correo);
+        try {
+            stm9.execute();
+            correo="";
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "ERROR: " + e);
+        }
     }
-    
-    public static int iduser(){
+
+    public static int iduser() {
         return iduser;
     }
-    
+
     public static int base() {
         return base;
     }

@@ -12,13 +12,40 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.SimpleDateFormat;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 public class Empleados {
+
+    static DefaultComboBoxModel<Area> model;
+
+    public static class Area {
+
+        private final int id;
+        private final String nombre;
+
+        public Area(int id, String nombre) {
+            this.id = id;
+            this.nombre = nombre;
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        public String getNombre() {
+            return nombre;
+        }
+
+        @Override
+        public String toString() {
+            return nombre; // lo que se muestra en el combo
+        }
+    }
 
     public static void MostrarEmpleados(Connection conexion, DefaultTableModel modelo) throws SQLException {
 
@@ -47,6 +74,19 @@ public class Empleados {
             fila[0] = rs.getString("cargo.idCargo");
             fila[1] = rs.getString("cargo.Cargo");
             fila[2] = rs.getString("area.area");
+            modelo.addRow(fila);
+        }
+    }
+
+    public static void MostrarArea(Connection conexion, DefaultTableModel modelo) throws SQLException {
+
+        PreparedStatement stm = conexion.prepareStatement("SELECT idArea, area from Area where borrado=0");
+        ResultSet rs = stm.executeQuery();
+
+        while (rs.next()) {
+            Object[] fila = new Object[4];
+            fila[0] = rs.getString("idArea");
+            fila[1] = rs.getString("area");
             modelo.addRow(fila);
         }
     }
@@ -102,6 +142,27 @@ public class Empleados {
         }
     }
 
+    public static void AreaComb(Connection conexion, JComboBox<Area> combo) {
+
+        String sql3 = "SELECT idArea, area FROM area WHERE borrado=0";
+        try {
+            PreparedStatement ps = conexion.prepareStatement(sql3);
+            ResultSet rs = ps.executeQuery();
+            model = new DefaultComboBoxModel<>();
+            model.addElement(new Area(0, "Opciones"));
+            while (rs.next()) {
+                int id = rs.getInt("idArea");
+                String nombreCompleto = rs.getString("area");
+                model.addElement(new Area(id, nombreCompleto));
+            }
+            combo.setModel(model);
+            AutoCompleteDecorator.decorate(combo);
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "ERROR: " + ex.getMessage());
+        }
+    }
+
     public static void ActjCombo(Connection conexion, JComboBox<String> combo1) {
 
         String sql2 = "SELECT Cargo FROM Cargo ORDER BY idCargo";
@@ -141,7 +202,7 @@ public class Empleados {
         }
 
         PreparedStatement stm = conexion.prepareStatement(
-                "INSERT INTO empleado (nombre, apellido, dni, domicilio, email, telefono, fecha_nac, borrado, idGrupoSanguineo, idCargo, idUsuario) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
+                "INSERT INTO empleado (nombre, apellido, dni, domicilio, email, telefono, fecha_nac, borrado, idGrupoSanguineo, idCargo) VALUES (?,?,?,?,?,?,?,?,?,?)",
                 // Usa la constante RETURN_GENERATED_KEYS
                 Statement.RETURN_GENERATED_KEYS
         );
@@ -155,8 +216,6 @@ public class Empleados {
         stm.setInt(8, 0);
         stm.setInt(9, gs);
         stm.setInt(10, car);
-        stm.setInt(11, iduser);
-        int nuevoId = 0;
         try {
             int filasAfectadas = stm.executeUpdate();
             if (filasAfectadas > 0) {
@@ -164,11 +223,12 @@ public class Empleados {
                     if (rs.next()) {
                         int nuevoIdEmpleado = rs.getInt(1);
                         PreparedStatement stm4 = conexion.prepareStatement("INSERT INTO auditoria_empleado (evento, id_empleado, id_usuario) VALUES (?, ?, ?)");
-                        stm4.setString(1, "NUEVO_USUARIO");
+                        stm4.setString(1, "NUEVA_TRIPULACION");
                         stm4.setInt(2, nuevoIdEmpleado);
                         stm4.setInt(3, iduser);
                         try {
                             stm4.execute();
+                            JOptionPane.showMessageDialog(null, "Tripulación agregada!");
                         } catch (Exception e) {
                             JOptionPane.showMessageDialog(null, "ERROR12" + e);
                         }
@@ -207,11 +267,9 @@ public class Empleados {
 
                 // 3. Confirmar la Transacción solo si AMBAS operaciones fueron exitosas
                 conexion.commit();
-                JOptionPane.showMessageDialog(null, "✅ Borrado lógico y auditoría registrados con éxito.");
             } else {
                 // Si no se actualizó ninguna fila (el empleado no existía), hacemos rollback y notificamos.
                 conexion.rollback();
-                JOptionPane.showMessageDialog(null, "⚠️ No se encontró al empleado para el borrado.");
             }
 
         } catch (SQLException e) {
@@ -238,20 +296,35 @@ public class Empleados {
         }
     }
 
-    public static void AgregarCargo(Connection conexion, String Cargo, String area, int Borrado) throws SQLException {
+    public static void EliminarArea(Connection conexion, int Codigo) throws SQLException {
 
-        int ar = 0;
+        PreparedStatement stm = conexion.prepareStatement("UPDATE area SET Borrado= 1 WHERE idArea = ?");
+        stm.setInt(1, Codigo);
 
-        PreparedStatement stm3 = conexion.prepareStatement("SELECT idArea from area where area = ?");
-        stm3.setString(1, area);
-        ResultSet rs = stm3.executeQuery();
-        if (rs.next()) {
-            ar = rs.getInt("idArea");
+        try {
+            stm.executeUpdate();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "ERROR12");
         }
+    }
+
+    public static void AgregarCargo(Connection conexion, String Cargo, int id) throws SQLException {
 
         PreparedStatement stm = conexion.prepareStatement("INSERT INTO cargo (Cargo, idArea, borrado) VALUES (?,?,0)");
         stm.setString(1, Cargo);
-        stm.setInt(2, ar);
+        stm.setInt(2, id);
+
+        try {
+            stm.execute();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "ERROR12");
+        }
+    }
+
+    public static void AgregarArea(Connection conexion, String Area, int id) throws SQLException {
+
+        PreparedStatement stm = conexion.prepareStatement("INSERT INTO area (Area, borrado) VALUES (?,0)");
+        stm.setString(1, Area);
 
         try {
             stm.execute();
@@ -410,6 +483,20 @@ public class Empleados {
                     JOptionPane.showMessageDialog(null, "ERROR12");
                 }
             }
+        }
+
+    }
+
+    public static void ActualizarArea(Connection conexion, int Codigo, String Area) throws SQLException {
+
+        PreparedStatement stm2 = conexion.prepareStatement("UPDATE area SET area=? WHERE idArea=?");
+        stm2.setString(1, Area);
+        stm2.setInt(2, Codigo);
+
+        try {
+            stm2.executeUpdate();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "ERROR12");
         }
 
     }

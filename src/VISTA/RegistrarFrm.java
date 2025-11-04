@@ -23,8 +23,8 @@ public class RegistrarFrm extends javax.swing.JDialog {
 
     Connection con = Conexiones.Conexion();
     ResultSet rs;
-    int id=0, band, idbase=0;
-    String veri="Opciones", fechaFormateada, veribase="Opciones";
+    int id = 0, band, idbase = 0;
+    String veri = "Opciones", fechaFormateada, veribase = "Opciones";
 
     public RegistrarFrm(JFrame ventanaPrincipal) {
         super(ventanaPrincipal, true);
@@ -67,6 +67,11 @@ public class RegistrarFrm extends javax.swing.JDialog {
         DNI.setBackground(new java.awt.Color(204, 204, 204));
         DNI.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)), "DNI", javax.swing.border.TitledBorder.LEADING, javax.swing.border.TitledBorder.ABOVE_TOP, new java.awt.Font("Tahoma", 1, 14))); // NOI18N
         DNI.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        DNI.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                DNIKeyTyped(evt);
+            }
+        });
 
         Apellido.setBackground(new java.awt.Color(204, 204, 204));
         Apellido.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)), "Apellido", javax.swing.border.TitledBorder.LEADING, javax.swing.border.TitledBorder.ABOVE_TOP, new java.awt.Font("Tahoma", 1, 14))); // NOI18N
@@ -215,6 +220,20 @@ public class RegistrarFrm extends javax.swing.JDialog {
             veri = dat.getNombre();
         }
     }//GEN-LAST:event_RangoActionPerformed
+
+    private void DNIKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_DNIKeyTyped
+        char r = evt.getKeyChar();
+
+        if (Character.isISOControl(r)) {
+            return; // permite borrar, mover, etc.
+        }
+
+        //Solo permite letras, numeros y signos no
+        if (!Character.isDigit(r)) {
+            getToolkit().beep();
+            evt.consume();
+        }
+    }//GEN-LAST:event_DNIKeyTyped
 
     /**
      * @param args the command line arguments

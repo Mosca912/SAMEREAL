@@ -239,6 +239,8 @@ public class Empleados extends javax.swing.JFrame implements CLASES.IBlockableFr
         Modificar = new javax.swing.JButton();
         jPanel8 = new javax.swing.JPanel();
         jLabel13 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
+        opcArea = new javax.swing.JComboBox<>();
         Barra = new javax.swing.JMenuBar();
         Menu = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
@@ -483,7 +485,7 @@ public class Empleados extends javax.swing.JFrame implements CLASES.IBlockableFr
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel9Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 576, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel9Layout.setVerticalGroup(
@@ -525,9 +527,9 @@ public class Empleados extends javax.swing.JFrame implements CLASES.IBlockableFr
         });
 
         jLabel12.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel12.setText("Opciones de cargo:");
+        jLabel12.setText("Opciones de Area:");
 
-        opcCargo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Opciones", "Modificar", "Eliminar" }));
+        opcCargo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Opciones", "Nuevo", "Modificar", "Eliminar" }));
         opcCargo.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         opcCargo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -589,30 +591,46 @@ public class Empleados extends javax.swing.JFrame implements CLASES.IBlockableFr
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        jLabel14.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel14.setText("Opciones de cargo:");
+
+        opcArea.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Opciones", "Nuevo", "Modificar", "Eliminar" }));
+        opcArea.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        opcArea.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                opcAreaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(20, 20, 20)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(Cargar, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(Limpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(32, 32, 32)
+                        .addComponent(Cargar, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(Limpiar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(Guardar)
-                        .addGap(66, 66, 66)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(opcCargo, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel12)))
-                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(jPanel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(jLabel14)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel12))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(opcCargo, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(opcArea, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(0, 383, Short.MAX_VALUE)
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(Eliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(Modificar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -640,9 +658,13 @@ public class Empleados extends javax.swing.JFrame implements CLASES.IBlockableFr
                         .addComponent(Limpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(Cargar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(opcCargo, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(opcArea, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(opcCargo))))
                 .addContainerGap())
         );
 
@@ -1224,16 +1246,23 @@ public class Empleados extends javax.swing.JFrame implements CLASES.IBlockableFr
         String seleccion = (String) opcCargo.getSelectedItem();
 
         switch (seleccion) {
+            case "Nuevo":
+                AddAreaCargo ventana3 = new AddAreaCargo (this, 1);
+                ventana3.setVisible(true);
+                refrescarCombo();
+                break;
             case "Modificar":
                 // Abrís ventana de modificación
                 ModElimCargo ventana = new ModElimCargo(1, this);
                 ventana.setVisible(true);
+                refrescarCombo();
                 break;
 
             case "Eliminar":
                 // Abrís ventana de eliminación
                 ModElimCargo ventana2 = new ModElimCargo(0, this);
                 ventana2.setVisible(true);
+                refrescarCombo();
                 break;
         }
 
@@ -1256,7 +1285,8 @@ public class Empleados extends javax.swing.JFrame implements CLASES.IBlockableFr
     }//GEN-LAST:event_nuevtripActionPerformed
 
     private void nuevovicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevovicActionPerformed
-        AddVic ventana = new AddVic(this);
+        int ban=0;
+        AddVic ventana = new AddVic(this,ban);
         if (rango == 1) {
             ventana.setVisible(true);
         } else {
@@ -1324,6 +1354,42 @@ public class Empleados extends javax.swing.JFrame implements CLASES.IBlockableFr
     private void EmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EmailActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_EmailActionPerformed
+
+    private void opcAreaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_opcAreaActionPerformed
+        String seleccion = (String) opcArea.getSelectedItem();
+
+        switch (seleccion) {
+            case "Nuevo":
+                AddAreaCargo ventana3 = new AddAreaCargo (this, 0);
+                ventana3.setVisible(true);   
+                refrescarCombo();
+                break;
+            case "Modificar":
+                // Abrís ventana de modificación
+                ModElimArea ventana = new ModElimArea(1, this);
+                ventana.setVisible(true);
+                refrescarCombo();
+                break;
+
+            case "Eliminar":
+                // Abrís ventana de eliminación
+                ModElimArea ventana2 = new ModElimArea(0, this);
+                ventana2.setVisible(true);
+                refrescarCombo();
+                break;
+        }
+
+        opcArea.setSelectedIndex(0);
+        try {
+            tabla1.setRowCount(0);
+            CLASES.Empleados.MostrarEmpleados(con, tabla1);
+            if (Tabla.getRowCount() == 0) {
+                JOptionPane.showMessageDialog(null, "No se encontró ningún Cliente.");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "ERROR13" + e);
+        }
+    }//GEN-LAST:event_opcAreaActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -1393,6 +1459,7 @@ public class Empleados extends javax.swing.JFrame implements CLASES.IBlockableFr
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -1412,6 +1479,7 @@ public class Empleados extends javax.swing.JFrame implements CLASES.IBlockableFr
     private javax.swing.JMenuItem mod;
     private javax.swing.JMenuItem nuevovic;
     private javax.swing.JMenuItem nuevtrip;
+    private javax.swing.JComboBox<String> opcArea;
     private javax.swing.JComboBox<String> opcCargo;
     // End of variables declaration//GEN-END:variables
 

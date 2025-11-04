@@ -104,7 +104,6 @@ public class Cargo extends javax.swing.JFrame {
         int borrado = 0;
         if (!cargo.trim().isEmpty() && !ar.equals("Area")) {
             try {
-                CLASES.Empleados.AgregarCargo(con, cargo, ar, borrado);
                 GuardarCargo.setEnabled(false);
                 nuevocargo.setText("");
                 area.setEnabled(false);

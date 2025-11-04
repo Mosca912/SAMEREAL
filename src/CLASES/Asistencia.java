@@ -242,7 +242,7 @@ public class Asistencia {
         return fechasFaltantes;
     }
 
-    public static void Verificacion(Connection conexion, int id) throws Exception {
+    public static void Verificacion(Connection conexion, int id, int iduser) throws Exception {
         int mes = LocalDate.now().getMonthValue();
         String nombre;
         String apellido;
@@ -372,6 +372,15 @@ public class Asistencia {
                     stm3.setInt(2, id);
                     try {
                         stm3.executeUpdate();
+                        PreparedStatement stm9 = conexion.prepareStatement("INSERT INTO auditoria_asistencia (evento, id_empleado, id_usuario) VALUES (?, ?, ?)");
+                        stm9.setString(1, "REGISTRO_ASISTENCIA_PDF");
+                        stm9.setInt(2, id);
+                        stm9.setInt(3, iduser);
+                        try {
+                            stm9.execute();
+                        } catch (Exception e) {
+                            JOptionPane.showMessageDialog(null, "ERROR: " + e);
+                        }
                     } catch (Exception e) {
                         JOptionPane.showMessageDialog(null, "ERROR12");
                     }
@@ -493,6 +502,15 @@ public class Asistencia {
                     stm3.setInt(2, id);
                     try {
                         stm3.executeUpdate();
+                        PreparedStatement stm9 = conexion.prepareStatement("INSERT INTO auditoria_asistencia (evento, id_empleado, id_usuario) VALUES (?, ?, ?)");
+                        stm9.setString(1, "REGISTRO_ASISTENCIA_PDF");
+                        stm9.setInt(2, id);
+                        stm9.setInt(3, iduser);
+                        try {
+                            stm9.execute();
+                        } catch (Exception e) {
+                            JOptionPane.showMessageDialog(null, "ERROR: " + e);
+                        }
                     } catch (Exception e) {
                         JOptionPane.showMessageDialog(null, "ERROR12");
                     }
@@ -666,9 +684,10 @@ public class Asistencia {
         return tabla;
     }
 
-    public static void AsistenciaReal(Connection conexion, int id) throws SQLException {
+    public static void AsistenciaReal(Connection conexion, int id, int iduser) throws SQLException {
         mesActual = LocalDate.now().getMonthValue();
         int ida = 0;
+        int base=CLASES.Usuario.base();
 
         PreparedStatement stm5 = conexion.prepareStatement("SELECT entrada from seguimientoasistencia inner join asistencia on seguimientoasistencia.idAsistencia=asistencia.idAsistencia WHERE DAY(entrada)=? and MONTH(entrada)=? and asistencia.id_Empleado=?;");
         stm5.setInt(1, dia2);
@@ -685,8 +704,9 @@ public class Asistencia {
             if (rs.next()) {
                 ida = rs.getInt("idAsistencia");
             } else {
-                PreparedStatement stm2 = conexion.prepareStatement("INSERT INTO asistencia (id_Empleado, idBase, activo, relevado, fecha) values (?,2,1,0,?)");
+                PreparedStatement stm2 = conexion.prepareStatement("INSERT INTO asistencia (id_Empleado, idBase, activo, relevado, fecha) values (?,?,1,0,?)");
                 stm2.setInt(1, id);
+                stm2.setInt(2, base);
                 stm2.setInt(2, mesActual);
                 try {
                     stm2.execute();
@@ -708,6 +728,15 @@ public class Asistencia {
             stm4.setInt(1, ida);
             try {
                 stm4.execute();
+                PreparedStatement stm9 = conexion.prepareStatement("INSERT INTO auditoria_asistencia (evento, id_empleado, id_usuario) VALUES (?, ?, ?)");
+                stm9.setString(1, "NUEVA_ASISTENCIA");
+                stm9.setInt(2, id);
+                stm9.setInt(3, iduser);
+                try {
+                    stm9.execute();
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, "ERROR: " + e);
+                }
                 JOptionPane.showMessageDialog(null, "¡Carga completa!");
             } catch (SQLException e) {
                 JOptionPane.showMessageDialog(null, "Segundo Error:" + e);
@@ -715,7 +744,7 @@ public class Asistencia {
         }
     }
 
-    public static void ActualizarAsistencia(Connection conexion, int Dia, String Entrada, String Observacion, int id) throws SQLException {
+    public static void ActualizarAsistencia(Connection conexion, int Dia, String Entrada, String Observacion, int id, int iduser) throws SQLException {
 
         PreparedStatement stm = conexion.prepareStatement("UPDATE seguimientoasistencia inner join asistencia on seguimientoasistencia.idAsistencia=asistencia.idAsistencia SET seguimientoasistencia.salida = NOW(), seguimientoasistencia.observacion = ?, seguimientoasistencia.Relevado=1 WHERE seguimientoasistencia.entrada = ? and asistencia.id_Empleado=?");
         stm.setString(1, Observacion);
@@ -724,6 +753,15 @@ public class Asistencia {
 
         try {
             stm.executeUpdate();
+            PreparedStatement stm9 = conexion.prepareStatement("INSERT INTO auditoria_asistencia (evento, id_empleado, id_usuario) VALUES (?, ?, ?)");
+            stm9.setString(1, "ACTUALIZACIÓN_ASISTENCIA");
+            stm9.setInt(2, id);
+            stm9.setInt(3, iduser);
+            try {
+                stm9.execute();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "ERROR: " + e);
+            }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "ERROR12");
         }

@@ -584,7 +584,8 @@ public class Estadisticas extends javax.swing.JFrame {
     }//GEN-LAST:event_nuevtripActionPerformed
 
     private void nuevovicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevovicActionPerformed
-        AddVic ventana = new AddVic(this);
+        int ban=0;
+        AddVic ventana = new AddVic(this,ban);
         if (rango == 1) {
             ventana.setVisible(true);
         } else {
