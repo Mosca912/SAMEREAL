@@ -29,6 +29,7 @@ import javax.swing.UIManager;
 public class MenuClass {
     Connection con = Conexiones.Conexion();
     static int ventana = 0;
+    static int ventanaTheme = 0;
 
     private JFrame ventanaAnterior;
 
@@ -52,6 +53,14 @@ public class MenuClass {
 
     public static void VentanaOpc(int band) {
         ventana = band;
+    }
+    
+    public static void VentanaOpcTheme(int band) {
+        ventanaTheme = band;
+    }
+    
+    public static int VentanaOpcThemeRet() {
+        return ventanaTheme;
     }
 
     private boolean isBlocked() {

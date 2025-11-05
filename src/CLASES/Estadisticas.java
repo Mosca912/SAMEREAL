@@ -248,7 +248,7 @@ public class Estadisticas {
 
             if (rs2.next()) {
                 String kms = String.valueOf(rs2.getInt("movimientos.kilometrosdesalida"));
-                kmtl.setText("Kilometraje total: " + kms);
+                kmtl.setText(kms);
             }
 
         } catch (SQLException ex) {
@@ -269,9 +269,9 @@ public class Estadisticas {
                 String cant = String.valueOf(rs2.getInt("cantidad"));
                 String pat = rs2.getString("ambulancia.patente");
                 String mar = rs2.getString("ambulancia.marca");
-                relevol.setText("Relevos: " + cant);
-                dominio.setText("Dominio: " + pat);
-                vict.setText("Marca: " + mar);
+                relevol.setText(cant);
+                dominio.setText(pat);
+                vict.setText(mar);
             }
 
         } catch (SQLException ex) {
@@ -290,7 +290,7 @@ public class Estadisticas {
 
             if (rs2.next()) {
                 String cant = String.valueOf(rs2.getInt("cantidad"));
-                nmovl.setText("Nº de Movimientos: " + cant);
+                nmovl.setText(cant);
             }
 
         } catch (SQLException ex) {
@@ -367,7 +367,7 @@ public class Estadisticas {
 
             if (rs2.next()) {
                 String kms = String.valueOf(rs2.getInt("movimientos.kilometrosdesalida"));
-                kmtl.setText("Kilometraje total: " + kms);
+                kmtl.setText(kms);
             }
 
         } catch (SQLException ex) {
@@ -383,9 +383,9 @@ public class Estadisticas {
                 String cant = String.valueOf(rs2.getInt("cantidad"));
                 String pat = rs2.getString("ambulancia.patente");
                 String mar = rs2.getString("ambulancia.marca");
-                relevol.setText("Relevos: " + cant);
-                dominio.setText("Dominio: " + pat);
-                vict.setText("Marca: " + mar);
+                relevol.setText(cant);
+                dominio.setText(pat);
+                vict.setText(mar);
             }
 
         } catch (SQLException ex) {
@@ -399,7 +399,7 @@ public class Estadisticas {
 
             if (rs2.next()) {
                 String cant = String.valueOf(rs2.getInt("cantidad"));
-                nmovl.setText("Nº De Movimientos: " + cant);
+                nmovl.setText(cant);
             }
 
         } catch (SQLException ex) {

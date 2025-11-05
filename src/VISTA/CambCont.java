@@ -7,6 +7,7 @@ package VISTA;
 
 import CONEXIONES.Conexiones;
 import java.sql.Connection;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -17,11 +18,13 @@ import javax.swing.JOptionPane;
 public class CambCont extends javax.swing.JDialog {
 
     Connection con = Conexiones.Conexion();
-
+    private final char caracterEchoPredeterminado;
     public CambCont(JFrame ventanaPrincipal) {
         super(ventanaPrincipal, true);
         initComponents();
         this.setLocationRelativeTo(null);
+        DNI.requestFocus();
+        caracterEchoPredeterminado = Contrasena.getEchoChar();
     }
 
     /**
@@ -39,6 +42,7 @@ public class CambCont extends javax.swing.JDialog {
         Contrasena = new javax.swing.JPasswordField();
         jButton1 = new javax.swing.JButton();
         Volver = new javax.swing.JButton();
+        MostOcPass = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
@@ -50,6 +54,11 @@ public class CambCont extends javax.swing.JDialog {
         DNI.setBackground(new java.awt.Color(204, 204, 204));
         DNI.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)), "DNI", javax.swing.border.TitledBorder.LEADING, javax.swing.border.TitledBorder.ABOVE_TOP, new java.awt.Font("Tahoma", 1, 14))); // NOI18N
         DNI.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        DNI.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                DNIKeyReleased(evt);
+            }
+        });
 
         Correo.setBackground(new java.awt.Color(204, 204, 204));
         Correo.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)), "Correo", javax.swing.border.TitledBorder.LEADING, javax.swing.border.TitledBorder.ABOVE_TOP, new java.awt.Font("Tahoma", 1, 14))); // NOI18N
@@ -59,21 +68,42 @@ public class CambCont extends javax.swing.JDialog {
                 CorreoActionPerformed(evt);
             }
         });
+        Correo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                CorreoKeyReleased(evt);
+            }
+        });
 
         Contrasena.setBackground(new java.awt.Color(204, 204, 204));
         Contrasena.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)), "Nueva contraseña", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 14))); // NOI18N
 
+        jButton1.setBackground(new java.awt.Color(78, 247, 177));
+        jButton1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jButton1.setText("Cambiar Contraseña");
+        jButton1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
 
+        Volver.setBackground(new java.awt.Color(78, 247, 177));
+        Volver.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         Volver.setText("Volver");
+        Volver.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         Volver.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 VolverActionPerformed(evt);
+            }
+        });
+
+        MostOcPass.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/ojoabierto.png"))); // NOI18N
+        MostOcPass.setToolTipText("Ver/Ocultar contraseña");
+        MostOcPass.setBorder(null);
+        MostOcPass.setContentAreaFilled(false);
+        MostOcPass.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MostOcPassActionPerformed(evt);
             }
         });
 
@@ -87,13 +117,15 @@ public class CambCont extends javax.swing.JDialog {
                     .addComponent(Contrasena)
                     .addComponent(Correo, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(DNI, javax.swing.GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE))
-                .addGap(114, 114, 114))
+                .addGap(18, 18, 18)
+                .addComponent(MostOcPass, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(56, 56, 56))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(67, 67, 67)
-                .addComponent(Volver)
+                .addContainerGap()
+                .addComponent(Volver, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1)
-                .addGap(65, 65, 65))
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -103,12 +135,14 @@ public class CambCont extends javax.swing.JDialog {
                 .addGap(18, 18, 18)
                 .addComponent(Correo, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30)
-                .addComponent(Contrasena, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(Volver))
-                .addContainerGap())
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(Contrasena, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(MostOcPass, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
+                    .addComponent(Volver, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(11, 11, 11))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -157,6 +191,31 @@ public class CambCont extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void DNIKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_DNIKeyReleased
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+            Correo.requestFocus();
+        }
+    }//GEN-LAST:event_DNIKeyReleased
+
+    private void CorreoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_CorreoKeyReleased
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+            Contrasena.requestFocus();
+        }
+    }//GEN-LAST:event_CorreoKeyReleased
+
+    private void MostOcPassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MostOcPassActionPerformed
+        ImageIcon icon1 = new ImageIcon(getClass().getResource("/IMAGENES/ojocerrado.png"));
+        ImageIcon icon2 = new ImageIcon(getClass().getResource("/IMAGENES/ojoabierto.png"));
+        char caracterActual = Contrasena.getEchoChar();
+        if (caracterActual != (char) 0) {
+            Contrasena.setEchoChar((char) 0);
+            MostOcPass.setIcon(icon1);
+        } else {
+            Contrasena.setEchoChar(caracterEchoPredeterminado);
+            MostOcPass.setIcon(icon2);
+        }
+    }//GEN-LAST:event_MostOcPassActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -196,6 +255,7 @@ public class CambCont extends javax.swing.JDialog {
     private javax.swing.JPasswordField Contrasena;
     private javax.swing.JTextField Correo;
     private javax.swing.JTextField DNI;
+    private javax.swing.JButton MostOcPass;
     private javax.swing.JButton Volver;
     private javax.swing.JButton jButton1;
     private javax.swing.JPanel jPanel1;

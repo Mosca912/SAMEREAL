@@ -17,6 +17,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -42,6 +43,7 @@ public class Relevar extends javax.swing.JDialog {
     private double angulo = Math.toRadians(225); // ángulo inicial 
     private final int radio = 75;        // largo de la aguja
     private boolean arrastrando = false;
+
     //AMBULANCIA
     public class PanelDibujo extends JPanel {
 
@@ -223,7 +225,7 @@ public class Relevar extends javax.swing.JDialog {
     }
 
     public Relevar(int idtrip, JFrame ventanaPrincipal) {
-        super(ventanaPrincipal,true);
+        super(ventanaPrincipal, true);
         this.idtrip2 = idtrip;
         initComponents();
         this.setLocationRelativeTo(null);
@@ -235,14 +237,14 @@ public class Relevar extends javax.swing.JDialog {
         fechaActual = hoy.format(formato2);
         CLASES.Relevar.Relevo(con, Victor, anterior1, saliente1, kmi1, kmf, turno, serie, idtrip);
         Fecha1.setText(fechaActual2);
-        
+
         iduser = CLASES.Usuario.iduser();
 
         // Le quitamos los ticks y labels si querés
         slider.setPaintTicks(false);
         slider.setPaintLabels(false);
         slider.setOpaque(false);
-                
+
         // Personalizamos la UI
         slider.setUI(new BasicSliderUI(slider) {
             @Override
@@ -1783,10 +1785,46 @@ public class Relevar extends javax.swing.JDialog {
     }//GEN-LAST:event_activadoActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        String rutaCarpeta = "C:\\SAME";
+        String rutaCarpeta2 = "C:\\SAME\\Relevos";
+        File carpeta = new File(rutaCarpeta);
+        File carpeta2 = new File(rutaCarpeta2);
+
+        if (!carpeta.exists()) {
+            boolean creada = carpeta.mkdirs();
+            if (creada) {
+                System.out.println("✅ Carpeta creada exitosamente en: " + rutaCarpeta);
+                if (!carpeta2.exists()) {
+                    boolean creada2 = carpeta2.mkdirs();
+                    if (creada2) {
+                        System.out.println("✅ Carpeta creada exitosamente en: " + rutaCarpeta2);
+                    } else {
+                        System.out.println("❌ Error al intentar crear la carpeta en: " + rutaCarpeta2);
+                    }
+                } else {
+                    System.out.println("⚠️ La carpeta ya existe en: " + rutaCarpeta2);
+                }
+            } else {
+                System.out.println("❌ Error al intentar crear la carpeta en: " + rutaCarpeta);
+            }
+        } else {
+            System.out.println("⚠️ La carpeta ya existe en: " + rutaCarpeta);
+            if (!carpeta2.exists()) {
+                boolean creada = carpeta2.mkdirs();
+                if (creada) {
+                    System.out.println("✅ Carpeta creada exitosamente en: " + rutaCarpeta2);
+                } else {
+                    System.out.println("❌ Error al intentar crear la carpeta en: " + rutaCarpeta2);
+                }
+            } else {
+                System.out.println("⚠️ La carpeta ya existe en: " + rutaCarpeta2);
+            }
+        }
+
         String vic = Victor.getText();
         String sal = saliente1.getText();
 
-        String direccion = "C:\\db\\Relevo _ id " + idtrip2 + "_ fecha " + fechaActual2 + "_ saliente " + sal + " _ victor " + vic + ".pdf";
+        String direccion = "C:\\SAME\\Relevos\\Relevo _ id " + idtrip2 + "_ fecha " + fechaActual2 + "_ saliente " + sal + " _ victor " + vic + ".pdf";
         int opcion = JOptionPane.showConfirmDialog(
                 null,
                 "¿Deseás Terminar?",

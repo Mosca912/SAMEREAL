@@ -7,6 +7,7 @@ package VISTA;
 
 import CLASES.Movimientos;
 import CONEXIONES.Conexiones;
+import java.awt.Color;
 import java.awt.event.*;
 import java.sql.*;
 import java.util.logging.*;
@@ -105,11 +106,18 @@ public class Historial extends javax.swing.JDialog{
                     String tripOf= String.valueOf(trip);
                     String vicOf= String.valueOf(vic);
                     String fecOf= String.valueOf(fec);
-                    String direccion = "C:\\db\\Relevo _ id " + idOf + "_ fecha " + fecOf + "_ saliente " + tripOf + " _ victor " + vicOf + ".pdf";
+                    String direccion = "C:\\SAME\\Relevos\\Relevo _ id " + idOf + "_ fecha " + fecOf + "_ saliente " + tripOf + " _ victor " + vicOf + ".pdf";
                     Movimientos.abrirPDF(direccion);       
                 }
             }
         });
+        
+        int ventanaTheme = CLASES.MenuClass.VentanaOpcThemeRet();
+        if (ventanaTheme == 0) {
+        } else if (ventanaTheme ==1){
+            Color colorPersonalizado = new Color(44, 44, 53);
+            Fondo.setBackground(colorPersonalizado);
+        }
     }
 
     /**
@@ -121,7 +129,7 @@ public class Historial extends javax.swing.JDialog{
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
+        Fondo = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         Tabla = new javax.swing.JTable();
         Salir = new javax.swing.JButton();
@@ -134,8 +142,8 @@ public class Historial extends javax.swing.JDialog{
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        Fondo.setBackground(new java.awt.Color(255, 255, 255));
+        Fondo.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         Tabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -183,23 +191,23 @@ public class Historial extends javax.swing.JDialog{
                 .addContainerGap(19, Short.MAX_VALUE))
         );
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout FondoLayout = new javax.swing.GroupLayout(Fondo);
+        Fondo.setLayout(FondoLayout);
+        FondoLayout.setHorizontalGroup(
+            FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(FondoLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 698, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGroup(FondoLayout.createSequentialGroup()
                         .addComponent(Salir, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        FondoLayout.setVerticalGroup(
+            FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(FondoLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -209,7 +217,7 @@ public class Historial extends javax.swing.JDialog{
                 .addContainerGap())
         );
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 720, 620));
+        getContentPane().add(Fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 720, 620));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -257,10 +265,10 @@ public class Historial extends javax.swing.JDialog{
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel Fondo;
     private javax.swing.JButton Salir;
     private javax.swing.JTable Tabla;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables

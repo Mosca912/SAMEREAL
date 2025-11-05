@@ -76,7 +76,6 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
 
         labelnu.setVisible(false);
         registrarse.setVisible(false);
-        Ayudin.setVisible(false);
 
         DNI.setVisible(true);
         contrasena.setVisible(true);
@@ -139,7 +138,6 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
 
         labelnu.setVisible(false);
         registrarse.setVisible(false);
-        Ayudin.setVisible(false);
 
         caracterEchoPredeterminado = contrasena.getEchoChar();
 
@@ -166,7 +164,6 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
         if (rango == 1) {
             labelnu.setVisible(true);
             registrarse.setVisible(true);
-            Ayudin.setVisible(true);
         } else if (rango == 2) {
 
         }
@@ -189,7 +186,6 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
         registrarse = new javax.swing.JButton();
         labelogin = new javax.swing.JLabel();
         iniciarsesion1 = new javax.swing.JButton();
-        Ayudin = new javax.swing.JLabel();
         labelnu = new javax.swing.JLabel();
         cambiarcont = new javax.swing.JButton();
         cerrarsesion = new javax.swing.JButton();
@@ -238,6 +234,7 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
 
         DNI.setBackground(new java.awt.Color(204, 204, 204));
         DNI.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        DNI.setToolTipText("Ingrese su DNI");
         DNI.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)), "DNI", javax.swing.border.TitledBorder.LEADING, javax.swing.border.TitledBorder.ABOVE_TOP, new java.awt.Font("Tahoma", 1, 14))); // NOI18N
         DNI.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         DNI.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -249,6 +246,7 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
 
         contrasena.setBackground(new java.awt.Color(204, 204, 204));
         contrasena.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        contrasena.setToolTipText("Ingrese su contraseña");
         contrasena.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)), "Contraseña", javax.swing.border.TitledBorder.LEADING, javax.swing.border.TitledBorder.ABOVE_TOP, new java.awt.Font("Tahoma", 1, 14))); // NOI18N
         contrasena.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         menuinicio.add(contrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 160, 190, 40));
@@ -257,6 +255,7 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
         registrarse.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         registrarse.setForeground(new java.awt.Color(255, 255, 255));
         registrarse.setText("Registrarse");
+        registrarse.setToolTipText("Registrar un nuevo usuario");
         registrarse.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         registrarse.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         registrarse.addActionListener(new java.awt.event.ActionListener() {
@@ -275,6 +274,7 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
         iniciarsesion1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         iniciarsesion1.setForeground(new java.awt.Color(255, 255, 255));
         iniciarsesion1.setText("Iniciar Sesión");
+        iniciarsesion1.setToolTipText("Iniciar sesión");
         iniciarsesion1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         iniciarsesion1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         iniciarsesion1.addActionListener(new java.awt.event.ActionListener() {
@@ -284,11 +284,6 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
         });
         menuinicio.add(iniciarsesion1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 220, 120, 40));
 
-        Ayudin.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        Ayudin.setForeground(new java.awt.Color(52, 170, 121));
-        Ayudin.setText("Ayuda");
-        menuinicio.add(Ayudin, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 290, -1, -1));
-
         labelnu.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         labelnu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/empleado.png"))); // NOI18N
         labelnu.setText("Nuevo Usuario");
@@ -297,6 +292,7 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
         cambiarcont.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         cambiarcont.setForeground(new java.awt.Color(52, 170, 121));
         cambiarcont.setText("¿Olvidaste la contraseña?");
+        cambiarcont.setToolTipText("");
         cambiarcont.setBorder(null);
         cambiarcont.setContentAreaFilled(false);
         cambiarcont.addActionListener(new java.awt.event.ActionListener() {
@@ -310,6 +306,7 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
         cerrarsesion.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         cerrarsesion.setForeground(new java.awt.Color(255, 255, 255));
         cerrarsesion.setText("Cerrar Sesión");
+        cerrarsesion.setToolTipText("Cerrar sesión!");
         cerrarsesion.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         cerrarsesion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -319,6 +316,7 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
         menuinicio.add(cerrarsesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 310, 140, -1));
 
         MostOcPass.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/ojoabierto.png"))); // NOI18N
+        MostOcPass.setToolTipText("Ver/Ocultar contraseña");
         MostOcPass.setBorder(null);
         MostOcPass.setContentAreaFilled(false);
         MostOcPass.addActionListener(new java.awt.event.ActionListener() {
@@ -358,11 +356,13 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
         Menu.setBackground(new java.awt.Color(204, 255, 204));
         Menu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/menui.png"))); // NOI18N
         Menu.setText("Menu");
+        Menu.setToolTipText("Menu");
         Menu.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         Menu.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
 
         incmen.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         incmen.setText("Inicio");
+        incmen.setToolTipText("");
         incmen.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 incmenActionPerformed(evt);
@@ -393,6 +393,7 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
 
         nuevtrip.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         nuevtrip.setText("Nueva tripulación");
+        nuevtrip.setToolTipText("");
         nuevtrip.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 nuevtripActionPerformed(evt);
@@ -647,7 +648,6 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
             if (rango == 1) {
                 labelnu.setVisible(true);
                 registrarse.setVisible(true);
-                Ayudin.setVisible(true);
             } else if (rango == 2) {
             }
         } else {
@@ -759,7 +759,6 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu Asistencia;
     private javax.swing.JMenu Ayuda;
-    private javax.swing.JLabel Ayudin;
     private javax.swing.JMenuBar Barra;
     private javax.swing.JMenu Configuracion;
     private javax.swing.JTextField DNI;

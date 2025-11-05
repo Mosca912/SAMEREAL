@@ -114,6 +114,101 @@ public class Movimientos {
     }
 
     public static void jChofer(Connection conexion, JComboBox<Cliente> combo1, JComboBox<Cliente> combo2, JComboBox<Cliente> combo3, JComboBox<Cliente> combo4, int band) {
+        String sql = "SELECT e.id_Empleado, CONCAT(e.nombre, ' ', e.apellido) AS cvs_nombre_completo FROM empleado e WHERE e.borrado = 0 AND e.idCargo = 3 AND e.id_Empleado NOT IN (SELECT t.cvs FROM tripulacion t WHERE t.relevado = 0 AND t.borrado = 0);";
+        try {
+            PreparedStatement ps = conexion.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            model = new DefaultComboBoxModel<>();
+            while (rs.next()) {
+                int id = rs.getInt("e.id_Empleado");
+                String nombreCompleto = rs.getString("cvs_nombre_completo");
+                model.addElement(new Cliente(id, nombreCompleto));
+            }
+
+            combo1.setModel(model);
+            AutoCompleteDecorator.decorate(combo1);
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "ERROR: " + ex.getMessage());
+        }
+
+        String sql2 = "SELECT e.id_Empleado, CONCAT(e.nombre, ' ', e.apellido) AS med_nombre_completo FROM empleado e WHERE e.borrado = 0 AND e.idCargo = 12 AND e.id_Empleado NOT IN (SELECT t.medico FROM tripulacion t WHERE t.relevado = 0 AND t.borrado = 0);";
+        try {
+            PreparedStatement ps = conexion.prepareStatement(sql2);
+            ResultSet rs = ps.executeQuery();
+            model2 = new DefaultComboBoxModel<>();
+            while (rs.next()) {
+                int id = rs.getInt("e.id_Empleado");
+                String nombreCompleto = rs.getString("med_nombre_completo");
+                model2.addElement(new Cliente(id, nombreCompleto));
+            }
+
+            combo2.setModel(model2);
+            AutoCompleteDecorator.decorate(combo2);
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "ERROR: " + ex.getMessage());
+        }
+
+        String sql3 = "SELECT e.id_Empleado, CONCAT(e.nombre, ' ', e.apellido) AS enf_nombre_completo FROM empleado e WHERE e.borrado = 0 AND e.idCargo = 13 AND e.id_Empleado NOT IN (SELECT t.enfermero FROM tripulacion t WHERE t.relevado = 0 AND t.borrado = 0);";
+        try {
+            PreparedStatement ps = conexion.prepareStatement(sql3);
+            ResultSet rs = ps.executeQuery();
+            model3 = new DefaultComboBoxModel<>();
+            while (rs.next()) {
+                int id = rs.getInt("id_Empleado");
+                String nombreCompleto = rs.getString("enf_nombre_completo");
+                model3.addElement(new Cliente(id, nombreCompleto));
+            }
+
+            combo3.setModel(model3);
+            AutoCompleteDecorator.decorate(combo3);
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "ERROR: " + ex.getMessage());
+        }
+
+        if (band == 0) {
+            String sql4 = "SELECT a.idAmbulancia, a.Victor FROM ambulancia a LEFT JOIN tripulacion t ON a.idAmbulancia = t.idAmbulancia  AND t.relevado = 0 AND t.borrado = 0 WHERE a.borrado = 0 AND t.idAmbulancia IS NULL;";
+            try {
+                PreparedStatement ps = conexion.prepareStatement(sql4);
+                ResultSet rs = ps.executeQuery();
+                model4 = new DefaultComboBoxModel<>();
+                while (rs.next()) {
+                    int id = rs.getInt("a.idAmbulancia");
+                    String nombreCompleto = rs.getString("a.victor");
+                    model4.addElement(new Cliente(id, nombreCompleto));
+                }
+
+                combo4.setModel(model4);
+                AutoCompleteDecorator.decorate(combo4);
+
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "ERROR: " + ex.getMessage());
+            }
+        } else if (band == 1) {
+            String sql4 = "SELECT idAmbulancia, victor FROM ambulancia WHERE borrado=0;";
+            try {
+                PreparedStatement ps = conexion.prepareStatement(sql4);
+                ResultSet rs = ps.executeQuery();
+                model4 = new DefaultComboBoxModel<>();
+                while (rs.next()) {
+                    int id = rs.getInt("idAmbulancia");
+                    String nombreCompleto = rs.getString("victor");
+                    model4.addElement(new Cliente(id, nombreCompleto));
+                }
+
+                combo4.setModel(model4);
+                AutoCompleteDecorator.decorate(combo4);
+
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "ERROR: " + ex.getMessage());
+            }
+        }
+
+    }
+
+    public static void jChoferAct(Connection conexion, JComboBox<Cliente> combo1, JComboBox<Cliente> combo2, JComboBox<Cliente> combo3, JComboBox<Cliente> combo4, int band) {
         String sql = "SELECT id_Empleado, nombre, apellido FROM empleado WHERE borrado=0 AND idCargo=3";
         try {
             PreparedStatement ps = conexion.prepareStatement(sql);
@@ -259,7 +354,6 @@ public class Movimientos {
     }
 
     public static void Carga(Connection conexion, int id, int id2, int id3, int id4, String fecha, int iduser) throws SQLException {
-        int idtrip = 0;
         String sql2 = "SELECT idtripulacion from Tripulacion WHERE idAmbulancia=? AND relevado=0 AND Fecha AND DATE(Fecha) = CURDATE();";
         PreparedStatement stm = conexion.prepareStatement(sql2);
         stm.setInt(1, id4);
@@ -303,32 +397,77 @@ public class Movimientos {
 
     }
 
-    public static void ActualizarTrip(Connection conexion, int id, int id2, int id3, int id4, int id5, int iduser) {
-        if (id4 != amb) {
-
-        }
-        String sql = "UPDATE tripulacion SET cvs=?, medico=?, enfermero=?, idAmbulancia=? WHERE idtripulacion=?";
-        try {
-            PreparedStatement ps = conexion.prepareStatement(sql);
-            ps.setInt(1, id);
-            ps.setInt(2, id2);
-            ps.setInt(3, id3);
-            ps.setInt(4, id4);
-            ps.setInt(5, id5);
-            ps.execute();
-            PreparedStatement stm9 = conexion.prepareStatement("INSERT INTO auditoria_movimientos (evento, id_tripulacion, id_usuario) VALUES (?, ?, ?)");
-            stm9.setString(1, "ACTUALIZACIÓN_TRIPULACION");
-            stm9.setInt(2, id5);
-            stm9.setInt(3, iduser);
+    public static void ActualizarTrip(Connection conexion, int id, int id2, int id3, int id4, int id5, int iduser) throws SQLException {
+        String sql2 = "Select idAmbulancia, idtripulacion from tripulacion WHERE idAmbulancia=? and relevado=0 and borrado=0;";
+        PreparedStatement stm = conexion.prepareStatement(sql2);
+        stm.setInt(1, id4);
+        ResultSet rs = stm.executeQuery();
+        if (rs.next()) {
+            JOptionPane.showMessageDialog(null, "Se hara el cambio del vehiculo, ya que este esta activo en otra tripulación");
+            int idtrip = rs.getInt("idtripulacion");
+            String sql = "UPDATE tripulacion SET cvs=?, medico=?, enfermero=?, idAmbulancia=? WHERE idtripulacion=?";
+            String sql3 = "UPDATE tripulacion SET idAmbulancia=? WHERE idtripulacion = ?";
             try {
-                stm9.execute();
+                PreparedStatement ps = conexion.prepareStatement(sql);
+                ps.setInt(1, id);
+                ps.setInt(2, id2);
+                ps.setInt(3, id3);
+                ps.setInt(4, id4);
+                ps.setInt(5, id5);
+                ps.execute();
+                PreparedStatement stm9 = conexion.prepareStatement("INSERT INTO auditoria_movimientos (evento, id_tripulacion, id_usuario) VALUES (?, ?, ?)");
+                stm9.setString(1, "ACTUALIZACIÓN_TRIPULACION");
+                stm9.setInt(2, id5);
+                stm9.setInt(3, iduser);
+                try {
+                    stm9.execute();
+                } catch (SQLException e) {
+                    JOptionPane.showMessageDialog(null, "ERROR: " + e);
+                }
             } catch (SQLException e) {
-                JOptionPane.showMessageDialog(null, "ERROR: " + e);
+                JOptionPane.showMessageDialog(null, e);
             }
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e);
-        }
 
+            try {
+                PreparedStatement ps = conexion.prepareStatement(sql3);
+                ps.setInt(1, amb);
+                ps.setInt(2, idtrip);
+                ps.execute();
+                PreparedStatement stm9 = conexion.prepareStatement("INSERT INTO auditoria_movimientos (evento, id_tripulacion, id_usuario) VALUES (?, ?, ?)");
+                stm9.setString(1, "ACTUALIZACIÓN_TRIPULACION");
+                stm9.setInt(2, idtrip);
+                stm9.setInt(3, iduser);
+                try {
+                    stm9.execute();
+                } catch (SQLException e) {
+                    JOptionPane.showMessageDialog(null, "ERROR: " + e);
+                }
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, e);
+            }
+        } else {
+            String sql = "UPDATE tripulacion SET cvs=?, medico=?, enfermero=?, idAmbulancia=? WHERE idtripulacion=?";
+            try {
+                PreparedStatement ps = conexion.prepareStatement(sql);
+                ps.setInt(1, id);
+                ps.setInt(2, id2);
+                ps.setInt(3, id3);
+                ps.setInt(4, id4);
+                ps.setInt(5, id5);
+                ps.execute();
+                PreparedStatement stm9 = conexion.prepareStatement("INSERT INTO auditoria_movimientos (evento, id_tripulacion, id_usuario) VALUES (?, ?, ?)");
+                stm9.setString(1, "ACTUALIZACIÓN_TRIPULACION");
+                stm9.setInt(2, id5);
+                stm9.setInt(3, iduser);
+                try {
+                    stm9.execute();
+                } catch (SQLException e) {
+                    JOptionPane.showMessageDialog(null, "ERROR: " + e);
+                }
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, e);
+            }
+        }
     }
 
     public static void CargaVic(Connection conexion, String victor, String modelo, String patente, String marca, String matafuego) throws SQLException {
@@ -646,7 +785,7 @@ public class Movimientos {
     public static void MostrarHist(Connection conexion, DefaultTableModel modelo, JTable tabla) throws SQLException {
         //BASE
 
-        PreparedStatement stm = conexion.prepareStatement("SELECT t.idtripulacion, CONCAT(e1.nombre, ' ', e1.apellido) AS cvs, CONCAT(e2.nombre, ' ', e2.apellido) AS medico, CONCAT(e3.nombre, ' ', e3.apellido) AS enfermero, a.victor, t.fecharelevado, COUNT(m.idMovimientos) AS cantidad_movimientos FROM tripulacion t JOIN empleado e1 ON t.cvs = e1.id_Empleado JOIN empleado e2 ON t.medico = e2.id_Empleado JOIN empleado e3 ON t.enfermero = e3.id_Empleado INNER JOIN ambulancia a ON t.idAmbulancia=a.idAmbulancia LEFT JOIN movimientos m ON t.idtripulacion = m.idtripulacion WHERE e1.borrado=0 and e2.borrado=0 and e3.borrado=0 and m.borrado=0 GROUP BY t.idtripulacion, cvs, medico, enfermero, a.victor, t.Fecha, t.relevado ORDER BY fecharelevado;");
+        PreparedStatement stm = conexion.prepareStatement("SELECT t.idtripulacion, CONCAT(e1.nombre, ' ', e1.apellido) AS cvs, CONCAT(e2.nombre, ' ', e2.apellido) AS medico, CONCAT(e3.nombre, ' ', e3.apellido) AS enfermero, a.victor, t.fecharelevado, COUNT(m.idMovimientos) AS cantidad_movimientos FROM tripulacion t JOIN empleado e1 ON t.cvs = e1.id_Empleado JOIN empleado e2 ON t.medico = e2.id_Empleado JOIN empleado e3 ON t.enfermero = e3.id_Empleado INNER JOIN ambulancia a ON t.idAmbulancia = a.idAmbulancia LEFT JOIN movimientos m ON t.idtripulacion = m.idtripulacion AND m.borrado = 0 WHERE e1.borrado = 0 AND e2.borrado = 0 AND e3.borrado = 0 AND t.borrado = 0 GROUP BY t.idtripulacion, cvs, medico, enfermero, a.victor, t.fecharelevado ORDER BY fecharelevado;");
         ResultSet rs = stm.executeQuery();
         while (rs.next()) {
             Object[] fila = new Object[5];
@@ -732,7 +871,7 @@ public class Movimientos {
         }
 
     }
-    
+
     public static void tablaVic(Connection conexion, DefaultTableModel modelo) {
 
         String sql = "SELECT idAmbulancia, victor, Patente from Ambulancia WHERE borrado=0;";
@@ -751,7 +890,7 @@ public class Movimientos {
         }
 
     }
-    
+
     public static void EliminarTrip(Connection conexion, int Codigo) throws SQLException {
 
         PreparedStatement stm = conexion.prepareStatement("UPDATE tripulacion SET borrado= 1 WHERE idtripulacion = ?");
@@ -763,8 +902,8 @@ public class Movimientos {
             JOptionPane.showMessageDialog(null, "ERROR12");
         }
     }
-    
-    public static int ValidacionVic (Connection conexion, int Codigo) throws SQLException {
+
+    public static int ValidacionVic(Connection conexion, int Codigo) throws SQLException {
         int resultado = 0;
         PreparedStatement stm = conexion.prepareStatement("Select idtripulacion from tripulacion where idAmbulancia=? and relevado=0");
         stm.setInt(1, Codigo);
@@ -796,7 +935,7 @@ public class Movimientos {
         }
         return resultado;
     }
-    
+
     public static void EliminarVic(Connection conexion, int Codigo) throws SQLException {
 
         PreparedStatement stm = conexion.prepareStatement("UPDATE ambulancia SET borrado= 1 WHERE idAmbulancia = ?");

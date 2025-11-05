@@ -7,6 +7,7 @@ package VISTA;
 
 import CLASES.Movimientos.Trip;
 import CONEXIONES.Conexiones;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.HeadlessException;
@@ -227,6 +228,13 @@ public class Movimiento extends javax.swing.JFrame {
             Tabla.getColumnModel().getColumn(2).setCellEditor(editor); // llegada
 
         }
+        
+        int ventanaTheme = CLASES.MenuClass.VentanaOpcThemeRet();
+        if (ventanaTheme == 0) {
+        } else if (ventanaTheme ==1){
+            Color colorPersonalizado = new Color(44, 44, 53);
+            Fondo.setBackground(colorPersonalizado);
+        }
 
     }
 
@@ -239,7 +247,7 @@ public class Movimiento extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel3 = new javax.swing.JPanel();
+        Fondo = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         Trip = new javax.swing.JComboBox<>();
@@ -315,8 +323,8 @@ public class Movimiento extends javax.swing.JFrame {
         setUndecorated(true);
         setResizable(false);
 
-        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        Fondo.setBackground(new java.awt.Color(255, 255, 255));
+        Fondo.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jPanel4.setBackground(new java.awt.Color(52, 170, 121));
         jPanel4.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -327,6 +335,7 @@ public class Movimiento extends javax.swing.JFrame {
         jLabel1.setText("Selección:");
 
         Trip.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        Trip.setToolTipText("Seleccione una tripulación para empezar a cargar movimientos!");
         Trip.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         Trip.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -341,6 +350,7 @@ public class Movimiento extends javax.swing.JFrame {
         AddT.setBackground(new java.awt.Color(78, 247, 177));
         AddT.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         AddT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/mas.png"))); // NOI18N
+        AddT.setToolTipText("Añadir nueva tripulación");
         AddT.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         AddT.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         AddT.addActionListener(new java.awt.event.ActionListener() {
@@ -352,6 +362,7 @@ public class Movimiento extends javax.swing.JFrame {
         Editar.setBackground(new java.awt.Color(78, 247, 177));
         Editar.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         Editar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/edit.png"))); // NOI18N
+        Editar.setToolTipText("Editar tripulación");
         Editar.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         Editar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         Editar.addActionListener(new java.awt.event.ActionListener() {
@@ -361,7 +372,8 @@ public class Movimiento extends javax.swing.JFrame {
         });
 
         Eliminartrip.setBackground(new java.awt.Color(78, 247, 177));
-        Eliminartrip.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/x.png"))); // NOI18N
+        Eliminartrip.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/menos.png"))); // NOI18N
+        Eliminartrip.setToolTipText("Eliminar tripulación");
         Eliminartrip.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         Eliminartrip.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -398,6 +410,7 @@ public class Movimiento extends javax.swing.JFrame {
         AddV.setBackground(new java.awt.Color(78, 247, 177));
         AddV.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         AddV.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/mas.png"))); // NOI18N
+        AddV.setToolTipText("Añadir nuevo victor");
         AddV.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         AddV.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         AddV.addActionListener(new java.awt.event.ActionListener() {
@@ -408,7 +421,8 @@ public class Movimiento extends javax.swing.JFrame {
 
         Eliminarvic.setBackground(new java.awt.Color(78, 247, 177));
         Eliminarvic.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        Eliminarvic.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/x.png"))); // NOI18N
+        Eliminarvic.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/menos.png"))); // NOI18N
+        Eliminarvic.setToolTipText("Eliminar un victor");
         Eliminarvic.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         Eliminarvic.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -418,6 +432,7 @@ public class Movimiento extends javax.swing.JFrame {
 
         EditarVic.setBackground(new java.awt.Color(78, 247, 177));
         EditarVic.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/edit.png"))); // NOI18N
+        EditarVic.setToolTipText("Editar un victor existente");
         EditarVic.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         EditarVic.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -490,6 +505,7 @@ public class Movimiento extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        Tabla.setToolTipText("Seleccione cualquier fila para actualizar/eliminar");
         jScrollPane1.setViewportView(Tabla);
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
@@ -815,6 +831,7 @@ public class Movimiento extends javax.swing.JFrame {
         Cancelar.setBackground(new java.awt.Color(78, 247, 177));
         Cancelar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         Cancelar.setText("Cancelar");
+        Cancelar.setToolTipText("Cancela cualquier nuevo movimiento");
         Cancelar.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         Cancelar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         Cancelar.addActionListener(new java.awt.event.ActionListener() {
@@ -826,6 +843,7 @@ public class Movimiento extends javax.swing.JFrame {
         Nuevo.setBackground(new java.awt.Color(78, 247, 177));
         Nuevo.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         Nuevo.setText("Nuevo");
+        Nuevo.setToolTipText("Agrega una nueva fila");
         Nuevo.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         Nuevo.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         Nuevo.addActionListener(new java.awt.event.ActionListener() {
@@ -837,6 +855,7 @@ public class Movimiento extends javax.swing.JFrame {
         Actualizar.setBackground(new java.awt.Color(78, 247, 177));
         Actualizar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         Actualizar.setText("Actualizar");
+        Actualizar.setToolTipText("Actualiza una movimiento ya guardado");
         Actualizar.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         Actualizar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         Actualizar.addActionListener(new java.awt.event.ActionListener() {
@@ -848,6 +867,7 @@ public class Movimiento extends javax.swing.JFrame {
         Eliminar.setBackground(new java.awt.Color(78, 247, 177));
         Eliminar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         Eliminar.setText("Eliminar");
+        Eliminar.setToolTipText("Elimina un movimiento ya guardado");
         Eliminar.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         Eliminar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         Eliminar.addActionListener(new java.awt.event.ActionListener() {
@@ -859,6 +879,7 @@ public class Movimiento extends javax.swing.JFrame {
         Terminar.setBackground(new java.awt.Color(78, 247, 177));
         Terminar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         Terminar.setText("Terminar");
+        Terminar.setToolTipText("Guarda el/los movimiento/s");
         Terminar.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         Terminar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         Terminar.addActionListener(new java.awt.event.ActionListener() {
@@ -870,6 +891,7 @@ public class Movimiento extends javax.swing.JFrame {
         Relevar.setBackground(new java.awt.Color(78, 247, 177));
         Relevar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         Relevar.setText("Relevar");
+        Relevar.setToolTipText("Al finalizar el turno, releve la ambulancia!");
         Relevar.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         Relevar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         Relevar.addActionListener(new java.awt.event.ActionListener() {
@@ -878,16 +900,16 @@ public class Movimiento extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
+        javax.swing.GroupLayout FondoLayout = new javax.swing.GroupLayout(Fondo);
+        Fondo.setLayout(FondoLayout);
+        FondoLayout.setHorizontalGroup(
+            FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(FondoLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGroup(FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(FondoLayout.createSequentialGroup()
+                        .addGroup(FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(FondoLayout.createSequentialGroup()
                                 .addComponent(Cancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(116, 116, 116)
                                 .addComponent(Nuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -899,28 +921,28 @@ public class Movimiento extends javax.swing.JFrame {
                                 .addComponent(Terminar, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(Relevar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
+        FondoLayout.setVerticalGroup(
+            FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(FondoLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGroup(FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(FondoLayout.createSequentialGroup()
                         .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, 279, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(Terminar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(Eliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(Actualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -930,7 +952,7 @@ public class Movimiento extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        getContentPane().add(jPanel3, java.awt.BorderLayout.CENTER);
+        getContentPane().add(Fondo, java.awt.BorderLayout.CENTER);
 
         Barra.setBackground(new java.awt.Color(52, 170, 121));
         Barra.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -1580,6 +1602,7 @@ public class Movimiento extends javax.swing.JFrame {
     private javax.swing.JButton Eliminarvic;
     private javax.swing.JMenu Empleados;
     private javax.swing.JMenu Estadisticas;
+    private javax.swing.JPanel Fondo;
     private javax.swing.JMenu Menu;
     private javax.swing.JMenu Movimientos;
     private javax.swing.JButton Nuevo;
@@ -1619,7 +1642,6 @@ public class Movimiento extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel15;
     private javax.swing.JPanel jPanel17;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;

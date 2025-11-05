@@ -19,6 +19,7 @@ import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfStamper;
 import com.itextpdf.text.pdf.PdfWriter;
 import java.awt.event.ActionEvent;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.Connection;
@@ -243,6 +244,43 @@ public class Asistencia {
     }
 
     public static void Verificacion(Connection conexion, int id, int iduser) throws Exception {
+        LocalDate fechaActual = LocalDate.now();
+        int anioActual = fechaActual.getYear();
+        String rutaCarpeta = "C:\\SAME";
+        String rutaCarpeta2 = "C:\\SAME\\Asistencia";
+        File carpeta = new File(rutaCarpeta);
+        File carpeta2 = new File(rutaCarpeta2);
+
+        if (!carpeta.exists()) {
+            boolean creada = carpeta.mkdirs();
+            if (creada) {
+                System.out.println("✅ Carpeta creada exitosamente en: " + rutaCarpeta);
+                if (!carpeta2.exists()) {
+                    boolean creada2 = carpeta2.mkdirs();
+                    if (creada2) {
+                        System.out.println("✅ Carpeta creada exitosamente en: " + rutaCarpeta2);
+                    } else {
+                        System.out.println("❌ Error al intentar crear la carpeta en: " + rutaCarpeta2);
+                    }
+                } else {
+                    System.out.println("⚠️ La carpeta ya existe en: " + rutaCarpeta2);
+                }
+            } else {
+                System.out.println("❌ Error al intentar crear la carpeta en: " + rutaCarpeta);
+            }
+        } else {
+            System.out.println("⚠️ La carpeta ya existe en: " + rutaCarpeta);
+            if (!carpeta2.exists()) {
+                boolean creada = carpeta2.mkdirs();
+                if (creada) {
+                    System.out.println("✅ Carpeta creada exitosamente en: " + rutaCarpeta2);
+                } else {
+                    System.out.println("❌ Error al intentar crear la carpeta en: " + rutaCarpeta2);
+                }
+            } else {
+                System.out.println("⚠️ La carpeta ya existe en: " + rutaCarpeta2);
+            }
+        }
         int mes = LocalDate.now().getMonthValue();
         String nombre;
         String apellido;
@@ -268,7 +306,7 @@ public class Asistencia {
                     System.out.println("Fecha faltante: " + fecha);
                     // 📄 Documento en horizontal
                     Document document = new Document(PageSize.A4.rotate());
-                    PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("C:\\db\\asistencia_mes_" + fecha + "_" + nombre + " " + apellido + ".pdf"));
+                    PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("C:\\SAME\\Asistencia\\asistencia_mes_" + fecha + "_año_"+anioActual+"_" + nombre + " " + apellido + ".pdf"));
                     document.open();
 
                     // 📸 Cargar imagen (desde carpeta del proyecto o ruta absoluta)
@@ -398,7 +436,7 @@ public class Asistencia {
                     System.out.println("Fecha faltante: " + fecha);
                     // 📄 Documento en horizontal
                     Document document = new Document(PageSize.A4.rotate());
-                    PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("C:\\db\\asistencia_mes_" + fecha + "_" + nombre + " " + apellido + ".pdf"));
+                    PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("C:\\SAME\\Asistencia\\asistencia_mes_" + fecha + "_año_"+anioActual+"_" + nombre + " " + apellido + ".pdf"));
                     document.open();
 
                     // 📸 Cargar imagen (desde carpeta del proyecto o ruta absoluta)
@@ -687,7 +725,7 @@ public class Asistencia {
     public static void AsistenciaReal(Connection conexion, int id, int iduser) throws SQLException {
         mesActual = LocalDate.now().getMonthValue();
         int ida = 0;
-        int base=CLASES.Usuario.base();
+        int base = CLASES.Usuario.base();
 
         PreparedStatement stm5 = conexion.prepareStatement("SELECT entrada from seguimientoasistencia inner join asistencia on seguimientoasistencia.idAsistencia=asistencia.idAsistencia WHERE DAY(entrada)=? and MONTH(entrada)=? and asistencia.id_Empleado=?;");
         stm5.setInt(1, dia2);

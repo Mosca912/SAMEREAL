@@ -299,6 +299,14 @@ public class Asistencia extends javax.swing.JFrame implements CLASES.IBlockableF
                 }
             });
         }
+        
+        int ventanaTheme = CLASES.MenuClass.VentanaOpcThemeRet();
+        if (ventanaTheme == 0) {
+        } else if (ventanaTheme ==1){
+            Color colorPersonalizado = new Color(44, 44, 53);
+            PanelBlanco.setBackground(colorPersonalizado);
+            fondolog.setBackground(colorPersonalizado);
+        }
     }
 
     /**
@@ -317,7 +325,7 @@ public class Asistencia extends javax.swing.JFrame implements CLASES.IBlockableF
         cargar = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         Actualizar = new javax.swing.JButton();
-        jPanel1 = new javax.swing.JPanel();
+        fondolog = new javax.swing.JPanel();
         logito = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -429,20 +437,20 @@ public class Asistencia extends javax.swing.JFrame implements CLASES.IBlockableF
             }
         });
 
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        fondolog.setBackground(new java.awt.Color(255, 255, 255));
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout fondologLayout = new javax.swing.GroupLayout(fondolog);
+        fondolog.setLayout(fondologLayout);
+        fondologLayout.setHorizontalGroup(
+            fondologLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(fondologLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(logito, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        fondologLayout.setVerticalGroup(
+            fondologLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(fondologLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(logito, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
@@ -497,7 +505,7 @@ public class Asistencia extends javax.swing.JFrame implements CLASES.IBlockableF
                                 .addGap(743, 743, 743))
                             .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(fondolog, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         PanelBlancoLayout.setVerticalGroup(
@@ -508,7 +516,7 @@ public class Asistencia extends javax.swing.JFrame implements CLASES.IBlockableF
                 .addGroup(PanelBlancoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(PanelBlancoLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(fondolog, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(PanelBlancoLayout.createSequentialGroup()
                         .addGap(11, 11, 11)
                         .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
@@ -922,6 +930,7 @@ public class Asistencia extends javax.swing.JFrame implements CLASES.IBlockableF
     private javax.swing.JMenu cargoemp;
     private javax.swing.JMenuItem elim;
     private javax.swing.JComboBox<Empleado> empleado;
+    private javax.swing.JPanel fondolog;
     private javax.swing.JMenuItem historial;
     private javax.swing.JMenuItem incmen;
     private javax.swing.JMenuItem inicemp;
@@ -929,7 +938,6 @@ public class Asistencia extends javax.swing.JFrame implements CLASES.IBlockableF
     private javax.swing.JMenuItem iniciomov;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;

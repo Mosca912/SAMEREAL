@@ -223,7 +223,7 @@ public class Empleados {
                     if (rs.next()) {
                         int nuevoIdEmpleado = rs.getInt(1);
                         PreparedStatement stm4 = conexion.prepareStatement("INSERT INTO auditoria_empleado (evento, id_empleado, id_usuario) VALUES (?, ?, ?)");
-                        stm4.setString(1, "NUEVA_TRIPULACION");
+                        stm4.setString(1, "NUEVO_EMPLEADO");
                         stm4.setInt(2, nuevoIdEmpleado);
                         stm4.setInt(3, iduser);
                         try {
