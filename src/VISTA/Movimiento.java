@@ -26,6 +26,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 import javax.swing.text.MaskFormatter;
 
 /**
@@ -37,7 +38,7 @@ public class Movimiento extends javax.swing.JFrame {
     Connection con = Conexiones.Conexion();
     ResultSet rs;
     int id = 0, band, cont = 0, idtrip, block = 0, rango, valid, iduser;
-    String veri, fechaActual;
+    String veri, fechaActual, ayuda2 = "Movimiento";
 
     public void refrescarCombo() {
         try {
@@ -98,7 +99,7 @@ public class Movimiento extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null);
         CLASES.MenuClass menuHelper = new CLASES.MenuClass();
-        menuHelper.MenuConfig(Movimientos, Menu, Asistencia, Empleados, Estadisticas, Ayuda, Configuracion, Salir, this);
+        menuHelper.MenuConfig(Movimientos, Menu, Asistencia, Empleados, Estadisticas, Ayuda, Configuracion, Salir, this, ayuda2);
 
         Tabla.setModel(tabla1);
 
@@ -228,12 +229,18 @@ public class Movimiento extends javax.swing.JFrame {
             Tabla.getColumnModel().getColumn(2).setCellEditor(editor); // llegada
 
         }
-        
+
         int ventanaTheme = CLASES.MenuClass.VentanaOpcThemeRet();
-        if (ventanaTheme == 0) {
-        } else if (ventanaTheme ==1){
+        if (ventanaTheme == 1) {
             Color colorPersonalizado = new Color(44, 44, 53);
             Fondo.setBackground(colorPersonalizado);
+
+            JTableHeader header = Tabla.getTableHeader();
+            header.setBackground(new Color(44, 44, 53));
+            header.setForeground(Color.WHITE);
+
+            Tabla.setBackground(new Color(50, 50, 50));
+            Tabla.setForeground(Color.WHITE);
         }
 
     }

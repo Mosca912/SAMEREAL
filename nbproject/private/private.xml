@@ -5,13 +5,26 @@
             <url>src/CLASES/Movimientos.java</url>
             <bookmark id="1">
                 <name/>
-                <line>229</line>
+                <line>324</line>
                 <key/>
             </bookmark>
         </file>
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/Users/Facuymayriver/Documents/NetBeansProjects/SAMEREAL/src/VISTA/Historial.java</file>
+            <file>file:/C:/Users/Facuymayriver/Documents/NetBeansProjects/SAMEREAL/src/CLASES/Movimientos.java</file>
+            <file>file:/C:/Users/Facuymayriver/Documents/NetBeansProjects/SAMEREAL/src/VISTA/Empleados.java</file>
+            <file>file:/C:/Users/Facuymayriver/Documents/NetBeansProjects/SAMEREAL/src/CLASES/Empleados.java</file>
+            <file>file:/C:/Users/Facuymayriver/Documents/NetBeansProjects/SAMEREAL/src/VISTA/AddTri.java</file>
+            <file>file:/C:/Users/Facuymayriver/Documents/NetBeansProjects/SAMEREAL/src/VISTA/Estadisticas.java</file>
+            <file>file:/C:/Users/Facuymayriver/Documents/NetBeansProjects/SAMEREAL/src/IMAGENES/AmbulanciaPartes.png</file>
+            <file>file:/C:/Users/Facuymayriver/Documents/NetBeansProjects/SAMEREAL/src/VISTA/AddDelVicTrip.java</file>
+            <file>file:/C:/Users/Facuymayriver/Documents/NetBeansProjects/SAMEREAL/src/IMAGENES/ambulancia.jpg</file>
+            <file>file:/C:/Users/Facuymayriver/Documents/NetBeansProjects/SAMEREAL/src/CLASES/Estadisticas.java</file>
+            <file>file:/C:/Users/Facuymayriver/Documents/NetBeansProjects/SAMEREAL/src/VISTA/Menu.java</file>
+            <file>file:/C:/Users/Facuymayriver/Documents/NetBeansProjects/SAMEREAL/src/IMAGENES/Funciona.png</file>
+            <file>file:/C:/Users/Facuymayriver/Documents/NetBeansProjects/SAMEREAL/src/VISTA/Ayuda.java</file>
             <file>file:/C:/Users/Facuymayriver/Documents/NetBeansProjects/SAMEREAL/src/VISTA/Movimiento.java</file>
         </group>
     </open-files>

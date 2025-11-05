@@ -34,6 +34,7 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 
 /**
  *
@@ -47,7 +48,9 @@ public class Asistencia extends javax.swing.JFrame implements CLASES.IBlockableF
     ResultSet rs;
     int cont = 0, band = 0;
     public int block = 0, block2 = 0, rango = 0, valid = 0;
-    String veri, veri2;
+    String veri, veri2, ayuda2 = "Asistencia";
+
+    int ventanaTheme = CLASES.MenuClass.VentanaOpcThemeRet();
 
     public void refrescarCombo() {
         while (empleado.getItemCount() > 1) {
@@ -139,7 +142,7 @@ public class Asistencia extends javax.swing.JFrame implements CLASES.IBlockableF
         rango = CLASES.Usuario.rango();
         this.setLocationRelativeTo(null);
         CLASES.MenuClass menuHelper = new CLASES.MenuClass();
-        menuHelper.MenuConfig(Movimientos, Menu, Asistencia, Empleados, Estadisticas, Ayuda, Configuracion, Salir, this);
+        menuHelper.MenuConfig(Movimientos, Menu, Asistencia, Empleados, Estadisticas, Ayuda, Configuracion, Salir, this, ayuda2);
 
         int ventana = CLASES.MenuClass.Ventana();
         if (ventana == 0) {
@@ -149,7 +152,12 @@ public class Asistencia extends javax.swing.JFrame implements CLASES.IBlockableF
             logito.setIcon(icono);
         } else if (ventana == 1) {
             this.setExtendedState(MAXIMIZED_BOTH);
-            String rutaImagen = "/IMAGENES/logosameasismax.png";
+            String rutaImagen="";
+            if (ventanaTheme==0){
+                rutaImagen = "/IMAGENES/logosameasismax.png";
+            } else if (ventanaTheme==1){
+                rutaImagen = "/IMAGENES/logosameasismaxosc.png";
+            }
             ImageIcon icono = new ImageIcon(getClass().getResource(rutaImagen));
             logito.setIcon(icono);
         }
@@ -158,8 +166,8 @@ public class Asistencia extends javax.swing.JFrame implements CLASES.IBlockableF
         cargar.setEnabled(false);
         CLASES.Asistencia.Select(con, area);
         Actualizar.setEnabled(false);
-        
-        iduser=CLASES.Usuario.iduser();
+
+        iduser = CLASES.Usuario.iduser();
 
         for (int i = 1; i <= 31; i++) {
             Object[] fila = {i, "", "", ""};
@@ -197,13 +205,22 @@ public class Asistencia extends javax.swing.JFrame implements CLASES.IBlockableF
                     try {
                         int dia = Integer.parseInt(diaObj.toString());
                         int diaActual = java.time.LocalDate.now().getDayOfMonth();
-
-                        if (dia > diaActual) {
-                            c.setBackground(new Color(230, 230, 230)); // gris clarito
-                            c.setForeground(Color.DARK_GRAY);
-                        } else {
-                            c.setBackground(Color.WHITE);
-                            c.setForeground(Color.BLACK);
+                        if (ventanaTheme == 0) {
+                            if (dia > diaActual) {
+                                c.setBackground(new Color(230, 230, 230)); // gris clarito
+                                c.setForeground(Color.DARK_GRAY);
+                            } else {
+                                c.setBackground(Color.WHITE);
+                                c.setForeground(Color.BLACK);
+                            }
+                        } else if (ventanaTheme == 1) {
+                            if (dia > diaActual) {
+                                c.setBackground(new Color(53, 53, 59)); // gris clarito
+                                c.setForeground(Color.BLACK);
+                            } else {
+                                c.setBackground(new Color(62, 62, 73));
+                                c.setForeground(Color.WHITE);
+                            }
                         }
                     } catch (NumberFormatException ex) {
                         c.setBackground(Color.WHITE);
@@ -299,13 +316,14 @@ public class Asistencia extends javax.swing.JFrame implements CLASES.IBlockableF
                 }
             });
         }
-        
-        int ventanaTheme = CLASES.MenuClass.VentanaOpcThemeRet();
-        if (ventanaTheme == 0) {
-        } else if (ventanaTheme ==1){
+
+        if (ventanaTheme == 1) {
             Color colorPersonalizado = new Color(44, 44, 53);
             PanelBlanco.setBackground(colorPersonalizado);
             fondolog.setBackground(colorPersonalizado);
+            JTableHeader header = Tabla.getTableHeader();
+            header.setBackground(new Color(44, 44, 53));
+            header.setForeground(Color.WHITE);
         }
     }
 
@@ -841,8 +859,8 @@ public class Asistencia extends javax.swing.JFrame implements CLASES.IBlockableF
     }//GEN-LAST:event_nuevtripActionPerformed
 
     private void nuevovicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevovicActionPerformed
-        int ban=0;
-        AddVic ventana = new AddVic(this,ban);
+        int ban = 0;
+        AddVic ventana = new AddVic(this, ban);
         if (rango == 1) {
             ventana.setVisible(true);
         } else {

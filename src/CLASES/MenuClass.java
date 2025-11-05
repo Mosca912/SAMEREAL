@@ -8,8 +8,14 @@ package CLASES;
 import CONEXIONES.Conexiones;
 import VISTA.Menu;
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -27,6 +33,7 @@ import javax.swing.UIManager;
  * @author Facuymayriver
  */
 public class MenuClass {
+
     Connection con = Conexiones.Conexion();
     static int ventana = 0;
     static int ventanaTheme = 0;
@@ -47,6 +54,32 @@ public class MenuClass {
         }
     }
 
+    public static void abrirPDF(String rutaRecurso) {
+        try (InputStream inputStream = CLASES.Movimientos.class.getResourceAsStream(rutaRecurso)) {
+
+            if (inputStream == null) {
+                JOptionPane.showMessageDialog(null, "Error: No se pudo encontrar el recurso interno: " + rutaRecurso);
+                return;
+            }
+
+            File tempFile = File.createTempFile("temp_pdf_", ".pdf");
+            tempFile.deleteOnExit();
+
+            Files.copy(inputStream, tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+            if (Desktop.isDesktopSupported()) {
+                Desktop.getDesktop().open(tempFile);
+            } else {
+                JOptionPane.showMessageDialog(null, "Desktop no está soportado en este sistema.");
+            }
+
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Error al procesar/abrir el PDF: " + e.getMessage());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error inesperado: " + e.getMessage());
+        }
+    }
+
     public static int Ventana() {
         return ventana;
     }
@@ -54,11 +87,11 @@ public class MenuClass {
     public static void VentanaOpc(int band) {
         ventana = band;
     }
-    
+
     public static void VentanaOpcTheme(int band) {
         ventanaTheme = band;
     }
-    
+
     public static int VentanaOpcThemeRet() {
         return ventanaTheme;
     }
@@ -83,7 +116,7 @@ public class MenuClass {
         return false;
     }
 
-    public void MenuConfig(JMenu Movimientos, JMenu Menu, JMenu Asistencia, JMenu Empleados, JMenu Estadisticas, JMenu Ayuda, JMenu Configuracion, JMenu Salir, JFrame ventanaAnterior) {
+    public void MenuConfig(JMenu Movimientos, JMenu Menu, JMenu Asistencia, JMenu Empleados, JMenu Estadisticas, JMenu Ayuda, JMenu Configuracion, JMenu Salir, JFrame ventanaAnterior, String ruta) {
 
         this.ventanaAnterior = ventanaAnterior;
         Icon iconNormal = new ImageIcon(MenuClass.class.getResource("/IMAGENES/movimiento.png"));
@@ -123,6 +156,7 @@ public class MenuClass {
                 Movimientos.setBorder(BorderFactory.createLineBorder(new Color(52, 170, 121)));
             }
 
+            @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
                     if (!isBlocked()) {
@@ -154,6 +188,7 @@ public class MenuClass {
                 Menu.setBorder(BorderFactory.createLineBorder(new Color(52, 170, 121)));
             }
 
+            @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
                     if (!isBlocked()) {
@@ -186,6 +221,7 @@ public class MenuClass {
                 Asistencia.setBorder(BorderFactory.createLineBorder(new Color(52, 170, 121)));
             }
 
+            @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
                     if (!isBlocked()) {
@@ -219,6 +255,7 @@ public class MenuClass {
                 Empleados.setBorder(BorderFactory.createLineBorder(new Color(52, 170, 121)));
             }
 
+            @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
                     if (!isBlocked()) {
@@ -251,6 +288,7 @@ public class MenuClass {
                 Estadisticas.setBorder(BorderFactory.createLineBorder(new Color(52, 170, 121)));
             }
 
+            @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
                     if (!isBlocked()) {
@@ -283,17 +321,12 @@ public class MenuClass {
                 Ayuda.setBorder(BorderFactory.createLineBorder(new Color(52, 170, 121)));
             }
 
+            @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
-                    if (!isBlocked()) {
-
-                        VISTA.Ayuda ventana = new VISTA.Ayuda();
-
-                        if (ventanaAnterior != null && ventanaAnterior.getClass() == ventana.getClass()) {
-                            System.out.println("Ya estás en la ventana actual.");
-                        } else {
-                            JOptionPane.showMessageDialog(null, "Proximamente");
-                        }
+                    if (!isBlocked2()) {
+                        String direccion1 = "/RECURSOS/"+ruta+".pdf";
+                        MenuClass.abrirPDF(direccion1);
                     }
                 }
             }
@@ -312,6 +345,7 @@ public class MenuClass {
                 Configuracion.setBorder(BorderFactory.createLineBorder(new Color(52, 170, 121)));
             }
 
+            @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
                     if (!isBlocked()) {

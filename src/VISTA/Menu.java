@@ -29,6 +29,7 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
     int id = 0, valid, rango = 0;
     String veri = "Opciones", fechaFormateada;
     private final char caracterEchoPredeterminado;
+    String ayuda2="Menu";
 
     public void validado() {
         DNI.setVisible(false);
@@ -132,7 +133,6 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
         Asistencia.setEnabled(false);
         Empleados.setEnabled(false);
         Estadisticas.setEnabled(false);
-        Ayuda.setEnabled(false);
         Configuracion.setEnabled(false);
         cerrarsesion.setVisible(false);
 
@@ -143,7 +143,7 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
 
         this.setLocationRelativeTo(null);
         CLASES.MenuClass menuHelper = new CLASES.MenuClass();
-        menuHelper.MenuConfig(Movimientos, Menu, Asistencia, Empleados, Estadisticas, Ayuda, Configuracion, Salir, this);
+        menuHelper.MenuConfig(Movimientos, Menu, Asistencia, Empleados, Estadisticas, Ayuda, Configuracion, Salir, this, ayuda2);
 
         int ventana = CLASES.MenuClass.Ventana();
         if (ventana == 0) {
@@ -193,21 +193,18 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
         jLabel3 = new javax.swing.JLabel();
         Barra = new javax.swing.JMenuBar();
         Menu = new javax.swing.JMenu();
-        incmen = new javax.swing.JMenuItem();
         Movimientos = new javax.swing.JMenu();
         iniciomov = new javax.swing.JMenuItem();
         nuevtrip = new javax.swing.JMenuItem();
         nuevovic = new javax.swing.JMenuItem();
         historial = new javax.swing.JMenuItem();
         Asistencia = new javax.swing.JMenu();
-        inicioas = new javax.swing.JMenuItem();
         Empleados = new javax.swing.JMenu();
         inicemp = new javax.swing.JMenuItem();
         cargoemp = new javax.swing.JMenu();
         mod = new javax.swing.JMenuItem();
         elim = new javax.swing.JMenuItem();
         Estadisticas = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
         Ayuda = new javax.swing.JMenu();
         Configuracion = new javax.swing.JMenu();
         Salir = new javax.swing.JMenu();
@@ -359,17 +356,6 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
         Menu.setToolTipText("Menu");
         Menu.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         Menu.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-
-        incmen.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        incmen.setText("Inicio");
-        incmen.setToolTipText("");
-        incmen.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                incmenActionPerformed(evt);
-            }
-        });
-        Menu.add(incmen);
-
         Barra.add(Menu);
 
         Movimientos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/movimiento.png"))); // NOI18N
@@ -430,16 +416,6 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
                 AsistenciaActionPerformed(evt);
             }
         });
-
-        inicioas.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        inicioas.setText("Inicio");
-        inicioas.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                inicioasActionPerformed(evt);
-            }
-        });
-        Asistencia.add(inicioas);
-
         Barra.add(Asistencia);
 
         Empleados.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/empleado.png"))); // NOI18N
@@ -486,22 +462,17 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
         Estadisticas.setText("Estadisticas");
         Estadisticas.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         Estadisticas.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-
-        jMenuItem1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jMenuItem1.setText("Consultar");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
-            }
-        });
-        Estadisticas.add(jMenuItem1);
-
         Barra.add(Estadisticas);
 
         Ayuda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/ayuda.png"))); // NOI18N
         Ayuda.setText("Ayuda");
         Ayuda.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         Ayuda.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        Ayuda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AyudaActionPerformed(evt);
+            }
+        });
         Barra.add(Ayuda);
 
         Configuracion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/config.png"))); // NOI18N
@@ -558,8 +529,8 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
     }//GEN-LAST:event_historialActionPerformed
 
     private void nuevovicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevovicActionPerformed
-        int ban=0;
-        AddVic ventana = new AddVic(this,ban);
+        int ban = 0;
+        AddVic ventana = new AddVic(this, ban);
         if (rango == 1) {
             ventana.setVisible(true);
         } else {
@@ -596,22 +567,6 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
             JOptionPane.showMessageDialog(null, "Es un usuario lector!");
         }
     }//GEN-LAST:event_elimActionPerformed
-
-    private void inicioasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inicioasActionPerformed
-        Asistencia ventana = new Asistencia();
-        ventana.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_inicioasActionPerformed
-
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        Estadisticas ventana = new Estadisticas();
-        ventana.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
-
-    private void incmenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_incmenActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_incmenActionPerformed
 
     private void MovimientosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MovimientosActionPerformed
         Movimiento ventana = new Movimiento();
@@ -712,6 +667,11 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
         }
     }//GEN-LAST:event_DNIKeyTyped
 
+    private void AyudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AyudaActionPerformed
+        String direccion1 = "\\RECURSOS\\Menu.pdf";
+        CLASES.Movimientos.abrirPDF(direccion1);
+    }//GEN-LAST:event_AyudaActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -775,17 +735,14 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
     private javax.swing.JPasswordField contrasena;
     private javax.swing.JMenuItem elim;
     private javax.swing.JMenuItem historial;
-    private javax.swing.JMenuItem incmen;
     private javax.swing.JMenuItem inicemp;
     private javax.swing.JButton iniciarsesion1;
-    private javax.swing.JMenuItem inicioas;
     private javax.swing.JMenuItem iniciomov;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu7;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel labelnu;
     private javax.swing.JLabel labelogin;

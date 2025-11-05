@@ -34,7 +34,7 @@ public class Estadisticas extends javax.swing.JFrame {
     Connection con = Conexiones.Conexion();
     ResultSet rs;
     int cont = 0, band = 0, indice, block=0, rango=0;
-    String veri, veri2;
+    String veri, veri2, ayuda2="Estadisticas";
 
     public Estadisticas() {
         CLASES.MenuClass.Configuracion();
@@ -46,7 +46,7 @@ public class Estadisticas extends javax.swing.JFrame {
         
         this.setLocationRelativeTo(null);
         CLASES.MenuClass menuHelper = new CLASES.MenuClass();
-        menuHelper.MenuConfig(Movimientos, Menu, Asistencia, Empleados, Estadisticas, Ayuda, Configuracion, Salir, this);
+        menuHelper.MenuConfig(Movimientos, Menu, Asistencia, Empleados, Estadisticas, Ayuda, Configuracion, Salir, this, ayuda2);
         
         int ventana=CLASES.MenuClass.Ventana();
         if (ventana==0){
@@ -321,12 +321,12 @@ public class Estadisticas extends javax.swing.JFrame {
         jPanel10.setBackground(new java.awt.Color(52, 170, 121));
         jPanel10.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Seleccionar victor", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Tahoma", 1, 14))); // NOI18N
         jPanel10.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
+            }
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
                 jPanel10AncestorAdded(evt);
             }
             public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
-            }
-            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
         });
 

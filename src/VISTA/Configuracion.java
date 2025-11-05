@@ -20,6 +20,7 @@ public class Configuracion extends javax.swing.JFrame {
 
     int block=0, rango=0;
     int band;
+    String ayuda2="Configuracion";
     class FondoInicio extends JPanel {
 
         private final Image imagen5;
@@ -52,7 +53,7 @@ public class Configuracion extends javax.swing.JFrame {
         }
         this.setLocationRelativeTo(null);
         CLASES.MenuClass menuHelper = new CLASES.MenuClass();
-        menuHelper.MenuConfig(Movimientos, Menu, Asistencia, Empleados, Estadisticas, Ayuda, Configuracion, Salir, this);
+        menuHelper.MenuConfig(Movimientos, Menu, Asistencia, Empleados, Estadisticas, Ayuda, Configuracion, Salir, this, ayuda2);
         int ventana=CLASES.MenuClass.Ventana();
         int ventanaTheme = CLASES.MenuClass.VentanaOpcThemeRet();
         if (ventanaTheme==0){

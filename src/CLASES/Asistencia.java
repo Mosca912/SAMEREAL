@@ -745,7 +745,7 @@ public class Asistencia {
                 PreparedStatement stm2 = conexion.prepareStatement("INSERT INTO asistencia (id_Empleado, idBase, activo, relevado, fecha) values (?,?,1,0,?)");
                 stm2.setInt(1, id);
                 stm2.setInt(2, base);
-                stm2.setInt(2, mesActual);
+                stm2.setInt(3, mesActual);
                 try {
                     stm2.execute();
                 } catch (SQLException e) {

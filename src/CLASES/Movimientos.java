@@ -375,7 +375,7 @@ public class Movimientos {
                         if (rs2.next()) {
                             int nuevoIdTrip = rs2.getInt(1);
                             PreparedStatement stm4 = conexion.prepareStatement("INSERT INTO auditoria_movimientos (evento, id_tripulacion, id_usuario) VALUES (?, ?, ?)");
-                            stm4.setString(1, "NUEVO_USUARIO");
+                            stm4.setString(1, "NUEVA_TRIPULACION");
                             stm4.setInt(2, nuevoIdTrip);
                             stm4.setInt(3, iduser);
                             try {
