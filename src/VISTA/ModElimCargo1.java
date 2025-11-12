@@ -7,8 +7,10 @@ package VISTA;
 
 import CONEXIONES.Conexiones;
 import java.awt.Color;
+import java.awt.Image;
 import java.sql.Connection;
 import java.sql.SQLException;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -47,6 +49,18 @@ public class ModElimCargo1 extends javax.swing.JDialog {
     public ModElimCargo1(int band, JFrame ventanaPrincipal) {
         super(ventanaPrincipal, true);
         initComponents();
+        
+        String rutaIcono = "/IMAGENES/iconosame.png";
+
+        try {
+            // Cargar la imagen desde los recursos del proyecto (la forma recomendada)
+            Image icono = new ImageIcon(getClass().getResource(rutaIcono)).getImage();
+            this.setIconImage(icono);
+
+        } catch (Exception e) {
+            System.err.println("Error al cargar el ícono: " + e.getMessage());
+        }
+        
         this.setLocationRelativeTo(null);
         ModElimCargo1.band = band;
 

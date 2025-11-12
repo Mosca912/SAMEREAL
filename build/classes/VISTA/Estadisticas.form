@@ -292,9 +292,6 @@
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="0"/>
     <Property name="title" type="java.lang.String" value="Estadisticas"/>
-    <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-      <Dimension value="[1200, 700]"/>
-    </Property>
     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
       <Dimension value="[1200, 700]"/>
     </Property>
@@ -837,7 +834,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/IMAGENES/estats.png"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Estad&#xed;sticas de Vehiculos"/>
+            <Property name="text" type="java.lang.String" value="Estad&#xed;sticas de Vehicular"/>
           </Properties>
         </Component>
       </SubComponents>

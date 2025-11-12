@@ -6,6 +6,7 @@
 package VISTA;
 
 import CONEXIONES.Conexiones;
+import java.awt.Image;
 import java.sql.Connection;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -22,6 +23,18 @@ public class CambCont extends javax.swing.JDialog {
     public CambCont(JFrame ventanaPrincipal) {
         super(ventanaPrincipal, true);
         initComponents();
+        
+        String rutaIcono = "/IMAGENES/iconosame.png";
+
+        try {
+            // Cargar la imagen desde los recursos del proyecto (la forma recomendada)
+            Image icono = new ImageIcon(getClass().getResource(rutaIcono)).getImage();
+            this.setIconImage(icono);
+
+        } catch (Exception e) {
+            System.err.println("Error al cargar el ícono: " + e.getMessage());
+        }
+        
         this.setLocationRelativeTo(null);
         DNI.requestFocus();
         caracterEchoPredeterminado = Contrasena.getEchoChar();

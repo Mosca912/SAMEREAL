@@ -29,7 +29,7 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
     int id = 0, valid, rango = 0;
     String veri = "Opciones", fechaFormateada;
     private final char caracterEchoPredeterminado;
-    String ayuda2="Menu";
+    String ayuda2 = "Menu";
 
     public void validado() {
         DNI.setVisible(false);
@@ -74,9 +74,8 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
         Ayuda.setEnabled(false);
         Configuracion.setEnabled(false);
         cerrarsesion.setVisible(false);
-
-        labelnu.setVisible(false);
         registrarse.setVisible(false);
+        modificaruser.setVisible(false);
 
         DNI.setVisible(true);
         contrasena.setVisible(true);
@@ -126,6 +125,17 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
 
         initComponents();
 
+        String rutaIcono = "/IMAGENES/iconosame.png";
+
+        try {
+            // Cargar la imagen desde los recursos del proyecto (la forma recomendada)
+            Image icono = new ImageIcon(getClass().getResource(rutaIcono)).getImage();
+            this.setIconImage(icono);
+
+        } catch (Exception e) {
+            System.err.println("Error al cargar el ícono: " + e.getMessage());
+        }
+
         block = 1;
         Barra.setEnabled(false);
         Menu.setEnabled(false);
@@ -135,8 +145,9 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
         Estadisticas.setEnabled(false);
         Configuracion.setEnabled(false);
         cerrarsesion.setVisible(false);
+        modificaruser.setVisible(false);
+        Datos.setText("");
 
-        labelnu.setVisible(false);
         registrarse.setVisible(false);
 
         caracterEchoPredeterminado = contrasena.getEchoChar();
@@ -156,16 +167,22 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
         if (valid == 1) {
             botones();
             validado();
-            CLASES.Usuario.nombre(labelogin);
+            CLASES.Usuario.nombre(labelogin, Datos);
             Salir.setText("Cerrar Sesión");
         }
 
         rango = CLASES.Usuario.rango();
         if (rango == 1) {
-            labelnu.setVisible(true);
             registrarse.setVisible(true);
-        } else if (rango == 2) {
+            modificaruser.setVisible(true);
+        }
 
+        int newuser = CLASES.Usuario.Verificacion(con);
+
+        if (newuser == 0) {
+            JOptionPane.showMessageDialog(null, "No hay usuarios!, se procedera a crear un registro nuevo");
+            RegistrarFrm ventana2 = new RegistrarFrm(this, 0);
+            ventana2.setVisible(true);
         }
 
     }
@@ -186,10 +203,11 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
         registrarse = new javax.swing.JButton();
         labelogin = new javax.swing.JLabel();
         iniciarsesion1 = new javax.swing.JButton();
-        labelnu = new javax.swing.JLabel();
         cambiarcont = new javax.swing.JButton();
         cerrarsesion = new javax.swing.JButton();
         MostOcPass = new javax.swing.JButton();
+        Datos = new javax.swing.JLabel();
+        modificaruser = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         Barra = new javax.swing.JMenuBar();
         Menu = new javax.swing.JMenu();
@@ -234,7 +252,15 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
         DNI.setToolTipText("Ingrese su DNI");
         DNI.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)), "DNI", javax.swing.border.TitledBorder.LEADING, javax.swing.border.TitledBorder.ABOVE_TOP, new java.awt.Font("Tahoma", 1, 14))); // NOI18N
         DNI.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        DNI.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DNIActionPerformed(evt);
+            }
+        });
         DNI.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                DNIKeyReleased(evt);
+            }
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 DNIKeyTyped(evt);
             }
@@ -246,12 +272,18 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
         contrasena.setToolTipText("Ingrese su contraseña");
         contrasena.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)), "Contraseña", javax.swing.border.TitledBorder.LEADING, javax.swing.border.TitledBorder.ABOVE_TOP, new java.awt.Font("Tahoma", 1, 14))); // NOI18N
         contrasena.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-        menuinicio.add(contrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 160, 190, 40));
+        contrasena.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                contrasenaKeyReleased(evt);
+            }
+        });
+        menuinicio.add(contrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 170, 190, 40));
 
         registrarse.setBackground(new java.awt.Color(52, 170, 121));
         registrarse.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         registrarse.setForeground(new java.awt.Color(255, 255, 255));
-        registrarse.setText("Registrarse");
+        registrarse.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/empleado.png"))); // NOI18N
+        registrarse.setText("Registrarse nuevo usuario");
         registrarse.setToolTipText("Registrar un nuevo usuario");
         registrarse.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         registrarse.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -260,7 +292,7 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
                 registrarseActionPerformed(evt);
             }
         });
-        menuinicio.add(registrarse, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 140, 120, 40));
+        menuinicio.add(registrarse, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 60, 250, 60));
 
         labelogin.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         labelogin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/asistencia.png"))); // NOI18N
@@ -279,12 +311,7 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
                 iniciarsesion1ActionPerformed(evt);
             }
         });
-        menuinicio.add(iniciarsesion1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 220, 120, 40));
-
-        labelnu.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        labelnu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/empleado.png"))); // NOI18N
-        labelnu.setText("Nuevo Usuario");
-        menuinicio.add(labelnu, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 90, 150, -1));
+        menuinicio.add(iniciarsesion1, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 230, 130, 40));
 
         cambiarcont.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         cambiarcont.setForeground(new java.awt.Color(52, 170, 121));
@@ -292,12 +319,13 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
         cambiarcont.setToolTipText("");
         cambiarcont.setBorder(null);
         cambiarcont.setContentAreaFilled(false);
+        cambiarcont.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cambiarcont.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cambiarcontActionPerformed(evt);
             }
         });
-        menuinicio.add(cambiarcont, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 280, 150, -1));
+        menuinicio.add(cambiarcont, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 300, 170, -1));
 
         cerrarsesion.setBackground(new java.awt.Color(52, 170, 121));
         cerrarsesion.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
@@ -305,23 +333,43 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
         cerrarsesion.setText("Cerrar Sesión");
         cerrarsesion.setToolTipText("Cerrar sesión!");
         cerrarsesion.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        cerrarsesion.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cerrarsesion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cerrarsesionActionPerformed(evt);
             }
         });
-        menuinicio.add(cerrarsesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 310, 140, -1));
+        menuinicio.add(cerrarsesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 280, 120, 40));
 
         MostOcPass.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/ojoabierto.png"))); // NOI18N
         MostOcPass.setToolTipText("Ver/Ocultar contraseña");
         MostOcPass.setBorder(null);
         MostOcPass.setContentAreaFilled(false);
+        MostOcPass.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         MostOcPass.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 MostOcPassActionPerformed(evt);
             }
         });
-        menuinicio.add(MostOcPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 160, 40, 40));
+        menuinicio.add(MostOcPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 170, 40, 40));
+
+        Datos.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        Datos.setText("jLabel1");
+        menuinicio.add(Datos, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 80, 150, 30));
+
+        modificaruser.setBackground(new java.awt.Color(52, 170, 121));
+        modificaruser.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        modificaruser.setForeground(new java.awt.Color(255, 255, 255));
+        modificaruser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/asistencia.png"))); // NOI18N
+        modificaruser.setText("Modificar Usuario");
+        modificaruser.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        modificaruser.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        modificaruser.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                modificaruserActionPerformed(evt);
+            }
+        });
+        menuinicio.add(modificaruser, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 170, 200, 50));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
         jLabel3.setText("SAME TRANSPORTE");
@@ -579,7 +627,7 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
     }//GEN-LAST:event_SalirActionPerformed
 
     private void registrarseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registrarseActionPerformed
-        RegistrarFrm ventana = new RegistrarFrm(this);
+        RegistrarFrm ventana = new RegistrarFrm(this, 1);
         ventana.setVisible(true);
     }//GEN-LAST:event_registrarseActionPerformed
 
@@ -588,7 +636,7 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
         String cont = contrasena.getText();
         if (!dni.trim().isEmpty() && !cont.trim().isEmpty()) {
             try {
-                valid = CLASES.Usuario.IniciarSesion(con, dni, cont, labelogin);
+                valid = CLASES.Usuario.IniciarSesion(con, dni, cont, labelogin, Datos);
             } catch (SQLException ex) {
                 Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -601,9 +649,8 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
             }
             rango = CLASES.Usuario.rango();
             if (rango == 1) {
-                labelnu.setVisible(true);
                 registrarse.setVisible(true);
-            } else if (rango == 2) {
+                modificaruser.setVisible(true);
             }
         } else {
             JOptionPane.showMessageDialog(null, "¡HAY CAMPOS VACIOS! Por favor, revise");
@@ -639,7 +686,7 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
 
         if (opcion == JOptionPane.OK_OPTION) {
             try {
-                CLASES.Usuario.CerrarSesion(con, labelogin);
+                CLASES.Usuario.CerrarSesion(con, labelogin, Datos);
             } catch (SQLException ex) {
                 Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -671,6 +718,27 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
         String direccion1 = "\\RECURSOS\\Menu.pdf";
         CLASES.Movimientos.abrirPDF(direccion1);
     }//GEN-LAST:event_AyudaActionPerformed
+
+    private void modificaruserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modificaruserActionPerformed
+        RegistrarFrm ventana = new RegistrarFrm(this, 2);
+        ventana.setVisible(true);
+    }//GEN-LAST:event_modificaruserActionPerformed
+
+    private void DNIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DNIActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_DNIActionPerformed
+
+    private void DNIKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_DNIKeyReleased
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+            contrasena.requestFocus();
+        }
+    }//GEN-LAST:event_DNIKeyReleased
+
+    private void contrasenaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_contrasenaKeyReleased
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+            iniciarsesion1.requestFocus();
+        }
+    }//GEN-LAST:event_contrasenaKeyReleased
 
     /**
      * @param args the command line arguments
@@ -722,6 +790,7 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
     private javax.swing.JMenuBar Barra;
     private javax.swing.JMenu Configuracion;
     private javax.swing.JTextField DNI;
+    private javax.swing.JLabel Datos;
     private javax.swing.JMenu Empleados;
     private javax.swing.JMenu Estadisticas;
     private javax.swing.JPanel Fondo;
@@ -744,10 +813,10 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
     private javax.swing.JMenu jMenu7;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JLabel labelnu;
     private javax.swing.JLabel labelogin;
     private javax.swing.JPanel menuinicio;
     private javax.swing.JMenuItem mod;
+    private javax.swing.JButton modificaruser;
     private javax.swing.JMenuItem nuevovic;
     private javax.swing.JMenuItem nuevtrip;
     private javax.swing.JButton registrarse;

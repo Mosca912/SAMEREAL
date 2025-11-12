@@ -8,6 +8,7 @@ package VISTA;
 import CLASES.Movimientos;
 import CONEXIONES.Conexiones;
 import java.awt.Color;
+import java.awt.Image;
 import java.awt.event.*;
 import java.sql.*;
 import java.util.logging.*;
@@ -67,6 +68,18 @@ public class Historial extends javax.swing.JDialog{
     public Historial(JFrame ventanaPrincipal) {
         super(ventanaPrincipal,true);
         initComponents();
+        
+        String rutaIcono = "/IMAGENES/iconosame.png";
+
+        try {
+            // Cargar la imagen desde los recursos del proyecto (la forma recomendada)
+            Image icono = new ImageIcon(getClass().getResource(rutaIcono)).getImage();
+            this.setIconImage(icono);
+
+        } catch (Exception e) {
+            System.err.println("Error al cargar el ícono: " + e.getMessage());
+        }
+        
         Tabla.setRowHeight(30);
         Tabla.setModel(tabla1);
         Tabla.getTableHeader().setReorderingAllowed(false);

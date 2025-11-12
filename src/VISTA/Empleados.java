@@ -12,6 +12,7 @@ import com.toedter.calendar.JDateChooser;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Image;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -19,11 +20,9 @@ import java.util.Date;
 import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -115,6 +114,18 @@ public class Empleados extends javax.swing.JFrame implements CLASES.IBlockableFr
         CLASES.MenuClass.Configuracion();
 
         initComponents();
+        
+        String rutaIcono = "/IMAGENES/iconosame.png";
+
+        try {
+            // Cargar la imagen desde los recursos del proyecto (la forma recomendada)
+            Image icono = new ImageIcon(getClass().getResource(rutaIcono)).getImage();
+            this.setIconImage(icono);
+
+        } catch (Exception e) {
+            System.err.println("Error al cargar el ícono: " + e.getMessage());
+        }
+        
         this.setLocationRelativeTo(null);
         CLASES.MenuClass menuHelper = new CLASES.MenuClass();
         menuHelper.MenuConfig(Movimientos, Menu, Asistencia, Empleados, Estadisticas, Ayuda, Configuracion, Salir, this, ayuda2);
@@ -397,6 +408,11 @@ public class Empleados extends javax.swing.JFrame implements CLASES.IBlockableFr
         Email.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 EmailActionPerformed(evt);
+            }
+        });
+        Email.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                EmailKeyReleased(evt);
             }
         });
 
@@ -908,14 +924,15 @@ public class Empleados extends javax.swing.JFrame implements CLASES.IBlockableFr
             Asistencia.setEnabled(false);
             Empleados.setEnabled(false);
             Estadisticas.setEnabled(false);
-            Ayuda.setEnabled(false);
             Configuracion.setEnabled(false);
             Salir.setEnabled(false);
             opcArea.setEnabled(false);
 
             Cargar.setIcon(icon2);
+            Nombre.requestFocus();
 
             block = 1;
+            block2= 1;
         } else if (x == 1) {
             Nombre.setEnabled(false);
             Apellido.setEnabled(false);
@@ -951,6 +968,7 @@ public class Empleados extends javax.swing.JFrame implements CLASES.IBlockableFr
             Cargo.setSelectedIndex(0);
             Fecha.setDate(null);
             block = 0;
+            block2=0;
             opcArea.setEnabled(true);
             Cargar.setIcon(icon1);
             x = 0;
@@ -1249,6 +1267,7 @@ public class Empleados extends javax.swing.JFrame implements CLASES.IBlockableFr
             int cod = Integer.parseInt(Tabla.getValueAt(fila, 0).toString());
             id = Integer.parseInt(Tabla.getValueAt(fila, 0).toString());
             Guardar.setEnabled(true);
+            ImageIcon icon2 = new ImageIcon(getClass().getResource("/IMAGENES/menos.png"));
             try {
                 CLASES.Empleados.SacarEmpleados(con, cod, Nombre, Apellido, DNI, Domicilio, Email, Telefono, Fecha, GS, Cargo);
                 Nombre.setEnabled(true);
@@ -1258,7 +1277,8 @@ public class Empleados extends javax.swing.JFrame implements CLASES.IBlockableFr
                 Email.setEnabled(true);
                 Telefono.setEnabled(true);
                 Fecha.setEnabled(true);
-                Cargar.setText("Cancelar");
+                Cargar.setIcon(icon2);
+                
                 Limpiar.setEnabled(true);
                 Guardar.setEnabled(true);
                 GS.setEnabled(true);
@@ -1473,6 +1493,12 @@ public class Empleados extends javax.swing.JFrame implements CLASES.IBlockableFr
             Cargo.requestFocus();
         }
     }//GEN-LAST:event_GSKeyReleased
+
+    private void EmailKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_EmailKeyReleased
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+            Telefono.requestFocus();
+        }
+    }//GEN-LAST:event_EmailKeyReleased
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */

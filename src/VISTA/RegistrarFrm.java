@@ -8,17 +8,18 @@ package VISTA;
 import CLASES.Usuario;
 import CLASES.Usuario.Base;
 import CLASES.Usuario.Rango;
+import CLASES.Usuario.UsuarioMod;
 import CONEXIONES.Conexiones;
-import com.toedter.calendar.JDateChooser;
 import java.awt.Color;
+import java.awt.Image;
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.List;
-import javax.swing.JComboBox;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
 /**
@@ -29,14 +30,29 @@ public class RegistrarFrm extends javax.swing.JDialog {
 
     Connection con = Conexiones.Conexion();
     ResultSet rs;
-    int id = 0, band, idbase = 0;
+    static int id = 0, band, idbase = 0, iduser;
     String veri = "Opciones", fechaFormateada, veribase = "Opciones";
+    private final char caracterEchoPredeterminado;
 
-    public RegistrarFrm(JFrame ventanaPrincipal) {
+    public RegistrarFrm(JFrame ventanaPrincipal, int band) {
         super(ventanaPrincipal, true);
+        RegistrarFrm.band = band;
         initComponents();
+
+        String rutaIcono = "/IMAGENES/iconosame.png";
+
+        try {
+            // Cargar la imagen desde los recursos del proyecto (la forma recomendada)
+            Image icono = new ImageIcon(getClass().getResource(rutaIcono)).getImage();
+            this.setIconImage(icono);
+
+        } catch (Exception e) {
+            System.err.println("Error al cargar el ícono: " + e.getMessage());
+        }
         this.setLocationRelativeTo(null);
         CLASES.Usuario.jCombo(con, Rango, Base);
+        
+        caracterEchoPredeterminado = contrasena.getEchoChar();
 
         int ventanaTheme = CLASES.MenuClass.VentanaOpcThemeRet();
         if (ventanaTheme == 1) {
@@ -45,6 +61,38 @@ public class RegistrarFrm extends javax.swing.JDialog {
             TitledBorder titledBorder = (TitledBorder) Fondo.getBorder();
             titledBorder.setTitleColor(Color.WHITE);
             Fondo.repaint();
+        }
+
+        int newuser = CLASES.Usuario.Verificacion(con);
+
+        switch (band) {
+            case 2:
+                guardar.setText("Modificar");
+                contrasena.setEnabled(false);
+                CLASES.Usuario.jComboUser(con, usercombo);
+                Base.setVisible(false);
+                usercombo.requestFocus();
+                Nombre.setEnabled(false);
+                Apellido.setEnabled(false);
+                DNI.setEnabled(false);
+                Correo.setEnabled(false);
+                Rango.setEnabled(false);
+                MostOcPass.setEnabled(false);
+                break;
+            case 1:
+                Base.setVisible(false);
+                usercombo.setVisible(false);
+                break;
+            case 0:
+                Rango.setVisible(false);
+                usercombo.setVisible(false);
+                break;
+            default:
+                break;
+        }
+
+        if (newuser == 0) {
+            volver.setEnabled(false);
         }
     }
 
@@ -62,56 +110,98 @@ public class RegistrarFrm extends javax.swing.JDialog {
         DNI = new javax.swing.JTextField();
         Apellido = new javax.swing.JTextField();
         Correo = new javax.swing.JTextField();
-        Contrasena = new javax.swing.JPasswordField();
+        contrasena = new javax.swing.JPasswordField();
         volver = new javax.swing.JButton();
         guardar = new javax.swing.JButton();
         Base = new javax.swing.JComboBox<>();
         Rango = new javax.swing.JComboBox<>();
+        usercombo = new javax.swing.JComboBox<>();
+        MostOcPass = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(416, 574));
         setUndecorated(true);
         setResizable(false);
 
         Fondo.setBackground(new java.awt.Color(255, 255, 255));
         Fondo.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), "Registro de usuario", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 18))); // NOI18N
+        Fondo.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         Nombre.setBackground(new java.awt.Color(204, 204, 204));
         Nombre.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)), "Nombre", javax.swing.border.TitledBorder.LEADING, javax.swing.border.TitledBorder.ABOVE_TOP, new java.awt.Font("Tahoma", 1, 14))); // NOI18N
         Nombre.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        Nombre.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                NombreKeyReleased(evt);
+            }
+        });
+        Fondo.add(Nombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 40, 270, 40));
 
         DNI.setBackground(new java.awt.Color(204, 204, 204));
         DNI.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)), "DNI", javax.swing.border.TitledBorder.LEADING, javax.swing.border.TitledBorder.ABOVE_TOP, new java.awt.Font("Tahoma", 1, 14))); // NOI18N
         DNI.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         DNI.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                DNIKeyReleased(evt);
+            }
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 DNIKeyTyped(evt);
             }
         });
+        Fondo.add(DNI, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 170, 270, 40));
 
         Apellido.setBackground(new java.awt.Color(204, 204, 204));
         Apellido.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)), "Apellido", javax.swing.border.TitledBorder.LEADING, javax.swing.border.TitledBorder.ABOVE_TOP, new java.awt.Font("Tahoma", 1, 14))); // NOI18N
         Apellido.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        Apellido.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                ApellidoKeyReleased(evt);
+            }
+        });
+        Fondo.add(Apellido, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 100, 270, 40));
 
         Correo.setBackground(new java.awt.Color(204, 204, 204));
         Correo.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)), "Correo", javax.swing.border.TitledBorder.LEADING, javax.swing.border.TitledBorder.ABOVE_TOP, new java.awt.Font("Tahoma", 1, 14))); // NOI18N
         Correo.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        Correo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                CorreoKeyReleased(evt);
+            }
+        });
+        Fondo.add(Correo, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 230, 270, 40));
 
-        Contrasena.setBackground(new java.awt.Color(204, 204, 204));
-        Contrasena.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)), "Contraseña", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 14))); // NOI18N
+        contrasena.setBackground(new java.awt.Color(204, 204, 204));
+        contrasena.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)), "Contraseña", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 14))); // NOI18N
+        contrasena.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                contrasenaKeyReleased(evt);
+            }
+        });
+        Fondo.add(contrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 300, 270, 46));
 
+        volver.setBackground(new java.awt.Color(52, 170, 121));
+        volver.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        volver.setForeground(new java.awt.Color(255, 255, 255));
         volver.setText("Volver");
+        volver.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         volver.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 volverActionPerformed(evt);
             }
         });
+        Fondo.add(volver, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 521, 89, 37));
 
+        guardar.setBackground(new java.awt.Color(52, 170, 121));
+        guardar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        guardar.setForeground(new java.awt.Color(255, 255, 255));
         guardar.setText("Guardar");
+        guardar.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         guardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 guardarActionPerformed(evt);
             }
         });
+        Fondo.add(guardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 520, 115, 37));
 
         Base.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)), "Base", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 14))); // NOI18N
         Base.addActionListener(new java.awt.event.ActionListener() {
@@ -119,6 +209,7 @@ public class RegistrarFrm extends javax.swing.JDialog {
                 BaseActionPerformed(evt);
             }
         });
+        Fondo.add(Base, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 430, 183, -1));
 
         Rango.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)), "Rango", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 14))); // NOI18N
         Rango.addActionListener(new java.awt.event.ActionListener() {
@@ -126,61 +217,39 @@ public class RegistrarFrm extends javax.swing.JDialog {
                 RangoActionPerformed(evt);
             }
         });
+        Rango.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                RangoKeyReleased(evt);
+            }
+        });
+        Fondo.add(Rango, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 360, 183, -1));
 
-        javax.swing.GroupLayout FondoLayout = new javax.swing.GroupLayout(Fondo);
-        Fondo.setLayout(FondoLayout);
-        FondoLayout.setHorizontalGroup(
-            FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(FondoLayout.createSequentialGroup()
-                .addGroup(FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(FondoLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(volver)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(guardar))
-                    .addGroup(FondoLayout.createSequentialGroup()
-                        .addGap(65, 65, 65)
-                        .addGroup(FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(Contrasena)
-                                .addComponent(Correo, javax.swing.GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE)
-                                .addComponent(Apellido)
-                                .addComponent(DNI)
-                                .addComponent(Nombre))
-                            .addComponent(Base, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(Rango, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 95, Short.MAX_VALUE)))
-                .addContainerGap())
-        );
-        FondoLayout.setVerticalGroup(
-            FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(FondoLayout.createSequentialGroup()
-                .addGap(28, 28, 28)
-                .addComponent(Nombre, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(Apellido, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(DNI, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(Correo, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(Contrasena, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
-                .addComponent(Rango, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(Base, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27)
-                .addGroup(FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(volver)
-                    .addComponent(guardar))
-                .addGap(25, 25, 25))
-        );
+        usercombo.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), "DNI - Nombre", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 14))); // NOI18N
+        usercombo.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        usercombo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                usercomboActionPerformed(evt);
+            }
+        });
+        Fondo.add(usercombo, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 430, 299, 50));
+
+        MostOcPass.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/ojoabierto.png"))); // NOI18N
+        MostOcPass.setToolTipText("Ver/Ocultar contraseña");
+        MostOcPass.setBorder(null);
+        MostOcPass.setContentAreaFilled(false);
+        MostOcPass.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        MostOcPass.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MostOcPassActionPerformed(evt);
+            }
+        });
+        Fondo.add(MostOcPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 300, 40, 40));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(Fondo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(Fondo, javax.swing.GroupLayout.PREFERRED_SIZE, 416, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -199,33 +268,65 @@ public class RegistrarFrm extends javax.swing.JDialog {
         String ap = Apellido.getText();
         String dni = DNI.getText();
         String em = Correo.getText();
-        String cont = Contrasena.getText();
+        String cont = contrasena.getText();
 
-        if (!nomb.trim().isEmpty() && !ap.trim().isEmpty() && !dni.trim().isEmpty() && !em.trim().isEmpty() && !cont.trim().isEmpty() && !veri.equals("Opciones") && !veribase.equals("Opciones")) {
-            if (em.contains("@") && em.contains(".")) {
-                try {
-                    CLASES.Usuario.AgregarNuevoUsuario(con, nomb, ap, dni, em, cont, id, idbase);
-                    this.dispose();
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(null, "ERROR1");
+        switch (band) {
+            case 0:
+                if (!nomb.trim().isEmpty() && !ap.trim().isEmpty() && !dni.trim().isEmpty() && !em.trim().isEmpty() && !cont.trim().isEmpty() && !veribase.equals("Opciones")) {
+                    if (em.contains("@") && em.contains(".")) {
+                        try {
+                            CLASES.Usuario.AgregarNuevoUsuario(con, nomb, ap, dni, em, cont, id, idbase, band);
+                            this.dispose();
+                        } catch (SQLException e) {
+                            JOptionPane.showMessageDialog(null, "ERROR1");
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Introduzca un correo valido!");
+                    }
+
+                } else {
+                    JOptionPane.showMessageDialog(null, "¡HAY CAMPOS VACIOS! Por favor, revise");
                 }
-            } else {
-                JOptionPane.showMessageDialog(null, "Introduzca un correo valido!");
-            }
+                break;
+            case 1:
+                if (!nomb.trim().isEmpty() && !ap.trim().isEmpty() && !dni.trim().isEmpty() && !em.trim().isEmpty() && !cont.trim().isEmpty() && !veri.equals("Opciones")) {
+                    if (em.contains("@") && em.contains(".")) {
+                        try {
+                            CLASES.Usuario.AgregarNuevoUsuario(con, nomb, ap, dni, em, cont, id, idbase, band);;
+                            this.dispose();
+                        } catch (SQLException e) {
+                            JOptionPane.showMessageDialog(null, "ERROR1");
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Introduzca un correo valido!");
+                    }
 
-        } else {
-            JOptionPane.showMessageDialog(null, "¡HAY CAMPOS VACIOS! Por favor, revise");
+                } else {
+                    JOptionPane.showMessageDialog(null, "¡HAY CAMPOS VACIOS! Por favor, revise");
+                }
+                break;
+            case 2:
+                if (!nomb.trim().isEmpty() && !ap.trim().isEmpty() && !dni.trim().isEmpty() && !em.trim().isEmpty() && !veri.equals("Opciones")) {
+                    if (em.contains("@") && em.contains(".")) {
+                        try {
+                            CLASES.Usuario.ActualizarUser(con, nomb, ap, dni, em, id, iduser);
+                            this.dispose();
+                        } catch (SQLException e) {
+                            JOptionPane.showMessageDialog(null, "ERROR1");
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Introduzca un correo valido!");
+                    }
+
+                } else {
+                    JOptionPane.showMessageDialog(null, "¡HAY CAMPOS VACIOS! Por favor, revise");
+                }
+                break;
+            default:
+                break;
         }
+
     }//GEN-LAST:event_guardarActionPerformed
-
-    private void BaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BaseActionPerformed
-        Object value = Base.getSelectedItem();
-        if (value instanceof Usuario.Base) {
-            Usuario.Base dat = (Usuario.Base) value;
-            idbase = dat.getId();
-            veribase = dat.getNombre();
-        }
-    }//GEN-LAST:event_BaseActionPerformed
 
     private void RangoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RangoActionPerformed
         Object value = Rango.getSelectedItem();
@@ -249,6 +350,98 @@ public class RegistrarFrm extends javax.swing.JDialog {
             evt.consume();
         }
     }//GEN-LAST:event_DNIKeyTyped
+
+    private void BaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BaseActionPerformed
+        Object value = Base.getSelectedItem();
+        if (value instanceof Usuario.Base) {
+            Usuario.Base dat = (Usuario.Base) value;
+            idbase = dat.getId();
+            veribase = dat.getNombre();
+        }
+    }//GEN-LAST:event_BaseActionPerformed
+
+    private void usercomboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usercomboActionPerformed
+        Object value = usercombo.getSelectedItem();
+        if (value instanceof Usuario.UsuarioMod) {
+            Usuario.UsuarioMod dat = (Usuario.UsuarioMod) value;
+            iduser = dat.getId();
+            veri = dat.getNombre();
+            if (!veri.equals("Opciones")) {
+                try {
+                    CLASES.Usuario.TraerUsuario(con, iduser, Nombre, Apellido, Correo, DNI);
+                    Nombre.setEnabled(true);
+                    Apellido.setEnabled(true);
+                    DNI.setEnabled(true);
+                    Correo.setEnabled(true);
+                    Rango.setEnabled(true);
+                    MostOcPass.setEnabled(true);
+                    Nombre.requestFocus();
+                } catch (SQLException ex) {
+                    Logger.getLogger(RegistrarFrm.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else {
+                Nombre.setText("");
+                Apellido.setText("");
+                Correo.setText("");
+                DNI.setText("");
+
+                Nombre.setEnabled(false);
+                Apellido.setEnabled(false);
+                DNI.setEnabled(false);
+                Correo.setEnabled(false);
+                Rango.setEnabled(false);
+                MostOcPass.setEnabled(false);
+
+            }
+        }
+    }//GEN-LAST:event_usercomboActionPerformed
+
+    private void NombreKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_NombreKeyReleased
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+            Apellido.requestFocus();
+        }
+    }//GEN-LAST:event_NombreKeyReleased
+
+    private void ApellidoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ApellidoKeyReleased
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+            DNI.requestFocus();
+        }
+    }//GEN-LAST:event_ApellidoKeyReleased
+
+    private void DNIKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_DNIKeyReleased
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+            Correo.requestFocus();
+        }
+    }//GEN-LAST:event_DNIKeyReleased
+
+    private void CorreoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_CorreoKeyReleased
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+            contrasena.requestFocus();
+        }
+    }//GEN-LAST:event_CorreoKeyReleased
+
+    private void contrasenaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_contrasenaKeyReleased
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+            Rango.requestFocus();
+        }
+    }//GEN-LAST:event_contrasenaKeyReleased
+
+    private void RangoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_RangoKeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_RangoKeyReleased
+
+    private void MostOcPassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MostOcPassActionPerformed
+        ImageIcon icon1 = new ImageIcon(getClass().getResource("/IMAGENES/ojocerrado.png"));
+        ImageIcon icon2 = new ImageIcon(getClass().getResource("/IMAGENES/ojoabierto.png"));
+        char caracterActual = contrasena.getEchoChar();
+        if (caracterActual != (char) 0) {
+            contrasena.setEchoChar((char) 0);
+            MostOcPass.setIcon(icon1);
+        } else {
+            contrasena.setEchoChar(caracterEchoPredeterminado);
+            MostOcPass.setIcon(icon2);
+        }
+    }//GEN-LAST:event_MostOcPassActionPerformed
 
     /**
      * @param args the command line arguments
@@ -280,7 +473,7 @@ public class RegistrarFrm extends javax.swing.JDialog {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new RegistrarFrm(null).setVisible(true);
+                new RegistrarFrm(null, band).setVisible(true);
             }
         });
     }
@@ -288,13 +481,15 @@ public class RegistrarFrm extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField Apellido;
     private javax.swing.JComboBox<Base> Base;
-    private javax.swing.JPasswordField Contrasena;
     private javax.swing.JTextField Correo;
     private javax.swing.JTextField DNI;
     private javax.swing.JPanel Fondo;
+    private javax.swing.JButton MostOcPass;
     private javax.swing.JTextField Nombre;
     private javax.swing.JComboBox<Rango> Rango;
+    private javax.swing.JPasswordField contrasena;
     private javax.swing.JButton guardar;
+    private javax.swing.JComboBox<UsuarioMod> usercombo;
     private javax.swing.JButton volver;
     // End of variables declaration//GEN-END:variables
 }

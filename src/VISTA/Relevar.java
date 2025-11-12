@@ -228,6 +228,18 @@ public class Relevar extends javax.swing.JDialog {
         super(ventanaPrincipal, true);
         this.idtrip2 = idtrip;
         initComponents();
+
+        String rutaIcono = "/IMAGENES/iconosame.png";
+
+        try {
+            // Cargar la imagen desde los recursos del proyecto (la forma recomendada)
+            Image icono = new ImageIcon(getClass().getResource(rutaIcono)).getImage();
+            this.setIconImage(icono);
+
+        } catch (Exception e) {
+            System.err.println("Error al cargar el ícono: " + e.getMessage());
+        }
+
         this.setLocationRelativeTo(null);
         setSize(1570, 860);
         LocalDate hoy = LocalDate.now();
@@ -271,7 +283,8 @@ public class Relevar extends javax.swing.JDialog {
                 // No pintamos nada para que no se vea la barra
             }
         });
-
+        observations.setLineWrap(true);      // Habilita el ajuste de línea
+        observations.setWrapStyleWord(true); // Ajusta solo en los límites de palabras
     }
 
     /**
@@ -1288,6 +1301,7 @@ public class Relevar extends javax.swing.JDialog {
             jLabel1.setText(">Observaciones");
 
             observations.setColumns(20);
+            observations.setFont(new java.awt.Font("Monospaced", 1, 18)); // NOI18N
             observations.setRows(5);
             jScrollPane1.setViewportView(observations);
 

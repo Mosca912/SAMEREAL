@@ -66,7 +66,7 @@ public class Empleados {
 
     public static void MostrarCargo(Connection conexion, DefaultTableModel modelo) throws SQLException {
 
-        PreparedStatement stm = conexion.prepareStatement("SELECT cargo.idCargo, cargo.Cargo, area.area from cargo inner join area on cargo.idArea=area.idArea where cargo.borrado=0;");
+        PreparedStatement stm = conexion.prepareStatement("SELECT cargo.idCargo, cargo.Cargo, area.area from cargo inner join area on cargo.idArea=area.idArea where cargo.borrado=0 AND cargo.idCargo > 3;");
         ResultSet rs = stm.executeQuery();
 
         while (rs.next()) {
@@ -80,7 +80,7 @@ public class Empleados {
 
     public static void MostrarArea(Connection conexion, DefaultTableModel modelo) throws SQLException {
 
-        PreparedStatement stm = conexion.prepareStatement("SELECT idArea, area from Area where borrado=0");
+        PreparedStatement stm = conexion.prepareStatement("SELECT idArea, area from Area where borrado=0 and idArea > 2");
         ResultSet rs = stm.executeQuery();
 
         while (rs.next()) {
@@ -228,7 +228,6 @@ public class Empleados {
                         stm4.setInt(3, iduser);
                         try {
                             stm4.execute();
-                            JOptionPane.showMessageDialog(null, "Tripulación agregada!");
                         } catch (Exception e) {
                             JOptionPane.showMessageDialog(null, "ERROR12" + e);
                         }

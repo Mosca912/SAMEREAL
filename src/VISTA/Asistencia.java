@@ -12,6 +12,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -139,6 +140,18 @@ public class Asistencia extends javax.swing.JFrame implements CLASES.IBlockableF
         CLASES.MenuClass.Configuracion();
 
         initComponents();
+        
+        String rutaIcono = "/IMAGENES/iconosame.png";
+
+        try {
+            // Cargar la imagen desde los recursos del proyecto (la forma recomendada)
+            Image icono = new ImageIcon(getClass().getResource(rutaIcono)).getImage();
+            this.setIconImage(icono);
+
+        } catch (Exception e) {
+            System.err.println("Error al cargar el ícono: " + e.getMessage());
+        }
+        
         rango = CLASES.Usuario.rango();
         this.setLocationRelativeTo(null);
         CLASES.MenuClass menuHelper = new CLASES.MenuClass();

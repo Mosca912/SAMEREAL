@@ -13,6 +13,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -24,6 +25,7 @@ public class Usuario {
 
     static DefaultComboBoxModel<Usuario.Rango> model;
     static DefaultComboBoxModel<Usuario.Base> model2;
+    static DefaultComboBoxModel<Usuario.UsuarioMod> model3;
 
     public static class Rango {
 
@@ -73,6 +75,50 @@ public class Usuario {
         }
     }
 
+    public static class UsuarioMod {
+
+        private final int id;
+        private final String nombre;
+
+        public UsuarioMod(int id, String nombre) {
+            this.id = id;
+            this.nombre = nombre;
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        public String getNombre() {
+            return nombre;
+        }
+
+        @Override
+        public String toString() {
+            return nombre; // lo que se muestra en el combo
+        }
+    }
+
+    public static void jComboUser(Connection conexion, JComboBox<Usuario.UsuarioMod> combo1) {
+        String sql = "SELECT idUsuario, DNI, Nombre FROM usuario WHERE borrado=0";
+        try {
+            PreparedStatement ps = conexion.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            model3 = new DefaultComboBoxModel<>();
+            model3.addElement(new Usuario.UsuarioMod(0, "Opciones"));
+            while (rs.next()) {
+                int id = rs.getInt("idUsuario");
+                String nombreCompleto = (rs.getString("DNI") + "-" + rs.getString("Nombre"));
+                model3.addElement(new Usuario.UsuarioMod(id, nombreCompleto));
+            }
+            combo1.setModel(model3);
+            AutoCompleteDecorator.decorate(combo1);
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "ERROR: " + ex.getMessage());
+        }
+    }
+
     public static void jCombo(Connection conexion, JComboBox<Usuario.Rango> combo1, JComboBox<Usuario.Base> combo2) {
         String sql = "SELECT idRango, rango FROM rango WHERE borrado=0";
         String sql2 = "SELECT idBase, Base from Base";
@@ -111,20 +157,61 @@ public class Usuario {
         }
     }
 
-    public static void AgregarNuevoUsuario(Connection conexion, String nombre, String apellido, String dni, String email, String contrasena, int id, int idbase) throws SQLException {
-        String contrasenaHasheada = BCrypt.hashpw(contrasena, BCrypt.gensalt());
-        String sql2 = "INSERT into usuario (nombre, apellido, correo, contrasena, rango, dni, base) VALUES (?,?,?,?,?,?,?) ";
+    public static void AgregarNuevoUsuario(Connection conexion, String nombre, String apellido, String dni, String email, String contrasena, int id, int idbase, int band) throws SQLException {
+        if (band == 0) {
+            String contrasenaHasheada = BCrypt.hashpw(contrasena, BCrypt.gensalt());
+            String sql2 = "INSERT into usuario (nombre, apellido, correo, contrasena, rango, dni, base, borrado) VALUES (?,?,?,?,?,?,?, 0) ";
+            try {
+                PreparedStatement ps2 = conexion.prepareStatement(sql2);
+                ps2.setString(1, nombre);
+                ps2.setString(2, apellido);
+                ps2.setString(3, email);
+                ps2.setString(4, contrasenaHasheada);
+                ps2.setInt(5, 1);
+                ps2.setString(6, dni);
+                ps2.setInt(7, idbase);
+                ps2.execute();
+                JOptionPane.showMessageDialog(null, "Guardado");
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, "ERROR " + e);
+            }
+        } else if (band == 1) {
+            String contrasenaHasheada = BCrypt.hashpw(contrasena, BCrypt.gensalt());
+            String sql2 = "INSERT into usuario (nombre, apellido, correo, contrasena, rango, dni, base, borrado) VALUES (?,?,?,?,?,?,?, 0) ";
+            try {
+                PreparedStatement ps2 = conexion.prepareStatement(sql2);
+                ps2.setString(1, nombre);
+                ps2.setString(2, apellido);
+                ps2.setString(3, email);
+                ps2.setString(4, contrasenaHasheada);
+                ps2.setInt(5, id);
+                ps2.setString(6, dni);
+                ps2.setInt(7, base);
+                ps2.execute();
+                JOptionPane.showMessageDialog(null, "Guardado");
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, "ERROR " + e);
+            }
+        }
+    }
+
+    public static void TraerUsuario(Connection conexion, int id, JTextField nombre, JTextField apellido, JTextField correo, JTextField dni) throws SQLException {
+        String sql2 = "SELECT nombre, apellido, correo, dni, rango FROM usuario WHERE idUsuario = ?;";
         try {
             PreparedStatement ps2 = conexion.prepareStatement(sql2);
-            ps2.setString(1, nombre);
-            ps2.setString(2, apellido);
-            ps2.setString(3, email);
-            ps2.setString(4, contrasenaHasheada);
-            ps2.setInt(5, id);
-            ps2.setString(6, dni);
-            ps2.setInt(7, idbase);
-            ps2.execute();
-            JOptionPane.showMessageDialog(null, "Guardado");
+            ps2.setInt(1, id);
+            ResultSet rs = ps2.executeQuery();
+            if (rs.next()) {
+                String nom = rs.getString("nombre");
+                String ape = rs.getString("apellido");
+                String cor = rs.getString("correo");
+                String dnis = rs.getString("dni");
+                int ran = rs.getInt("rango");
+                nombre.setText(nom);
+                apellido.setText(ape);
+                correo.setText(cor);
+                dni.setText(dnis);
+            }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "ERROR " + e);
         }
@@ -162,17 +249,61 @@ public class Usuario {
         return veri;
     }
 
+    public static void ActualizarUser(Connection conexion, String nombre, String apellido, String dni, String em, int id1, int id) throws SQLException {
+
+        String sql = "UPDATE usuario SET nombre=?, apellido=?, correo=?, rango = ?, dni = ? WHERE idUsuario=?";
+        try {
+            PreparedStatement ps = conexion.prepareStatement(sql);
+            ps.setString(1, nombre);
+            ps.setString(2, apellido);
+            ps.setString(3, em);
+            ps.setInt(4, id1);
+            ps.setString(5, dni);
+            ps.setInt(6, id);
+            ps.execute();
+            JOptionPane.showMessageDialog(null, "Actualización de usuario exitosa");
+            PreparedStatement stm9 = conexion.prepareStatement("INSERT INTO auditoria (evento, usuario_afectado) VALUES (?, ?)");
+            stm9.setString(1, "MODIFICACION_USUARIO");
+            stm9.setString(2, em);
+            try {
+                stm9.execute();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "ERROR: " + e);
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+
+    }
+
+    public static int Verificacion(Connection conexion) {
+        int veri = 0;
+        String sql2 = "SELECT idUsuario from usuario";
+        try {
+            PreparedStatement ps2 = conexion.prepareStatement(sql2);
+            ResultSet rs = ps2.executeQuery();
+            if (rs.next()) {
+                veri = 1;
+            } else {
+                veri = 0;
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "ERROR " + e);
+        }
+        return veri;
+    }
+
     static int valid;
     static int rango;
     static int iduser;
     static String nomb;
     static int base;
-    static String correo;
+    static String correo, basenomb;
 
-    public static int IniciarSesion(Connection conexion, String dni, String contrasena, JLabel login) throws SQLException {
+    public static int IniciarSesion(Connection conexion, String dni, String contrasena, JLabel login, JLabel datos) throws SQLException {
         valid = 0;
         String contrasenadb;
-        String sql = "SELECT contrasena, nombre, rango, correo, idUsuario, base FROM usuario WHERE dni = ?";
+        String sql = "SELECT contrasena, nombre, rango, correo, idUsuario, usuario.base, base.Base FROM usuario inner join base on usuario.base=base.idBase WHERE dni = ?";
         try {
             PreparedStatement ps2 = conexion.prepareStatement(sql);
             ps2.setString(1, dni);
@@ -184,9 +315,11 @@ public class Usuario {
                 iduser = rs.getInt("idUsuario");
                 base = rs.getInt("base");
                 correo = rs.getString("correo");
+                basenomb = rs.getString("base.Base");
                 if (BCrypt.checkpw(contrasena, contrasenadb)) {
                     valid = 1;
                     login.setText("Bienvenido/a " + nomb);
+                    datos.setText(basenomb);
                     JOptionPane.showMessageDialog(null, "INICIO DE SESION CORRECTO, " + nomb);
                     PreparedStatement stm9 = conexion.prepareStatement("INSERT INTO auditoria (evento, usuario_afectado) VALUES (?, ?)");
                     stm9.setString(1, "LOGIN_USUARIO");
@@ -210,8 +343,9 @@ public class Usuario {
         return valid;
     }
 
-    public static void CerrarSesion(Connection conexion, JLabel login) throws SQLException {
+    public static void CerrarSesion(Connection conexion, JLabel login, JLabel datos) throws SQLException {
         login.setText("Login");
+        datos.setText("");
         valid = 0;
         rango = 0;
         iduser = 0;
@@ -221,7 +355,7 @@ public class Usuario {
         stm9.setString(2, correo);
         try {
             stm9.execute();
-            correo="";
+            correo = "";
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "ERROR: " + e);
         }
@@ -237,7 +371,7 @@ public class Usuario {
         stm9.setString(2, correo);
         try {
             stm9.execute();
-            correo="";
+            correo = "";
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "ERROR: " + e);
         }
@@ -255,8 +389,9 @@ public class Usuario {
         return rango;
     }
 
-    public static void nombre(JLabel login) {
+    public static void nombre(JLabel login, JLabel base) {
         login.setText("Bienvenido/a " + nomb);
+        base.setText(basenomb);
     }
 
     public static int verificacion() {

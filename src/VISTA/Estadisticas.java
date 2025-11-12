@@ -20,6 +20,7 @@ import java.awt.event.MouseMotionListener;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -40,6 +41,18 @@ public class Estadisticas extends javax.swing.JFrame {
         CLASES.MenuClass.Configuracion();
 
         initComponents();
+        
+        String rutaIcono = "/IMAGENES/iconosame.png";
+
+        try {
+            // Cargar la imagen desde los recursos del proyecto (la forma recomendada)
+            Image icono = new ImageIcon(getClass().getResource(rutaIcono)).getImage();
+            this.setIconImage(icono);
+
+        } catch (Exception e) {
+            System.err.println("Error al cargar el ícono: " + e.getMessage());
+        }
+        
         
         rango=CLASES.Usuario.rango();
         
@@ -137,7 +150,6 @@ public class Estadisticas extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Estadisticas");
-        setMaximumSize(new java.awt.Dimension(1200, 700));
         setMinimumSize(new java.awt.Dimension(1200, 700));
         setName("Estadisticas"); // NOI18N
         setUndecorated(true);
@@ -385,7 +397,7 @@ public class Estadisticas extends javax.swing.JFrame {
         labest.setFont(new java.awt.Font("Tahoma", 1, 48)); // NOI18N
         labest.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         labest.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/estats.png"))); // NOI18N
-        labest.setText("Estadísticas de Vehiculos");
+        labest.setText("Estadísticas de Vehicular");
 
         javax.swing.GroupLayout FondoLayout = new javax.swing.GroupLayout(Fondo);
         Fondo.setLayout(FondoLayout);

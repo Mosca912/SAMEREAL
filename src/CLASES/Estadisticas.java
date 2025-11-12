@@ -14,7 +14,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -85,6 +88,37 @@ public class Estadisticas {
         }
     }
 
+    private static String getNombreMes(int mes) {
+        switch (mes) {
+            case 1:
+                return "Enero";
+            case 2:
+                return "Febrero";
+            case 3:
+                return "Marzo";
+            case 4:
+                return "Abril";
+            case 5:
+                return "Mayo";
+            case 6:
+                return "Junio";
+            case 7:
+                return "Julio";
+            case 8:
+                return "Agosto";
+            case 9:
+                return "Septiembre";
+            case 10:
+                return "Octubre";
+            case 11:
+                return "Noviembre";
+            case 12:
+                return "Diciembre";
+            default:
+                return "Desconocido";
+        }
+    }
+
     public static void estadisticageneral(Connection conexion, JPanel panelEst) {
         // Listas para guardar los IDs y nombres (o "victor" en tu caso)
         List<Integer> ambulancias = new ArrayList<>();
@@ -106,31 +140,71 @@ public class Estadisticas {
         }
 
         // Dataset para el gráfico
-        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+
 
         // 2️⃣ Recorrer cada ambulancia y contar sus movimientos por mes
-        String sqlMovimientos = "SELECT MONTH(movimientos.fecha) AS mes, COUNT(*) AS cantidad_movimientos FROM movimientos INNER JOIN tripulacion ON movimientos.idtripulacion = tripulacion.idtripulacion WHERE tripulacion.idAmbulancia = ? and tripulacion.borrado=0 GROUP BY MONTH(fecha) ORDER BY mes;";
+        String sqlMovimientos = "SELECT YEAR(movimientos.fecha) AS anio, MONTH(movimientos.fecha) AS mes, COUNT(*) AS cantidad_movimientos "
+                + "FROM movimientos INNER JOIN tripulacion ON movimientos.idtripulacion = tripulacion.idtripulacion "
+                + "WHERE tripulacion.idAmbulancia = ? AND tripulacion.borrado=0 "
+                + "AND YEAR(movimientos.fecha) = YEAR(NOW()) " // 🚨 Filtro Clave: SOLO el año actual
+                + "AND movimientos.fecha >= DATE_SUB(LAST_DAY(NOW()), INTERVAL 5 MONTH) " // Filtro de 5 meses
+                + "GROUP BY YEAR(movimientos.fecha), MONTH(movimientos.fecha) "
+                + "ORDER BY anio, mes;";
+        Map<String, Map<String, Integer>> datosPorMes = new TreeMap<>();
 
         for (int i = 0; i < ambulancias.size(); i++) {
             int idAmb = ambulancias.get(i);
             int victorName = victor.get(i);
+            String serieAmbulancia = "Ambulancia " + victorName; // Nombre de la barra (serie)
 
             try (PreparedStatement ps2 = conexion.prepareStatement(sqlMovimientos)) {
                 ps2.setInt(1, idAmb);
                 ResultSet rs2 = ps2.executeQuery();
 
                 while (rs2.next()) {
-                    int cantidadMov = rs2.getInt("cantidad_movimientos");
+                    int anio = rs2.getInt("anio");
                     int mes = rs2.getInt("mes");
+                    int cantidadMov = rs2.getInt("cantidad_movimientos");
 
-                    // Agregar datos al dataset (valor, serie, categoría)
-                    dataset.addValue(cantidadMov, "Ambulancia " + victorName, "Mes " + mes);
+                    // 1. Crear la clave ordenada: "YYYY-MM" (ej: 2025-11)
+                    String claveMes = String.format("%d-%02d", anio, mes);
+
+                    // 2. Si la clave (mes) no existe, inicializar el mapa interior
+                    datosPorMes.putIfAbsent(claveMes, new HashMap<>());
+
+                    // 3. Almacenar el dato en el mapa
+                    datosPorMes.get(claveMes).put(serieAmbulancia, cantidadMov);
                 }
 
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, "Error al contar movimientos de la ambulancia " + idAmb + ": " + ex.getMessage());
             }
         }
+        
+        // Dataset para el gráfico
+    DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+
+    // 4. Recorrer el mapa ordenado (TreeMap) e ingresar los datos
+    for (Map.Entry<String, Map<String, Integer>> entry : datosPorMes.entrySet()) {
+        String claveMes = entry.getKey(); // Ej: "2025-08"
+        Map<String, Integer> movimientosPorAmbulancia = entry.getValue();
+        
+        // Extraer mes y nombre para el Eje X
+        String[] partes = claveMes.split("-");
+        int anio = Integer.parseInt(partes[0]);
+        int mes = Integer.parseInt(partes[1]);
+        
+        // 5. Crear la etiqueta final del eje X (Eje: Agosto '25)
+        String etiquetaMes = getNombreMes(mes) + " '" + (anio % 100); 
+
+        for (Map.Entry<String, Integer> ambulanciaEntry : movimientosPorAmbulancia.entrySet()) {
+            String serieAmbulancia = ambulanciaEntry.getKey();
+            int cantidadMov = ambulanciaEntry.getValue();
+
+            // Agregar al dataset. La clave 'etiquetaMes' se agregará en el orden correcto
+            dataset.addValue(cantidadMov, serieAmbulancia, etiquetaMes);
+        }
+    }
 
         // 3️⃣ Crear gráfico de columnas (bar chart)
         JFreeChart chart = ChartFactory.createBarChart(
@@ -175,12 +249,12 @@ public class Estadisticas {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
         // Query principal: cantidad de movimientos por mes
-        String sqlMovimientos
-                = "SELECT MONTH(movimientos.fecha) AS mes, COUNT(*) AS cantidad_movimientos "
-                + "FROM movimientos "
-                + "INNER JOIN tripulacion ON movimientos.idtripulacion = tripulacion.idtripulacion "
-                + "WHERE tripulacion.idAmbulancia = ? AND tripulacion.relevado = 1 "
-                + "GROUP BY MONTH(fecha) ORDER BY mes;";
+        String sqlMovimientos = "SELECT MONTH(movimientos.fecha) AS mes, COUNT(*) AS cantidad_movimientos "
+                      + "FROM movimientos "
+                      + "INNER JOIN tripulacion ON movimientos.idtripulacion = tripulacion.idtripulacion "
+                      + "WHERE tripulacion.idAmbulancia = ? AND tripulacion.relevado = 1 "
+                      + "AND YEAR(movimientos.fecha) = YEAR(NOW()) " // 🚨 AGREGADO para filtrar por año actual
+                      + "GROUP BY MONTH(fecha) ORDER BY mes;";
 
         try (PreparedStatement ps2 = conexion.prepareStatement(sqlMovimientos)) {
             ps2.setInt(1, id);
@@ -304,7 +378,12 @@ public class Estadisticas {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
         // 2️⃣ Recorrer cada ambulancia y contar sus movimientos por mes
-        String sqlMovimientos = "SELECT DAY(movimientos.fecha) AS dia, COUNT(*) AS cantidad_movimientos FROM movimientos INNER JOIN tripulacion ON movimientos.idtripulacion = tripulacion.idtripulacion WHERE tripulacion.idAmbulancia = ? AND MONTH(movimientos.fecha) = ? and tripulacion.relevado=1 GROUP BY DAY(movimientos.fecha) ORDER BY dia;";
+        String sqlMovimientos = "SELECT DAY(movimientos.fecha) AS dia, COUNT(*) AS cantidad_movimientos "
+                      + "FROM movimientos "
+                      + "INNER JOIN tripulacion ON movimientos.idtripulacion = tripulacion.idtripulacion "
+                      + "WHERE tripulacion.idAmbulancia = ? AND MONTH(movimientos.fecha) = ? and tripulacion.relevado=1 "
+                      + "AND YEAR(movimientos.fecha) = YEAR(NOW()) " // 🚨 AGREGADO para filtrar por año actual
+                      + "GROUP BY DAY(movimientos.fecha) ORDER BY dia;";
 
         try (PreparedStatement ps2 = conexion.prepareStatement(sqlMovimientos)) {
             ps2.setInt(1, id);

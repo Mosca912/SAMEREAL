@@ -58,32 +58,39 @@
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" attributes="0">
                                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                      <Group type="102" alignment="0" attributes="0">
+                                      <Component id="jSeparator1" alignment="1" min="-2" pref="409" max="-2" attributes="0"/>
+                                      <Group type="102" alignment="1" attributes="0">
                                           <Group type="103" groupAlignment="0" attributes="0">
+                                              <Group type="102" attributes="0">
+                                                  <EmptySpace min="-2" pref="49" max="-2" attributes="0"/>
+                                                  <Component id="VictorT" min="-2" pref="55" max="-2" attributes="0"/>
+                                              </Group>
                                               <Component id="labelvic1" min="-2" max="-2" attributes="0"/>
-                                              <Component id="labelpat" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <EmptySpace max="-2" attributes="0"/>
-                                          <Group type="103" groupAlignment="0" attributes="0">
-                                              <Component id="Patente" alignment="0" min="-2" pref="78" max="-2" attributes="0"/>
-                                              <Component id="VictorT" alignment="0" min="-2" pref="55" max="-2" attributes="0"/>
+                                              <Group type="102" alignment="0" attributes="0">
+                                                  <Component id="labelmod" min="-2" max="-2" attributes="0"/>
+                                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                                  <Component id="Modelo" min="-2" pref="137" max="-2" attributes="0"/>
+                                              </Group>
                                           </Group>
                                           <EmptySpace max="32767" attributes="0"/>
                                           <Group type="103" groupAlignment="0" attributes="0">
-                                              <Component id="labelmod" min="-2" max="-2" attributes="0"/>
-                                              <Component id="labelmar" min="-2" max="-2" attributes="0"/>
+                                              <Group type="102" attributes="0">
+                                                  <Component id="labelpat" min="-2" max="-2" attributes="0"/>
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                                  <Component id="Patente" min="-2" pref="95" max="-2" attributes="0"/>
+                                              </Group>
+                                              <Group type="102" attributes="0">
+                                                  <Component id="labelmar" min="-2" max="-2" attributes="0"/>
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                                  <Component id="Marca" min="-2" pref="142" max="-2" attributes="0"/>
+                                              </Group>
                                           </Group>
-                                          <EmptySpace type="separate" max="-2" attributes="0"/>
-                                          <Group type="103" groupAlignment="1" attributes="0">
-                                              <Component id="Modelo" min="-2" pref="137" max="-2" attributes="0"/>
-                                              <Component id="Marca" min="-2" pref="137" max="-2" attributes="0"/>
-                                          </Group>
+                                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                       </Group>
-                                      <Component id="jSeparator1" alignment="1" min="-2" pref="409" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                               </Group>
@@ -116,7 +123,7 @@
                           <Component id="titulo" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace pref="131" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -133,28 +140,22 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="labelvic1" min="-2" max="-2" attributes="0"/>
                           <Group type="103" alignment="0" groupAlignment="3" attributes="0">
-                              <Component id="labelmod" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="Modelo" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="labelmar" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="Marca" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="labelpat" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="Patente" alignment="3" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <Component id="labelmar" alignment="0" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="labelmat" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="matafuego" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                      </Group>
-                      <Component id="Marca" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="labelmod" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="Modelo" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="labelpat" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="Patente" alignment="0" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="labelmat" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="matafuego" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace pref="22" max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
@@ -192,6 +193,7 @@
         </Component>
         <Component class="javax.swing.JTextField" name="VictorT">
           <Events>
+            <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="VictorTKeyReleased"/>
             <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="VictorTKeyTyped"/>
           </Events>
         </Component>
@@ -220,6 +222,9 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="Modelo">
+          <Events>
+            <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="ModeloKeyReleased"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="labelmat">
           <Properties>
@@ -230,6 +235,9 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="matafuego">
+          <Events>
+            <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="matafuegoKeyReleased"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="Volver">
           <Properties>
@@ -270,6 +278,9 @@
           </Events>
         </Component>
         <Component class="javax.swing.JFormattedTextField" name="Patente">
+          <Events>
+            <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="PatenteKeyReleased"/>
+          </Events>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JFormattedTextField(formatter)"/>
             <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="try {&#xa;    MaskFormatter formatter = new MaskFormatter(&quot;UU-###-UU&quot;);&#xa;    formatter.setPlaceholderCharacter(&apos;_&apos;);"/>
@@ -277,6 +288,9 @@
           </AuxValues>
         </Component>
         <Component class="javax.swing.JTextField" name="Marca">
+          <Events>
+            <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="MarcaKeyReleased"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="labelvic">
           <Properties>

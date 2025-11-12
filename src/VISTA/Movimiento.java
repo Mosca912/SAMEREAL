@@ -11,15 +11,18 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.HeadlessException;
+import java.awt.Image;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultCellEditor;
+import javax.swing.ImageIcon;
 import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -33,12 +36,23 @@ import javax.swing.text.MaskFormatter;
  *
  * @author Facuymayriver
  */
-public class Movimiento extends javax.swing.JFrame {
+public class Movimiento extends javax.swing.JFrame implements CLASES.IBlockableFrame {
 
+    @Override
+    public int getBlockStateSalir() {
+        return this.block2;
+    }
+
+    @Override
+    public int getBlockState() {
+        return this.block;
+    }
     Connection con = Conexiones.Conexion();
     ResultSet rs;
-    int id = 0, band, cont = 0, idtrip, block = 0, rango, valid, iduser;
+    int id = 0, band, cont = 0, idtrip, rango, valid, iduser;
     String veri, fechaActual, ayuda2 = "Movimiento";
+    public int block = 0, block2 = 0;
+    int ventana;
 
     public void refrescarCombo() {
         try {
@@ -97,6 +111,18 @@ public class Movimiento extends javax.swing.JFrame {
         CLASES.MenuClass.Configuracion();
 
         initComponents();
+
+        String rutaIcono = "/IMAGENES/iconosame.png";
+
+        try {
+            // Cargar la imagen desde los recursos del proyecto (la forma recomendada)
+            Image icono = new ImageIcon(getClass().getResource(rutaIcono)).getImage();
+            this.setIconImage(icono);
+
+        } catch (Exception e) {
+            System.err.println("Error al cargar el ícono: " + e.getMessage());
+        }
+
         this.setLocationRelativeTo(null);
         CLASES.MenuClass menuHelper = new CLASES.MenuClass();
         menuHelper.MenuConfig(Movimientos, Menu, Asistencia, Empleados, Estadisticas, Ayuda, Configuracion, Salir, this, ayuda2);
@@ -126,7 +152,7 @@ public class Movimiento extends javax.swing.JFrame {
         centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
         Tabla.setDefaultRenderer(Object.class, centerRenderer);
 
-        int ventana = CLASES.MenuClass.Ventana();
+        ventana = CLASES.MenuClass.Ventana();
         if (ventana == 0) {
             Tabla.setRowHeight(30);
             Tabla.getTableHeader().setReorderingAllowed(false);
@@ -188,7 +214,7 @@ public class Movimiento extends javax.swing.JFrame {
         CLASES.Movimientos.Select(con, Trip, fechaActual);
 
         if (ventana == 1) {
-            // 1. Crear el MaskFormatter como lo tenías
+
             MaskFormatter formatter = null;
             try {
                 formatter = new MaskFormatter("##:##:##");
@@ -196,7 +222,6 @@ public class Movimiento extends javax.swing.JFrame {
                 Logger.getLogger(Movimiento.class.getName()).log(Level.SEVERE, null, ex);
             }
 
-            formatter.setPlaceholderCharacter('0');
             JFormattedTextField horaField = new JFormattedTextField(formatter);
 
             Font fuenteGrande = new Font("Arial", Font.BOLD, 25);
@@ -206,13 +231,10 @@ public class Movimiento extends javax.swing.JFrame {
 
             DefaultCellEditor editor = new DefaultCellEditor(horaField);
             Tabla.getColumnModel().getColumn(1).setCellEditor(editor); // salida
-            Tabla.getColumnModel().getColumn(2).setCellEditor(editor); // llegada
+            Tabla.getColumnModel().getColumn(2).setCellEditor(editor); // salida
 
             centerRenderer.setHorizontalAlignment(JTextField.CENTER);
             centerRenderer.setFont(fuenteGrande);
-
-            Tabla.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
-            Tabla.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);
         } else if (ventana == 0) {
             MaskFormatter formatter = null;
             try {
@@ -220,13 +242,12 @@ public class Movimiento extends javax.swing.JFrame {
             } catch (ParseException ex) {
                 Logger.getLogger(Movimiento.class.getName()).log(Level.SEVERE, null, ex);
             }
-            formatter.setPlaceholderCharacter('0');
+
             JFormattedTextField horaField = new JFormattedTextField(formatter);
 
-            // Asignar el editor a las columnas "salida" y "llegada"
             DefaultCellEditor editor = new DefaultCellEditor(horaField);
             Tabla.getColumnModel().getColumn(1).setCellEditor(editor); // salida
-            Tabla.getColumnModel().getColumn(2).setCellEditor(editor); // llegada
+            Tabla.getColumnModel().getColumn(2).setCellEditor(editor); // salida
 
         }
 
@@ -339,7 +360,7 @@ public class Movimiento extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/movimiento.png"))); // NOI18N
-        jLabel1.setText("Selección:");
+        jLabel1.setText("Movimientos");
 
         Trip.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         Trip.setToolTipText("Seleccione una tripulación para empezar a cargar movimientos!");
@@ -474,7 +495,7 @@ public class Movimiento extends javax.swing.JFrame {
                 .addGap(17, 17, 17)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(Trip, javax.swing.GroupLayout.PREFERRED_SIZE, 396, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(Trip, javax.swing.GroupLayout.PREFERRED_SIZE, 455, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -1138,14 +1159,20 @@ public class Movimiento extends javax.swing.JFrame {
         int ban = 0;
         AddVic ventana = new AddVic(this, ban);
         ventana.setVisible(true);
+
     }//GEN-LAST:event_AddVActionPerformed
 
     private void AddTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddTActionPerformed
         idtrip = 0;
-        AddTri ventana = new AddTri(idtrip, this);
-        ventana.setVisible(true);
 
-        this.refrescarCombo();
+        int veritrip = CLASES.Movimientos.VerificacionTrip(con);
+
+        if (veritrip == 0) {
+            AddTri ventana = new AddTri(idtrip, this);
+            ventana.setVisible(true);
+
+            this.refrescarCombo();
+        }
     }//GEN-LAST:event_AddTActionPerformed
 
     private void TripActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TripActionPerformed
@@ -1154,7 +1181,7 @@ public class Movimiento extends javax.swing.JFrame {
             Trip dat = (Trip) value;
             id = dat.getId();
             veri = dat.getNombre();
-
+            JOptionPane.showMessageDialog(null, "Id trip:" + id);
             if (!veri.equals("Opciones")) {
                 try {
                     tabla1.setRowCount(0);
@@ -1179,6 +1206,28 @@ public class Movimiento extends javax.swing.JFrame {
                 Actualizar.setEnabled(false);
                 Eliminar.setEnabled(false);
                 Terminar.setEnabled(false);
+                Cancelar.setEnabled(false);
+
+                Menu.setEnabled(true);
+                Movimientos.setEnabled(true);
+                Asistencia.setEnabled(true);
+                Empleados.setEnabled(true);
+                Estadisticas.setEnabled(true);
+                Ayuda.setEnabled(true);
+                Configuracion.setEnabled(true);
+                Salir.setEnabled(true);
+
+                chofer.setText("");
+                enfermero.setText("");
+                medico.setText("");
+                patente.setText("-");
+                victor.setText("000");
+                modelo.setText("-");
+                marca.setText("-");
+                cantidad.setText("0");
+
+                block = 0;
+                block2 = 0;
             }
         }
     }//GEN-LAST:event_TripActionPerformed
@@ -1187,6 +1236,14 @@ public class Movimiento extends javax.swing.JFrame {
         Actualizar.setEnabled(false);
         Eliminar.setEnabled(false);
         Terminar.setEnabled(true);
+
+        AddT.setEnabled(false);
+        Editar.setEnabled(false);
+        Eliminartrip.setEnabled(false);
+        EditarVic.setEnabled(false);
+        Eliminarvic.setEnabled(false);
+        AddV.setEnabled(false);
+
         cont++;
         band = 0;
         Object[] nuevaFila = {"", "", "", "", "", ""};
@@ -1201,20 +1258,57 @@ public class Movimiento extends javax.swing.JFrame {
 
         // Seleccionar automáticamente
         Tabla.setRowSelectionInterval(nuevaFilaIndex, nuevaFilaIndex);
-        Tabla.editCellAt(nuevaFilaIndex, 1); // enfocar en la primera celda editable
+        Tabla.editCellAt(nuevaFilaIndex, 3); // enfocar en la primera celda editable
         Tabla.requestFocus();
+
+        String horaActual = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+        Tabla.setValueAt(horaActual, nuevaFilaIndex, 1);
+
+        Menu.setEnabled(false);
+        Movimientos.setEnabled(false);
+        Asistencia.setEnabled(false);
+        Empleados.setEnabled(false);
+        Estadisticas.setEnabled(false);
+        Ayuda.setEnabled(false);
+        Configuracion.setEnabled(false);
+        Salir.setEnabled(false);
+
+        block = 1;
+        block2 = 1;
     }//GEN-LAST:event_NuevoActionPerformed
 
     private void ActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ActualizarActionPerformed
+
         Nuevo.setEnabled(false);
         Eliminar.setEnabled(false);
         Cancelar.setEnabled(true);
+
+        AddT.setEnabled(false);
+        Editar.setEnabled(false);
+        Eliminartrip.setEnabled(false);
+        EditarVic.setEnabled(false);
+        Eliminarvic.setEnabled(false);
+        AddV.setEnabled(false);
+
+        Menu.setEnabled(false);
+        Movimientos.setEnabled(false);
+        Asistencia.setEnabled(false);
+        Empleados.setEnabled(false);
+        Estadisticas.setEnabled(false);
+        Ayuda.setEnabled(false);
+        Configuracion.setEnabled(false);
+        Salir.setEnabled(false);
+
+        block = 1;
+        block2 = 1;
         band = 1;
         int filaSeleccionada = Tabla.getSelectedRow();
         if (filaSeleccionada != -1) {
             tabla1.setEditableRow(filaSeleccionada);
+            String horaActual = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+            Tabla.setValueAt(horaActual, filaSeleccionada, 2);
             Terminar.setEnabled(true);
-            Nuevo.setEnabled(true);
+            Nuevo.setEnabled(false);
             Cancelar.setEnabled(true);
         } else {
             JOptionPane.showMessageDialog(null, "Seleccione una fila primero.");
@@ -1222,12 +1316,24 @@ public class Movimiento extends javax.swing.JFrame {
             Terminar.setEnabled(false);
             Nuevo.setEnabled(true);
             Cancelar.setEnabled(false);
+
+            Menu.setEnabled(true);
+            Movimientos.setEnabled(true);
+            Asistencia.setEnabled(true);
+            Empleados.setEnabled(true);
+            Estadisticas.setEnabled(true);
+            Ayuda.setEnabled(true);
+            Configuracion.setEnabled(true);
+            Salir.setEnabled(true);
+
+            block = 0;
+            block2 = 0;
         }
     }//GEN-LAST:event_ActualizarActionPerformed
 
     private void TerminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TerminarActionPerformed
+        int verisalida = 0;
         if (band == 0) {  //Guardar nuevo registro
-
             //validacion
             for (int i = 0; i < Tabla.getRowCount(); i++) {
                 Object idObj = Tabla.getValueAt(i, 0);
@@ -1238,8 +1344,12 @@ public class Movimiento extends javax.swing.JFrame {
                     for (int j = 1; j < tabla1.getColumnCount(); j++) {
                         Object valor = tabla1.getValueAt(i, j);
                         if (valor == null || valor.toString().trim().isEmpty()) {
-                            filaCompleta = false;
-                            break;
+                            if (j == 2) {
+                                verisalida = 1;
+                            } else {
+                                filaCompleta = false;
+                                break;
+                            }
                         }
                     }
 
@@ -1260,6 +1370,69 @@ public class Movimiento extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(null, "¡Ha ingresado un valor NO numerico en la fila " + i + "! Porfavor, revise");
                     return;
                 }
+
+                String llegada = Tabla.getValueAt(i, 1).toString();
+                String[] partes = llegada.split(":");
+
+                // 4. Obtener las horas, minutos y segundos como enteros
+                int horas = Integer.parseInt(partes[0]);
+                int minutos = Integer.parseInt(partes[1]);
+                int segundos = Integer.parseInt(partes[2]);
+
+                String salida = Tabla.getValueAt(i, 2).toString();
+                String[] partes2 = salida.split(":");
+
+                // 5. Comprobar los rangos
+                if (horas < 0 || horas > 23) { // Máximo 23 horas
+                    JOptionPane.showMessageDialog(null,
+                            "Error en la Fila " + (i + 1) + ": La hora (" + horas + ") debe estar entre 00 y 23.",
+                            "Rango Inválido", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                if (minutos < 0 || minutos > 59) { // Máximo 59 minutos
+                    JOptionPane.showMessageDialog(null,
+                            "Error en la Fila " + (i + 1) + ": Los minutos (" + minutos + ") deben estar entre 00 y 59.",
+                            "Rango Inválido", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                if (segundos < 0 || segundos > 59) { // Máximo 59 segundos
+                    JOptionPane.showMessageDialog(null,
+                            "Error en la Fila " + (i + 1) + ": Los segundos (" + segundos + ") deben estar entre 00 y 59.",
+                            "Rango Inválido", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                if (verisalida == 0) {
+                    // 4. Obtener las horas, minutos y segundos como enteros
+                    int horas2 = Integer.parseInt(partes2[0]);
+                    int minutos2 = Integer.parseInt(partes2[1]);
+                    int segundos2 = Integer.parseInt(partes2[2]);
+
+                    // 5. Comprobar los rangos
+                    if (horas2 < 0 || horas2 > 23) { // Máximo 23 horas
+                        JOptionPane.showMessageDialog(null,
+                                "Error en la Fila " + (i + 1) + ": La hora (" + horas + ") debe estar entre 00 y 23.",
+                                "Rango Inválido", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+
+                    if (minutos2 < 0 || minutos2 > 59) { // Máximo 59 minutos
+                        JOptionPane.showMessageDialog(null,
+                                "Error en la Fila " + (i + 1) + ": Los minutos (" + minutos + ") deben estar entre 00 y 59.",
+                                "Rango Inválido", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+
+                    if (segundos2 < 0 || segundos2 > 59) { // Máximo 59 segundos
+                        JOptionPane.showMessageDialog(null,
+                                "Error en la Fila " + (i + 1) + ": Los segundos (" + segundos + ") deben estar entre 00 y 59.",
+                                "Rango Inválido", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                }
+
             }
             //validacion
 
@@ -1286,6 +1459,27 @@ public class Movimiento extends javax.swing.JFrame {
             Eliminar.setEnabled(true);
             Terminar.setEnabled(false);
             Actualizar.setEnabled(true);
+            Cancelar.setEnabled(false);
+
+            AddT.setEnabled(true);
+            Editar.setEnabled(true);
+            Eliminartrip.setEnabled(true);
+            EditarVic.setEnabled(true);
+            Eliminarvic.setEnabled(true);
+            AddV.setEnabled(true);
+
+            Menu.setEnabled(true);
+            Movimientos.setEnabled(true);
+            Asistencia.setEnabled(true);
+            Empleados.setEnabled(true);
+            Estadisticas.setEnabled(true);
+            Ayuda.setEnabled(true);
+            Configuracion.setEnabled(true);
+            Salir.setEnabled(true);
+
+            block = 0;
+            block2 = 0;
+
             try {
                 tabla1.setRowCount(0);
                 CLASES.Movimientos.MostrarMov(con, tabla1, fechaActual, id);
@@ -1313,8 +1507,6 @@ public class Movimiento extends javax.swing.JFrame {
                     return; // Cancela el proceso de guardado
                 }
 
-            }
-            for (int i = 0; i < Tabla.getRowCount(); i++) {
                 // Obtener los datos actualizados desde la tabla
                 String Km = Tabla.getValueAt(i, 3).toString();
                 String Num = Tabla.getValueAt(i, 5).toString();
@@ -1326,6 +1518,67 @@ public class Movimiento extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(null, "¡Ha ingresado un valor NO numerico en la fila " + i + "! Porfavor, revise");
                     return;
                 }
+
+                String llegada = Tabla.getValueAt(i, 1).toString();
+                String[] partes = llegada.split(":");
+
+                // 4. Obtener las horas, minutos y segundos como enteros
+                int horas = Integer.parseInt(partes[0]);
+                int minutos = Integer.parseInt(partes[1]);
+                int segundos = Integer.parseInt(partes[2]);
+
+                String salida = Tabla.getValueAt(i, 2).toString();
+                String[] partes2 = salida.split(":");
+
+                // 5. Comprobar los rangos
+                if (horas < 0 || horas > 23) { // Máximo 23 horas
+                    JOptionPane.showMessageDialog(null,
+                            "Error en la Fila " + (i + 1) + ": La hora (" + horas + ") debe estar entre 00 y 23.",
+                            "Rango Inválido", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                if (minutos < 0 || minutos > 59) { // Máximo 59 minutos
+                    JOptionPane.showMessageDialog(null,
+                            "Error en la Fila " + (i + 1) + ": Los minutos (" + minutos + ") deben estar entre 00 y 59.",
+                            "Rango Inválido", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                if (segundos < 0 || segundos > 59) { // Máximo 59 segundos
+                    JOptionPane.showMessageDialog(null,
+                            "Error en la Fila " + (i + 1) + ": Los segundos (" + segundos + ") deben estar entre 00 y 59.",
+                            "Rango Inválido", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                // 4. Obtener las horas, minutos y segundos como enteros
+                int horas2 = Integer.parseInt(partes2[0]);
+                int minutos2 = Integer.parseInt(partes2[1]);
+                int segundos2 = Integer.parseInt(partes2[2]);
+
+                // 5. Comprobar los rangos
+                if (horas2 < 0 || horas2 > 23) { // Máximo 23 horas
+                    JOptionPane.showMessageDialog(null,
+                            "Error en la Fila " + (i + 1) + ": La hora (" + horas + ") debe estar entre 00 y 23.",
+                            "Rango Inválido", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                if (minutos2 < 0 || minutos2 > 59) { // Máximo 59 minutos
+                    JOptionPane.showMessageDialog(null,
+                            "Error en la Fila " + (i + 1) + ": Los minutos (" + minutos + ") deben estar entre 00 y 59.",
+                            "Rango Inválido", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                if (segundos2 < 0 || segundos2 > 59) { // Máximo 59 segundos
+                    JOptionPane.showMessageDialog(null,
+                            "Error en la Fila " + (i + 1) + ": Los segundos (" + segundos + ") deben estar entre 00 y 59.",
+                            "Rango Inválido", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
             }
 
             for (int i = 0; i < Tabla.getRowCount(); i++) {
@@ -1348,6 +1601,26 @@ public class Movimiento extends javax.swing.JFrame {
             Terminar.setEnabled(false);
             Actualizar.setEnabled(true);
             Cancelar.setEnabled(false);
+
+            AddT.setEnabled(true);
+            Nuevo.setEnabled(true);
+            Editar.setEnabled(true);
+            Eliminartrip.setEnabled(true);
+            EditarVic.setEnabled(true);
+            Eliminarvic.setEnabled(true);
+            AddV.setEnabled(true);
+
+            Menu.setEnabled(true);
+            Movimientos.setEnabled(true);
+            Asistencia.setEnabled(true);
+            Empleados.setEnabled(true);
+            Estadisticas.setEnabled(true);
+            Ayuda.setEnabled(true);
+            Configuracion.setEnabled(true);
+            Salir.setEnabled(true);
+
+            block = 0;
+            block2 = 0;
             try {
                 tabla1.setRowCount(0);
                 CLASES.Movimientos.MostrarMov(con, tabla1, fechaActual, id);
@@ -1363,7 +1636,34 @@ public class Movimiento extends javax.swing.JFrame {
         } else {
             Relevar ventana = new Relevar(id, this);
             ventana.setVisible(true);
+            Relevar.setEnabled(false);
+            Terminar.setEnabled(false);
+            Eliminar.setEnabled(false);
+            Actualizar.setEnabled(false);
+            Nuevo.setEnabled(false);
+            Cancelar.setEnabled(false);
+
+            Menu.setEnabled(true);
+            Movimientos.setEnabled(true);
+            Asistencia.setEnabled(true);
+            Empleados.setEnabled(true);
+            Estadisticas.setEnabled(true);
+            Ayuda.setEnabled(true);
+            Configuracion.setEnabled(true);
+            Salir.setEnabled(true);
+
+            block = 0;
+            block2 = 0;
             this.refrescarCombo();
+            chofer.setText("");
+            enfermero.setText("");
+            medico.setText("");
+            patente.setText("-");
+            victor.setText("000");
+            modelo.setText("-");
+            marca.setText("-");
+            cantidad.setText("0");
+
         }
     }//GEN-LAST:event_RelevarActionPerformed
 
@@ -1425,19 +1725,42 @@ public class Movimiento extends javax.swing.JFrame {
         }
         Cancelar.setEnabled(false);
         Terminar.setEnabled(false);
-        Editar.setEnabled(true);
         Eliminar.setEnabled(true);
-        Salir.setEnabled(true);
+        Editar.setEnabled(true);
         Nuevo.setEnabled(true);
         Actualizar.setEnabled(true);
+
+        Menu.setEnabled(true);
+        Movimientos.setEnabled(true);
+        Asistencia.setEnabled(true);
+        Empleados.setEnabled(true);
+        Estadisticas.setEnabled(true);
+        Ayuda.setEnabled(true);
+        Configuracion.setEnabled(true);
+        Salir.setEnabled(true);
+
+        AddT.setEnabled(true);
+        Editar.setEnabled(true);
+        Eliminartrip.setEnabled(true);
+        EditarVic.setEnabled(true);
+        Eliminarvic.setEnabled(true);
+        AddV.setEnabled(true);
+
+        block = 0;
+        block2 = 0;
         cont = 0;
     }//GEN-LAST:event_CancelarActionPerformed
 
     private void EditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditarActionPerformed
         idtrip = 1;
-        AddTri ventana = new AddTri(idtrip, this);
-        ventana.setVisible(true);
-        this.refrescarCombo();
+
+        int veritrip = CLASES.Movimientos.VerificacionTrip2(con);
+
+        if (veritrip == 0) {
+            AddTri ventana = new AddTri(idtrip, this);
+            ventana.setVisible(true);
+            this.refrescarCombo();
+        }
     }//GEN-LAST:event_EditarActionPerformed
 
     private void iniciomovActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iniciomovActionPerformed
@@ -1537,13 +1860,18 @@ public class Movimiento extends javax.swing.JFrame {
 
     private void EditarVicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditarVicActionPerformed
         int ban = 1;
-        AddVic ventana = new AddVic(this, ban);
-        if (rango == 1) {
-            ventana.setVisible(true);
-        } else {
-            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+
+        int veritrip = CLASES.Movimientos.VerificacionVictor(con);
+
+        if (veritrip == 0) {
+            AddVic ventana = new AddVic(this, ban);
+            if (rango == 1) {
+                ventana.setVisible(true);
+            } else {
+                JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+            }
+            this.refrescarCombo();
         }
-        this.refrescarCombo();
     }//GEN-LAST:event_EditarVicActionPerformed
 
     private void EliminartripActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EliminartripActionPerformed

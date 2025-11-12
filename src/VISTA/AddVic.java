@@ -5,16 +5,19 @@
  */
 package VISTA;
 
+import Atxy2k.CustomTextField.RestrictedTextField;
 import CLASES.Movimientos.Victor;
 import CONEXIONES.Conexiones;
 import java.awt.Color;
 import java.awt.HeadlessException;
+import java.awt.Image;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.text.MaskFormatter;
@@ -33,10 +36,23 @@ public class AddVic extends javax.swing.JDialog {
     public AddVic(JFrame ventanaPrincipal, int ban) {
         super(ventanaPrincipal, true);
         initComponents();
+
+        String rutaIcono = "/IMAGENES/iconosame.png";
+
+        try {
+            // Cargar la imagen desde los recursos del proyecto (la forma recomendada)
+            Image icono = new ImageIcon(getClass().getResource(rutaIcono)).getImage();
+            this.setIconImage(icono);
+
+        } catch (Exception e) {
+            System.err.println("Error al cargar el ícono: " + e.getMessage());
+        }
+
         AddVic.ban = ban;
         this.setLocationRelativeTo(null);
         selcvic.setVisible(false);
         labelvic.setVisible(false);
+        VictorT.requestFocus();
         if (ban == 1) {
             selcvic.setVisible(true);
             VictorT.setEnabled(false);
@@ -44,24 +60,25 @@ public class AddVic extends javax.swing.JDialog {
             Patente.setEnabled(false);
             Marca.setEnabled(false);
             matafuego.setEnabled(false);
-            labelvic.setVisible(true);
+            labelvic.setVisible(true);   
             CLASES.Movimientos.victorcomb(con, selcvic);
+            selcvic.requestFocus();
         }
-        
+
         int ventanaTheme = CLASES.MenuClass.VentanaOpcThemeRet();
-            if (ventanaTheme == 0) {
-            } else if (ventanaTheme == 1) {
-                Color colorPersonalizado = new Color(44, 44, 53);
-                Fondo.setBackground(colorPersonalizado);
-                labelvic.setForeground(Color.WHITE);
-                labelvic1.setForeground(Color.WHITE);
-                labelvic.setForeground(Color.WHITE);
-                labelmod.setForeground(Color.WHITE);
-                labelmar.setForeground(Color.WHITE);
-                labelmat.setForeground(Color.WHITE);
-                titulo.setForeground(Color.WHITE);
-                labelpat.setForeground(Color.WHITE);
-            }
+        if (ventanaTheme == 0) {
+        } else if (ventanaTheme == 1) {
+            Color colorPersonalizado = new Color(44, 44, 53);
+            Fondo.setBackground(colorPersonalizado);
+            labelvic.setForeground(Color.WHITE);
+            labelvic1.setForeground(Color.WHITE);
+            labelvic.setForeground(Color.WHITE);
+            labelmod.setForeground(Color.WHITE);
+            labelmar.setForeground(Color.WHITE);
+            labelmat.setForeground(Color.WHITE);
+            titulo.setForeground(Color.WHITE);
+            labelpat.setForeground(Color.WHITE);
+        }
     }
 
     /**
@@ -111,6 +128,9 @@ public class AddVic extends javax.swing.JDialog {
             labelvic1.setText("Victor");
 
             VictorT.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyReleased(java.awt.event.KeyEvent evt) {
+                    VictorTKeyReleased(evt);
+                }
                 public void keyTyped(java.awt.event.KeyEvent evt) {
                     VictorTKeyTyped(evt);
                 }
@@ -125,8 +145,20 @@ public class AddVic extends javax.swing.JDialog {
             labelmar.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
             labelmar.setText("Marca");
 
+            Modelo.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyReleased(java.awt.event.KeyEvent evt) {
+                    ModeloKeyReleased(evt);
+                }
+            });
+
             labelmat.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
             labelmat.setText("Numero de serie (matafuego):");
+
+            matafuego.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyReleased(java.awt.event.KeyEvent evt) {
+                    matafuegoKeyReleased(evt);
+                }
+            });
 
             Volver.setBackground(new java.awt.Color(78, 247, 177));
             Volver.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
@@ -151,6 +183,17 @@ public class AddVic extends javax.swing.JDialog {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        Patente.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                PatenteKeyReleased(evt);
+            }
+        });
+
+        Marca.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                MarcaKeyReleased(evt);
+            }
+        });
 
         labelvic.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         labelvic.setText("Seleccione un victor:");
@@ -172,23 +215,28 @@ public class AddVic extends javax.swing.JDialog {
                         .addGroup(FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(FondoLayout.createSequentialGroup()
                                 .addGroup(FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addGroup(FondoLayout.createSequentialGroup()
+                                    .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 409, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, FondoLayout.createSequentialGroup()
                                         .addGroup(FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(FondoLayout.createSequentialGroup()
+                                                .addGap(49, 49, 49)
+                                                .addComponent(VictorT, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
                                             .addComponent(labelvic1)
-                                            .addComponent(labelpat))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addGroup(FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(Patente, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(VictorT, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(FondoLayout.createSequentialGroup()
+                                                .addComponent(labelmod)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(Modelo, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addGroup(FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(labelmod)
-                                            .addComponent(labelmar))
-                                        .addGap(18, 18, 18)
-                                        .addGroup(FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(Modelo, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(Marca, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 409, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(FondoLayout.createSequentialGroup()
+                                                .addComponent(labelpat)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(Patente, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(FondoLayout.createSequentialGroup()
+                                                .addComponent(labelmar)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(Marca, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addGap(0, 0, Short.MAX_VALUE)))
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(FondoLayout.createSequentialGroup()
                                 .addComponent(Volver, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -210,7 +258,7 @@ public class AddVic extends javax.swing.JDialog {
                     .addGroup(FondoLayout.createSequentialGroup()
                         .addGap(171, 171, 171)
                         .addComponent(titulo)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(131, Short.MAX_VALUE))
         );
         FondoLayout.setVerticalGroup(
             FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -225,21 +273,18 @@ public class AddVic extends javax.swing.JDialog {
                     .addGroup(FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(labelvic1)
                         .addGroup(FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(labelmod)
-                            .addComponent(Modelo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(labelmar)
+                            .addComponent(Marca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(18, 18, 18)
-                .addGroup(FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(FondoLayout.createSequentialGroup()
-                        .addGroup(FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(labelpat)
-                                .addComponent(Patente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(labelmar))
-                        .addGap(30, 30, 30)
-                        .addGroup(FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(labelmat)
-                            .addComponent(matafuego, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(Marca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(labelmod)
+                    .addComponent(Modelo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(labelpat)
+                    .addComponent(Patente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(30, 30, 30)
+                .addGroup(FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(labelmat)
+                    .addComponent(matafuego, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
                 .addGroup(FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(labelvic)
@@ -298,7 +343,7 @@ public class AddVic extends javax.swing.JDialog {
 
             if (!veri.equals("Opciones")) {
                 try {
-                    VictorT.setText("");
+                    VictorT.setText("000");
                     Modelo.setText("");
                     Patente.setText("__-___-__");
                     Marca.setText("");
@@ -330,6 +375,7 @@ public class AddVic extends javax.swing.JDialog {
     }//GEN-LAST:event_selcvicActionPerformed
 
     private void VictorTKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_VictorTKeyTyped
+
         char r = evt.getKeyChar();
 
         if (Character.isISOControl(r)) {
@@ -341,7 +387,39 @@ public class AddVic extends javax.swing.JDialog {
             getToolkit().beep();
             evt.consume();
         }
+
+        if (VictorT.getText().length() >= 3) {
+            evt.consume();
+        }
     }//GEN-LAST:event_VictorTKeyTyped
+
+    private void VictorTKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_VictorTKeyReleased
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+            Marca.requestFocus();
+        }
+    }//GEN-LAST:event_VictorTKeyReleased
+
+    private void MarcaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_MarcaKeyReleased
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+            Modelo.requestFocus();
+        }
+    }//GEN-LAST:event_MarcaKeyReleased
+
+    private void ModeloKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ModeloKeyReleased
+       if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+            Patente.requestFocus();
+        }
+    }//GEN-LAST:event_ModeloKeyReleased
+
+    private void PatenteKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_PatenteKeyReleased
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+            matafuego.requestFocus();
+        }
+    }//GEN-LAST:event_PatenteKeyReleased
+
+    private void matafuegoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_matafuegoKeyReleased
+
+    }//GEN-LAST:event_matafuegoKeyReleased
 
     /**
      * @param args the command line arguments

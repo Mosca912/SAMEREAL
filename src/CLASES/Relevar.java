@@ -370,7 +370,7 @@ public class Relevar {
                     ResultSet rs5 = ps5.executeQuery();
 
                     if (rs5.next()) {
-                        saliente.setText(rs5.getString("cvs") + "-" + rs5.getString("medico") + "-" + rs5.getString("enfermero"));
+                        saliente.setText(rs5.getString("cvs"));
                     }
 
                 } catch (SQLException ex) {
@@ -384,7 +384,7 @@ public class Relevar {
                     ResultSet rs6 = ps6.executeQuery();
 
                     if (rs6.next()) {
-                        anterior.setText(rs6.getString("cvs") + "-" + rs6.getString("medico") + "-" + rs6.getString("enfermero"));
+                        anterior.setText(rs6.getString("cvs"));
                     }
 
                 } catch (SQLException ex) {
