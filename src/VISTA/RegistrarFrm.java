@@ -31,7 +31,7 @@ public class RegistrarFrm extends javax.swing.JDialog {
     Connection con = Conexiones.Conexion();
     ResultSet rs;
     static int id = 0, band, idbase = 0, iduser;
-    String veri = "Opciones", fechaFormateada, veribase = "Opciones";
+    String veri = "Opciones", fechaFormateada, veribase = "Opciones", veriCombo;
     private final char caracterEchoPredeterminado;
 
     public RegistrarFrm(JFrame ventanaPrincipal, int band) {
@@ -77,7 +77,10 @@ public class RegistrarFrm extends javax.swing.JDialog {
                 DNI.setEnabled(false);
                 Correo.setEnabled(false);
                 Rango.setEnabled(false);
+                MostOcPass.setVisible(false);
                 MostOcPass.setEnabled(false);
+                veri="Opciones";
+                id=0;
                 break;
             case 1:
                 Base.setVisible(false);
@@ -275,8 +278,10 @@ public class RegistrarFrm extends javax.swing.JDialog {
                 if (!nomb.trim().isEmpty() && !ap.trim().isEmpty() && !dni.trim().isEmpty() && !em.trim().isEmpty() && !cont.trim().isEmpty() && !veribase.equals("Opciones")) {
                     if (em.contains("@") && em.contains(".")) {
                         try {
-                            CLASES.Usuario.AgregarNuevoUsuario(con, nomb, ap, dni, em, cont, id, idbase, band);
-                            this.dispose();
+                            int cerrar=CLASES.Usuario.AgregarNuevoUsuario(con, nomb, ap, dni, em, cont, id, idbase, band);
+                            if (cerrar==1){
+                                this.dispose();
+                            }
                         } catch (SQLException e) {
                             JOptionPane.showMessageDialog(null, "ERROR1");
                         }
@@ -292,8 +297,10 @@ public class RegistrarFrm extends javax.swing.JDialog {
                 if (!nomb.trim().isEmpty() && !ap.trim().isEmpty() && !dni.trim().isEmpty() && !em.trim().isEmpty() && !cont.trim().isEmpty() && !veri.equals("Opciones")) {
                     if (em.contains("@") && em.contains(".")) {
                         try {
-                            CLASES.Usuario.AgregarNuevoUsuario(con, nomb, ap, dni, em, cont, id, idbase, band);;
-                            this.dispose();
+                            int cerrar=CLASES.Usuario.AgregarNuevoUsuario(con, nomb, ap, dni, em, cont, id, idbase, band);;
+                            if (cerrar==1){
+                                this.dispose();
+                            }
                         } catch (SQLException e) {
                             JOptionPane.showMessageDialog(null, "ERROR1");
                         }
@@ -309,8 +316,11 @@ public class RegistrarFrm extends javax.swing.JDialog {
                 if (!nomb.trim().isEmpty() && !ap.trim().isEmpty() && !dni.trim().isEmpty() && !em.trim().isEmpty() && !veri.equals("Opciones")) {
                     if (em.contains("@") && em.contains(".")) {
                         try {
-                            CLASES.Usuario.ActualizarUser(con, nomb, ap, dni, em, id, iduser);
-                            this.dispose();
+                            System.out.println(id);
+                            int cerrar=CLASES.Usuario.ActualizarUser(con, nomb, ap, dni, em, id, iduser);
+                            if (cerrar==1){
+                                this.dispose();
+                            }
                         } catch (SQLException e) {
                             JOptionPane.showMessageDialog(null, "ERROR1");
                         }
@@ -333,6 +343,7 @@ public class RegistrarFrm extends javax.swing.JDialog {
         if (value instanceof Usuario.Rango) {
             Usuario.Rango dat = (Usuario.Rango) value;
             id = dat.getId();
+            System.out.println(id);
             veri = dat.getNombre();
         }
     }//GEN-LAST:event_RangoActionPerformed
@@ -365,8 +376,8 @@ public class RegistrarFrm extends javax.swing.JDialog {
         if (value instanceof Usuario.UsuarioMod) {
             Usuario.UsuarioMod dat = (Usuario.UsuarioMod) value;
             iduser = dat.getId();
-            veri = dat.getNombre();
-            if (!veri.equals("Opciones")) {
+            veriCombo = dat.getNombre();
+            if (!veriCombo.equals("Opciones")) {
                 try {
                     CLASES.Usuario.TraerUsuario(con, iduser, Nombre, Apellido, Correo, DNI);
                     Nombre.setEnabled(true);

@@ -12,6 +12,7 @@ import com.toedter.calendar.JDateChooser;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.HeadlessException;
 import java.awt.Image;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -270,7 +271,7 @@ public class Empleados extends javax.swing.JFrame implements CLASES.IBlockableFr
         try {
             CLASES.Empleados.MostrarEmpleados(con, tabla1);
             if (Tabla.getRowCount() == 0) {
-                JOptionPane.showMessageDialog(null, "No se encontró ningún Cliente.");
+                JOptionPane.showMessageDialog(null, "No se encontró ningún Empleado.");
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "ERROR13" + e);
@@ -1011,14 +1012,14 @@ public class Empleados extends javax.swing.JFrame implements CLASES.IBlockableFr
                     try {
                         CLASES.Empleados.AgregarEmpleados(con, nomb, ap, dni, dom, em, tel, fe, gs, car, iduser);
                         JOptionPane.showMessageDialog(null, "Guardado");
-                    } catch (Exception e) {
+                    } catch (HeadlessException | SQLException e) {
                         JOptionPane.showMessageDialog(null, "ERROR1");
                     }
 
                     try {
                         tabla1.setRowCount(0); // Limpia
                         CLASES.Empleados.MostrarEmpleados(con, tabla1);
-                    } catch (Exception e) {
+                    } catch (SQLException e) {
                         JOptionPane.showMessageDialog(null, "Error al refrescar categorías");
                     }
 
@@ -1243,7 +1244,7 @@ public class Empleados extends javax.swing.JFrame implements CLASES.IBlockableFr
                 int borrado = 1;
                 try {
                     CLASES.Empleados.EliminarEmpleados(con, cod, borrado, iduser);
-                    JOptionPane.showMessageDialog(null, "Eliminao");
+                    JOptionPane.showMessageDialog(null, "Eliminado");
                     tabla1.setRowCount(0); // Limpia
                     CLASES.Empleados.MostrarEmpleados(con, tabla1);
                 } catch (SQLException ex) {
@@ -1445,7 +1446,7 @@ public class Empleados extends javax.swing.JFrame implements CLASES.IBlockableFr
             tabla1.setRowCount(0);
             CLASES.Empleados.MostrarEmpleados(con, tabla1);
             if (Tabla.getRowCount() == 0) {
-                JOptionPane.showMessageDialog(null, "No se encontró ningún Cliente.");
+                JOptionPane.showMessageDialog(null, "No se encontró ningún Empleado.");
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "ERROR13" + e);

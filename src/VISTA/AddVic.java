@@ -276,11 +276,12 @@ public class AddVic extends javax.swing.JDialog {
                             .addComponent(labelmar)
                             .addComponent(Marca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(18, 18, 18)
-                .addGroup(FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(labelmod)
-                    .addComponent(Modelo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(labelpat)
-                    .addComponent(Patente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(Patente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(labelmod)
+                        .addComponent(Modelo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(labelpat)))
                 .addGap(30, 30, 30)
                 .addGroup(FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(labelmat)
@@ -315,7 +316,7 @@ public class AddVic extends javax.swing.JDialog {
             if (ban == 0) {
                 try {
                     CLASES.Movimientos.CargaVic(con, vic, model, pat, marca, matafueg);
-                    JOptionPane.showMessageDialog(null, "Cargao");
+                    JOptionPane.showMessageDialog(null, "Cargado");
                     this.dispose();;
                 } catch (SQLException ex) {
                     Logger.getLogger(AddVic.class.getName()).log(Level.SEVERE, null, ex);
@@ -323,7 +324,7 @@ public class AddVic extends javax.swing.JDialog {
             } else if (ban == 1) {
                 try {
                     CLASES.Movimientos.actVic(con, vic, model, pat, marca, matafueg, idvic);
-                    JOptionPane.showMessageDialog(null, "Cargao");
+                    JOptionPane.showMessageDialog(null, "Actualizado");
                     this.dispose();;
                 } catch (SQLException ex) {
                     Logger.getLogger(AddVic.class.getName()).log(Level.SEVERE, null, ex);

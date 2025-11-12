@@ -237,7 +237,7 @@ public class ModElimArea extends javax.swing.JFrame {
                     int borrado = 1;
                     try {
                         CLASES.Empleados.EliminarArea(con, cod);
-                        JOptionPane.showMessageDialog(null, "Eliminao");
+                        JOptionPane.showMessageDialog(null, "Eliminado");
                         tabla1.setRowCount(0);
                         CLASES.Empleados.MostrarArea(con, tabla1);
                         tablamostrar.setModel(tabla1);
@@ -282,7 +282,7 @@ public class ModElimArea extends javax.swing.JFrame {
                 }
             }
 
-            JOptionPane.showMessageDialog(null, "Actualizao");
+            JOptionPane.showMessageDialog(null, "Actualizado");
             try {
                 tabla1.setRowCount(0);
                 CLASES.Empleados.MostrarCargo(con, tabla1);

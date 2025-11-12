@@ -69,7 +69,7 @@ public class ModElimCargo extends javax.swing.JFrame {
         try {
             CLASES.Empleados.MostrarCargo(con, tabla2);
             if (tablamostrar.getRowCount() == 0) {
-                JOptionPane.showMessageDialog(null, "No se encontró ningún Producto.");
+                JOptionPane.showMessageDialog(null, "No se encontró ningún Cargo.");
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "ERROR" + e);
@@ -242,7 +242,7 @@ public class ModElimCargo extends javax.swing.JFrame {
                             case 1:
                                 try {
                                     CLASES.Empleados.EliminarCargo(con, cod, borrado);
-                                    JOptionPane.showMessageDialog(null, "Eliminao");
+                                    JOptionPane.showMessageDialog(null, "Eliminado");
                                     tabla1.setRowCount(0);
                                     CLASES.Empleados.MostrarCargo(con, tabla1);
                                     tablamostrar.setModel(tabla1);
@@ -253,7 +253,7 @@ public class ModElimCargo extends javax.swing.JFrame {
                             case 0:
                                 try {
                                     CLASES.Empleados.EliminarCargo(con, cod, borrado);
-                                    JOptionPane.showMessageDialog(null, "Eliminao");
+                                    JOptionPane.showMessageDialog(null, "Eliminado");
                                     tabla1.setRowCount(0);
                                     CLASES.Empleados.MostrarCargo(con, tabla1);
                                     tablamostrar.setModel(tabla1);
@@ -306,7 +306,7 @@ public class ModElimCargo extends javax.swing.JFrame {
                 }
             }
 
-            JOptionPane.showMessageDialog(null, "Actualizao");
+            JOptionPane.showMessageDialog(null, "Actualizado");
             try {
                 tabla1.setRowCount(0);
                 CLASES.Empleados.MostrarCargo(con, tabla1);

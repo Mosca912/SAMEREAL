@@ -648,7 +648,17 @@ public class Movimientos {
             ps2.setInt(5, nuevoId);
             ps2.execute();
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "ERROR12");
+            int errorCode = e.getErrorCode();
+            if (errorCode == 1062) {
+                // Mensaje Personalizado para DNI/Correo Repetido
+                JOptionPane.showMessageDialog(null,
+                        "Error: El victor que intentás ingresar ya existen en el sistema. Deben ser únicos.",
+                        "Error de Registro Duplicado", // Título de la ventana
+                        JOptionPane.ERROR_MESSAGE);
+            } else {
+                // Si es cualquier otro error de SQL, mostramos el mensaje genérico
+                JOptionPane.showMessageDialog(null, "ERROR SQL no esperado: " + e.getMessage());
+            }
         }
     }
     static int idmat;
@@ -694,7 +704,17 @@ public class Movimientos {
             ps.setInt(2, idmat);
             ps.execute();
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e);
+            int errorCode = e.getErrorCode();
+            if (errorCode == 1062) {
+                // Mensaje Personalizado para DNI/Correo Repetido
+                JOptionPane.showMessageDialog(null,
+                        "Error: El victor que intentás ingresar ya existen en el sistema. Deben ser únicos.",
+                        "Error de Registro Duplicado", // Título de la ventana
+                        JOptionPane.ERROR_MESSAGE);
+            } else {
+                // Si es cualquier otro error de SQL, mostramos el mensaje genérico
+                JOptionPane.showMessageDialog(null, "ERROR SQL no esperado: " + e.getMessage());
+            }
         }
     }
 

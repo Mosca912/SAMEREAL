@@ -224,7 +224,7 @@ public class AddAreaCargo extends javax.swing.JDialog {
             if (!nomb.trim().isEmpty()) {
                 try {
                     CLASES.Empleados.AgregarArea(con, nomb, id);
-                    JOptionPane.showMessageDialog(null, "Cargao");
+                    JOptionPane.showMessageDialog(null, "Cargado");
                     this.dispose();
                 } catch (SQLException ex) {
                     Logger.getLogger(AddAreaCargo.class.getName()).log(Level.SEVERE, null, ex);

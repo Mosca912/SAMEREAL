@@ -157,7 +157,8 @@ public class Usuario {
         }
     }
 
-    public static void AgregarNuevoUsuario(Connection conexion, String nombre, String apellido, String dni, String email, String contrasena, int id, int idbase, int band) throws SQLException {
+    public static int AgregarNuevoUsuario(Connection conexion, String nombre, String apellido, String dni, String email, String contrasena, int id, int idbase, int band) throws SQLException {
+        int valid = 0;
         if (band == 0) {
             String contrasenaHasheada = BCrypt.hashpw(contrasena, BCrypt.gensalt());
             String sql2 = "INSERT into usuario (nombre, apellido, correo, contrasena, rango, dni, base, borrado) VALUES (?,?,?,?,?,?,?, 0) ";
@@ -172,6 +173,7 @@ public class Usuario {
                 ps2.setInt(7, idbase);
                 ps2.execute();
                 JOptionPane.showMessageDialog(null, "Guardado");
+                valid = 1;
             } catch (SQLException e) {
                 JOptionPane.showMessageDialog(null, "ERROR " + e);
             }
@@ -189,10 +191,22 @@ public class Usuario {
                 ps2.setInt(7, base);
                 ps2.execute();
                 JOptionPane.showMessageDialog(null, "Guardado");
+                valid = 1;
             } catch (SQLException e) {
-                JOptionPane.showMessageDialog(null, "ERROR " + e);
+                int errorCode = e.getErrorCode();
+                if (errorCode == 1062) {
+                    // Mensaje Personalizado para DNI/Correo Repetido
+                    JOptionPane.showMessageDialog(null,
+                            "⚠️ Error: El DNI o el correo electrónico que intentás ingresar ya existen en el sistema. Deben ser únicos.",
+                            "Error de Registro Duplicado", // Título de la ventana
+                            JOptionPane.ERROR_MESSAGE);
+                } else {
+                    // Si es cualquier otro error de SQL, mostramos el mensaje genérico
+                    JOptionPane.showMessageDialog(null, "ERROR SQL no esperado: " + e.getMessage());
+                }
             }
         }
+        return valid;
     }
 
     public static void TraerUsuario(Connection conexion, int id, JTextField nombre, JTextField apellido, JTextField correo, JTextField dni) throws SQLException {
@@ -249,8 +263,8 @@ public class Usuario {
         return veri;
     }
 
-    public static void ActualizarUser(Connection conexion, String nombre, String apellido, String dni, String em, int id1, int id) throws SQLException {
-
+    public static int ActualizarUser(Connection conexion, String nombre, String apellido, String dni, String em, int id1, int id) throws SQLException {
+        System.out.println(id1);
         String sql = "UPDATE usuario SET nombre=?, apellido=?, correo=?, rango = ?, dni = ? WHERE idUsuario=?";
         try {
             PreparedStatement ps = conexion.prepareStatement(sql);
@@ -262,6 +276,7 @@ public class Usuario {
             ps.setInt(6, id);
             ps.execute();
             JOptionPane.showMessageDialog(null, "Actualización de usuario exitosa");
+            valid=1;
             PreparedStatement stm9 = conexion.prepareStatement("INSERT INTO auditoria (evento, usuario_afectado) VALUES (?, ?)");
             stm9.setString(1, "MODIFICACION_USUARIO");
             stm9.setString(2, em);
@@ -271,9 +286,19 @@ public class Usuario {
                 JOptionPane.showMessageDialog(null, "ERROR: " + e);
             }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e);
+            int errorCode = e.getErrorCode();
+            if (errorCode == 1062) {
+                // Mensaje Personalizado para DNI/Correo Repetido
+                JOptionPane.showMessageDialog(null,
+                        "⚠️ Error: El DNI o el correo electrónico que intentás ingresar ya existen en el sistema. Deben ser únicos.",
+                        "Error de Registro Duplicado", // Título de la ventana
+                        JOptionPane.ERROR_MESSAGE);
+            } else {
+                // Si es cualquier otro error de SQL, mostramos el mensaje genérico
+                JOptionPane.showMessageDialog(null, "ERROR SQL no esperado: " + e.getMessage());
+            }
         }
-
+        return valid;
     }
 
     public static int Verificacion(Connection conexion) {

@@ -14,9 +14,8 @@ public class Dump {
     private static final String RUTA_MYSQLDUMP = "C:\\laragon\\bin\\mysql\\mysql-8.0.30-winx64\\bin\\mysqldump.exe";
     // 2. Nombre de la base de datos a respaldar
     private static final String DB_NAME = "samerealpro";
-    // 3. Credenciales de la BD
-    private static final String DB_USER = "root";
-    private static final String DB_PASS = ""; // Dejar vacío si no tienes contraseña
+    private static final String DB_USER = "same";
+    private static final String DB_PASS = "samejujuy1072025ies"; // Dejar vacío si no tienes contraseña
     private static final String RUTA_SALIDA_DUMP = "C:\\db\\" + DB_NAME + ".sql";
 
     public static void realizarDump() {

@@ -1157,8 +1157,8 @@ public class Movimiento extends javax.swing.JFrame implements CLASES.IBlockableF
 
     private void AddVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddVActionPerformed
         int ban = 0;
-        AddVic ventana = new AddVic(this, ban);
-        ventana.setVisible(true);
+        AddVic ventana1 = new AddVic(this, ban);
+        ventana1.setVisible(true);
 
     }//GEN-LAST:event_AddVActionPerformed
 
@@ -1168,8 +1168,8 @@ public class Movimiento extends javax.swing.JFrame implements CLASES.IBlockableF
         int veritrip = CLASES.Movimientos.VerificacionTrip(con);
 
         if (veritrip == 0) {
-            AddTri ventana = new AddTri(idtrip, this);
-            ventana.setVisible(true);
+            AddTri ventana1 = new AddTri(idtrip, this);
+            ventana1.setVisible(true);
 
             this.refrescarCombo();
         }
@@ -1455,7 +1455,7 @@ public class Movimiento extends javax.swing.JFrame implements CLASES.IBlockableF
             }
             //Insert
 
-            JOptionPane.showMessageDialog(null, "Agregao");
+            JOptionPane.showMessageDialog(null, "Agregado");
             Eliminar.setEnabled(true);
             Terminar.setEnabled(false);
             Actualizar.setEnabled(true);
@@ -1596,7 +1596,7 @@ public class Movimiento extends javax.swing.JFrame implements CLASES.IBlockableF
                 }
             }
 
-            JOptionPane.showMessageDialog(null, "Actualizao");
+            JOptionPane.showMessageDialog(null, "Actualizado");
             Eliminar.setEnabled(true);
             Terminar.setEnabled(false);
             Actualizar.setEnabled(true);
@@ -1634,8 +1634,8 @@ public class Movimiento extends javax.swing.JFrame implements CLASES.IBlockableF
         if (id == 0) {
             JOptionPane.showMessageDialog(null, "SELECCIONE UNA TRIPULACION");
         } else {
-            Relevar ventana = new Relevar(id, this);
-            ventana.setVisible(true);
+            Relevar ventana1 = new Relevar(id, this);
+            ventana1.setVisible(true);
             Relevar.setEnabled(false);
             Terminar.setEnabled(false);
             Eliminar.setEnabled(false);
@@ -1683,7 +1683,7 @@ public class Movimiento extends javax.swing.JFrame implements CLASES.IBlockableF
                 int cod = Integer.parseInt(Tabla.getValueAt(fila, 0).toString());
                 try {
                     CLASES.Movimientos.EliminarMovimiento(con, cod, iduser, id);
-                    JOptionPane.showMessageDialog(null, "Eliminao");
+                    JOptionPane.showMessageDialog(null, "Eliminado");
                     tabla1.setRowCount(0);
                     CLASES.Movimientos.MostrarMov(con, tabla1, fechaActual, id);
                     CLASES.Movimientos.Contador(con, id, cantidad, fechaActual);
@@ -1757,8 +1757,8 @@ public class Movimiento extends javax.swing.JFrame implements CLASES.IBlockableF
         int veritrip = CLASES.Movimientos.VerificacionTrip2(con);
 
         if (veritrip == 0) {
-            AddTri ventana = new AddTri(idtrip, this);
-            ventana.setVisible(true);
+            AddTri ventana1 = new AddTri(idtrip, this);
+            ventana1.setVisible(true);
             this.refrescarCombo();
         }
     }//GEN-LAST:event_EditarActionPerformed
@@ -1768,9 +1768,9 @@ public class Movimiento extends javax.swing.JFrame implements CLASES.IBlockableF
     }//GEN-LAST:event_iniciomovActionPerformed
 
     private void nuevtripActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevtripActionPerformed
-        AddTri ventana = new AddTri(0, this);
+        AddTri ventana1 = new AddTri(0, this);
         if (rango == 1) {
-            ventana.setVisible(true);
+            ventana1.setVisible(true);
         } else {
             JOptionPane.showMessageDialog(null, "Es un usuario lector!");
         }
@@ -1778,64 +1778,64 @@ public class Movimiento extends javax.swing.JFrame implements CLASES.IBlockableF
 
     private void nuevovicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevovicActionPerformed
         int ban = 0;
-        AddVic ventana = new AddVic(this, ban);
+        AddVic ventana1 = new AddVic(this, ban);
         if (rango == 1) {
-            ventana.setVisible(true);
+            ventana1.setVisible(true);
         } else {
             JOptionPane.showMessageDialog(null, "Es un usuario lector!");
         }
     }//GEN-LAST:event_nuevovicActionPerformed
 
     private void historialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_historialActionPerformed
-        Historial ventana = new Historial(this);
-        ventana.setVisible(true);
+        Historial ventana1 = new Historial(this);
+        ventana1.setVisible(true);
     }//GEN-LAST:event_historialActionPerformed
 
     private void inicioasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inicioasActionPerformed
-        Asistencia ventana = new Asistencia();
-        ventana.setVisible(true);
+        Asistencia ventana1 = new Asistencia();
+        ventana1.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_inicioasActionPerformed
 
     private void AsistenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AsistenciaActionPerformed
-        Asistencia ventana = new Asistencia();
-        ventana.setVisible(true);
+        Asistencia ventana1 = new Asistencia();
+        ventana1.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_AsistenciaActionPerformed
 
     private void inicempActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inicempActionPerformed
-        Empleados ventana = new Empleados();
-        ventana.setVisible(true);
+        Empleados ventana1 = new Empleados();
+        ventana1.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_inicempActionPerformed
 
     private void modActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modActionPerformed
-        ModElimCargo1 ventana = new ModElimCargo1(1, this);
+        ModElimCargo1 ventana1 = new ModElimCargo1(1, this);
         if (rango == 1) {
-            ventana.setVisible(true);
+            ventana1.setVisible(true);
         } else {
             JOptionPane.showMessageDialog(null, "Es un usuario lector!");
         }
     }//GEN-LAST:event_modActionPerformed
 
     private void elimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_elimActionPerformed
-        ModElimCargo1 ventana = new ModElimCargo1(0, this);
+        ModElimCargo1 ventana1 = new ModElimCargo1(0, this);
         if (rango == 1) {
-            ventana.setVisible(true);
+            ventana1.setVisible(true);
         } else {
             JOptionPane.showMessageDialog(null, "Es un usuario lector!");
         }
     }//GEN-LAST:event_elimActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        Estadisticas ventana = new Estadisticas();
-        ventana.setVisible(true);
+        Estadisticas ventana1 = new Estadisticas();
+        ventana1.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        Menu ventana = new Menu();
-        ventana.setVisible(true);
+        Menu ventana1 = new Menu();
+        ventana1.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
@@ -1845,9 +1845,9 @@ public class Movimiento extends javax.swing.JFrame implements CLASES.IBlockableF
 
     private void EliminarvicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EliminarvicActionPerformed
         int ban = 0;
-        AddDelVicTrip ventana = new AddDelVicTrip(this, ban);
+        AddDelVicTrip ventana1 = new AddDelVicTrip(this, ban);
         if (rango == 1) {
-            ventana.setVisible(true);
+            ventana1.setVisible(true);
         } else {
             JOptionPane.showMessageDialog(null, "Es un usuario lector!");
         }
@@ -1864,9 +1864,9 @@ public class Movimiento extends javax.swing.JFrame implements CLASES.IBlockableF
         int veritrip = CLASES.Movimientos.VerificacionVictor(con);
 
         if (veritrip == 0) {
-            AddVic ventana = new AddVic(this, ban);
+            AddVic ventana1 = new AddVic(this, ban);
             if (rango == 1) {
-                ventana.setVisible(true);
+                ventana1.setVisible(true);
             } else {
                 JOptionPane.showMessageDialog(null, "Es un usuario lector!");
             }
@@ -1876,9 +1876,9 @@ public class Movimiento extends javax.swing.JFrame implements CLASES.IBlockableF
 
     private void EliminartripActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EliminartripActionPerformed
         int ban = 1;
-        AddDelVicTrip ventana = new AddDelVicTrip(this, ban);
+        AddDelVicTrip ventana1 = new AddDelVicTrip(this, ban);
         if (rango == 1) {
-            ventana.setVisible(true);
+            ventana1.setVisible(true);
         } else {
             JOptionPane.showMessageDialog(null, "Es un usuario lector!");
         }

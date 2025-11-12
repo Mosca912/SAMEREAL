@@ -71,7 +71,6 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
         Asistencia.setEnabled(false);
         Empleados.setEnabled(false);
         Estadisticas.setEnabled(false);
-        Ayuda.setEnabled(false);
         Configuracion.setEnabled(false);
         cerrarsesion.setVisible(false);
         registrarse.setVisible(false);

@@ -71,7 +71,7 @@ public class ModElimCargo1 extends javax.swing.JDialog {
         try {
             CLASES.Empleados.MostrarCargo(con, tabla2);
             if (tablamostrar.getRowCount() == 0) {
-                JOptionPane.showMessageDialog(null, "No se encontró ningún Producto.");
+                JOptionPane.showMessageDialog(null, "No se encontró ningún Cargo.");
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "ERROR" + e);
@@ -79,11 +79,11 @@ public class ModElimCargo1 extends javax.swing.JDialog {
 
         if (band == 0) {
             titulo.setText("Eliminar");
-            Leyenda.setText("Seleccione una opcion que desea eliminar");
+            Leyenda.setText("Seleccione una opción que desea eliminar");
             Boton.setText("Eliminar");
         } else if (band == 1) {
             titulo.setText("Modificar");
-            Leyenda.setText("Seleccione una opcion que desea modificar");
+            Leyenda.setText("Seleccione una opción que desea modificar");
             Boton.setText("Modificar");
         }
 
@@ -237,7 +237,7 @@ public class ModElimCargo1 extends javax.swing.JDialog {
                             case 1:
                                 try {
                                     CLASES.Empleados.EliminarCargo(con, cod, borrado);
-                                    JOptionPane.showMessageDialog(null, "Eliminao");
+                                    JOptionPane.showMessageDialog(null, "Eliminado");
                                     tabla1.setRowCount(0);
                                     CLASES.Empleados.MostrarCargo(con, tabla1);
                                     tablamostrar.setModel(tabla1);
@@ -248,7 +248,7 @@ public class ModElimCargo1 extends javax.swing.JDialog {
                             case 0:
                                 try {
                                     CLASES.Empleados.EliminarCargo(con, cod, borrado);
-                                    JOptionPane.showMessageDialog(null, "Eliminao");
+                                    JOptionPane.showMessageDialog(null, "Eliminado");
                                     tabla1.setRowCount(0);
                                     CLASES.Empleados.MostrarCargo(con, tabla1);
                                     tablamostrar.setModel(tabla1);
@@ -301,7 +301,7 @@ public class ModElimCargo1 extends javax.swing.JDialog {
                 }
             }
 
-            JOptionPane.showMessageDialog(null, "Actualizao");
+            JOptionPane.showMessageDialog(null, "Actualizado");
             try {
                 tabla1.setRowCount(0);
                 CLASES.Empleados.MostrarCargo(con, tabla1);

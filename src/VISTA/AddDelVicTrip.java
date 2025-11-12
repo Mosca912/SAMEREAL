@@ -242,7 +242,7 @@ public class AddDelVicTrip extends javax.swing.JDialog {
                             case 1:
                                 try {
                                     CLASES.Movimientos.EliminarVic(con, cod);
-                                    JOptionPane.showMessageDialog(null, "Eliminao");
+                                    JOptionPane.showMessageDialog(null, "Eliminado");
                                     tabla2.setRowCount(0);
                                     CLASES.Movimientos.tablaVic(con, tabla2);
                                     Tabla.setModel(tabla2);
@@ -253,7 +253,7 @@ public class AddDelVicTrip extends javax.swing.JDialog {
                             case 0:
                                 try {
                                     CLASES.Movimientos.EliminarVic(con, cod);
-                                    JOptionPane.showMessageDialog(null, "Eliminao");
+                                    JOptionPane.showMessageDialog(null, "Eliminado");
                                     tabla2.setRowCount(0);
                                     CLASES.Movimientos.tablaVic(con, tabla2);
                                     Tabla.setModel(tabla2);
@@ -290,7 +290,7 @@ public class AddDelVicTrip extends javax.swing.JDialog {
                     int cod = Integer.parseInt(Tabla.getValueAt(fila, 0).toString());
                     try {
                         CLASES.Movimientos.EliminarTrip(con, cod);
-                        JOptionPane.showMessageDialog(null, "Eliminao");
+                        JOptionPane.showMessageDialog(null, "Eliminado");
                         tabla1.setRowCount(0);
                         CLASES.Movimientos.tablaTrip(con, tabla1);
                         Tabla.setModel(tabla1);
