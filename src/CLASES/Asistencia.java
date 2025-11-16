@@ -31,6 +31,8 @@ import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -117,33 +119,17 @@ public class Asistencia {
     }
 
     public static void jCombo(Connection conexion, JComboBox<Empleado> combo1, int id) {
-        int car = 0;
-        String sql3 = "SELECT idCargo FROM cargo WHERE idArea=?";
 
-        try {
-
-            PreparedStatement stm2 = conexion.prepareStatement(sql3);
-            stm2.setInt(1, id);
-            ResultSet rs2 = stm2.executeQuery();
-
-            if (rs2.next()) {
-                car = rs2.getInt("idCargo");
-            }
-
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "ERROR: " + ex.getMessage());
-        }
-
-        String sql = "SELECT id_Empleado, apellido, dni FROM empleado WHERE idCargo=? and borrado=0;";
+        String sql = "SELECT empleado.id_Empleado, empleado.apellido, empleado.dni FROM empleado inner join cargo on empleado.idCargo=cargo.idCargo WHERE cargo.idArea=? and empleado.borrado=0;";
         try {
             PreparedStatement ps = conexion.prepareStatement(sql);
-            ps.setInt(1, car);
+            ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             DefaultComboBoxModel<Asistencia.Empleado> empl = new DefaultComboBoxModel();
             empl.addElement(new Asistencia.Empleado(0, "Opciones"));
             while (rs.next()) {
-                int id2 = rs.getInt("id_Empleado");
-                String emp = rs.getString("apellido") + ("-") + rs.getString("dni");
+                int id2 = rs.getInt("empleado.id_Empleado");
+                String emp = rs.getString("empleado.apellido") + ("-") + rs.getString("empleado.dni");
                 empl.addElement(new Asistencia.Empleado(id2, emp));
             }
 
@@ -175,16 +161,18 @@ public class Asistencia {
             d.setText(doc);
         }
     }
-    static int dia2, mesActual;
+    static int dia2, mesActual, yearact;
 
     public static void MostrarTabla(Connection conexion, int id, JTable tabla) throws SQLException {
         mesActual = LocalDate.now().getMonthValue();
+        yearact = LocalDate.now().getYear();
         dia2 = LocalDate.now().getDayOfMonth();
 
         PreparedStatement stm = conexion.prepareStatement(
-                "SELECT DAY(entrada) as dia, entrada, salida, observacion FROM seguimientoasistencia inner join asistencia on seguimientoasistencia.idAsistencia=asistencia.idAsistencia WHERE asistencia.id_Empleado=? AND MONTH(entrada)=?;");
+                "SELECT DAY(entrada) as dia, entrada, salida, observacion FROM seguimientoasistencia inner join asistencia on seguimientoasistencia.idAsistencia=asistencia.idAsistencia WHERE asistencia.id_Empleado=? AND MONTH(entrada)=? AND asistencia.year=?;");
         stm.setInt(1, id);
         stm.setInt(2, mesActual);
+        stm.setInt(3, yearact);
         ResultSet rs = stm.executeQuery();
 
         DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
@@ -217,29 +205,42 @@ public class Asistencia {
         }
     }
 
-    public static List<String> obtenerFechasFaltantes(Connection con, int mes, int id) throws SQLException {
-
+    public static List<String> obtenerFechasFaltantes(Connection con, int mes, int anioActual, int id) throws SQLException {
         // Usaremos una lista de String para guardar las fechas
         List<String> fechasFaltantes = new ArrayList<>();
-
-        PreparedStatement pstmt = con.prepareStatement("SELECT asistencia.fecha FROM asistencia WHERE asistencia.fecha != ? and asistencia.id_Empleado=? and asistencia.relevado=0;");
-        pstmt.setInt(1, mes);
-        pstmt.setInt(2, id);
+        PreparedStatement pstmt = con.prepareStatement("SELECT fecha, year FROM asistencia WHERE id_Empleado = ? AND relevado = 0 AND (year < ? OR (year = ? AND fecha < ?)) ORDER BY year, fecha ASC;");
+        pstmt.setInt(1, id);
+        pstmt.setInt(2, anioActual);
+        pstmt.setInt(3, anioActual);
+        pstmt.setInt(4, mes);
         ResultSet rs = pstmt.executeQuery();
         try {
             while (rs.next()) {
-                int fechaInt = rs.getInt("fecha");
-                if (!rs.wasNull()) {
-                    String fechaString = String.valueOf(fechaInt);
-                    fechasFaltantes.add(fechaString);
+                int mesrel = rs.getInt("fecha");
+                int anio = rs.getInt("year"); // <-- Obtenemos el año
 
+                // Combinamos mes y año en un formato fácil de usar (ej: "11-2025")
+                String fechaCompleta = mesrel + "-" + anio;
+                fechasFaltantes.add(fechaCompleta);
+            }
+        } catch (SQLException e) {
+            // En lugar de e.printStackTrace(), es mejor lanzar la excepción o manejarla
+            throw new SQLException("Error al obtener fechas faltantes de la asistencia: " + e.getMessage(), e);
+        } finally {
+            // Asegúrate de cerrar el ResultSet
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException ignore) {
                 }
             }
-
-        } catch (Exception e) {
-            e.printStackTrace();
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException ignore) {
+                }
+            }
         }
-
         return fechasFaltantes;
     }
 
@@ -284,29 +285,38 @@ public class Asistencia {
         int mes = LocalDate.now().getMonthValue();
         String nombre;
         String apellido;
-        PreparedStatement stm = conexion.prepareStatement("SELECT COUNT(asistencia.idasistencia), empleado.nombre, empleado.apellido FROM asistencia inner join empleado on asistencia.id_Empleado=empleado.id_Empleado WHERE asistencia.fecha != ? and asistencia.id_Empleado=? and asistencia.relevado=0;");
-        stm.setInt(1, mes);
-        stm.setInt(2, id);
+
+        String sqlContar = "SELECT COUNT(T1.idasistencia), T2.nombre, T2.apellido FROM asistencia T1 INNER JOIN empleado T2 ON T1.id_Empleado = T2.id_Empleado WHERE T1.id_Empleado = ?  AND T1.relevado = 0  AND (T1.year != ? OR (T1.year = ? AND T1.fecha != ?));";
+
+        //PreparedStatement stm = conexion.prepareStatement("SELECT COUNT(asistencia.idasistencia), empleado.nombre, empleado.apellido FROM asistencia inner join empleado on asistencia.id_Empleado=empleado.id_Empleado WHERE asistencia.fecha != ? and asistencia.id_Empleado=? and asistencia.relevado=0;");
+        PreparedStatement stm = conexion.prepareStatement(sqlContar);
+        stm.setInt(1, id);
+        stm.setInt(2, anioActual); // T1.year < anioActual
+        stm.setInt(3, anioActual); // T1.year = anioActual
+        stm.setInt(4, mes);
         ResultSet rs = stm.executeQuery();
         int base = CLASES.Usuario.base();
         if (rs.next()) {
-            count = rs.getInt("COUNT(asistencia.idasistencia)");
-            nombre = rs.getString("empleado.nombre");
-            apellido = rs.getString("empleado.apellido");
+            count = rs.getInt("COUNT(T1.idasistencia)");
+            nombre = rs.getString("T2.nombre");
+            apellido = rs.getString("T2.apellido");
             if (count == 1) {
                 JOptionPane.showMessageDialog(null, "Este empleado tiene " + count + " mes sin relevar. Se generará el PDF correspondiente");
 
                 // Llamar al método
-                List<String> misFechas = obtenerFechasFaltantes(con, mes, id);
+                List<String> misFechas = obtenerFechasFaltantes(con, mes, anioActual, id);
                 int cantidad = misFechas.size();
                 System.out.println("Cantidad de registros encontrados: " + cantidad);
 
                 // Para ver cada fecha:
                 for (String fecha : misFechas) {
                     System.out.println("Fecha faltante: " + fecha);
-                    // 📄 Documento en horizontal
+                    String[] partes = fecha.split("-");
+                    int mesFaltante = Integer.parseInt(partes[0]);
+                    int anioFaltante = Integer.parseInt(partes[1]);
+
                     Document document = new Document(PageSize.A4.rotate());
-                    PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("C:\\SAME\\Asistencia\\asistencia_mes_" + fecha + "_año_"+anioActual+"_" + nombre + " " + apellido + ".pdf"));
+                    PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("C:\\SAME\\Asistencia\\asistencia_mes_" + fecha + "_" + nombre + " " + apellido + ".pdf"));
                     document.open();
 
                     // 📸 Cargar imagen (desde carpeta del proyecto o ruta absoluta)
@@ -371,10 +381,19 @@ public class Asistencia {
                     Font fontHeader = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12, BaseColor.WHITE);
                     Font fontNormal = FontFactory.getFont(FontFactory.HELVETICA, 10, BaseColor.BLACK);
 
-                    // ⚙️ Query → traer los registros
-                    PreparedStatement stm2 = con.prepareStatement("SELECT DAY(entrada) as dia, entrada, salida, observacion FROM seguimientoasistencia INNER JOIN asistencia ON seguimientoasistencia.idAsistencia = asistencia.idAsistencia WHERE asistencia.id_Empleado = ? AND MONTH(entrada) = ?;");
+                    // Consulta para los registros de seguimiento (stm2)
+                    PreparedStatement stm2 = con.prepareStatement(
+                            "SELECT DAY(sa.entrada) as dia, sa.entrada, sa.salida, sa.observacion "
+                            + "FROM seguimientoasistencia sa "
+                            + "INNER JOIN asistencia a ON sa.idAsistencia = a.idAsistencia "
+                            + "WHERE a.id_Empleado = ? "
+                            + "  AND MONTH(sa.entrada) = ? "
+                            + "  AND YEAR(sa.entrada) = ?;"
+                    );
+
                     stm2.setInt(1, id);
-                    stm2.setString(2, fecha);
+                    stm2.setInt(2, mesFaltante); // Mes faltante (debe ser INT)
+                    stm2.setInt(3, anioFaltante); // Año faltante (debe ser INT)
 
                     ResultSet rs2 = stm2.executeQuery();
 
@@ -388,26 +407,29 @@ public class Asistencia {
                         registros.put(dia, new String[]{entrada, salida, observ});
                     }
 
-                    // 🧱 Crear dos tablas
-                    PdfPTable tablaIzq = crearTablaAsistencia(1, 15, registros, fontHeader, fontNormal);
-                    PdfPTable tablaDer = crearTablaAsistencia(16, 31, registros, fontHeader, fontNormal);
+                    Calendar calendar = new GregorianCalendar(anioFaltante, mesFaltante - 1, 1);
+                    int totalDiasMes = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
 
-                    // ✅ Versión buena — usar tabla contenedora (no coordenadas absolutas)
-                    PdfPTable contenedor = new PdfPTable(2);
-                    contenedor.setWidthPercentage(105);
-                    contenedor.addCell(tablaIzq);
-                    contenedor.addCell(tablaDer);
+// Generar la tabla unificada de 8 columnas
+                    PdfPTable tablaUnificada = crearTablaAsistenciaUnificada(
+                            registros,
+                            fontHeader,
+                            fontNormal,
+                            totalDiasMes // <-- Le pasamos cuántos días tiene el mes
+                    );
 
-                    document.add(contenedor);
+// Añadir la tabla al documento
+                    document.add(tablaUnificada);
 
                     document.close();
                     writer.close();
 
                     System.out.println("✅ PDF generado correctamente en horizontal: asistencia_mes_" + mes + ".pdf");
 
-                    PreparedStatement stm3 = conexion.prepareStatement("UPDATE asistencia SET relevado = 1 WHERE fecha= ? and id_Empleado=?;");
-                    stm3.setString(1, fecha);
+                    PreparedStatement stm3 = conexion.prepareStatement("UPDATE asistencia SET relevado = 1 WHERE fecha= ? and id_Empleado=? and year=?;");
+                    stm3.setInt(1, mesFaltante);
                     stm3.setInt(2, id);
+                    stm3.setInt(3, anioFaltante);
                     try {
                         stm3.executeUpdate();
                         PreparedStatement stm9 = conexion.prepareStatement("INSERT INTO auditoria_asistencia (evento, id_empleado, id_usuario) VALUES (?, ?, ?)");
@@ -420,23 +442,26 @@ public class Asistencia {
                             JOptionPane.showMessageDialog(null, "ERROR: " + e);
                         }
                     } catch (Exception e) {
-                        JOptionPane.showMessageDialog(null, "ERROR12");
+                        JOptionPane.showMessageDialog(null, "ERROR" + e);
                     }
                 }
             } else if (count > 1) {
                 JOptionPane.showMessageDialog(null, "Este empleado tiene " + count + " meses sin relevar. Se generará el PDF correspondiente");
 
                 // Llamar al método
-                List<String> misFechas = obtenerFechasFaltantes(con, mes, id);
+                List<String> misFechas = obtenerFechasFaltantes(con, mes, anioActual, id);
                 int cantidad = misFechas.size();
                 System.out.println("Cantidad de registros encontrados: " + cantidad);
 
                 // Para ver cada fecha:
                 for (String fecha : misFechas) {
                     System.out.println("Fecha faltante: " + fecha);
+                    String[] partes = fecha.split("-");
+                    int mesFaltante = Integer.parseInt(partes[0]);
+                    int anioFaltante = Integer.parseInt(partes[1]);
                     // 📄 Documento en horizontal
                     Document document = new Document(PageSize.A4.rotate());
-                    PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("C:\\SAME\\Asistencia\\asistencia_mes_" + fecha + "_año_"+anioActual+"_" + nombre + " " + apellido + ".pdf"));
+                    PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("C:\\SAME\\Asistencia\\asistencia_mes_" + fecha + "_" + nombre + " " + apellido + ".pdf"));
                     document.open();
 
                     // 📸 Cargar imagen (desde carpeta del proyecto o ruta absoluta)
@@ -501,10 +526,19 @@ public class Asistencia {
                     Font fontHeader = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12, BaseColor.WHITE);
                     Font fontNormal = FontFactory.getFont(FontFactory.HELVETICA, 10, BaseColor.BLACK);
 
-                    // ⚙️ Query → traer los registros
-                    PreparedStatement stm2 = con.prepareStatement("SELECT DAY(entrada) as dia, entrada, salida, observacion FROM seguimientoasistencia INNER JOIN asistencia ON seguimientoasistencia.idAsistencia = asistencia.idAsistencia WHERE asistencia.id_Empleado = ? AND MONTH(entrada) = ?;");
+                    // Consulta para los registros de seguimiento (stm2)
+                    PreparedStatement stm2 = con.prepareStatement(
+                            "SELECT DAY(sa.entrada) as dia, sa.entrada, sa.salida, sa.observacion "
+                            + "FROM seguimientoasistencia sa "
+                            + "INNER JOIN asistencia a ON sa.idAsistencia = a.idAsistencia "
+                            + "WHERE a.id_Empleado = ? "
+                            + "  AND MONTH(sa.entrada) = ? "
+                            + "  AND YEAR(sa.entrada) = ?;"
+                    );
+
                     stm2.setInt(1, id);
-                    stm2.setString(2, fecha);
+                    stm2.setInt(2, mesFaltante); // Mes faltante (debe ser INT)
+                    stm2.setInt(3, anioFaltante); // Año faltante (debe ser INT)
 
                     ResultSet rs2 = stm2.executeQuery();
 
@@ -518,26 +552,29 @@ public class Asistencia {
                         registros.put(dia, new String[]{entrada, salida, observ});
                     }
 
-                    // 🧱 Crear dos tablas
-                    PdfPTable tablaIzq = crearTablaAsistencia(1, 15, registros, fontHeader, fontNormal);
-                    PdfPTable tablaDer = crearTablaAsistencia(16, 31, registros, fontHeader, fontNormal);
+                    Calendar calendar = new GregorianCalendar(anioFaltante, mesFaltante - 1, 1);
+                    int totalDiasMes = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
 
-                    // ✅ Versión buena — usar tabla contenedora (no coordenadas absolutas)
-                    PdfPTable contenedor = new PdfPTable(2);
-                    contenedor.setWidthPercentage(105);
-                    contenedor.addCell(tablaIzq);
-                    contenedor.addCell(tablaDer);
+// Generar la tabla unificada de 8 columnas
+                    PdfPTable tablaUnificada = crearTablaAsistenciaUnificada(
+                            registros,
+                            fontHeader,
+                            fontNormal,
+                            totalDiasMes // <-- Le pasamos cuántos días tiene el mes
+                    );
 
-                    document.add(contenedor);
+// Añadir la tabla al documento
+                    document.add(tablaUnificada);
 
                     document.close();
                     writer.close();
 
                     System.out.println("✅ PDF generado correctamente en horizontal: asistencia_mes_" + mes + ".pdf");
 
-                    PreparedStatement stm3 = conexion.prepareStatement("UPDATE asistencia SET relevado = 1 WHERE fecha= ? and id_Empleado=?;");
-                    stm3.setString(1, fecha);
+                    PreparedStatement stm3 = conexion.prepareStatement("UPDATE asistencia SET relevado = 1 WHERE fecha= ? and id_Empleado=? and year=?;");
+                    stm3.setInt(1, mesFaltante);
                     stm3.setInt(2, id);
+                    stm3.setInt(3, anioFaltante);
                     try {
                         stm3.executeUpdate();
                         PreparedStatement stm9 = conexion.prepareStatement("INSERT INTO auditoria_asistencia (evento, id_empleado, id_usuario) VALUES (?, ?, ?)");
@@ -550,7 +587,7 @@ public class Asistencia {
                             JOptionPane.showMessageDialog(null, "ERROR: " + e);
                         }
                     } catch (Exception e) {
-                        JOptionPane.showMessageDialog(null, "ERROR12");
+                        JOptionPane.showMessageDialog(null, "ERRORXD" + e);
                     }
                 }
             }
@@ -645,14 +682,13 @@ public class Asistencia {
         }
 
         // 🧱 Crear dos tablas
-        PdfPTable tablaIzq = crearTablaAsistencia(1, 15, registros, fontHeader, fontNormal);
-        PdfPTable tablaDer = crearTablaAsistencia(16, 31, registros, fontHeader, fontNormal);
-
+        //PdfPTable tablaIzq = crearTablaAsistencia(1, 15, registros, fontHeader, fontNormal);
+        //PdfPTable tablaDer = crearTablaAsistencia(16, 31, registros, fontHeader, fontNormal);
         // ✅ Versión buena — usar tabla contenedora (no coordenadas absolutas)
         PdfPTable contenedor = new PdfPTable(2);
         contenedor.setWidthPercentage(105);
-        contenedor.addCell(tablaIzq);
-        contenedor.addCell(tablaDer);
+        //contenedor.addCell(tablaIzq);
+        //contenedor.addCell(tablaDer);
 
         document.add(contenedor);
 
@@ -662,6 +698,117 @@ public class Asistencia {
         System.out.println("✅ PDF generado correctamente en horizontal: asistencia_mes_" + mes + ".pdf");
     }
 
+    public static PdfPTable crearTablaAsistenciaUnificada(
+            Map<Integer, String[]> registros, // Mapa con todos los días del mes (1-31)
+            Font fontHeader,
+            Font fontNormal,
+            int totalDiasMes // Nuevo parámetro para manejar meses de 28, 29, 30 o 31 días
+    ) {
+
+        // 1. Crear la tabla con 8 columnas
+        PdfPTable table = new PdfPTable(8);
+        table.setWidthPercentage(100);
+        table.setHeaderRows(1);
+
+        // ********** AJUSTE CRÍTICO PARA EL SALTO DE PÁGINA **********
+        // Permite que la tabla se divida más cerca del final de la página.
+        table.setSplitLate(false);
+
+        // Definir anchos relativos (Total debe sumar 100f)
+        // Días más estrechos, Entradas/Salidas intermedias, Observación más ancha.
+        float[] columnWidths = {5f, 15f, 15f, 25f, 5f, 15f, 15f, 5f}; // TOTAL: 100f
+        try {
+            table.setWidths(columnWidths);
+        } catch (Exception e) {
+            // Manejo de excepción si hay un problema con los anchos
+            e.printStackTrace();
+        }
+
+        // 2. Añadir encabezados (8 columnas)
+        String[] headers = {"Día", "Entrada", "Salida", "Observación"};
+        BaseColor headerColor = new BaseColor(60, 60, 60); // Gris oscuro para encabezados
+
+        for (int j = 0; j < 2; j++) { // Repite los encabezados para ambos lados
+            for (String h : headers) {
+                PdfPCell header = new PdfPCell(new Phrase(h, fontHeader));
+                header.setBackgroundColor(headerColor);
+                header.setHorizontalAlignment(Element.ALIGN_CENTER);
+                header.setPadding(5);
+                table.addCell(header);
+            }
+        }
+
+        // Define el valor de padding que quieres usar
+        float paddingValue = 5f;
+
+        // 3. Llenar los datos: Iteramos por las primeras 16 filas (Día 1 al 16)
+        // El máximo de filas necesarias es 16 (para cubrir día 1 y día 31)
+        int filas = (totalDiasMes <= 15) ? 15 : 16;
+
+        for (int i = 1; i <= filas; i++) {
+
+            // --- LADO IZQUIERDO (Día 1 al 15 o 16) ---
+            int diaIzquierdo = i;
+            agregarFila(table, diaIzquierdo, registros, fontNormal, paddingValue);
+
+            // --- LADO DERECHO (Día 16 al 31) ---
+            int diaDerecho = i + 15;
+
+            // Solo agregamos si el día existe en el mes
+            if (diaDerecho <= totalDiasMes) {
+                agregarFila(table, diaDerecho, registros, fontNormal, paddingValue);
+            } else {
+                // Si el día no existe (ej: después del 30 en Abril), rellenar con 4 celdas vacías
+                for (int k = 0; k < 4; k++) {
+                    PdfPCell emptyCell = new PdfPCell(new Phrase("", fontNormal));
+                    emptyCell.setPadding(paddingValue);
+                    table.addCell(emptyCell);
+                }
+            }
+        }
+
+        return table;
+    }
+
+// Función auxiliar para agregar las 4 celdas de una entrada
+    private static void agregarFila(PdfPTable table, int dia, Map<Integer, String[]> registros, Font fontNormal, float paddingValue) {
+        // Celda para el valor de 'Día'
+        PdfPCell cellDia = new PdfPCell(new Phrase(String.valueOf(dia), fontNormal));
+        cellDia.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cellDia.setPadding(paddingValue);
+        table.addCell(cellDia);
+
+        if (registros.containsKey(dia)) {
+            String[] datos = registros.get(dia);
+
+            // Entrada (datos[0])
+            PdfPCell cellEntrada = new PdfPCell(new Phrase(datos[0], fontNormal));
+            cellEntrada.setPadding(paddingValue);
+            table.addCell(cellEntrada);
+
+            // Salida (datos[1])
+            PdfPCell cellSalida = new PdfPCell(new Phrase(datos[1], fontNormal));
+            cellSalida.setPadding(paddingValue);
+            table.addCell(cellSalida);
+
+            // Observación (datos[2])
+            PdfPCell cellObservacion = new PdfPCell(new Phrase(datos[2], fontNormal));
+            cellObservacion.setPadding(paddingValue);
+            // IMPORTANTE: Permitir que el texto envuelva
+            cellObservacion.setNoWrap(false);
+            table.addCell(cellObservacion);
+
+        } else {
+            // Celdas vacías
+            for (int k = 0; k < 3; k++) {
+                PdfPCell emptyCell = new PdfPCell(new Phrase("", fontNormal));
+                emptyCell.setPadding(paddingValue);
+                table.addCell(emptyCell);
+            }
+        }
+    }
+
+    /*
     private static PdfPTable crearTablaAsistencia(int inicio, int fin, Map<Integer, String[]> registros, Font fontHeader, Font fontNormal) {
         PdfPTable tabla = new PdfPTable(4);
         tabla.setWidthPercentage(100);
@@ -721,16 +868,18 @@ public class Asistencia {
 
         return tabla;
     }
-
+     */
     public static void AsistenciaReal(Connection conexion, int id, int iduser) throws SQLException {
         mesActual = LocalDate.now().getMonthValue();
+        yearact = LocalDate.now().getYear();
         int ida = 0;
         int base = CLASES.Usuario.base();
 
-        PreparedStatement stm5 = conexion.prepareStatement("SELECT entrada from seguimientoasistencia inner join asistencia on seguimientoasistencia.idAsistencia=asistencia.idAsistencia WHERE DAY(entrada)=? and MONTH(entrada)=? and asistencia.id_Empleado=?;");
+        PreparedStatement stm5 = conexion.prepareStatement("SELECT entrada from seguimientoasistencia inner join asistencia on seguimientoasistencia.idAsistencia=asistencia.idAsistencia WHERE DAY(entrada)=? and MONTH(entrada)=? and asistencia.id_Empleado=? and asistencia.year=?;");
         stm5.setInt(1, dia2);
         stm5.setInt(2, mesActual);
         stm5.setInt(3, id);
+        stm5.setInt(4, yearact);
         ResultSet rs5 = stm5.executeQuery();
 
         if (rs5.next()) {
@@ -742,10 +891,11 @@ public class Asistencia {
             if (rs.next()) {
                 ida = rs.getInt("idAsistencia");
             } else {
-                PreparedStatement stm2 = conexion.prepareStatement("INSERT INTO asistencia (id_Empleado, idBase, activo, relevado, fecha) values (?,?,1,0,?)");
+                PreparedStatement stm2 = conexion.prepareStatement("INSERT INTO asistencia (id_Empleado, idBase, activo, relevado, fecha, year) values (?,?,1,0,?,?)");
                 stm2.setInt(1, id);
                 stm2.setInt(2, base);
                 stm2.setInt(3, mesActual);
+                stm2.setInt(4, yearact);
                 try {
                     stm2.execute();
                 } catch (SQLException e) {

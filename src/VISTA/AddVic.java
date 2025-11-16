@@ -383,7 +383,6 @@ public class AddVic extends javax.swing.JDialog {
             return; // permite borrar, mover, etc.
         }
 
-        //Solo permite letras, numeros y signos no
         if (!Character.isDigit(r)) {
             getToolkit().beep();
             evt.consume();

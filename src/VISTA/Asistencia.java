@@ -47,9 +47,9 @@ public class Asistencia extends javax.swing.JFrame implements CLASES.IBlockableF
     String emp = "";
     Connection con = Conexiones.Conexion();
     ResultSet rs;
-    int cont = 0, band = 0;
+    int cont = 0, band = 0, bandopc = 0;
     public int block = 0, block2 = 0, rango = 0, valid = 0;
-    String veri, veri2, ayuda2 = "Asistencia";
+    String veri = "Opciones", veri2, ayuda2 = "Asistencia";
 
     int ventanaTheme = CLASES.MenuClass.VentanaOpcThemeRet();
 
@@ -140,7 +140,7 @@ public class Asistencia extends javax.swing.JFrame implements CLASES.IBlockableF
         CLASES.MenuClass.Configuracion();
 
         initComponents();
-        
+
         String rutaIcono = "/IMAGENES/iconosame.png";
 
         try {
@@ -151,7 +151,7 @@ public class Asistencia extends javax.swing.JFrame implements CLASES.IBlockableF
         } catch (Exception e) {
             System.err.println("Error al cargar el ícono: " + e.getMessage());
         }
-        
+
         rango = CLASES.Usuario.rango();
         this.setLocationRelativeTo(null);
         CLASES.MenuClass menuHelper = new CLASES.MenuClass();
@@ -165,10 +165,10 @@ public class Asistencia extends javax.swing.JFrame implements CLASES.IBlockableF
             logito.setIcon(icono);
         } else if (ventana == 1) {
             this.setExtendedState(MAXIMIZED_BOTH);
-            String rutaImagen="";
-            if (ventanaTheme==0){
+            String rutaImagen = "";
+            if (ventanaTheme == 0) {
                 rutaImagen = "/IMAGENES/logosameasismax.png";
-            } else if (ventanaTheme==1){
+            } else if (ventanaTheme == 1) {
                 rutaImagen = "/IMAGENES/logosameasismaxosc.png";
             }
             ImageIcon icono = new ImageIcon(getClass().getResource(rutaImagen));
@@ -318,6 +318,7 @@ public class Asistencia extends javax.swing.JFrame implements CLASES.IBlockableF
                                 return;
                             } else {
                                 Tabla.setValueAt("", filaSeleccionada, 2);
+                                Tabla.setValueAt("", filaSeleccionada, 3);
                             }
                         } catch (SQLException ex) {
                             Logger.getLogger(Asistencia.class.getName()).log(Level.SEVERE, null, ex);
@@ -363,28 +364,38 @@ public class Asistencia extends javax.swing.JFrame implements CLASES.IBlockableF
         Tabla = new javax.swing.JTable();
         Barra = new javax.swing.JMenuBar();
         Menu = new javax.swing.JMenu();
-        incmen = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
         Movimientos = new javax.swing.JMenu();
         iniciomov = new javax.swing.JMenuItem();
-        nuevtrip = new javax.swing.JMenuItem();
-        nuevovic = new javax.swing.JMenuItem();
         historial = new javax.swing.JMenuItem();
+        jMenu3 = new javax.swing.JMenu();
+        jMenuItem4 = new javax.swing.JMenuItem();
+        jMenuItem5 = new javax.swing.JMenuItem();
+        jMenuItem6 = new javax.swing.JMenuItem();
+        jMenu4 = new javax.swing.JMenu();
+        jMenuItem7 = new javax.swing.JMenuItem();
+        jMenuItem8 = new javax.swing.JMenuItem();
+        jMenuItem9 = new javax.swing.JMenuItem();
         Asistencia = new javax.swing.JMenu();
-        inicioas = new javax.swing.JMenuItem();
         Empleados = new javax.swing.JMenu();
         inicemp = new javax.swing.JMenuItem();
         cargoemp = new javax.swing.JMenu();
+        jMenuItem10 = new javax.swing.JMenuItem();
         mod = new javax.swing.JMenuItem();
         elim = new javax.swing.JMenuItem();
+        jMenu5 = new javax.swing.JMenu();
+        jMenuItem11 = new javax.swing.JMenuItem();
+        jMenuItem12 = new javax.swing.JMenuItem();
+        jMenuItem13 = new javax.swing.JMenuItem();
         Estadisticas = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
         Ayuda = new javax.swing.JMenu();
         Configuracion = new javax.swing.JMenu();
         Salir = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Asistencia");
-        setMaximumSize(new java.awt.Dimension(1200, 700));
         setMinimumSize(new java.awt.Dimension(1200, 700));
         setUndecorated(true);
         setResizable(false);
@@ -564,22 +575,36 @@ public class Asistencia extends javax.swing.JFrame implements CLASES.IBlockableF
         Menu.setBackground(new java.awt.Color(204, 255, 204));
         Menu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/menui.png"))); // NOI18N
         Menu.setText("Menu");
+        Menu.setToolTipText("Menu");
         Menu.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         Menu.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        Menu.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                MenuActionPerformed(evt);
-            }
-        });
 
-        incmen.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        incmen.setText("Inicio");
-        incmen.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItem1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jMenuItem1.setText("Nuevo usuario");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                incmenActionPerformed(evt);
+                jMenuItem1ActionPerformed(evt);
             }
         });
-        Menu.add(incmen);
+        Menu.add(jMenuItem1);
+
+        jMenuItem2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jMenuItem2.setText("Modificar usuario");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        Menu.add(jMenuItem2);
+
+        jMenuItem3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jMenuItem3.setText("Eliminar usuario");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        Menu.add(jMenuItem3);
 
         Barra.add(Menu);
 
@@ -587,6 +612,11 @@ public class Asistencia extends javax.swing.JFrame implements CLASES.IBlockableF
         Movimientos.setText("Movimientos");
         Movimientos.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         Movimientos.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        Movimientos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MovimientosActionPerformed(evt);
+            }
+        });
 
         iniciomov.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         iniciomov.setText("Inicio");
@@ -597,24 +627,6 @@ public class Asistencia extends javax.swing.JFrame implements CLASES.IBlockableF
         });
         Movimientos.add(iniciomov);
 
-        nuevtrip.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        nuevtrip.setText("Nueva tripulación");
-        nuevtrip.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                nuevtripActionPerformed(evt);
-            }
-        });
-        Movimientos.add(nuevtrip);
-
-        nuevovic.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        nuevovic.setText("Nuevo victor");
-        nuevovic.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                nuevovicActionPerformed(evt);
-            }
-        });
-        Movimientos.add(nuevovic);
-
         historial.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         historial.setText("Historial");
         historial.addActionListener(new java.awt.event.ActionListener() {
@@ -623,6 +635,75 @@ public class Asistencia extends javax.swing.JFrame implements CLASES.IBlockableF
             }
         });
         Movimientos.add(historial);
+
+        jMenu3.setText("Tripulación");
+        jMenu3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jMenu3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+
+        jMenuItem4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jMenuItem4.setText("Nuevo");
+        jMenuItem4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem4);
+
+        jMenuItem5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jMenuItem5.setText("Modificar");
+        jMenuItem5.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem5);
+
+        jMenuItem6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jMenuItem6.setText("Eliminar");
+        jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem6ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem6);
+
+        Movimientos.add(jMenu3);
+
+        jMenu4.setText("Victor");
+        jMenu4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jMenu4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jMenu4.setHideActionText(true);
+
+        jMenuItem7.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jMenuItem7.setText("Nuevo");
+        jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem7ActionPerformed(evt);
+            }
+        });
+        jMenu4.add(jMenuItem7);
+
+        jMenuItem8.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jMenuItem8.setText("Modificar");
+        jMenuItem8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem8ActionPerformed(evt);
+            }
+        });
+        jMenu4.add(jMenuItem8);
+
+        jMenuItem9.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jMenuItem9.setText("Eliminar");
+        jMenuItem9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem9ActionPerformed(evt);
+            }
+        });
+        jMenu4.add(jMenuItem9);
+
+        Movimientos.add(jMenu4);
 
         Barra.add(Movimientos);
 
@@ -635,16 +716,6 @@ public class Asistencia extends javax.swing.JFrame implements CLASES.IBlockableF
                 AsistenciaActionPerformed(evt);
             }
         });
-
-        inicioas.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        inicioas.setText("Inicio");
-        inicioas.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                inicioasActionPerformed(evt);
-            }
-        });
-        Asistencia.add(inicioas);
-
         Barra.add(Asistencia);
 
         Empleados.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/empleado.png"))); // NOI18N
@@ -654,6 +725,7 @@ public class Asistencia extends javax.swing.JFrame implements CLASES.IBlockableF
 
         inicemp.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         inicemp.setText("Inicio");
+        inicemp.setCursor(new java.awt.Cursor(java.awt.Cursor.MOVE_CURSOR));
         inicemp.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 inicempActionPerformed(evt);
@@ -663,7 +735,17 @@ public class Asistencia extends javax.swing.JFrame implements CLASES.IBlockableF
 
         cargoemp.setBackground(new java.awt.Color(52, 170, 121));
         cargoemp.setText("Cargo");
+        cargoemp.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cargoemp.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+
+        jMenuItem10.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jMenuItem10.setText("Nuevo");
+        jMenuItem10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem10ActionPerformed(evt);
+            }
+        });
+        cargoemp.add(jMenuItem10);
 
         mod.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         mod.setText("Modificar");
@@ -685,28 +767,56 @@ public class Asistencia extends javax.swing.JFrame implements CLASES.IBlockableF
 
         Empleados.add(cargoemp);
 
+        jMenu5.setText("Area");
+        jMenu5.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jMenu5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+
+        jMenuItem11.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jMenuItem11.setText("Nueva");
+        jMenuItem11.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem11ActionPerformed(evt);
+            }
+        });
+        jMenu5.add(jMenuItem11);
+
+        jMenuItem12.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jMenuItem12.setText("Modificar");
+        jMenuItem12.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem12ActionPerformed(evt);
+            }
+        });
+        jMenu5.add(jMenuItem12);
+
+        jMenuItem13.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jMenuItem13.setText("Eliminar");
+        jMenuItem13.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem13ActionPerformed(evt);
+            }
+        });
+        jMenu5.add(jMenuItem13);
+
+        Empleados.add(jMenu5);
+
         Barra.add(Empleados);
 
         Estadisticas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/estats.png"))); // NOI18N
         Estadisticas.setText("Estadisticas");
         Estadisticas.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         Estadisticas.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-
-        jMenuItem1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jMenuItem1.setText("Consultar");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
-            }
-        });
-        Estadisticas.add(jMenuItem1);
-
         Barra.add(Estadisticas);
 
         Ayuda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/ayuda.png"))); // NOI18N
         Ayuda.setText("Ayuda");
         Ayuda.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         Ayuda.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        Ayuda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AyudaActionPerformed(evt);
+            }
+        });
         Barra.add(Ayuda);
 
         Configuracion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/config.png"))); // NOI18N
@@ -716,9 +826,14 @@ public class Asistencia extends javax.swing.JFrame implements CLASES.IBlockableF
         Barra.add(Configuracion);
 
         Salir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/salir.png"))); // NOI18N
-        Salir.setText("Cerrar Sesión");
+        Salir.setText("Salir");
         Salir.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         Salir.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        Salir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SalirActionPerformed(evt);
+            }
+        });
         Barra.add(Salir);
 
         setJMenuBar(Barra);
@@ -738,12 +853,15 @@ public class Asistencia extends javax.swing.JFrame implements CLASES.IBlockableF
                 Actualizar.setEnabled(false);
                 refrescarCombo();
                 CLASES.Asistencia.jCombo(con, empleado, id);
+                bandopc = 1;
                 empleado.setSelectedIndex(0);
             } else {
                 empleado.setEnabled(false);
                 Actualizar.setEnabled(false);
                 refrescarCombo();
-                empleado.setSelectedIndex(0);
+                if (bandopc == 1) {
+                    empleado.setSelectedIndex(0);
+                }
                 tabla1.bloquearEdicion();
                 block = 0;
                 block2 = 0;
@@ -829,7 +947,14 @@ public class Asistencia extends javax.swing.JFrame implements CLASES.IBlockableF
 
             int Dia = Integer.parseInt(Tabla.getValueAt(filaSeleccionada, 0).toString());
             String Entrada = Tabla.getValueAt(filaSeleccionada, 1).toString();
-            String Observaciones = Tabla.getValueAt(filaSeleccionada, 3).toString();
+            Object obsValue = Tabla.getValueAt(filaSeleccionada, 3);
+            String Observaciones;
+
+            if (obsValue == null) {
+                Observaciones = "";
+            } else {
+                Observaciones = obsValue.toString();
+            }
 
             try {
                 CLASES.Asistencia.ActualizarAsistencia(con, Dia, Entrada, Observaciones, id2, iduser);
@@ -850,11 +975,32 @@ public class Asistencia extends javax.swing.JFrame implements CLASES.IBlockableF
         }
     }//GEN-LAST:event_ActualizarActionPerformed
 
-    private void incmenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_incmenActionPerformed
-        Menu ventana = new Menu();
-        ventana.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_incmenActionPerformed
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        RegistrarFrm ventana = new RegistrarFrm(this, 1);
+        if (rango == 1) {
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        RegistrarFrm ventana = new RegistrarFrm(this, 2);
+        if (rango == 1) {
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        AddDelUser ventana = new AddDelUser(this, 1);
+        if (rango == 1) {
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     private void iniciomovActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iniciomovActionPerformed
         Movimiento ventana = new Movimiento();
@@ -862,16 +1008,40 @@ public class Asistencia extends javax.swing.JFrame implements CLASES.IBlockableF
         this.dispose();
     }//GEN-LAST:event_iniciomovActionPerformed
 
-    private void nuevtripActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevtripActionPerformed
+    private void historialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_historialActionPerformed
+        Historial ventana = new Historial(this);
+        ventana.setVisible(true);
+    }//GEN-LAST:event_historialActionPerformed
+
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
         AddTri ventana = new AddTri(0, this);
         if (rango == 1) {
             ventana.setVisible(true);
         } else {
             JOptionPane.showMessageDialog(null, "Es un usuario lector!");
         }
-    }//GEN-LAST:event_nuevtripActionPerformed
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
 
-    private void nuevovicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevovicActionPerformed
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        AddTri ventana = new AddTri(1, this);
+        if (rango == 1) {
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
+
+    private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
+        int ban = 1;
+        AddDelVicTrip ventana = new AddDelVicTrip(this, ban);
+        if (rango == 1) {
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
+    }//GEN-LAST:event_jMenuItem6ActionPerformed
+
+    private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
         int ban = 0;
         AddVic ventana = new AddVic(this, ban);
         if (rango == 1) {
@@ -879,18 +1049,33 @@ public class Asistencia extends javax.swing.JFrame implements CLASES.IBlockableF
         } else {
             JOptionPane.showMessageDialog(null, "Es un usuario lector!");
         }
-    }//GEN-LAST:event_nuevovicActionPerformed
+    }//GEN-LAST:event_jMenuItem7ActionPerformed
 
-    private void historialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_historialActionPerformed
-        Historial ventana = new Historial(this);
-        ventana.setVisible(true);
-    }//GEN-LAST:event_historialActionPerformed
+    private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
+        int ban = 1;
+        AddVic ventana = new AddVic(this, ban);
+        if (rango == 1) {
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
+    }//GEN-LAST:event_jMenuItem8ActionPerformed
 
-    private void inicioasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inicioasActionPerformed
-        Asistencia ventana = new Asistencia();
+    private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem9ActionPerformed
+        int ban = 0;
+        AddDelVicTrip ventana = new AddDelVicTrip(this, ban);
+        if (rango == 1) {
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
+    }//GEN-LAST:event_jMenuItem9ActionPerformed
+
+    private void MovimientosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MovimientosActionPerformed
+        Movimiento ventana = new Movimiento();
         ventana.setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_inicioasActionPerformed
+    }//GEN-LAST:event_MovimientosActionPerformed
 
     private void AsistenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AsistenciaActionPerformed
         Asistencia ventana = new Asistencia();
@@ -903,6 +1088,15 @@ public class Asistencia extends javax.swing.JFrame implements CLASES.IBlockableF
         ventana.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_inicempActionPerformed
+
+    private void jMenuItem10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem10ActionPerformed
+        AddAreaCargo ventana3 = new AddAreaCargo(this, 1);
+        if (rango == 1) {
+            ventana3.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
+    }//GEN-LAST:event_jMenuItem10ActionPerformed
 
     private void modActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modActionPerformed
         ModElimCargo1 ventana = new ModElimCargo1(1, this);
@@ -922,15 +1116,41 @@ public class Asistencia extends javax.swing.JFrame implements CLASES.IBlockableF
         }
     }//GEN-LAST:event_elimActionPerformed
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        Estadisticas ventana = new Estadisticas();
-        ventana.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    private void jMenuItem11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem11ActionPerformed
+        AddAreaCargo ventana3 = new AddAreaCargo(this, 0);
+        if (rango == 1) {
+            ventana3.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
+    }//GEN-LAST:event_jMenuItem11ActionPerformed
 
-    private void MenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuActionPerformed
+    private void jMenuItem12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem12ActionPerformed
+        ModElimArea1 ventana = new ModElimArea1(1, this);
+        if (rango == 1) {
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
+    }//GEN-LAST:event_jMenuItem12ActionPerformed
 
-    }//GEN-LAST:event_MenuActionPerformed
+    private void jMenuItem13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem13ActionPerformed
+        ModElimArea1 ventana = new ModElimArea1(0, this);
+        if (rango == 1) {
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
+    }//GEN-LAST:event_jMenuItem13ActionPerformed
+
+    private void AyudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AyudaActionPerformed
+        String direccion1 = "\\RECURSOS\\Menu.pdf";
+        CLASES.Movimientos.abrirPDF(direccion1);
+    }//GEN-LAST:event_AyudaActionPerformed
+
+    private void SalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SalirActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_SalirActionPerformed
 
     /**
      * @param args the command line arguments
@@ -963,19 +1183,30 @@ public class Asistencia extends javax.swing.JFrame implements CLASES.IBlockableF
     private javax.swing.JComboBox<Empleado> empleado;
     private javax.swing.JPanel fondolog;
     private javax.swing.JMenuItem historial;
-    private javax.swing.JMenuItem incmen;
     private javax.swing.JMenuItem inicemp;
-    private javax.swing.JMenuItem inicioas;
     private javax.swing.JMenuItem iniciomov;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenu jMenu4;
+    private javax.swing.JMenu jMenu5;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem10;
+    private javax.swing.JMenuItem jMenuItem11;
+    private javax.swing.JMenuItem jMenuItem12;
+    private javax.swing.JMenuItem jMenuItem13;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JMenuItem jMenuItem6;
+    private javax.swing.JMenuItem jMenuItem7;
+    private javax.swing.JMenuItem jMenuItem8;
+    private javax.swing.JMenuItem jMenuItem9;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel logito;
     private javax.swing.JMenuItem mod;
-    private javax.swing.JMenuItem nuevovic;
-    private javax.swing.JMenuItem nuevtrip;
     // End of variables declaration//GEN-END:variables
     @Override
     public int getBlockState() {

@@ -73,7 +73,7 @@ public class Relevar extends javax.swing.JDialog {
                     Graphics2D g2 = imagen.createGraphics();
                     g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-                    int radioExterno = 80; // tamaño del círculo grande
+                    int radioExterno = 50; // tamaño del círculo grande
                     int grosor = 5;       // grosor del borde
 
                     // Dibuja el borde rojo
@@ -408,7 +408,7 @@ public class Relevar extends javax.swing.JDialog {
             MarcarNiv = new javax.swing.JPanel();
             try {
                 extint = new PanelImagen("/IMAGENES/marcanivel.png");
-                jTextField2 = new javax.swing.JTextField();
+                CantMat = new javax.swing.JTextField();
                 jLabel16 = new javax.swing.JLabel();
                 jLabel17 = new javax.swing.JLabel();
                 serie = new javax.swing.JLabel();
@@ -423,7 +423,7 @@ public class Relevar extends javax.swing.JDialog {
                     MarcarAb = new javax.swing.JPanel();
                     jLabel9 = new javax.swing.JLabel();
                     try {
-                        Ambulancia = new PanelDibujo("/IMAGENES/ambulancia.jpg");
+                        Ambulancia = new PanelDibujo("/IMAGENES/Ambu.png");
                         Borrar = new javax.swing.JButton();
                         Observaciones = new javax.swing.JPanel();
                         jLabel1 = new javax.swing.JLabel();
@@ -438,7 +438,7 @@ public class Relevar extends javax.swing.JDialog {
                         ypf = new javax.swing.JPanel();
                         jLabel13 = new javax.swing.JLabel();
                         jLabel14 = new javax.swing.JLabel();
-                        jTextField1 = new javax.swing.JTextField();
+                        NTarjeta = new javax.swing.JTextField();
                         jLabel15 = new javax.swing.JLabel();
                         ypfguard = new javax.swing.JToggleButton();
                         try {
@@ -1127,6 +1127,12 @@ public class Relevar extends javax.swing.JDialog {
                     }
                     extint.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
+                    CantMat.addKeyListener(new java.awt.event.KeyAdapter() {
+                        public void keyTyped(java.awt.event.KeyEvent evt) {
+                            CantMatKeyTyped(evt);
+                        }
+                    });
+
                     jLabel16.setText("Nº Serie:");
 
                     jLabel17.setText("Cantidad");
@@ -1184,7 +1190,7 @@ public class Relevar extends javax.swing.JDialog {
                                         .addGroup(extintLayout.createSequentialGroup()
                                             .addComponent(jLabel17)
                                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addComponent(CantMat, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addGroup(extintLayout.createSequentialGroup()
                                             .addComponent(jLabel16)
                                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -1200,7 +1206,7 @@ public class Relevar extends javax.swing.JDialog {
                                     .addGap(18, 18, 18)
                                     .addGroup(extintLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(jLabel17)
-                                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(CantMat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGap(14, 14, 14)
                                     .addGroup(extintLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(jLabel16)
@@ -1301,7 +1307,7 @@ public class Relevar extends javax.swing.JDialog {
             jLabel1.setText(">Observaciones");
 
             observations.setColumns(20);
-            observations.setFont(new java.awt.Font("Monospaced", 1, 18)); // NOI18N
+            observations.setFont(new java.awt.Font("Monospaced", 1, 14)); // NOI18N
             observations.setRows(5);
             jScrollPane1.setViewportView(observations);
 
@@ -1396,6 +1402,12 @@ public class Relevar extends javax.swing.JDialog {
 
             jLabel14.setText("Nº Tarjeta");
 
+            NTarjeta.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyTyped(java.awt.event.KeyEvent evt) {
+                    NTarjetaKeyTyped(evt);
+                }
+            });
+
             jLabel15.setText("Entrega a Guarda Siguiente:");
 
             ypfguard.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/NO.png"))); // NOI18N
@@ -1423,7 +1435,7 @@ public class Relevar extends javax.swing.JDialog {
                         .addGroup(ypfLayout.createSequentialGroup()
                             .addComponent(jLabel14)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jTextField1))
+                            .addComponent(NTarjeta))
                         .addGroup(ypfLayout.createSequentialGroup()
                             .addComponent(jLabel15)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1438,7 +1450,7 @@ public class Relevar extends javax.swing.JDialog {
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addGroup(ypfLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel14)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(NTarjeta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                     .addGroup(ypfLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(ypfguard, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1648,28 +1660,40 @@ public class Relevar extends javax.swing.JDialog {
 
         jPanel1.setBackground(new java.awt.Color(0, 0, 0));
 
+        jButton3.setBackground(new java.awt.Color(78, 247, 177));
+        jButton3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jButton3.setText("Guardar");
+        jButton3.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
             }
         });
 
+        jButton4.setBackground(new java.awt.Color(78, 247, 177));
+        jButton4.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jButton4.setText("Volver");
+        jButton4.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton4ActionPerformed(evt);
             }
         });
 
+        activado.setBackground(new java.awt.Color(78, 247, 177));
+        activado.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         activado.setText("Todos si");
+        activado.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         activado.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 activadoActionPerformed(evt);
             }
         });
 
+        Deshabilitar.setBackground(new java.awt.Color(78, 247, 177));
+        Deshabilitar.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         Deshabilitar.setText("Todos no");
+        Deshabilitar.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         Deshabilitar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 DeshabilitarActionPerformed(evt);
@@ -1907,6 +1931,40 @@ public class Relevar extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_jButton3ActionPerformed
 
+    private void NTarjetaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_NTarjetaKeyTyped
+        char r = evt.getKeyChar();
+
+        if (Character.isISOControl(r)) {
+            return; // permite borrar, mover, etc.
+        }
+
+        if (!Character.isDigit(r)) {
+            getToolkit().beep();
+            evt.consume();
+        }
+
+        if (NTarjeta.getText().length() >= 20) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_NTarjetaKeyTyped
+
+    private void CantMatKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_CantMatKeyTyped
+        char r = evt.getKeyChar();
+
+        if (Character.isISOControl(r)) {
+            return; // permite borrar, mover, etc.
+        }
+
+        if (!Character.isDigit(r)) {
+            getToolkit().beep();
+            evt.consume();
+        }
+
+        if (CantMat.getText().length() >= 15) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_CantMatKeyTyped
+
     /**
      * @param args the command line arguments
      */
@@ -1947,6 +2005,7 @@ public class Relevar extends javax.swing.JDialog {
     private javax.swing.JPanel Ambulancia;
     private javax.swing.JButton Borrar;
     private javax.swing.JToggleButton CalAir;
+    private javax.swing.JTextField CantMat;
     private javax.swing.JToggleButton CarBat;
     private javax.swing.JButton Deshabilitar;
     private javax.swing.JLabel Fecha;
@@ -1970,6 +2029,7 @@ public class Relevar extends javax.swing.JDialog {
     private javax.swing.JPanel MarcarAb;
     private javax.swing.JPanel MarcarNiv;
     private javax.swing.JPanel Marcarext;
+    private javax.swing.JTextField NTarjeta;
     private javax.swing.JPanel Observaciones;
     private javax.swing.JToggleButton TestServ;
     private javax.swing.JLabel Victor;
@@ -2068,8 +2128,6 @@ public class Relevar extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
     private javax.swing.JToggleButton jToggleButton10;
     private javax.swing.JToggleButton jToggleButton11;
     private javax.swing.JToggleButton jToggleButton12;

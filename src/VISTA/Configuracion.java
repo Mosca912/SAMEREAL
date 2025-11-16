@@ -7,6 +7,7 @@ package VISTA;
 
 import java.awt.Graphics;
 import java.awt.Image;
+import java.io.File;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -17,10 +18,10 @@ import javax.swing.JPanel;
  */
 public class Configuracion extends javax.swing.JFrame {
 
-
-    int block=0, rango=0;
+    int block = 0, rango = 0;
     int band;
-    String ayuda2="Configuracion";
+    String ayuda2 = "Configuracion";
+
     class FondoInicio extends JPanel {
 
         private final Image imagen5;
@@ -42,12 +43,12 @@ public class Configuracion extends javax.swing.JFrame {
             g.drawImage(imagen5, 0, 0, getWidth(), getHeight(), this);
         }
     }
-    
+
     public Configuracion() {
         CLASES.MenuClass.Configuracion();
 
         initComponents();
-        
+
         String rutaIcono = "/IMAGENES/iconosame.png";
 
         try {
@@ -58,27 +59,27 @@ public class Configuracion extends javax.swing.JFrame {
         } catch (Exception e) {
             System.err.println("Error al cargar el ícono: " + e.getMessage());
         }
-        
-        rango=CLASES.Usuario.rango();
-        if (rango==2){
+
+        rango = CLASES.Usuario.rango();
+        if (rango == 2) {
             GuardarDump.setEnabled(false);
         }
         this.setLocationRelativeTo(null);
         CLASES.MenuClass menuHelper = new CLASES.MenuClass();
         menuHelper.MenuConfig(Movimientos, Menu, Asistencia, Empleados, Estadisticas, Ayuda, Configuracion, Salir, this, ayuda2);
-        int ventana=CLASES.MenuClass.Ventana();
+        int ventana = CLASES.MenuClass.Ventana();
         int ventanaTheme = CLASES.MenuClass.VentanaOpcThemeRet();
-        if (ventanaTheme==0){
+        if (ventanaTheme == 0) {
             Clar.setEnabled(false);
             Osc.setEnabled(true);
-        } else if (ventana==1){
+        } else if (ventana == 1) {
             Clar.setEnabled(true);
             Osc.setEnabled(false);
         }
-        if (ventana==0){
+        if (ventana == 0) {
             this.setExtendedState(NORMAL);
             Min.setEnabled(false);
-        } else if (ventana == 1){
+        } else if (ventana == 1) {
             this.setExtendedState(MAXIMIZED_BOTH);
             Max.setEnabled(false);
         }
@@ -101,7 +102,7 @@ public class Configuracion extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         GuardarDump = new javax.swing.JButton();
-        jLabel3 = new javax.swing.JLabel();
+        guardado = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -112,29 +113,41 @@ public class Configuracion extends javax.swing.JFrame {
         Clar = new javax.swing.JButton();
         Barra = new javax.swing.JMenuBar();
         Menu = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
         Movimientos = new javax.swing.JMenu();
         iniciomov = new javax.swing.JMenuItem();
-        nuevtrip = new javax.swing.JMenuItem();
-        nuevovic = new javax.swing.JMenuItem();
         historial = new javax.swing.JMenuItem();
+        jMenu3 = new javax.swing.JMenu();
+        jMenuItem4 = new javax.swing.JMenuItem();
+        jMenuItem5 = new javax.swing.JMenuItem();
+        jMenuItem6 = new javax.swing.JMenuItem();
+        jMenu4 = new javax.swing.JMenu();
+        jMenuItem7 = new javax.swing.JMenuItem();
+        jMenuItem8 = new javax.swing.JMenuItem();
+        jMenuItem9 = new javax.swing.JMenuItem();
         Asistencia = new javax.swing.JMenu();
-        inicioas = new javax.swing.JMenuItem();
         Empleados = new javax.swing.JMenu();
         inicemp = new javax.swing.JMenuItem();
         cargoemp = new javax.swing.JMenu();
+        jMenuItem10 = new javax.swing.JMenuItem();
         mod = new javax.swing.JMenuItem();
         elim = new javax.swing.JMenuItem();
+        jMenu5 = new javax.swing.JMenu();
+        jMenuItem11 = new javax.swing.JMenuItem();
+        jMenuItem12 = new javax.swing.JMenuItem();
+        jMenuItem13 = new javax.swing.JMenuItem();
         Estadisticas = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
         Ayuda = new javax.swing.JMenu();
         Configuracion = new javax.swing.JMenu();
-        iniconf = new javax.swing.JMenuItem();
         Salir = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Configuración");
         setName("Ayuda"); // NOI18N
         setUndecorated(true);
+        setPreferredSize(new java.awt.Dimension(1200, 700));
         setResizable(false);
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
@@ -217,30 +230,31 @@ public class Configuracion extends javax.swing.JFrame {
             }
         });
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel3.setText("Ultimo guardado: 09/12/2018");
+        guardado.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        guardado.setText("Toque en guardar para hacer la copia");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(GuardarDump, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(67, 67, 67))
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addComponent(jLabel3)
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(guardado))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(81, 81, 81)
+                        .addComponent(GuardarDump, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(guardado, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(GuardarDump, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGap(23, 23, 23))
         );
 
         jPanel5.setBackground(new java.awt.Color(204, 204, 204));
@@ -253,17 +267,17 @@ public class Configuracion extends javax.swing.JFrame {
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(55, 55, 55)
-                .addComponent(jLabel2)
-                .addContainerGap(75, Short.MAX_VALUE))
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel2)
-                .addContainerGap())
+                .addGap(67, 67, 67))
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel2)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 48)); // NOI18N
@@ -341,7 +355,7 @@ public class Configuracion extends javax.swing.JFrame {
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap(267, Short.MAX_VALUE)
+                .addContainerGap(260, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 663, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel3Layout.createSequentialGroup()
@@ -349,12 +363,12 @@ public class Configuracion extends javax.swing.JFrame {
                             .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(119, 119, 119)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(268, Short.MAX_VALUE))
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap(261, Short.MAX_VALUE))
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(461, 461, 461)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -373,11 +387,11 @@ public class Configuracion extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(64, Short.MAX_VALUE))
+                .addContainerGap(69, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel3, java.awt.BorderLayout.CENTER);
@@ -388,14 +402,48 @@ public class Configuracion extends javax.swing.JFrame {
         Menu.setBackground(new java.awt.Color(204, 255, 204));
         Menu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/menui.png"))); // NOI18N
         Menu.setText("Menu");
+        Menu.setToolTipText("Menu");
         Menu.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         Menu.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+
+        jMenuItem1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jMenuItem1.setText("Nuevo usuario");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        Menu.add(jMenuItem1);
+
+        jMenuItem2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jMenuItem2.setText("Modificar usuario");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        Menu.add(jMenuItem2);
+
+        jMenuItem3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jMenuItem3.setText("Eliminar usuario");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        Menu.add(jMenuItem3);
+
         Barra.add(Menu);
 
         Movimientos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/movimiento.png"))); // NOI18N
         Movimientos.setText("Movimientos");
         Movimientos.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         Movimientos.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        Movimientos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MovimientosActionPerformed(evt);
+            }
+        });
 
         iniciomov.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         iniciomov.setText("Inicio");
@@ -406,24 +454,6 @@ public class Configuracion extends javax.swing.JFrame {
         });
         Movimientos.add(iniciomov);
 
-        nuevtrip.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        nuevtrip.setText("Nueva tripulación");
-        nuevtrip.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                nuevtripActionPerformed(evt);
-            }
-        });
-        Movimientos.add(nuevtrip);
-
-        nuevovic.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        nuevovic.setText("Nuevo victor");
-        nuevovic.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                nuevovicActionPerformed(evt);
-            }
-        });
-        Movimientos.add(nuevovic);
-
         historial.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         historial.setText("Historial");
         historial.addActionListener(new java.awt.event.ActionListener() {
@@ -432,6 +462,75 @@ public class Configuracion extends javax.swing.JFrame {
             }
         });
         Movimientos.add(historial);
+
+        jMenu3.setText("Tripulación");
+        jMenu3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jMenu3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+
+        jMenuItem4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jMenuItem4.setText("Nuevo");
+        jMenuItem4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem4);
+
+        jMenuItem5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jMenuItem5.setText("Modificar");
+        jMenuItem5.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem5);
+
+        jMenuItem6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jMenuItem6.setText("Eliminar");
+        jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem6ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem6);
+
+        Movimientos.add(jMenu3);
+
+        jMenu4.setText("Victor");
+        jMenu4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jMenu4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jMenu4.setHideActionText(true);
+
+        jMenuItem7.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jMenuItem7.setText("Nuevo");
+        jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem7ActionPerformed(evt);
+            }
+        });
+        jMenu4.add(jMenuItem7);
+
+        jMenuItem8.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jMenuItem8.setText("Modificar");
+        jMenuItem8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem8ActionPerformed(evt);
+            }
+        });
+        jMenu4.add(jMenuItem8);
+
+        jMenuItem9.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jMenuItem9.setText("Eliminar");
+        jMenuItem9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem9ActionPerformed(evt);
+            }
+        });
+        jMenu4.add(jMenuItem9);
+
+        Movimientos.add(jMenu4);
 
         Barra.add(Movimientos);
 
@@ -444,16 +543,6 @@ public class Configuracion extends javax.swing.JFrame {
                 AsistenciaActionPerformed(evt);
             }
         });
-
-        inicioas.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        inicioas.setText("Inicio");
-        inicioas.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                inicioasActionPerformed(evt);
-            }
-        });
-        Asistencia.add(inicioas);
-
         Barra.add(Asistencia);
 
         Empleados.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/empleado.png"))); // NOI18N
@@ -463,6 +552,7 @@ public class Configuracion extends javax.swing.JFrame {
 
         inicemp.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         inicemp.setText("Inicio");
+        inicemp.setCursor(new java.awt.Cursor(java.awt.Cursor.MOVE_CURSOR));
         inicemp.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 inicempActionPerformed(evt);
@@ -472,7 +562,17 @@ public class Configuracion extends javax.swing.JFrame {
 
         cargoemp.setBackground(new java.awt.Color(52, 170, 121));
         cargoemp.setText("Cargo");
+        cargoemp.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cargoemp.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+
+        jMenuItem10.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jMenuItem10.setText("Nuevo");
+        jMenuItem10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem10ActionPerformed(evt);
+            }
+        });
+        cargoemp.add(jMenuItem10);
 
         mod.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         mod.setText("Modificar");
@@ -494,45 +594,73 @@ public class Configuracion extends javax.swing.JFrame {
 
         Empleados.add(cargoemp);
 
+        jMenu5.setText("Area");
+        jMenu5.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jMenu5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+
+        jMenuItem11.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jMenuItem11.setText("Nueva");
+        jMenuItem11.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem11ActionPerformed(evt);
+            }
+        });
+        jMenu5.add(jMenuItem11);
+
+        jMenuItem12.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jMenuItem12.setText("Modificar");
+        jMenuItem12.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem12ActionPerformed(evt);
+            }
+        });
+        jMenu5.add(jMenuItem12);
+
+        jMenuItem13.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jMenuItem13.setText("Eliminar");
+        jMenuItem13.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem13ActionPerformed(evt);
+            }
+        });
+        jMenu5.add(jMenuItem13);
+
+        Empleados.add(jMenu5);
+
         Barra.add(Empleados);
 
         Estadisticas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/estats.png"))); // NOI18N
         Estadisticas.setText("Estadisticas");
         Estadisticas.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         Estadisticas.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-
-        jMenuItem1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jMenuItem1.setText("Consultar");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
-            }
-        });
-        Estadisticas.add(jMenuItem1);
-
         Barra.add(Estadisticas);
 
         Ayuda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/ayuda.png"))); // NOI18N
         Ayuda.setText("Ayuda");
         Ayuda.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         Ayuda.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        Ayuda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AyudaActionPerformed(evt);
+            }
+        });
         Barra.add(Ayuda);
 
         Configuracion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/config.png"))); // NOI18N
         Configuracion.setText("Configuración");
         Configuracion.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         Configuracion.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-
-        iniconf.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        iniconf.setText("Inicio");
-        Configuracion.add(iniconf);
-
         Barra.add(Configuracion);
 
         Salir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/salir.png"))); // NOI18N
-        Salir.setText("Cerrar Sesión");
+        Salir.setText("Salir");
         Salir.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         Salir.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        Salir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SalirActionPerformed(evt);
+            }
+        });
         Barra.add(Salir);
 
         setJMenuBar(Barra);
@@ -542,11 +670,100 @@ public class Configuracion extends javax.swing.JFrame {
 
     private void MaxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MaxActionPerformed
         this.setExtendedState(MAXIMIZED_BOTH);
-        band=1;
+        band = 1;
         Max.setEnabled(false);
         Min.setEnabled(true);
         CLASES.MenuClass.VentanaOpc(band);
     }//GEN-LAST:event_MaxActionPerformed
+
+    private void MinActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MinActionPerformed
+        this.setExtendedState(NORMAL);
+        band = 0;
+        Max.setEnabled(true);
+        Min.setEnabled(false);
+        CLASES.MenuClass.VentanaOpc(band);
+    }//GEN-LAST:event_MinActionPerformed
+
+    private void OscActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OscActionPerformed
+        int bander = 1;
+        CLASES.MenuClass.VentanaOpcTheme(bander);
+        Osc.setEnabled(false);
+        Clar.setEnabled(true);
+    }//GEN-LAST:event_OscActionPerformed
+
+    private void ClarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ClarActionPerformed
+        int bander = 0;
+        CLASES.MenuClass.VentanaOpcTheme(bander);
+        Osc.setEnabled(true);
+        Clar.setEnabled(false);
+    }//GEN-LAST:event_ClarActionPerformed
+
+    private void GuardarDumpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GuardarDumpActionPerformed
+        String rutaCarpeta = "C:\\SAME";
+        String rutaCarpeta2 = "C:\\SAME\\Copia_Seguridad";
+        File carpeta = new File(rutaCarpeta);
+        File carpeta2 = new File(rutaCarpeta2);
+
+        if (!carpeta.exists()) {
+            boolean creada = carpeta.mkdirs();
+            if (creada) {
+                System.out.println("✅ Carpeta creada exitosamente en: " + rutaCarpeta);
+                if (!carpeta2.exists()) {
+                    boolean creada2 = carpeta2.mkdirs();
+                    if (creada2) {
+                        System.out.println("✅ Carpeta creada exitosamente en: " + rutaCarpeta2);
+                    } else {
+                        System.out.println("❌ Error al intentar crear la carpeta en: " + rutaCarpeta2);
+                    }
+                } else {
+                    System.out.println("⚠️ La carpeta ya existe en: " + rutaCarpeta2);
+                }
+            } else {
+                System.out.println("❌ Error al intentar crear la carpeta en: " + rutaCarpeta);
+            }
+        } else {
+            System.out.println("⚠️ La carpeta ya existe en: " + rutaCarpeta);
+            if (!carpeta2.exists()) {
+                boolean creada = carpeta2.mkdirs();
+                if (creada) {
+                    System.out.println("✅ Carpeta creada exitosamente en: " + rutaCarpeta2);
+                } else {
+                    System.out.println("❌ Error al intentar crear la carpeta en: " + rutaCarpeta2);
+                }
+            } else {
+                System.out.println("⚠️ La carpeta ya existe en: " + rutaCarpeta2);
+            }
+        }
+        CLASES.Dump.realizarDump();
+        JOptionPane.showMessageDialog(null, "Copia de seguridad realizada con exito!");
+    }//GEN-LAST:event_GuardarDumpActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        RegistrarFrm ventana = new RegistrarFrm(this, 1);
+        if (rango == 1) {
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        RegistrarFrm ventana = new RegistrarFrm(this, 2);
+        if (rango == 1) {
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        AddDelUser ventana = new AddDelUser(this, 1);
+        if (rango == 1) {
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     private void iniciomovActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iniciomovActionPerformed
         Movimiento ventana = new Movimiento();
@@ -554,35 +771,74 @@ public class Configuracion extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_iniciomovActionPerformed
 
-    private void nuevtripActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevtripActionPerformed
+    private void historialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_historialActionPerformed
+        Historial ventana = new Historial(this);
+        ventana.setVisible(true);
+    }//GEN-LAST:event_historialActionPerformed
+
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
         AddTri ventana = new AddTri(0, this);
         if (rango == 1) {
             ventana.setVisible(true);
         } else {
             JOptionPane.showMessageDialog(null, "Es un usuario lector!");
         }
-    }//GEN-LAST:event_nuevtripActionPerformed
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
 
-    private void nuevovicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevovicActionPerformed
-        int ban=0;
-        AddVic ventana = new AddVic(this,ban);
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        AddTri ventana = new AddTri(1, this);
         if (rango == 1) {
             ventana.setVisible(true);
         } else {
             JOptionPane.showMessageDialog(null, "Es un usuario lector!");
         }
-    }//GEN-LAST:event_nuevovicActionPerformed
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
 
-    private void historialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_historialActionPerformed
-        Historial ventana = new Historial(this);
-        ventana.setVisible(true);
-    }//GEN-LAST:event_historialActionPerformed
+    private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
+        int ban = 1;
+        AddDelVicTrip ventana = new AddDelVicTrip(this, ban);
+        if (rango == 1) {
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
+    }//GEN-LAST:event_jMenuItem6ActionPerformed
 
-    private void inicioasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inicioasActionPerformed
-        Asistencia ventana = new Asistencia();
+    private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
+        int ban = 0;
+        AddVic ventana = new AddVic(this, ban);
+        if (rango == 1) {
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
+    }//GEN-LAST:event_jMenuItem7ActionPerformed
+
+    private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
+        int ban = 1;
+        AddVic ventana = new AddVic(this, ban);
+        if (rango == 1) {
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
+    }//GEN-LAST:event_jMenuItem8ActionPerformed
+
+    private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem9ActionPerformed
+        int ban = 0;
+        AddDelVicTrip ventana = new AddDelVicTrip(this, ban);
+        if (rango == 1) {
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
+    }//GEN-LAST:event_jMenuItem9ActionPerformed
+
+    private void MovimientosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MovimientosActionPerformed
+        Movimiento ventana = new Movimiento();
         ventana.setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_inicioasActionPerformed
+    }//GEN-LAST:event_MovimientosActionPerformed
 
     private void AsistenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AsistenciaActionPerformed
         Asistencia ventana = new Asistencia();
@@ -595,6 +851,15 @@ public class Configuracion extends javax.swing.JFrame {
         ventana.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_inicempActionPerformed
+
+    private void jMenuItem10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem10ActionPerformed
+        AddAreaCargo ventana3 = new AddAreaCargo(this, 1);
+        if (rango == 1) {
+            ventana3.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
+    }//GEN-LAST:event_jMenuItem10ActionPerformed
 
     private void modActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modActionPerformed
         ModElimCargo1 ventana = new ModElimCargo1(1, this);
@@ -614,38 +879,41 @@ public class Configuracion extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_elimActionPerformed
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        Estadisticas ventana = new Estadisticas();
-        ventana.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    private void jMenuItem11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem11ActionPerformed
+        AddAreaCargo ventana3 = new AddAreaCargo(this, 0);
+        if (rango == 1) {
+            ventana3.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
+    }//GEN-LAST:event_jMenuItem11ActionPerformed
 
-    private void MinActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MinActionPerformed
-        this.setExtendedState(NORMAL);
-        band=0;
-        Max.setEnabled(true);
-        Min.setEnabled(false);
-        CLASES.MenuClass.VentanaOpc(band);
-    }//GEN-LAST:event_MinActionPerformed
+    private void jMenuItem12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem12ActionPerformed
+        ModElimArea1 ventana = new ModElimArea1(1, this);
+        if (rango == 1) {
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
+    }//GEN-LAST:event_jMenuItem12ActionPerformed
 
-    private void OscActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OscActionPerformed
-        int bander=1;
-        CLASES.MenuClass.VentanaOpcTheme(bander);
-        Osc.setEnabled(false);
-        Clar.setEnabled(true);
-    }//GEN-LAST:event_OscActionPerformed
+    private void jMenuItem13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem13ActionPerformed
+        ModElimArea1 ventana = new ModElimArea1(0, this);
+        if (rango == 1) {
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
+    }//GEN-LAST:event_jMenuItem13ActionPerformed
 
-    private void ClarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ClarActionPerformed
-        int bander=0;
-        CLASES.MenuClass.VentanaOpcTheme(bander);
-        Osc.setEnabled(true);
-        Clar.setEnabled(false);
-    }//GEN-LAST:event_ClarActionPerformed
+    private void AyudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AyudaActionPerformed
+        String direccion1 = "\\RECURSOS\\Configuracion.pdf";
+        CLASES.Movimientos.abrirPDF(direccion1);
+    }//GEN-LAST:event_AyudaActionPerformed
 
-    private void GuardarDumpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GuardarDumpActionPerformed
-
-        CLASES.Dump.realizarDump();
-    }//GEN-LAST:event_GuardarDumpActionPerformed
+    private void SalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SalirActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_SalirActionPerformed
 
     /**
      * @param args the command line arguments
@@ -700,17 +968,30 @@ public class Configuracion extends javax.swing.JFrame {
     private javax.swing.JMenu Salir;
     private javax.swing.JMenu cargoemp;
     private javax.swing.JMenuItem elim;
+    private javax.swing.JLabel guardado;
     private javax.swing.JMenuItem historial;
     private javax.swing.JMenuItem inicemp;
-    private javax.swing.JMenuItem inicioas;
     private javax.swing.JMenuItem iniciomov;
-    private javax.swing.JMenuItem iniconf;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenu jMenu4;
+    private javax.swing.JMenu jMenu5;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem10;
+    private javax.swing.JMenuItem jMenuItem11;
+    private javax.swing.JMenuItem jMenuItem12;
+    private javax.swing.JMenuItem jMenuItem13;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JMenuItem jMenuItem6;
+    private javax.swing.JMenuItem jMenuItem7;
+    private javax.swing.JMenuItem jMenuItem8;
+    private javax.swing.JMenuItem jMenuItem9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
@@ -719,7 +1000,5 @@ public class Configuracion extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JMenuItem mod;
-    private javax.swing.JMenuItem nuevovic;
-    private javax.swing.JMenuItem nuevtrip;
     // End of variables declaration//GEN-END:variables
 }

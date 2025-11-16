@@ -18,7 +18,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Facuymayriver
  */
-public class ModElimArea extends javax.swing.JFrame {
+public class ModElimArea extends javax.swing.JDialog {
 
     private int band;
     private Empleados ventanaPrincipal;
@@ -46,8 +46,9 @@ public class ModElimArea extends javax.swing.JFrame {
     ModeloEditablePorFila tabla1 = new ModeloEditablePorFila(new String[]{"Nº", "Area"}, 0, band);
 
     public ModElimArea(int band, Empleados ventanaPrincipal) {
+        super(ventanaPrincipal, true);
         initComponents();
-        
+
         String rutaIcono = "/IMAGENES/iconosame.png";
 
         try {
@@ -58,7 +59,7 @@ public class ModElimArea extends javax.swing.JFrame {
         } catch (Exception e) {
             System.err.println("Error al cargar el ícono: " + e.getMessage());
         }
-        
+
         this.setLocationRelativeTo(null);
         this.band = band;
         this.ventanaPrincipal = ventanaPrincipal;
@@ -87,10 +88,10 @@ public class ModElimArea extends javax.swing.JFrame {
         tablamostrar.setRowHeight(30);
         tablamostrar.getTableHeader().setReorderingAllowed(false);
         tablamostrar.getTableHeader().setResizingAllowed(false);
-        
+
         int ventanaTheme = CLASES.MenuClass.VentanaOpcThemeRet();
         if (ventanaTheme == 0) {
-        } else if (ventanaTheme ==1){
+        } else if (ventanaTheme == 1) {
             Color colorPersonalizado = new Color(44, 44, 53);
             Fondo.setBackground(colorPersonalizado);
             titulo.setForeground(Color.WHITE);
@@ -115,7 +116,7 @@ public class ModElimArea extends javax.swing.JFrame {
         Cancelar = new javax.swing.JButton();
         Boton = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Opciones");
         setUndecorated(true);
 
@@ -275,10 +276,16 @@ public class ModElimArea extends javax.swing.JFrame {
                 // Obtener los datos actualizados desde la tabla
                 int cod = Integer.parseInt(tablamostrar.getValueAt(i, 0).toString());
                 String Area = tablamostrar.getValueAt(i, 1).toString();
-                try {
-                    CLASES.Empleados.ActualizarArea(con, cod, Area);
-                } catch (SQLException ex) {
-                    JOptionPane.showMessageDialog(null, "ERROR" + ex);
+                int tamañoar = Area.length();
+                if (tamañoar >= 44) {
+                    JOptionPane.showMessageDialog(null, "DEMASIADOS CARACTERES!");
+                    return;
+                } else {
+                    try {
+                        CLASES.Empleados.ActualizarArea(con, cod, Area);
+                    } catch (SQLException ex) {
+                        JOptionPane.showMessageDialog(null, "ERROR" + ex);
+                    }
                 }
             }
 

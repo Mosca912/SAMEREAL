@@ -27,9 +27,6 @@ public class AddAreaCargo extends javax.swing.JDialog {
     static String veri = "Opciones";
     Connection con = Conexiones.Conexion();
 
-    /**
-     * Creates new form AddAreaCargo
-     */
     public AddAreaCargo(JFrame ventanaPrincipal, int ban) {
         super(ventanaPrincipal, true);
         initComponents();
@@ -271,6 +268,10 @@ public class AddAreaCargo extends javax.swing.JDialog {
                 getToolkit().beep();
                 evt.consume(); // evita que se escriba
             }
+        }
+        
+        if (text1.getText().length() >= 44) {
+            evt.consume();
         }
     }//GEN-LAST:event_text1KeyTyped
 

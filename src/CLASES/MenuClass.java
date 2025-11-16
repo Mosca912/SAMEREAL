@@ -42,13 +42,36 @@ public class MenuClass {
 
     public static void Configuracion() {
         try {
-            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName()); // usa el clásico Metal
-            UIManager.put("MenuBar.background", new Color(52, 170, 121));
-            UIManager.put("Menu.foreground", Color.WHITE);
-            UIManager.put("MenuItem.background", new Color(52, 170, 121));
-            UIManager.put("MenuItem.foreground", Color.WHITE);
-            UIManager.put("Menu.selectionBackground", new Color(52, 170, 121));
-            UIManager.put("Menu.selectionForeground", Color.WHITE);
+            // 1. Usa el L&F del sistema para mejor integración, o sigue usando Metal (CrossPlatform)
+            // UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); 
+            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName()); // Ya lo tenías
+
+            // CONFIGURACIÓN DEL FONDO DEL MENÚ Y LA BARRA
+            Color menuBg = new Color(52, 170, 121);
+            Color menuFg = Color.WHITE;
+            Color menuHighlight = new Color(75, 192, 145); // Un verde ligeramente más claro para el hover
+
+            // --- BARRA DE MENÚ PRINCIPAL (Empleados, etc.) ---
+            UIManager.put("MenuBar.background", menuBg);
+
+            // --- CONTENEDOR DESPLEGABLE (El fondo que baja) ---
+            // ESTE ES EL AJUSTE CRÍTICO: El fondo del menú desplegable.
+            UIManager.put("PopupMenu.background", menuBg);
+
+            // --- EL MENÚ EN SÍ (Ej: el elemento 'Empleados') ---
+            UIManager.put("Menu.background", menuBg);
+            UIManager.put("Menu.foreground", menuFg);
+            UIManager.put("Menu.selectionBackground", menuHighlight); // Color cuando seleccionas el menú
+            UIManager.put("Menu.selectionForeground", menuFg);
+
+            // --- LOS ELEMENTOS DENTRO DEL MENÚ (Inicio, Cargo) ---
+            UIManager.put("MenuItem.background", menuBg);
+            UIManager.put("MenuItem.foreground", menuFg);
+
+            // ESTE ES EL OTRO AJUSTE CRÍTICO: Color al pasar el ratón (hover/selección)
+            UIManager.put("MenuItem.selectionBackground", menuHighlight); // Fondo de la celda resaltada
+            UIManager.put("MenuItem.selectionForeground", Color.BLACK); // Texto del elemento resaltado (opcional)
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -325,7 +348,7 @@ public class MenuClass {
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
                     if (!isBlocked2()) {
-                        String direccion1 = "/RECURSOS/"+ruta+".pdf";
+                        String direccion1 = "/RECURSOS/" + ruta + ".pdf";
                         MenuClass.abrirPDF(direccion1);
                     }
                 }

@@ -7,6 +7,7 @@ package VISTA;
 
 import CONEXIONES.Conexiones;
 import java.awt.Image;
+import java.awt.event.KeyEvent;
 import java.sql.Connection;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -53,7 +54,7 @@ public class CambCont extends javax.swing.JDialog {
         DNI = new javax.swing.JTextField();
         Correo = new javax.swing.JTextField();
         Contrasena = new javax.swing.JPasswordField();
-        jButton1 = new javax.swing.JButton();
+        cambcont = new javax.swing.JButton();
         Volver = new javax.swing.JButton();
         MostOcPass = new javax.swing.JButton();
 
@@ -71,6 +72,9 @@ public class CambCont extends javax.swing.JDialog {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 DNIKeyReleased(evt);
             }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                DNIKeyTyped(evt);
+            }
         });
 
         Correo.setBackground(new java.awt.Color(204, 204, 204));
@@ -85,18 +89,29 @@ public class CambCont extends javax.swing.JDialog {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 CorreoKeyReleased(evt);
             }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                CorreoKeyTyped(evt);
+            }
         });
 
         Contrasena.setBackground(new java.awt.Color(204, 204, 204));
         Contrasena.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)), "Nueva contraseña", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 14))); // NOI18N
+        Contrasena.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                ContrasenaKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                ContrasenaKeyTyped(evt);
+            }
+        });
 
-        jButton1.setBackground(new java.awt.Color(78, 247, 177));
-        jButton1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jButton1.setText("Cambiar Contraseña");
-        jButton1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        cambcont.setBackground(new java.awt.Color(78, 247, 177));
+        cambcont.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        cambcont.setText("Cambiar Contraseña");
+        cambcont.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        cambcont.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                cambcontActionPerformed(evt);
             }
         });
 
@@ -137,7 +152,7 @@ public class CambCont extends javax.swing.JDialog {
                 .addContainerGap()
                 .addComponent(Volver, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(cambcont, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -153,7 +168,7 @@ public class CambCont extends javax.swing.JDialog {
                     .addComponent(MostOcPass, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
+                    .addComponent(cambcont, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
                     .addComponent(Volver, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(11, 11, 11))
         );
@@ -180,7 +195,7 @@ public class CambCont extends javax.swing.JDialog {
         this.dispose();
     }//GEN-LAST:event_VolverActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void cambcontActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cambcontActionPerformed
         String dni = DNI.getText();
         String em = Correo.getText();
         String cont = Contrasena.getText();
@@ -202,7 +217,7 @@ public class CambCont extends javax.swing.JDialog {
         } else {
             JOptionPane.showMessageDialog(null, "¡HAY CAMPOS VACIOS! Por favor, revise");
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_cambcontActionPerformed
 
     private void DNIKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_DNIKeyReleased
         if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
@@ -228,6 +243,42 @@ public class CambCont extends javax.swing.JDialog {
             MostOcPass.setIcon(icon2);
         }
     }//GEN-LAST:event_MostOcPassActionPerformed
+
+    private void ContrasenaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ContrasenaKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            cambcont.doClick();
+        }
+    }//GEN-LAST:event_ContrasenaKeyPressed
+
+    private void ContrasenaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ContrasenaKeyTyped
+        if (Contrasena.getText().length() >= 99) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_ContrasenaKeyTyped
+
+    private void DNIKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_DNIKeyTyped
+        char r = evt.getKeyChar();
+
+        if (Character.isISOControl(r)) {
+            return; // permite borrar, mover, etc.
+        }
+
+        //Solo permite letras, numeros y signos no
+        if (!Character.isDigit(r)) {
+            getToolkit().beep();
+            evt.consume();
+        }
+        
+        if (DNI.getText().length() >= 44) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_DNIKeyTyped
+
+    private void CorreoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_CorreoKeyTyped
+        if (Correo.getText().length() >= 74) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_CorreoKeyTyped
 
     /**
      * @param args the command line arguments
@@ -270,7 +321,7 @@ public class CambCont extends javax.swing.JDialog {
     private javax.swing.JTextField DNI;
     private javax.swing.JButton MostOcPass;
     private javax.swing.JButton Volver;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton cambcont;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 }

@@ -51,7 +51,7 @@ public class RegistrarFrm extends javax.swing.JDialog {
         }
         this.setLocationRelativeTo(null);
         CLASES.Usuario.jCombo(con, Rango, Base);
-        
+
         caracterEchoPredeterminado = contrasena.getEchoChar();
 
         int ventanaTheme = CLASES.MenuClass.VentanaOpcThemeRet();
@@ -79,8 +79,8 @@ public class RegistrarFrm extends javax.swing.JDialog {
                 Rango.setEnabled(false);
                 MostOcPass.setVisible(false);
                 MostOcPass.setEnabled(false);
-                veri="Opciones";
-                id=0;
+                veri = "Opciones";
+                id = 0;
                 break;
             case 1:
                 Base.setVisible(false);
@@ -137,6 +137,9 @@ public class RegistrarFrm extends javax.swing.JDialog {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 NombreKeyReleased(evt);
             }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                NombreKeyTyped(evt);
+            }
         });
         Fondo.add(Nombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 40, 270, 40));
 
@@ -160,6 +163,9 @@ public class RegistrarFrm extends javax.swing.JDialog {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 ApellidoKeyReleased(evt);
             }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                ApellidoKeyTyped(evt);
+            }
         });
         Fondo.add(Apellido, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 100, 270, 40));
 
@@ -170,6 +176,9 @@ public class RegistrarFrm extends javax.swing.JDialog {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 CorreoKeyReleased(evt);
             }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                CorreoKeyTyped(evt);
+            }
         });
         Fondo.add(Correo, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 230, 270, 40));
 
@@ -178,6 +187,9 @@ public class RegistrarFrm extends javax.swing.JDialog {
         contrasena.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 contrasenaKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                contrasenaKeyTyped(evt);
             }
         });
         Fondo.add(contrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 300, 270, 46));
@@ -278,8 +290,8 @@ public class RegistrarFrm extends javax.swing.JDialog {
                 if (!nomb.trim().isEmpty() && !ap.trim().isEmpty() && !dni.trim().isEmpty() && !em.trim().isEmpty() && !cont.trim().isEmpty() && !veribase.equals("Opciones")) {
                     if (em.contains("@") && em.contains(".")) {
                         try {
-                            int cerrar=CLASES.Usuario.AgregarNuevoUsuario(con, nomb, ap, dni, em, cont, id, idbase, band);
-                            if (cerrar==1){
+                            int cerrar = CLASES.Usuario.AgregarNuevoUsuario(con, nomb, ap, dni, em, cont, id, idbase, band);
+                            if (cerrar == 1) {
                                 this.dispose();
                             }
                         } catch (SQLException e) {
@@ -297,8 +309,8 @@ public class RegistrarFrm extends javax.swing.JDialog {
                 if (!nomb.trim().isEmpty() && !ap.trim().isEmpty() && !dni.trim().isEmpty() && !em.trim().isEmpty() && !cont.trim().isEmpty() && !veri.equals("Opciones")) {
                     if (em.contains("@") && em.contains(".")) {
                         try {
-                            int cerrar=CLASES.Usuario.AgregarNuevoUsuario(con, nomb, ap, dni, em, cont, id, idbase, band);;
-                            if (cerrar==1){
+                            int cerrar = CLASES.Usuario.AgregarNuevoUsuario(con, nomb, ap, dni, em, cont, id, idbase, band);;
+                            if (cerrar == 1) {
                                 this.dispose();
                             }
                         } catch (SQLException e) {
@@ -317,8 +329,8 @@ public class RegistrarFrm extends javax.swing.JDialog {
                     if (em.contains("@") && em.contains(".")) {
                         try {
                             System.out.println(id);
-                            int cerrar=CLASES.Usuario.ActualizarUser(con, nomb, ap, dni, em, id, iduser);
-                            if (cerrar==1){
+                            int cerrar = CLASES.Usuario.ActualizarUser(con, nomb, ap, dni, em, id, iduser);
+                            if (cerrar == 1) {
                                 this.dispose();
                             }
                         } catch (SQLException e) {
@@ -358,6 +370,10 @@ public class RegistrarFrm extends javax.swing.JDialog {
         //Solo permite letras, numeros y signos no
         if (!Character.isDigit(r)) {
             getToolkit().beep();
+            evt.consume();
+        }
+        
+        if (DNI.getText().length() >= 44) {
             evt.consume();
         }
     }//GEN-LAST:event_DNIKeyTyped
@@ -453,6 +469,84 @@ public class RegistrarFrm extends javax.swing.JDialog {
             MostOcPass.setIcon(icon2);
         }
     }//GEN-LAST:event_MostOcPassActionPerformed
+
+    private void NombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_NombreKeyTyped
+        char c = evt.getKeyChar();
+
+        //Permitir teclas de control como Backspace, Delete, Enter, etc.
+        if (Character.isISOControl(c)) {
+            return;
+        }
+
+        //Solo permitir letras y espacios
+        if (!Character.isLetter(c) && !Character.isWhitespace(c)) {
+            getToolkit().beep();
+            evt.consume();
+        }
+
+        String textoActual = Nombre.getText();
+        int longitud = textoActual.length();
+
+        //Evita que se repita mas de dos letras seguidas
+        if (longitud >= 2) {
+            char ultimo = textoActual.charAt(longitud - 1);
+            char penultimo = textoActual.charAt(longitud - 2);
+
+            if (ultimo == penultimo && penultimo == c) {
+                getToolkit().beep();
+                evt.consume(); // evita que se escriba
+            }
+        }
+        
+        if (Nombre.getText().length() >= 74) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_NombreKeyTyped
+
+    private void ApellidoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ApellidoKeyTyped
+        char c = evt.getKeyChar();
+
+        //Permitir teclas de control como Backspace, Delete, Enter, etc.
+        if (Character.isISOControl(c)) {
+            return;
+        }
+
+        //Solo permitir letras y espacios
+        if (!Character.isLetter(c) && !Character.isWhitespace(c)) {
+            getToolkit().beep();
+            evt.consume();
+        }
+
+        String textoActual = Apellido.getText();
+        int longitud = textoActual.length();
+
+        //Evita que se repita mas de dos letras seguidas
+        if (longitud >= 2) {
+            char ultimo = textoActual.charAt(longitud - 1);
+            char penultimo = textoActual.charAt(longitud - 2);
+
+            if (ultimo == penultimo && penultimo == c) {
+                getToolkit().beep();
+                evt.consume(); // evita que se escriba
+            }
+        }
+        
+        if (Apellido.getText().length() >= 74) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_ApellidoKeyTyped
+
+    private void CorreoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_CorreoKeyTyped
+        if (Correo.getText().length() >= 74) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_CorreoKeyTyped
+
+    private void contrasenaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_contrasenaKeyTyped
+        if (contrasena.getText().length() >= 99) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_contrasenaKeyTyped
 
     /**
      * @param args the command line arguments

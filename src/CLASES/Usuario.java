@@ -14,6 +14,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -100,7 +101,7 @@ public class Usuario {
     }
 
     public static void jComboUser(Connection conexion, JComboBox<Usuario.UsuarioMod> combo1) {
-        String sql = "SELECT idUsuario, DNI, Nombre FROM usuario WHERE borrado=0";
+        String sql = "SELECT idUsuario, DNI, Nombre FROM usuario WHERE borrado=0 and idUsuario!=1;";
         try {
             PreparedStatement ps = conexion.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
@@ -421,6 +422,37 @@ public class Usuario {
 
     public static int verificacion() {
         return valid;
+    }
+    
+    public static void EliminarUsuario(Connection conexion, int Codigo) throws SQLException {
+
+        PreparedStatement stm = conexion.prepareStatement("UPDATE Usuario SET borrado= 1 WHERE idUsuario = ?");
+        stm.setInt(1, Codigo);
+
+        try {
+            stm.executeUpdate();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "ERROR12");
+        }
+    }
+    
+    public static void tablaUser(Connection conexion, DefaultTableModel modelo) {
+        String sql = "SELECT idUsuario, Nombre, Apellido, Correo, DNI from Usuario WHERE borrado=0 and idUsuario!=1 and idUsuario!=?;";
+        try {
+            PreparedStatement ps = conexion.prepareStatement(sql);
+            ps.setInt(1, iduser);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Object[] fila = new Object[3];
+                fila[0] = rs.getInt("idUsuario");
+                fila[1] = rs.getString("Apellido");
+                fila[2] = rs.getString("Correo");
+                modelo.addRow(fila);
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "ERROR: " + ex.getMessage());
+        }
+
     }
 
 }

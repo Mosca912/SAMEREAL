@@ -134,6 +134,9 @@ public class Movimiento extends javax.swing.JFrame implements CLASES.IBlockableF
             AddT.setEnabled(false);
             AddV.setEnabled(false);
             Editar.setEnabled(false);
+            Eliminartrip.setEnabled(false);
+            EditarVic.setEnabled(false);
+            Eliminarvic.setEnabled(false);
         }
         Relevar.setEnabled(false);
         Nuevo.setEnabled(false);
@@ -218,12 +221,12 @@ public class Movimiento extends javax.swing.JFrame implements CLASES.IBlockableF
             MaskFormatter formatter = null;
             try {
                 formatter = new MaskFormatter("##:##:##");
+                formatter.setPlaceholderCharacter('0');
             } catch (ParseException ex) {
                 Logger.getLogger(Movimiento.class.getName()).log(Level.SEVERE, null, ex);
             }
 
             JFormattedTextField horaField = new JFormattedTextField(formatter);
-
             Font fuenteGrande = new Font("Arial", Font.BOLD, 25);
             horaField.setFont(fuenteGrande);
 
@@ -239,12 +242,13 @@ public class Movimiento extends javax.swing.JFrame implements CLASES.IBlockableF
             MaskFormatter formatter = null;
             try {
                 formatter = new MaskFormatter("##:##:##");
+                formatter.setPlaceholderCharacter('0');
             } catch (ParseException ex) {
                 Logger.getLogger(Movimiento.class.getName()).log(Level.SEVERE, null, ex);
             }
 
             JFormattedTextField horaField = new JFormattedTextField(formatter);
-
+            horaField.setValue("0");
             DefaultCellEditor editor = new DefaultCellEditor(horaField);
             Tabla.getColumnModel().getColumn(1).setCellEditor(editor); // salida
             Tabla.getColumnModel().getColumn(2).setCellEditor(editor); // salida
@@ -327,21 +331,32 @@ public class Movimiento extends javax.swing.JFrame implements CLASES.IBlockableF
         Relevar = new javax.swing.JButton();
         Barra = new javax.swing.JMenuBar();
         Menu = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
         Movimientos = new javax.swing.JMenu();
         iniciomov = new javax.swing.JMenuItem();
-        nuevtrip = new javax.swing.JMenuItem();
-        nuevovic = new javax.swing.JMenuItem();
         historial = new javax.swing.JMenuItem();
+        jMenu3 = new javax.swing.JMenu();
+        jMenuItem4 = new javax.swing.JMenuItem();
+        jMenuItem5 = new javax.swing.JMenuItem();
+        jMenuItem6 = new javax.swing.JMenuItem();
+        jMenu4 = new javax.swing.JMenu();
+        jMenuItem7 = new javax.swing.JMenuItem();
+        jMenuItem8 = new javax.swing.JMenuItem();
+        jMenuItem9 = new javax.swing.JMenuItem();
         Asistencia = new javax.swing.JMenu();
-        inicioas = new javax.swing.JMenuItem();
         Empleados = new javax.swing.JMenu();
         inicemp = new javax.swing.JMenuItem();
         cargoemp = new javax.swing.JMenu();
+        jMenuItem10 = new javax.swing.JMenuItem();
         mod = new javax.swing.JMenuItem();
         elim = new javax.swing.JMenuItem();
+        jMenu5 = new javax.swing.JMenu();
+        jMenuItem11 = new javax.swing.JMenuItem();
+        jMenuItem12 = new javax.swing.JMenuItem();
+        jMenuItem13 = new javax.swing.JMenuItem();
         Estadisticas = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
         Ayuda = new javax.swing.JMenu();
         Configuracion = new javax.swing.JMenu();
         Salir = new javax.swing.JMenu();
@@ -349,6 +364,7 @@ public class Movimiento extends javax.swing.JFrame implements CLASES.IBlockableF
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Movimientos");
         setUndecorated(true);
+        setPreferredSize(new java.awt.Dimension(1200, 700));
         setResizable(false);
 
         Fondo.setBackground(new java.awt.Color(255, 255, 255));
@@ -534,6 +550,11 @@ public class Movimiento extends javax.swing.JFrame implements CLASES.IBlockableF
             }
         ));
         Tabla.setToolTipText("Seleccione cualquier fila para actualizar/eliminar");
+        Tabla.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                TablaKeyTyped(evt);
+            }
+        });
         jScrollPane1.setViewportView(Tabla);
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
@@ -549,7 +570,7 @@ public class Movimiento extends javax.swing.JFrame implements CLASES.IBlockableF
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 435, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 449, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -988,16 +1009,21 @@ public class Movimiento extends javax.swing.JFrame implements CLASES.IBlockableF
         Menu.setBackground(new java.awt.Color(204, 255, 204));
         Menu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/menui.png"))); // NOI18N
         Menu.setText("Menu");
+        Menu.setToolTipText("Menu");
         Menu.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         Menu.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        Menu.addActionListener(new java.awt.event.ActionListener() {
+
+        jMenuItem1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jMenuItem1.setText("Nuevo usuario");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                MenuActionPerformed(evt);
+                jMenuItem1ActionPerformed(evt);
             }
         });
+        Menu.add(jMenuItem1);
 
         jMenuItem2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jMenuItem2.setText("Inicio");
+        jMenuItem2.setText("Modificar usuario");
         jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem2ActionPerformed(evt);
@@ -1005,12 +1031,26 @@ public class Movimiento extends javax.swing.JFrame implements CLASES.IBlockableF
         });
         Menu.add(jMenuItem2);
 
+        jMenuItem3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jMenuItem3.setText("Eliminar usuario");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        Menu.add(jMenuItem3);
+
         Barra.add(Menu);
 
         Movimientos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/movimiento.png"))); // NOI18N
         Movimientos.setText("Movimientos");
         Movimientos.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         Movimientos.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        Movimientos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MovimientosActionPerformed(evt);
+            }
+        });
 
         iniciomov.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         iniciomov.setText("Inicio");
@@ -1021,24 +1061,6 @@ public class Movimiento extends javax.swing.JFrame implements CLASES.IBlockableF
         });
         Movimientos.add(iniciomov);
 
-        nuevtrip.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        nuevtrip.setText("Nueva tripulación");
-        nuevtrip.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                nuevtripActionPerformed(evt);
-            }
-        });
-        Movimientos.add(nuevtrip);
-
-        nuevovic.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        nuevovic.setText("Nuevo victor");
-        nuevovic.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                nuevovicActionPerformed(evt);
-            }
-        });
-        Movimientos.add(nuevovic);
-
         historial.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         historial.setText("Historial");
         historial.addActionListener(new java.awt.event.ActionListener() {
@@ -1047,6 +1069,75 @@ public class Movimiento extends javax.swing.JFrame implements CLASES.IBlockableF
             }
         });
         Movimientos.add(historial);
+
+        jMenu3.setText("Tripulación");
+        jMenu3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jMenu3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+
+        jMenuItem4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jMenuItem4.setText("Nuevo");
+        jMenuItem4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem4);
+
+        jMenuItem5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jMenuItem5.setText("Modificar");
+        jMenuItem5.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem5);
+
+        jMenuItem6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jMenuItem6.setText("Eliminar");
+        jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem6ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem6);
+
+        Movimientos.add(jMenu3);
+
+        jMenu4.setText("Victor");
+        jMenu4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jMenu4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jMenu4.setHideActionText(true);
+
+        jMenuItem7.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jMenuItem7.setText("Nuevo");
+        jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem7ActionPerformed(evt);
+            }
+        });
+        jMenu4.add(jMenuItem7);
+
+        jMenuItem8.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jMenuItem8.setText("Modificar");
+        jMenuItem8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem8ActionPerformed(evt);
+            }
+        });
+        jMenu4.add(jMenuItem8);
+
+        jMenuItem9.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jMenuItem9.setText("Eliminar");
+        jMenuItem9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem9ActionPerformed(evt);
+            }
+        });
+        jMenu4.add(jMenuItem9);
+
+        Movimientos.add(jMenu4);
 
         Barra.add(Movimientos);
 
@@ -1059,16 +1150,6 @@ public class Movimiento extends javax.swing.JFrame implements CLASES.IBlockableF
                 AsistenciaActionPerformed(evt);
             }
         });
-
-        inicioas.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        inicioas.setText("Inicio");
-        inicioas.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                inicioasActionPerformed(evt);
-            }
-        });
-        Asistencia.add(inicioas);
-
         Barra.add(Asistencia);
 
         Empleados.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/empleado.png"))); // NOI18N
@@ -1078,6 +1159,7 @@ public class Movimiento extends javax.swing.JFrame implements CLASES.IBlockableF
 
         inicemp.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         inicemp.setText("Inicio");
+        inicemp.setCursor(new java.awt.Cursor(java.awt.Cursor.MOVE_CURSOR));
         inicemp.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 inicempActionPerformed(evt);
@@ -1087,7 +1169,17 @@ public class Movimiento extends javax.swing.JFrame implements CLASES.IBlockableF
 
         cargoemp.setBackground(new java.awt.Color(52, 170, 121));
         cargoemp.setText("Cargo");
+        cargoemp.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cargoemp.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+
+        jMenuItem10.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jMenuItem10.setText("Nuevo");
+        jMenuItem10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem10ActionPerformed(evt);
+            }
+        });
+        cargoemp.add(jMenuItem10);
 
         mod.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         mod.setText("Modificar");
@@ -1109,28 +1201,56 @@ public class Movimiento extends javax.swing.JFrame implements CLASES.IBlockableF
 
         Empleados.add(cargoemp);
 
+        jMenu5.setText("Area");
+        jMenu5.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jMenu5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+
+        jMenuItem11.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jMenuItem11.setText("Nueva");
+        jMenuItem11.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem11ActionPerformed(evt);
+            }
+        });
+        jMenu5.add(jMenuItem11);
+
+        jMenuItem12.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jMenuItem12.setText("Modificar");
+        jMenuItem12.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem12ActionPerformed(evt);
+            }
+        });
+        jMenu5.add(jMenuItem12);
+
+        jMenuItem13.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jMenuItem13.setText("Eliminar");
+        jMenuItem13.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem13ActionPerformed(evt);
+            }
+        });
+        jMenu5.add(jMenuItem13);
+
+        Empleados.add(jMenu5);
+
         Barra.add(Empleados);
 
         Estadisticas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/estats.png"))); // NOI18N
         Estadisticas.setText("Estadisticas");
         Estadisticas.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         Estadisticas.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-
-        jMenuItem1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jMenuItem1.setText("Consultar");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
-            }
-        });
-        Estadisticas.add(jMenuItem1);
-
         Barra.add(Estadisticas);
 
         Ayuda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/ayuda.png"))); // NOI18N
         Ayuda.setText("Ayuda");
         Ayuda.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         Ayuda.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        Ayuda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AyudaActionPerformed(evt);
+            }
+        });
         Barra.add(Ayuda);
 
         Configuracion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/config.png"))); // NOI18N
@@ -1140,7 +1260,7 @@ public class Movimiento extends javax.swing.JFrame implements CLASES.IBlockableF
         Barra.add(Configuracion);
 
         Salir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/salir.png"))); // NOI18N
-        Salir.setText("Cerrar Sesión");
+        Salir.setText("Salir");
         Salir.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         Salir.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         Salir.addActionListener(new java.awt.event.ActionListener() {
@@ -1181,7 +1301,6 @@ public class Movimiento extends javax.swing.JFrame implements CLASES.IBlockableF
             Trip dat = (Trip) value;
             id = dat.getId();
             veri = dat.getNombre();
-            JOptionPane.showMessageDialog(null, "Id trip:" + id);
             if (!veri.equals("Opciones")) {
                 try {
                     tabla1.setRowCount(0);
@@ -1198,6 +1317,14 @@ public class Movimiento extends javax.swing.JFrame implements CLASES.IBlockableF
                     Nuevo.setEnabled(true);
                     Actualizar.setEnabled(true);
                     Eliminar.setEnabled(true);
+
+                    AddT.setEnabled(false);
+                    Editar.setEnabled(false);
+                    Eliminartrip.setEnabled(false);
+
+                    AddV.setEnabled(false);
+                    EditarVic.setEnabled(false);
+                    Eliminarvic.setEnabled(false);
                 }
             } else {
                 tabla1.setRowCount(0);
@@ -1216,6 +1343,16 @@ public class Movimiento extends javax.swing.JFrame implements CLASES.IBlockableF
                 Ayuda.setEnabled(true);
                 Configuracion.setEnabled(true);
                 Salir.setEnabled(true);
+
+                if (rango == 1) {
+                    AddT.setEnabled(true);
+                    Editar.setEnabled(true);
+                    Eliminartrip.setEnabled(true);
+
+                    AddV.setEnabled(true);
+                    EditarVic.setEnabled(true);
+                    Eliminarvic.setEnabled(true);
+                }
 
                 chofer.setText("");
                 enfermero.setText("");
@@ -1446,10 +1583,18 @@ public class Movimiento extends javax.swing.JFrame implements CLASES.IBlockableF
                     String Km = Tabla.getValueAt(i, 3).toString();
                     String Destino = Tabla.getValueAt(i, 4).toString();
                     String NumServicio = Tabla.getValueAt(i, 5).toString();
-                    try {
-                        CLASES.Movimientos.movimientos(con, cod, Salida, Llegada, Km, Destino, NumServicio, band, id, fechaActual, iduser);
-                    } catch (SQLException e) {
-                        JOptionPane.showMessageDialog(null, "ERROR1");
+                    int tamañoKm = Km.length();
+                    int tamañoDestino = Destino.length();
+                    int tamañoServicio = NumServicio.length();
+                    if (tamañoKm >= 44 || tamañoDestino >= 44 || tamañoServicio >= 44) {
+                        JOptionPane.showMessageDialog(null, "DEMASIADOS CARACTERES!");
+                        return;
+                    } else {
+                        try {
+                            CLASES.Movimientos.movimientos(con, cod, Salida, Llegada, Km, Destino, NumServicio, band, id, fechaActual, iduser);
+                        } catch (SQLException e) {
+                            JOptionPane.showMessageDialog(null, "ERROR1");
+                        }
                     }
                 }
             }
@@ -1589,10 +1734,18 @@ public class Movimiento extends javax.swing.JFrame implements CLASES.IBlockableF
                 String Km = Tabla.getValueAt(i, 3).toString();
                 String Destino = Tabla.getValueAt(i, 4).toString();
                 String NumServicio = Tabla.getValueAt(i, 5).toString();
-                try {
-                    CLASES.Movimientos.movimientos(con, cod, Salida, Llegada, Km, Destino, NumServicio, band, id, fechaActual, iduser);
-                } catch (SQLException ex) {
-                    JOptionPane.showMessageDialog(null, "ERROR");
+                int tamañoKm = Km.length();
+                int tamañoDestino = Destino.length();
+                int tamañoServicio = NumServicio.length();
+                if (tamañoKm >= 44 || tamañoDestino >= 44 || tamañoServicio >= 44) {
+                    JOptionPane.showMessageDialog(null, "DEMASIADOS CARACTERES!");
+                    return;
+                } else {
+                    try {
+                        CLASES.Movimientos.movimientos(con, cod, Salida, Llegada, Km, Destino, NumServicio, band, id, fechaActual, iduser);
+                    } catch (SQLException ex) {
+                        JOptionPane.showMessageDialog(null, "ERROR");
+                    }
                 }
             }
 
@@ -1621,6 +1774,9 @@ public class Movimiento extends javax.swing.JFrame implements CLASES.IBlockableF
 
             block = 0;
             block2 = 0;
+
+            Tabla.clearSelection();
+            tabla1.bloquearEdicion();
             try {
                 tabla1.setRowCount(0);
                 CLASES.Movimientos.MostrarMov(con, tabla1, fechaActual, id);
@@ -1749,6 +1905,15 @@ public class Movimiento extends javax.swing.JFrame implements CLASES.IBlockableF
         block = 0;
         block2 = 0;
         cont = 0;
+
+        try {
+            tabla1.setRowCount(0);
+            CLASES.Movimientos.MostrarMov(con, tabla1, fechaActual, id);
+            CLASES.Movimientos.Contador(con, id, cantidad, fechaActual);
+            tabla1.bloquearEdicion();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "ERROR1");
+        }
     }//GEN-LAST:event_CancelarActionPerformed
 
     private void EditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditarActionPerformed
@@ -1763,86 +1928,6 @@ public class Movimiento extends javax.swing.JFrame implements CLASES.IBlockableF
         }
     }//GEN-LAST:event_EditarActionPerformed
 
-    private void iniciomovActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iniciomovActionPerformed
-
-    }//GEN-LAST:event_iniciomovActionPerformed
-
-    private void nuevtripActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevtripActionPerformed
-        AddTri ventana1 = new AddTri(0, this);
-        if (rango == 1) {
-            ventana1.setVisible(true);
-        } else {
-            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
-        }
-    }//GEN-LAST:event_nuevtripActionPerformed
-
-    private void nuevovicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevovicActionPerformed
-        int ban = 0;
-        AddVic ventana1 = new AddVic(this, ban);
-        if (rango == 1) {
-            ventana1.setVisible(true);
-        } else {
-            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
-        }
-    }//GEN-LAST:event_nuevovicActionPerformed
-
-    private void historialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_historialActionPerformed
-        Historial ventana1 = new Historial(this);
-        ventana1.setVisible(true);
-    }//GEN-LAST:event_historialActionPerformed
-
-    private void inicioasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inicioasActionPerformed
-        Asistencia ventana1 = new Asistencia();
-        ventana1.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_inicioasActionPerformed
-
-    private void AsistenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AsistenciaActionPerformed
-        Asistencia ventana1 = new Asistencia();
-        ventana1.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_AsistenciaActionPerformed
-
-    private void inicempActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inicempActionPerformed
-        Empleados ventana1 = new Empleados();
-        ventana1.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_inicempActionPerformed
-
-    private void modActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modActionPerformed
-        ModElimCargo1 ventana1 = new ModElimCargo1(1, this);
-        if (rango == 1) {
-            ventana1.setVisible(true);
-        } else {
-            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
-        }
-    }//GEN-LAST:event_modActionPerformed
-
-    private void elimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_elimActionPerformed
-        ModElimCargo1 ventana1 = new ModElimCargo1(0, this);
-        if (rango == 1) {
-            ventana1.setVisible(true);
-        } else {
-            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
-        }
-    }//GEN-LAST:event_elimActionPerformed
-
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        Estadisticas ventana1 = new Estadisticas();
-        ventana1.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
-
-    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        Menu ventana1 = new Menu();
-        ventana1.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_jMenuItem2ActionPerformed
-
-    private void MenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_MenuActionPerformed
-
     private void EliminarvicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EliminarvicActionPerformed
         int ban = 0;
         AddDelVicTrip ventana1 = new AddDelVicTrip(this, ban);
@@ -1853,10 +1938,6 @@ public class Movimiento extends javax.swing.JFrame implements CLASES.IBlockableF
         }
         this.refrescarCombo();
     }//GEN-LAST:event_EliminarvicActionPerformed
-
-    private void SalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SalirActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_SalirActionPerformed
 
     private void EditarVicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditarVicActionPerformed
         int ban = 1;
@@ -1884,6 +1965,187 @@ public class Movimiento extends javax.swing.JFrame implements CLASES.IBlockableF
         }
         this.refrescarCombo();
     }//GEN-LAST:event_EliminartripActionPerformed
+
+    private void TablaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TablaKeyTyped
+
+    }//GEN-LAST:event_TablaKeyTyped
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        RegistrarFrm ventana = new RegistrarFrm(this, 1);
+        if (rango == 1) {
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        RegistrarFrm ventana = new RegistrarFrm(this, 2);
+        if (rango == 1) {
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        AddDelUser ventana = new AddDelUser(this, 1);
+        if (rango == 1) {
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void iniciomovActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iniciomovActionPerformed
+        Movimiento ventana = new Movimiento();
+        ventana.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_iniciomovActionPerformed
+
+    private void historialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_historialActionPerformed
+        Historial ventana = new Historial(this);
+        ventana.setVisible(true);
+    }//GEN-LAST:event_historialActionPerformed
+
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        AddTri ventana = new AddTri(0, this);
+        if (rango == 1) {
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
+
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        AddTri ventana = new AddTri(1, this);
+        if (rango == 1) {
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
+
+    private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
+        int ban = 1;
+        AddDelVicTrip ventana = new AddDelVicTrip(this, ban);
+        if (rango == 1) {
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
+    }//GEN-LAST:event_jMenuItem6ActionPerformed
+
+    private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
+        int ban = 0;
+        AddVic ventana = new AddVic(this, ban);
+        if (rango == 1) {
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
+    }//GEN-LAST:event_jMenuItem7ActionPerformed
+
+    private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
+        int ban = 1;
+        AddVic ventana = new AddVic(this, ban);
+        if (rango == 1) {
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
+    }//GEN-LAST:event_jMenuItem8ActionPerformed
+
+    private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem9ActionPerformed
+        int ban = 0;
+        AddDelVicTrip ventana = new AddDelVicTrip(this, ban);
+        if (rango == 1) {
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
+    }//GEN-LAST:event_jMenuItem9ActionPerformed
+
+    private void MovimientosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MovimientosActionPerformed
+        Movimiento ventana = new Movimiento();
+        ventana.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_MovimientosActionPerformed
+
+    private void AsistenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AsistenciaActionPerformed
+        Asistencia ventana = new Asistencia();
+        ventana.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_AsistenciaActionPerformed
+
+    private void inicempActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inicempActionPerformed
+        Empleados ventana = new Empleados();
+        ventana.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_inicempActionPerformed
+
+    private void jMenuItem10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem10ActionPerformed
+        AddAreaCargo ventana3 = new AddAreaCargo(this, 1);
+        if (rango == 1) {
+            ventana3.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
+    }//GEN-LAST:event_jMenuItem10ActionPerformed
+
+    private void modActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modActionPerformed
+        ModElimCargo1 ventana = new ModElimCargo1(1, this);
+        if (rango == 1) {
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
+    }//GEN-LAST:event_modActionPerformed
+
+    private void elimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_elimActionPerformed
+        ModElimCargo1 ventana = new ModElimCargo1(0, this);
+        if (rango == 1) {
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
+    }//GEN-LAST:event_elimActionPerformed
+
+    private void jMenuItem11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem11ActionPerformed
+        AddAreaCargo ventana3 = new AddAreaCargo(this, 0);
+        if (rango == 1) {
+            ventana3.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
+    }//GEN-LAST:event_jMenuItem11ActionPerformed
+
+    private void jMenuItem12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem12ActionPerformed
+        ModElimArea1 ventana = new ModElimArea1(1, this);
+        if (rango == 1) {
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
+    }//GEN-LAST:event_jMenuItem12ActionPerformed
+
+    private void jMenuItem13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem13ActionPerformed
+        ModElimArea1 ventana = new ModElimArea1(0, this);
+        if (rango == 1) {
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
+    }//GEN-LAST:event_jMenuItem13ActionPerformed
+
+    private void AyudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AyudaActionPerformed
+        String direccion1 = "\\RECURSOS\\Movimientos.pdf";
+        CLASES.Movimientos.abrirPDF(direccion1);
+    }//GEN-LAST:event_AyudaActionPerformed
+
+    private void SalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SalirActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_SalirActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1953,7 +2215,6 @@ public class Movimiento extends javax.swing.JFrame implements CLASES.IBlockableF
     private javax.swing.JLabel enfermero;
     private javax.swing.JMenuItem historial;
     private javax.swing.JMenuItem inicemp;
-    private javax.swing.JMenuItem inicioas;
     private javax.swing.JMenuItem iniciomov;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -1966,8 +2227,22 @@ public class Movimiento extends javax.swing.JFrame implements CLASES.IBlockableF
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenu jMenu4;
+    private javax.swing.JMenu jMenu5;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem10;
+    private javax.swing.JMenuItem jMenuItem11;
+    private javax.swing.JMenuItem jMenuItem12;
+    private javax.swing.JMenuItem jMenuItem13;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JMenuItem jMenuItem6;
+    private javax.swing.JMenuItem jMenuItem7;
+    private javax.swing.JMenuItem jMenuItem8;
+    private javax.swing.JMenuItem jMenuItem9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
@@ -1988,8 +2263,6 @@ public class Movimiento extends javax.swing.JFrame implements CLASES.IBlockableF
     private javax.swing.JLabel medico;
     private javax.swing.JMenuItem mod;
     private javax.swing.JLabel modelo;
-    private javax.swing.JMenuItem nuevovic;
-    private javax.swing.JMenuItem nuevtrip;
     private javax.swing.JLabel patente;
     private javax.swing.JLabel victor;
     // End of variables declaration//GEN-END:variables

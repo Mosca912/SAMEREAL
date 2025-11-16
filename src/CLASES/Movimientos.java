@@ -652,7 +652,7 @@ public class Movimientos {
             if (errorCode == 1062) {
                 // Mensaje Personalizado para DNI/Correo Repetido
                 JOptionPane.showMessageDialog(null,
-                        "Error: El victor que intentás ingresar ya existen en el sistema. Deben ser únicos.",
+                        "Error: El victor que intentás ingresar ya existen en el sistema. Debe ser único.",
                         "Error de Registro Duplicado", // Título de la ventana
                         JOptionPane.ERROR_MESSAGE);
             } else {
@@ -708,7 +708,7 @@ public class Movimientos {
             if (errorCode == 1062) {
                 // Mensaje Personalizado para DNI/Correo Repetido
                 JOptionPane.showMessageDialog(null,
-                        "Error: El victor que intentás ingresar ya existen en el sistema. Deben ser únicos.",
+                        "Error: El victor que intentás ingresar ya existen en el sistema. Debe ser único.",
                         "Error de Registro Duplicado", // Título de la ventana
                         JOptionPane.ERROR_MESSAGE);
             } else {
@@ -840,9 +840,8 @@ public class Movimientos {
 
     public static void Contador(Connection conexion, int id, JLabel cantidad, String fecha) throws SQLException {
 
-        PreparedStatement stm3 = conexion.prepareStatement("SELECT COUNT(idMovimientos) FROM samerealpro.movimientos WHERE idtripulacion=? AND fecha=? AND borrado=0");
+        PreparedStatement stm3 = conexion.prepareStatement("SELECT COUNT(idMovimientos) FROM samerealpro.movimientos WHERE idtripulacion=? AND borrado=0");
         stm3.setInt(1, id);
-        stm3.setString(2, fecha);
         ResultSet rs3 = stm3.executeQuery();
         if (rs3.next()) {
             cantidad.setText(rs3.getString("COUNT(idMovimientos)"));
@@ -957,15 +956,16 @@ public class Movimientos {
     }
 
     //Historial
-    public static void MostrarHist(Connection conexion, DefaultTableModel modelo, JTable tabla) throws SQLException {
-        //BASE
-
-        PreparedStatement stm = conexion.prepareStatement("SELECT t.idtripulacion, CONCAT(e1.nombre, ' ', e1.apellido) AS cvs, CONCAT(e2.nombre, ' ', e2.apellido) AS medico, CONCAT(e3.nombre, ' ', e3.apellido) AS enfermero, a.victor, t.fecharelevado, COUNT(m.idMovimientos) AS cantidad_movimientos FROM tripulacion t JOIN empleado e1 ON t.cvs = e1.id_Empleado JOIN empleado e2 ON t.medico = e2.id_Empleado JOIN empleado e3 ON t.enfermero = e3.id_Empleado INNER JOIN ambulancia a ON t.idAmbulancia = a.idAmbulancia LEFT JOIN movimientos m ON t.idtripulacion = m.idtripulacion AND m.borrado = 0 WHERE e1.borrado = 0 AND e2.borrado = 0 AND e3.borrado = 0 AND t.borrado = 0 GROUP BY t.idtripulacion, cvs, medico, enfermero, a.victor, t.fecharelevado ORDER BY fecharelevado;");
+    public static void MostrarHist(Connection conexion, DefaultTableModel modelo, JTable tabla, int mesActual) throws SQLException {
+        int yearact = LocalDate.now().getYear();
+        PreparedStatement stm = conexion.prepareStatement("SELECT t.idtripulacion, CONCAT(e1.nombre, ' ', e1.apellido) AS cvs, CONCAT(e2.nombre, ' ', e2.apellido) AS medico, CONCAT(e3.nombre, ' ', e3.apellido) AS enfermero, a.victor, t.fecharelevado, COUNT(m.idMovimientos) AS cantidad_movimientos FROM tripulacion t JOIN empleado e1 ON t.cvs = e1.id_Empleado JOIN empleado e2 ON t.medico = e2.id_Empleado JOIN empleado e3 ON t.enfermero = e3.id_Empleado INNER JOIN ambulancia a ON t.idAmbulancia = a.idAmbulancia LEFT JOIN movimientos m ON t.idtripulacion = m.idtripulacion AND m.borrado = 0 WHERE e1.borrado = 0 AND e2.borrado = 0 AND e3.borrado = 0 AND t.borrado = 0 AND MONTH(fecharelevado)= ? AND YEAR(fecharelevado)= ? GROUP BY t.idtripulacion, cvs, medico, enfermero, a.victor, t.fecharelevado ORDER BY fecharelevado;");
+        stm.setInt(1, mesActual);
+        stm.setInt(2, yearact);
         ResultSet rs = stm.executeQuery();
         while (rs.next()) {
             Object[] fila = new Object[5];
             fila[0] = rs.getInt("t.idtripulacion");
-            fila[1] = rs.getString("cvs") + "-" + rs.getString("medico") + "-" + rs.getString("enfermero");
+            fila[1] = rs.getString("cvs");
             fila[2] = rs.getString("a.victor");
             LocalDate fecha = rs.getObject("t.fecharelevado", LocalDate.class);
             DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd-MM-yyyy");

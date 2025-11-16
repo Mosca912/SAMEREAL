@@ -8,15 +8,19 @@ package CLASES;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Dump {
 
     private static final String RUTA_MYSQLDUMP = "C:\\laragon\\bin\\mysql\\mysql-8.0.30-winx64\\bin\\mysqldump.exe";
-    // 2. Nombre de la base de datos a respaldar
     private static final String DB_NAME = "samerealpro";
     private static final String DB_USER = "same";
     private static final String DB_PASS = "samejujuy1072025ies"; // Dejar vacío si no tienes contraseña
-    private static final String RUTA_SALIDA_DUMP = "C:\\db\\" + DB_NAME + ".sql";
+    private static final LocalDateTime AHORA = LocalDateTime.now();
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss");
+    private static final String TIMESTAMP = AHORA.format(FORMATTER);
+    private static final String RUTA_SALIDA_DUMP = "C:\\SAME\\Copia_Seguridad\\" + DB_NAME + "_" + TIMESTAMP + ".sql";
 
     public static void realizarDump() {
 // --- 1. Construcción del Comando ---

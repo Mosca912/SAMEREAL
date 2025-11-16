@@ -8,6 +8,7 @@ package VISTA;
 import CONEXIONES.Conexiones;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.event.KeyEvent;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -82,6 +83,7 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
         iniciarsesion1.setVisible(true);
         cambiarcont.setVisible(true);
         cerrarsesion.setVisible(false);
+        eliminaruser.setVisible(false);
         MostOcPass.setVisible(true);
     }
 
@@ -145,6 +147,7 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
         Configuracion.setEnabled(false);
         cerrarsesion.setVisible(false);
         modificaruser.setVisible(false);
+        eliminaruser.setVisible(false);
         Datos.setText("");
 
         registrarse.setVisible(false);
@@ -174,6 +177,7 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
         if (rango == 1) {
             registrarse.setVisible(true);
             modificaruser.setVisible(true);
+            eliminaruser.setVisible(true);
         }
 
         int newuser = CLASES.Usuario.Verificacion(con);
@@ -207,20 +211,35 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
         MostOcPass = new javax.swing.JButton();
         Datos = new javax.swing.JLabel();
         modificaruser = new javax.swing.JButton();
+        eliminaruser = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         Barra = new javax.swing.JMenuBar();
         Menu = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
         Movimientos = new javax.swing.JMenu();
         iniciomov = new javax.swing.JMenuItem();
-        nuevtrip = new javax.swing.JMenuItem();
-        nuevovic = new javax.swing.JMenuItem();
         historial = new javax.swing.JMenuItem();
+        jMenu3 = new javax.swing.JMenu();
+        jMenuItem4 = new javax.swing.JMenuItem();
+        jMenuItem5 = new javax.swing.JMenuItem();
+        jMenuItem6 = new javax.swing.JMenuItem();
+        jMenu4 = new javax.swing.JMenu();
+        jMenuItem7 = new javax.swing.JMenuItem();
+        jMenuItem8 = new javax.swing.JMenuItem();
+        jMenuItem9 = new javax.swing.JMenuItem();
         Asistencia = new javax.swing.JMenu();
         Empleados = new javax.swing.JMenu();
         inicemp = new javax.swing.JMenuItem();
         cargoemp = new javax.swing.JMenu();
+        jMenuItem10 = new javax.swing.JMenuItem();
         mod = new javax.swing.JMenuItem();
         elim = new javax.swing.JMenuItem();
+        jMenu5 = new javax.swing.JMenu();
+        jMenuItem11 = new javax.swing.JMenuItem();
+        jMenuItem12 = new javax.swing.JMenuItem();
+        jMenuItem13 = new javax.swing.JMenuItem();
         Estadisticas = new javax.swing.JMenu();
         Ayuda = new javax.swing.JMenu();
         Configuracion = new javax.swing.JMenu();
@@ -237,6 +256,7 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Bienvenido al sistema de SAME 107");
         setUndecorated(true);
+        setPreferredSize(new java.awt.Dimension(1200, 700));
         setResizable(false);
 
         Fondo.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -272,8 +292,14 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
         contrasena.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)), "Contraseña", javax.swing.border.TitledBorder.LEADING, javax.swing.border.TitledBorder.ABOVE_TOP, new java.awt.Font("Tahoma", 1, 14))); // NOI18N
         contrasena.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         contrasena.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                contrasenaKeyPressed(evt);
+            }
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 contrasenaKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                contrasenaKeyTyped(evt);
             }
         });
         menuinicio.add(contrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 170, 190, 40));
@@ -286,6 +312,7 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
         registrarse.setToolTipText("Registrar un nuevo usuario");
         registrarse.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         registrarse.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        registrarse.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         registrarse.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 registrarseActionPerformed(evt);
@@ -363,12 +390,28 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
         modificaruser.setText("Modificar Usuario");
         modificaruser.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         modificaruser.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        modificaruser.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         modificaruser.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 modificaruserActionPerformed(evt);
             }
         });
-        menuinicio.add(modificaruser, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 170, 200, 50));
+        menuinicio.add(modificaruser, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 130, 250, 50));
+
+        eliminaruser.setBackground(new java.awt.Color(52, 170, 121));
+        eliminaruser.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        eliminaruser.setForeground(new java.awt.Color(255, 255, 255));
+        eliminaruser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/x.png"))); // NOI18N
+        eliminaruser.setText("Eliminar");
+        eliminaruser.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        eliminaruser.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        eliminaruser.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        eliminaruser.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                eliminaruserActionPerformed(evt);
+            }
+        });
+        menuinicio.add(eliminaruser, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 200, 250, 50));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
         jLabel3.setText("SAME TRANSPORTE");
@@ -403,6 +446,34 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
         Menu.setToolTipText("Menu");
         Menu.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         Menu.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+
+        jMenuItem1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jMenuItem1.setText("Nuevo usuario");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        Menu.add(jMenuItem1);
+
+        jMenuItem2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jMenuItem2.setText("Modificar usuario");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        Menu.add(jMenuItem2);
+
+        jMenuItem3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jMenuItem3.setText("Eliminar usuario");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        Menu.add(jMenuItem3);
+
         Barra.add(Menu);
 
         Movimientos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/movimiento.png"))); // NOI18N
@@ -424,25 +495,6 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
         });
         Movimientos.add(iniciomov);
 
-        nuevtrip.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        nuevtrip.setText("Nueva tripulación");
-        nuevtrip.setToolTipText("");
-        nuevtrip.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                nuevtripActionPerformed(evt);
-            }
-        });
-        Movimientos.add(nuevtrip);
-
-        nuevovic.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        nuevovic.setText("Nuevo victor");
-        nuevovic.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                nuevovicActionPerformed(evt);
-            }
-        });
-        Movimientos.add(nuevovic);
-
         historial.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         historial.setText("Historial");
         historial.addActionListener(new java.awt.event.ActionListener() {
@@ -451,6 +503,75 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
             }
         });
         Movimientos.add(historial);
+
+        jMenu3.setText("Tripulación");
+        jMenu3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jMenu3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+
+        jMenuItem4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jMenuItem4.setText("Nuevo");
+        jMenuItem4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem4);
+
+        jMenuItem5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jMenuItem5.setText("Modificar");
+        jMenuItem5.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem5);
+
+        jMenuItem6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jMenuItem6.setText("Eliminar");
+        jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem6ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem6);
+
+        Movimientos.add(jMenu3);
+
+        jMenu4.setText("Victor");
+        jMenu4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jMenu4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jMenu4.setHideActionText(true);
+
+        jMenuItem7.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jMenuItem7.setText("Nuevo");
+        jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem7ActionPerformed(evt);
+            }
+        });
+        jMenu4.add(jMenuItem7);
+
+        jMenuItem8.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jMenuItem8.setText("Modificar");
+        jMenuItem8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem8ActionPerformed(evt);
+            }
+        });
+        jMenu4.add(jMenuItem8);
+
+        jMenuItem9.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jMenuItem9.setText("Eliminar");
+        jMenuItem9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem9ActionPerformed(evt);
+            }
+        });
+        jMenu4.add(jMenuItem9);
+
+        Movimientos.add(jMenu4);
 
         Barra.add(Movimientos);
 
@@ -472,6 +593,7 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
 
         inicemp.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         inicemp.setText("Inicio");
+        inicemp.setCursor(new java.awt.Cursor(java.awt.Cursor.MOVE_CURSOR));
         inicemp.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 inicempActionPerformed(evt);
@@ -481,7 +603,17 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
 
         cargoemp.setBackground(new java.awt.Color(52, 170, 121));
         cargoemp.setText("Cargo");
+        cargoemp.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cargoemp.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+
+        jMenuItem10.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jMenuItem10.setText("Nuevo");
+        jMenuItem10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem10ActionPerformed(evt);
+            }
+        });
+        cargoemp.add(jMenuItem10);
 
         mod.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         mod.setText("Modificar");
@@ -502,6 +634,39 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
         cargoemp.add(elim);
 
         Empleados.add(cargoemp);
+
+        jMenu5.setText("Area");
+        jMenu5.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jMenu5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+
+        jMenuItem11.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jMenuItem11.setText("Nueva");
+        jMenuItem11.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem11ActionPerformed(evt);
+            }
+        });
+        jMenu5.add(jMenuItem11);
+
+        jMenuItem12.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jMenuItem12.setText("Modificar");
+        jMenuItem12.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem12ActionPerformed(evt);
+            }
+        });
+        jMenu5.add(jMenuItem12);
+
+        jMenuItem13.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jMenuItem13.setText("Eliminar");
+        jMenuItem13.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem13ActionPerformed(evt);
+            }
+        });
+        jMenu5.add(jMenuItem13);
+
+        Empleados.add(jMenu5);
 
         Barra.add(Empleados);
 
@@ -561,29 +726,10 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
         this.dispose();
     }//GEN-LAST:event_iniciomovActionPerformed
 
-    private void nuevtripActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevtripActionPerformed
-        AddTri ventana = new AddTri(0, this);
-        if (rango == 1) {
-            ventana.setVisible(true);
-        } else {
-            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
-        }
-    }//GEN-LAST:event_nuevtripActionPerformed
-
     private void historialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_historialActionPerformed
         Historial ventana = new Historial(this);
         ventana.setVisible(true);
     }//GEN-LAST:event_historialActionPerformed
-
-    private void nuevovicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevovicActionPerformed
-        int ban = 0;
-        AddVic ventana = new AddVic(this, ban);
-        if (rango == 1) {
-            ventana.setVisible(true);
-        } else {
-            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
-        }
-    }//GEN-LAST:event_nuevovicActionPerformed
 
     private void modActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modActionPerformed
         ModElimCargo1 ventana = new ModElimCargo1(1, this);
@@ -650,6 +796,7 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
             if (rango == 1) {
                 registrarse.setVisible(true);
                 modificaruser.setVisible(true);
+                eliminaruser.setVisible(true);
             }
         } else {
             JOptionPane.showMessageDialog(null, "¡HAY CAMPOS VACIOS! Por favor, revise");
@@ -711,6 +858,10 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
             getToolkit().beep();
             evt.consume();
         }
+
+        if (DNI.getText().length() >= 15) {
+            evt.consume();
+        }
     }//GEN-LAST:event_DNIKeyTyped
 
     private void AyudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AyudaActionPerformed
@@ -738,6 +889,146 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
             iniciarsesion1.requestFocus();
         }
     }//GEN-LAST:event_contrasenaKeyReleased
+
+    private void contrasenaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_contrasenaKeyTyped
+        if (contrasena.getText().length() >= 99) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_contrasenaKeyTyped
+
+    private void contrasenaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_contrasenaKeyPressed
+
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            iniciarsesion1.doClick();
+        }
+    }//GEN-LAST:event_contrasenaKeyPressed
+
+    private void eliminaruserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eliminaruserActionPerformed
+        AddDelUser ventana = new AddDelUser(this, 1);
+        ventana.setVisible(true);
+    }//GEN-LAST:event_eliminaruserActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        RegistrarFrm ventana = new RegistrarFrm(this, 1);
+        if (rango == 1) {
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
+        int ban = 1;
+        AddDelVicTrip ventana = new AddDelVicTrip(this, ban);
+        if (rango == 1) {
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
+    }//GEN-LAST:event_jMenuItem6ActionPerformed
+
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        AddTri ventana = new AddTri(0, this);
+        if (rango == 1) {
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
+
+    private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
+        int ban = 0;
+        AddVic ventana = new AddVic(this, ban);
+        if (rango == 1) {
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
+    }//GEN-LAST:event_jMenuItem7ActionPerformed
+
+    private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
+        int ban = 1;
+        AddVic ventana = new AddVic(this, ban);
+        if (rango == 1) {
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
+    }//GEN-LAST:event_jMenuItem8ActionPerformed
+
+    private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem9ActionPerformed
+        int ban = 0;
+        AddDelVicTrip ventana = new AddDelVicTrip(this, ban);
+        if (rango == 1) {
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
+    }//GEN-LAST:event_jMenuItem9ActionPerformed
+
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        AddTri ventana = new AddTri(1, this);
+        if (rango == 1) {
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        RegistrarFrm ventana = new RegistrarFrm(this, 2);
+        if (rango == 1) {
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        AddDelUser ventana = new AddDelUser(this, 1);
+        if (rango == 1) {
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void jMenuItem10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem10ActionPerformed
+        AddAreaCargo ventana3 = new AddAreaCargo(this, 1);
+        if (rango == 1) {
+            ventana3.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
+    }//GEN-LAST:event_jMenuItem10ActionPerformed
+
+    private void jMenuItem12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem12ActionPerformed
+        ModElimArea1 ventana = new ModElimArea1(1, this);
+        if (rango == 1) {
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
+
+    }//GEN-LAST:event_jMenuItem12ActionPerformed
+
+    private void jMenuItem11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem11ActionPerformed
+        AddAreaCargo ventana3 = new AddAreaCargo(this, 0);
+        if (rango == 1) {
+            ventana3.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
+    }//GEN-LAST:event_jMenuItem11ActionPerformed
+
+    private void jMenuItem13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem13ActionPerformed
+        ModElimArea1 ventana = new ModElimArea1(0, this);
+        if (rango == 1) {
+            ventana.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Es un usuario lector!");
+        }
+    }//GEN-LAST:event_jMenuItem13ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -802,6 +1093,7 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
     private javax.swing.JButton cerrarsesion;
     private javax.swing.JPasswordField contrasena;
     private javax.swing.JMenuItem elim;
+    private javax.swing.JButton eliminaruser;
     private javax.swing.JMenuItem historial;
     private javax.swing.JMenuItem inicemp;
     private javax.swing.JButton iniciarsesion1;
@@ -809,15 +1101,29 @@ public final class Menu extends javax.swing.JFrame implements CLASES.IBlockableF
     private javax.swing.JLabel jLabel3;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenu jMenu4;
+    private javax.swing.JMenu jMenu5;
     private javax.swing.JMenu jMenu7;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem10;
+    private javax.swing.JMenuItem jMenuItem11;
+    private javax.swing.JMenuItem jMenuItem12;
+    private javax.swing.JMenuItem jMenuItem13;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JMenuItem jMenuItem6;
+    private javax.swing.JMenuItem jMenuItem7;
+    private javax.swing.JMenuItem jMenuItem8;
+    private javax.swing.JMenuItem jMenuItem9;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel labelogin;
     private javax.swing.JPanel menuinicio;
     private javax.swing.JMenuItem mod;
     private javax.swing.JButton modificaruser;
-    private javax.swing.JMenuItem nuevovic;
-    private javax.swing.JMenuItem nuevtrip;
     private javax.swing.JButton registrarse;
     // End of variables declaration//GEN-END:variables
 }

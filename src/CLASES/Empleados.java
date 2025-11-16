@@ -182,8 +182,8 @@ public class Empleados {
 
     }
 
-    public static void AgregarEmpleados(Connection conexion, String Nombre, String Apellido, String DNI, String Domicilio, String Email, String Telefono, String Fecha, String Grupo, String Cargo, int iduser) throws SQLException {
-
+    public static int AgregarEmpleados(Connection conexion, String Nombre, String Apellido, String DNI, String Domicilio, String Email, String Telefono, String Fecha, String Grupo, String Cargo, int iduser) throws SQLException {
+        int validacionunique = 0;
         int gs = 0;
         int car = 0;
 
@@ -221,6 +221,7 @@ public class Empleados {
             if (filasAfectadas > 0) {
                 try (java.sql.ResultSet rs = stm.getGeneratedKeys()) {
                     if (rs.next()) {
+                        validacionunique = 1;
                         int nuevoIdEmpleado = rs.getInt(1);
                         PreparedStatement stm4 = conexion.prepareStatement("INSERT INTO auditoria_empleado (evento, id_empleado, id_usuario) VALUES (?, ?, ?)");
                         stm4.setString(1, "NUEVO_EMPLEADO");
@@ -232,15 +233,26 @@ public class Empleados {
                             JOptionPane.showMessageDialog(null, "ERROR12" + e);
                         }
                     } else {
-                        System.out.println("⚠️ Insertado, pero no se pudo obtener el ID.");
+                        System.out.println("Insertado, pero no se pudo obtener el ID.");
                     }
                 }
             } else {
-                System.out.println("❌ Error: No se insertó ninguna fila.");
+                System.out.println("Error: No se insertó ninguna fila.");
             }
-        } catch (java.sql.SQLException e) {
-            JOptionPane.showMessageDialog(null, "Error en la inserción: " + e.getMessage());
+        } catch (SQLException e) {
+            int errorCode = e.getErrorCode();
+            if (errorCode == 1062) {
+                // Mensaje Personalizado para DNI/Correo Repetido
+                JOptionPane.showMessageDialog(null,
+                        "Error: El DNI o el correo electrónico que intentás ingresar ya existen en el sistema. Deben ser únicos.",
+                        "Error de Registro Duplicado", // Título de la ventana
+                        JOptionPane.ERROR_MESSAGE);
+            } else {
+                // Si es cualquier otro error de SQL, mostramos el mensaje genérico
+                JOptionPane.showMessageDialog(null, "ERROR SQL no esperado: " + e.getMessage());
+            }
         }
+        return validacionunique;
     }
 
     public static void EliminarEmpleados(Connection conexion, int Codigo, int borrado, int iduser) throws SQLException {
@@ -382,8 +394,8 @@ public class Empleados {
         }
     }
 
-    public static void ModificarEmpleados(Connection conexion, int id, String Nombre, String Apellido, String DNI, String Domicilio, String Email, String Telefono, String Fecha, String Grupo, String Cargo, int iduser) throws SQLException {
-
+    public static int ModificarEmpleados(Connection conexion, int id, String Nombre, String Apellido, String DNI, String Domicilio, String Email, String Telefono, String Fecha, String Grupo, String Cargo, int iduser) throws SQLException {
+        int validacionunique = 0;
         int gs = 0;
         int car = 0;
 
@@ -415,6 +427,7 @@ public class Empleados {
 
         try {
             stm.execute();
+            validacionunique = 1;
             PreparedStatement stm4 = conexion.prepareStatement("INSERT INTO auditoria_empleado (evento, id_empleado, id_usuario) VALUES (?, ?, ?)");
             stm4.setString(1, "ACTUALIZACIÓN_USUARIO");
             stm4.setInt(2, id);
@@ -424,9 +437,20 @@ public class Empleados {
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, "ERROR12" + e);
             }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "ERROR12" + e);
+        } catch (SQLException e) {
+            int errorCode = e.getErrorCode();
+            if (errorCode == 1062) {
+                // Mensaje Personalizado para DNI/Correo Repetido
+                JOptionPane.showMessageDialog(null,
+                        "Error: El DNI o el correo electrónico que intentás ingresar ya existen en el sistema. Deben ser únicos.",
+                        "Error de Registro Duplicado", // Título de la ventana
+                        JOptionPane.ERROR_MESSAGE);
+            } else {
+                // Si es cualquier otro error de SQL, mostramos el mensaje genérico
+                JOptionPane.showMessageDialog(null, "ERROR SQL no esperado: " + e.getMessage());
+            }
         }
+        return validacionunique;
     }
 
     public static int Validacion(Connection conexion, int Codigo) throws SQLException {

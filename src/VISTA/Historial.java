@@ -11,6 +11,7 @@ import java.awt.Color;
 import java.awt.Image;
 import java.awt.event.*;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.logging.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -62,7 +63,7 @@ public class Historial extends javax.swing.JDialog{
 
     Connection con = Conexiones.Conexion();
     ResultSet rs;
-    int id, band;
+    int id, band, mesActual, indice;
     String veri, fechaFormateada;
 
     public Historial(JFrame ventanaPrincipal) {
@@ -84,9 +85,10 @@ public class Historial extends javax.swing.JDialog{
         Tabla.setModel(tabla1);
         Tabla.getTableHeader().setReorderingAllowed(false);
         this.setLocationRelativeTo(null);
-
+        mesActual = LocalDate.now().getMonthValue();
+        titulo.setText("Historial de movimientos - mes "+mesActual);
         try {
-            CLASES.Movimientos.MostrarHist(con, tabla1, Tabla);
+            CLASES.Movimientos.MostrarHist(con, tabla1, Tabla, mesActual);
         } catch (SQLException ex) {
             Logger.getLogger(Historial.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -147,7 +149,8 @@ public class Historial extends javax.swing.JDialog{
         Tabla = new javax.swing.JTable();
         Salir = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        titulo = new javax.swing.JLabel();
+        mes = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Historial");
@@ -183,26 +186,37 @@ public class Historial extends javax.swing.JDialog{
         jPanel2.setBackground(new java.awt.Color(52, 170, 121));
         jPanel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("Historial de Movimientos");
+        titulo.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
+        titulo.setForeground(new java.awt.Color(255, 255, 255));
+        titulo.setText("Historial de Movimientos");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(117, 117, 117))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(37, 37, 37)
+                .addComponent(titulo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(titulo, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(19, Short.MAX_VALUE))
         );
+
+        mes.setBackground(new java.awt.Color(78, 247, 177));
+        mes.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        mes.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Opciones", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" }));
+        mes.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED), "Mes"));
+        mes.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        mes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mesActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout FondoLayout = new javax.swing.GroupLayout(Fondo);
         Fondo.setLayout(FondoLayout);
@@ -214,7 +228,8 @@ public class Historial extends javax.swing.JDialog{
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 698, Short.MAX_VALUE)
                     .addGroup(FondoLayout.createSequentialGroup()
                         .addComponent(Salir, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(mes, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -226,7 +241,9 @@ public class Historial extends javax.swing.JDialog{
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 440, Short.MAX_VALUE)
                 .addGap(28, 28, 28)
-                .addComponent(Salir, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(Salir, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(mes))
                 .addContainerGap())
         );
 
@@ -238,6 +255,27 @@ public class Historial extends javax.swing.JDialog{
     private void SalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SalirActionPerformed
         this.dispose();
     }//GEN-LAST:event_SalirActionPerformed
+
+    private void mesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mesActionPerformed
+        indice = mes.getSelectedIndex();
+        if (indice != 0) {
+            try {
+                tabla1.setRowCount(0);
+                CLASES.Movimientos.MostrarHist(con, tabla1, Tabla, indice);
+                titulo.setText("Historial de movimientos - mes "+indice);
+            } catch (SQLException ex) {
+                Logger.getLogger(Historial.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            try {
+                tabla1.setRowCount(0);
+                CLASES.Movimientos.MostrarHist(con, tabla1, Tabla, mesActual);
+                titulo.setText("Historial de movimientos - mes "+mesActual);
+            } catch (SQLException ex) {
+                Logger.getLogger(Historial.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_mesActionPerformed
 
     /**
      * @param args the command line arguments
@@ -281,8 +319,9 @@ public class Historial extends javax.swing.JDialog{
     private javax.swing.JPanel Fondo;
     private javax.swing.JButton Salir;
     private javax.swing.JTable Tabla;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JComboBox<String> mes;
+    private javax.swing.JLabel titulo;
     // End of variables declaration//GEN-END:variables
 }
