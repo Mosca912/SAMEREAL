@@ -39,7 +39,6 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -587,7 +586,7 @@ public class Asistencia {
                             JOptionPane.showMessageDialog(null, "ERROR: " + e);
                         }
                     } catch (Exception e) {
-                        JOptionPane.showMessageDialog(null, "ERRORXD" + e);
+                        JOptionPane.showMessageDialog(null, "ERROR" + e);
                     }
                 }
             }
@@ -808,67 +807,6 @@ public class Asistencia {
         }
     }
 
-    /*
-    private static PdfPTable crearTablaAsistencia(int inicio, int fin, Map<Integer, String[]> registros, Font fontHeader, Font fontNormal) {
-        PdfPTable tabla = new PdfPTable(4);
-        tabla.setWidthPercentage(100);
-        tabla.setHeaderRows(1);
-
-        String[] headers = {"Día", "Entrada", "Salida", "Observación"};
-        for (String h : headers) {
-            PdfPCell header = new PdfPCell(new Phrase(h, fontHeader));
-            header.setBackgroundColor(BaseColor.DARK_GRAY);
-            header.setHorizontalAlignment(Element.ALIGN_CENTER);
-            header.setPadding(5);
-            tabla.addCell(header);
-        }
-// Define el valor de padding que quieres usar (ej: 5f para 5 puntos)
-        float paddingValue = 5f;
-
-        for (int i = inicio; i <= fin; i++) {
-            // Celda para el valor de 'i'
-            PdfPCell cellI = new PdfPCell(new Phrase(String.valueOf(i), fontNormal));
-            cellI.setPadding(paddingValue); // <--- APLICA EL RELLENO AQUÍ
-            tabla.addCell(cellI);
-
-            if (registros.containsKey(i)) {
-                String[] datos = registros.get(i);
-
-                // Celda para Entrada
-                PdfPCell cellEntrada = new PdfPCell(new Phrase(datos[0], fontNormal));
-                cellEntrada.setPadding(paddingValue); // <--- APLICA EL RELLENO
-                tabla.addCell(cellEntrada);
-
-                // Celda para Salida
-                PdfPCell cellSalida = new PdfPCell(new Phrase(datos[1], fontNormal));
-                cellSalida.setPadding(paddingValue); // <--- APLICA EL RELLENO
-                tabla.addCell(cellSalida);
-
-                // Celda para Observación
-                PdfPCell cellObservacion = new PdfPCell(new Phrase(datos[2], fontNormal));
-                cellObservacion.setPadding(paddingValue); // <--- APLICA EL RELLENO
-                tabla.addCell(cellObservacion);
-
-            } else {
-                // Celdas vacías
-
-                PdfPCell emptyCell1 = new PdfPCell(new Phrase("", fontNormal));
-                emptyCell1.setPadding(paddingValue); // <--- APLICA EL RELLENO
-                tabla.addCell(emptyCell1);
-
-                PdfPCell emptyCell2 = new PdfPCell(new Phrase("", fontNormal));
-                emptyCell2.setPadding(paddingValue); // <--- APLICA EL RELLENO
-                tabla.addCell(emptyCell2);
-
-                PdfPCell emptyCell3 = new PdfPCell(new Phrase("", fontNormal));
-                emptyCell3.setPadding(paddingValue); // <--- APLICA EL RELLENO
-                tabla.addCell(emptyCell3);
-            }
-        }
-
-        return tabla;
-    }
-     */
     public static void AsistenciaReal(Connection conexion, int id, int iduser) throws SQLException {
         mesActual = LocalDate.now().getMonthValue();
         yearact = LocalDate.now().getYear();
@@ -1020,49 +958,6 @@ public class Asistencia {
 
             System.out.println("✅ PDF generado correctamente en: " + rutaGuardado);
         }
-    }
-
-    private static Timer timer = null;
-
-    public static void iniciarContador(Connection conexion, LocalDateTime entrada, JLabel destinoLabel) {
-        if (timer != null && timer.isRunning()) {
-            timer.stop();
-        }
-
-        timer = new Timer(1000, (ActionEvent e) -> {
-            LocalDateTime ahora = LocalDateTime.now();
-            long minutosTotales = ChronoUnit.MINUTES.between(entrada, ahora);
-            long horas = minutosTotales / 60;
-            long minutos = minutosTotales % 60;
-
-            if (horas < 8) {
-                destinoLabel.setText("Transcurrido: " + horas + "h " + minutos + "min");
-            } else {
-                // 🚨 Alcanzó 8 horas
-                int opcion = JOptionPane.showConfirmDialog(
-                        null,
-                        "Se alcanzaron las 8 horas. ¿Querés finalizar el turno?",
-                        "Confirmar fin de turno",
-                        JOptionPane.YES_NO_OPTION
-                );
-
-                if (opcion == JOptionPane.YES_OPTION) {
-                    destinoLabel.setText("Turno finalizado");
-                    ((Timer) e.getSource()).stop();
-                    try {
-                        PreparedStatement stm = conexion.prepareStatement("UPDATE asistencia SET activo=0");
-                        stm.executeUpdate();
-                    } catch (SQLException ex) {
-                        Logger.getLogger(Asistencia.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                } else {
-                    destinoLabel.setText("Superadas 8h (esperando cierre manual)");
-                    ((Timer) e.getSource()).stop(); // ❌ lo detengo igual
-                }
-            }
-        });
-
-        timer.start(); // ⏯️ Comienza la cuenta
     }
 
     public static void Select(Connection conexion, JComboBox<Area> combo1) {

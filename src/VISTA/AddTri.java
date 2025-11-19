@@ -271,7 +271,7 @@ public class AddTri extends javax.swing.JDialog {
                 JOptionPane.showMessageDialog(null, "Carga correcta!");
                 this.dispose();
             } catch (HeadlessException e) {
-                JOptionPane.showMessageDialog(null, "ERROR1");
+                JOptionPane.showMessageDialog(null, "ERROR"+ e);
             } catch (SQLException ex) {
                 Logger.getLogger(AddTri.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -290,7 +290,7 @@ public class AddTri extends javax.swing.JDialog {
                     JOptionPane.showMessageDialog(null, "Actualizado!");
                     this.dispose();
                 } catch (HeadlessException e) {
-                    JOptionPane.showMessageDialog(null, "ERROR1");
+                    JOptionPane.showMessageDialog(null, "ERROR"+ e);
                 } catch (SQLException ex) {
                     Logger.getLogger(AddTri.class.getName()).log(Level.SEVERE, null, ex);
                 }

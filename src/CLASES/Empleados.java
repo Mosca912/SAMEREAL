@@ -230,7 +230,7 @@ public class Empleados {
                         try {
                             stm4.execute();
                         } catch (Exception e) {
-                            JOptionPane.showMessageDialog(null, "ERROR12" + e);
+                            JOptionPane.showMessageDialog(null, "ERROR" + e);
                         }
                     } else {
                         System.out.println("Insertado, pero no se pudo obtener el ID.");
@@ -303,7 +303,7 @@ public class Empleados {
         try {
             stm.executeUpdate();
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "ERROR12");
+            JOptionPane.showMessageDialog(null, "ERROR"+ e);
         }
     }
 
@@ -315,7 +315,7 @@ public class Empleados {
         try {
             stm.executeUpdate();
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "ERROR12");
+            JOptionPane.showMessageDialog(null, "ERROR"+ e);
         }
     }
 
@@ -328,7 +328,7 @@ public class Empleados {
         try {
             stm.execute();
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "ERROR12");
+            JOptionPane.showMessageDialog(null, "ERROR"+ e);
         }
     }
 
@@ -340,7 +340,7 @@ public class Empleados {
         try {
             stm.execute();
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "ERROR12");
+            JOptionPane.showMessageDialog(null, "ERROR"+ e);
         }
     }
 
@@ -390,7 +390,7 @@ public class Empleados {
         try {
 
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "ERROR12" + e);
+            JOptionPane.showMessageDialog(null, "ERROR" + e);
         }
     }
 
@@ -435,7 +435,7 @@ public class Empleados {
             try {
                 stm4.execute();
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, "ERROR12" + e);
+                JOptionPane.showMessageDialog(null, "ERROR" + e);
             }
         } catch (SQLException e) {
             int errorCode = e.getErrorCode();
@@ -473,7 +473,7 @@ public class Empleados {
                     stm2.executeUpdate();
                     resultado = 1;
                 } catch (Exception e) {
-                    JOptionPane.showMessageDialog(null, "ERROR12");
+                    JOptionPane.showMessageDialog(null, "ERROR"+ e);
                 }
             } else if (opcion == JOptionPane.CANCEL_OPTION || opcion == JOptionPane.CLOSED_OPTION) {
                 // El usuario eligió "Cancelar" o cerró la ventana
@@ -503,7 +503,7 @@ public class Empleados {
                 try {
                     stm.executeUpdate();
                 } catch (Exception e) {
-                    JOptionPane.showMessageDialog(null, "ERROR12");
+                    JOptionPane.showMessageDialog(null, "ERROR"+ e);
                 }
             }
         }
@@ -519,7 +519,7 @@ public class Empleados {
         try {
             stm2.executeUpdate();
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "ERROR12");
+            JOptionPane.showMessageDialog(null, "ERROR"+ e);
         }
 
     }

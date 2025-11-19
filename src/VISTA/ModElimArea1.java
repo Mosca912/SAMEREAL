@@ -286,7 +286,7 @@ public class ModElimArea1 extends javax.swing.JDialog {
                 tabla1.setRowCount(0);
                 CLASES.Empleados.MostrarCargo(con, tabla1);
             } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null, "ERROR1" + ex);
+                JOptionPane.showMessageDialog(null, "ERROR" + ex);
             }
         }
     }//GEN-LAST:event_BotonActionPerformed

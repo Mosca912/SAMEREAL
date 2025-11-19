@@ -358,7 +358,7 @@ public class Usuario {
                 } else {
                     valid = 0;
                     rango = 0;
-                    JOptionPane.showMessageDialog(null, "Contraseña pifiada");
+                    JOptionPane.showMessageDialog(null, "Contraseña Incorrecta");
                 }
             } else {
                 JOptionPane.showMessageDialog(null, "DNI Incorrecto!");

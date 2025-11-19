@@ -69,19 +69,19 @@ public class Dump {
             int exitCode = proceso.waitFor();
 
             if (exitCode == 0) {
-                System.out.println("✅ Dump de la base de datos completado con éxito.");
+                System.out.println("Dump de la base de datos completado con éxito.");
                 System.out.println("   Archivo guardado en: " + RUTA_SALIDA_DUMP);
             } else {
-                System.err.println("❌ ERROR: El proceso mysqldump falló.");
+                System.err.println("ERROR: El proceso mysqldump falló.");
                 System.err.println("   Código de salida: " + exitCode + ". Revise las credenciales y el nombre de la BD.");
             }
 
         } catch (IOException e) {
             // Error de Java si no encuentra la ruta de mysqldump (ej: CreateProcess error=2)
-            System.err.println("\n❌ ERROR IO: No se pudo ejecutar el programa.");
+            System.err.println("ERROR IO: No se pudo ejecutar el programa.");
             System.err.println("   Verifique que la RUTA_MYSQLDUMP sea correcta: " + RUTA_MYSQLDUMP);
         } catch (InterruptedException e) {
-            System.err.println("❌ ERROR: El proceso fue interrumpido.");
+            System.err.println("ERROR: El proceso fue interrumpido.");
         }
     }
 }

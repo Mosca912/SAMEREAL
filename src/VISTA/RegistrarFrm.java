@@ -373,7 +373,7 @@ public class RegistrarFrm extends javax.swing.JDialog {
             evt.consume();
         }
         
-        if (DNI.getText().length() >= 44) {
+        if (DNI.getText().length() >= 9) {
             evt.consume();
         }
     }//GEN-LAST:event_DNIKeyTyped

@@ -1593,7 +1593,7 @@ public class Movimiento extends javax.swing.JFrame implements CLASES.IBlockableF
                         try {
                             CLASES.Movimientos.movimientos(con, cod, Salida, Llegada, Km, Destino, NumServicio, band, id, fechaActual, iduser);
                         } catch (SQLException e) {
-                            JOptionPane.showMessageDialog(null, "ERROR1");
+                            JOptionPane.showMessageDialog(null, "ERROR" + e);
                         }
                     }
                 }
@@ -1631,7 +1631,7 @@ public class Movimiento extends javax.swing.JFrame implements CLASES.IBlockableF
                 CLASES.Movimientos.Contador(con, id, cantidad, fechaActual);
                 tabla1.bloquearEdicion();
             } catch (SQLException e) {
-                JOptionPane.showMessageDialog(null, "ERROR1");
+                JOptionPane.showMessageDialog(null, "ERROR" + e);
             }
 
         } else if (band == 1) { //Editar
@@ -1744,7 +1744,7 @@ public class Movimiento extends javax.swing.JFrame implements CLASES.IBlockableF
                     try {
                         CLASES.Movimientos.movimientos(con, cod, Salida, Llegada, Km, Destino, NumServicio, band, id, fechaActual, iduser);
                     } catch (SQLException ex) {
-                        JOptionPane.showMessageDialog(null, "ERROR");
+                        JOptionPane.showMessageDialog(null, "ERROR" + ex);
                     }
                 }
             }
@@ -1781,7 +1781,7 @@ public class Movimiento extends javax.swing.JFrame implements CLASES.IBlockableF
                 tabla1.setRowCount(0);
                 CLASES.Movimientos.MostrarMov(con, tabla1, fechaActual, id);
             } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null, "ERROR1");
+                JOptionPane.showMessageDialog(null, "ERROR" + ex);
             }
         }
     }//GEN-LAST:event_TerminarActionPerformed
@@ -1844,7 +1844,7 @@ public class Movimiento extends javax.swing.JFrame implements CLASES.IBlockableF
                     CLASES.Movimientos.MostrarMov(con, tabla1, fechaActual, id);
                     CLASES.Movimientos.Contador(con, id, cantidad, fechaActual);
                 } catch (SQLException ex) {
-                    JOptionPane.showMessageDialog(null, "ERROR");
+                    JOptionPane.showMessageDialog(null, "ERROR"+ ex);
                 }
             } else if (opcion == JOptionPane.CANCEL_OPTION || opcion == JOptionPane.CLOSED_OPTION) {
                 // El usuario eligió "Cancelar" o cerró la ventana
@@ -1971,56 +1971,56 @@ public class Movimiento extends javax.swing.JFrame implements CLASES.IBlockableF
     }//GEN-LAST:event_TablaKeyTyped
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        RegistrarFrm ventana = new RegistrarFrm(this, 1);
+        RegistrarFrm ventana1 = new RegistrarFrm(this, 1);
         if (rango == 1) {
-            ventana.setVisible(true);
+            ventana1.setVisible(true);
         } else {
             JOptionPane.showMessageDialog(null, "Es un usuario lector!");
         }
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        RegistrarFrm ventana = new RegistrarFrm(this, 2);
+        RegistrarFrm ventana1 = new RegistrarFrm(this, 2);
         if (rango == 1) {
-            ventana.setVisible(true);
+            ventana1.setVisible(true);
         } else {
             JOptionPane.showMessageDialog(null, "Es un usuario lector!");
         }
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-        AddDelUser ventana = new AddDelUser(this, 1);
+        AddDelUser ventana1 = new AddDelUser(this, 1);
         if (rango == 1) {
-            ventana.setVisible(true);
+            ventana1.setVisible(true);
         } else {
             JOptionPane.showMessageDialog(null, "Es un usuario lector!");
         }
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     private void iniciomovActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iniciomovActionPerformed
-        Movimiento ventana = new Movimiento();
-        ventana.setVisible(true);
+        Movimiento ventana1 = new Movimiento();
+        ventana1.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_iniciomovActionPerformed
 
     private void historialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_historialActionPerformed
-        Historial ventana = new Historial(this);
-        ventana.setVisible(true);
+        Historial ventana1 = new Historial(this);
+        ventana1.setVisible(true);
     }//GEN-LAST:event_historialActionPerformed
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
-        AddTri ventana = new AddTri(0, this);
+        AddTri ventana1 = new AddTri(0, this);
         if (rango == 1) {
-            ventana.setVisible(true);
+            ventana1.setVisible(true);
         } else {
             JOptionPane.showMessageDialog(null, "Es un usuario lector!");
         }
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
-        AddTri ventana = new AddTri(1, this);
+        AddTri ventana1 = new AddTri(1, this);
         if (rango == 1) {
-            ventana.setVisible(true);
+            ventana1.setVisible(true);
         } else {
             JOptionPane.showMessageDialog(null, "Es un usuario lector!");
         }
@@ -2028,9 +2028,9 @@ public class Movimiento extends javax.swing.JFrame implements CLASES.IBlockableF
 
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
         int ban = 1;
-        AddDelVicTrip ventana = new AddDelVicTrip(this, ban);
+        AddDelVicTrip ventana1 = new AddDelVicTrip(this, ban);
         if (rango == 1) {
-            ventana.setVisible(true);
+            ventana1.setVisible(true);
         } else {
             JOptionPane.showMessageDialog(null, "Es un usuario lector!");
         }
@@ -2038,9 +2038,9 @@ public class Movimiento extends javax.swing.JFrame implements CLASES.IBlockableF
 
     private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
         int ban = 0;
-        AddVic ventana = new AddVic(this, ban);
+        AddVic ventana1 = new AddVic(this, ban);
         if (rango == 1) {
-            ventana.setVisible(true);
+            ventana1.setVisible(true);
         } else {
             JOptionPane.showMessageDialog(null, "Es un usuario lector!");
         }
@@ -2048,9 +2048,9 @@ public class Movimiento extends javax.swing.JFrame implements CLASES.IBlockableF
 
     private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
         int ban = 1;
-        AddVic ventana = new AddVic(this, ban);
+        AddVic ventana1 = new AddVic(this, ban);
         if (rango == 1) {
-            ventana.setVisible(true);
+            ventana1.setVisible(true);
         } else {
             JOptionPane.showMessageDialog(null, "Es un usuario lector!");
         }
@@ -2058,29 +2058,29 @@ public class Movimiento extends javax.swing.JFrame implements CLASES.IBlockableF
 
     private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem9ActionPerformed
         int ban = 0;
-        AddDelVicTrip ventana = new AddDelVicTrip(this, ban);
+        AddDelVicTrip ventana1 = new AddDelVicTrip(this, ban);
         if (rango == 1) {
-            ventana.setVisible(true);
+            ventana1.setVisible(true);
         } else {
             JOptionPane.showMessageDialog(null, "Es un usuario lector!");
         }
     }//GEN-LAST:event_jMenuItem9ActionPerformed
 
     private void MovimientosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MovimientosActionPerformed
-        Movimiento ventana = new Movimiento();
-        ventana.setVisible(true);
+        Movimiento ventana1 = new Movimiento();
+        ventana1.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_MovimientosActionPerformed
 
     private void AsistenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AsistenciaActionPerformed
-        Asistencia ventana = new Asistencia();
-        ventana.setVisible(true);
+        Asistencia ventana1 = new Asistencia();
+        ventana1.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_AsistenciaActionPerformed
 
     private void inicempActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inicempActionPerformed
-        Empleados ventana = new Empleados();
-        ventana.setVisible(true);
+        Empleados ventana1 = new Empleados();
+        ventana1.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_inicempActionPerformed
 
@@ -2094,18 +2094,18 @@ public class Movimiento extends javax.swing.JFrame implements CLASES.IBlockableF
     }//GEN-LAST:event_jMenuItem10ActionPerformed
 
     private void modActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modActionPerformed
-        ModElimCargo1 ventana = new ModElimCargo1(1, this);
+        ModElimCargo1 ventana1 = new ModElimCargo1(1, this);
         if (rango == 1) {
-            ventana.setVisible(true);
+            ventana1.setVisible(true);
         } else {
             JOptionPane.showMessageDialog(null, "Es un usuario lector!");
         }
     }//GEN-LAST:event_modActionPerformed
 
     private void elimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_elimActionPerformed
-        ModElimCargo1 ventana = new ModElimCargo1(0, this);
+        ModElimCargo1 ventana1 = new ModElimCargo1(0, this);
         if (rango == 1) {
-            ventana.setVisible(true);
+            ventana1.setVisible(true);
         } else {
             JOptionPane.showMessageDialog(null, "Es un usuario lector!");
         }
@@ -2121,18 +2121,18 @@ public class Movimiento extends javax.swing.JFrame implements CLASES.IBlockableF
     }//GEN-LAST:event_jMenuItem11ActionPerformed
 
     private void jMenuItem12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem12ActionPerformed
-        ModElimArea1 ventana = new ModElimArea1(1, this);
+        ModElimArea1 ventana1 = new ModElimArea1(1, this);
         if (rango == 1) {
-            ventana.setVisible(true);
+            ventana1.setVisible(true);
         } else {
             JOptionPane.showMessageDialog(null, "Es un usuario lector!");
         }
     }//GEN-LAST:event_jMenuItem12ActionPerformed
 
     private void jMenuItem13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem13ActionPerformed
-        ModElimArea1 ventana = new ModElimArea1(0, this);
+        ModElimArea1 ventana1 = new ModElimArea1(0, this);
         if (rango == 1) {
-            ventana.setVisible(true);
+            ventana1.setVisible(true);
         } else {
             JOptionPane.showMessageDialog(null, "Es un usuario lector!");
         }

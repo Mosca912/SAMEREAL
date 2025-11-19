@@ -707,31 +707,31 @@ public class Configuracion extends javax.swing.JFrame {
         if (!carpeta.exists()) {
             boolean creada = carpeta.mkdirs();
             if (creada) {
-                System.out.println("✅ Carpeta creada exitosamente en: " + rutaCarpeta);
+                System.out.println("Carpeta creada exitosamente en: " + rutaCarpeta);
                 if (!carpeta2.exists()) {
                     boolean creada2 = carpeta2.mkdirs();
                     if (creada2) {
-                        System.out.println("✅ Carpeta creada exitosamente en: " + rutaCarpeta2);
+                        System.out.println("Carpeta creada exitosamente en: " + rutaCarpeta2);
                     } else {
-                        System.out.println("❌ Error al intentar crear la carpeta en: " + rutaCarpeta2);
+                        System.out.println("Error al intentar crear la carpeta en: " + rutaCarpeta2);
                     }
                 } else {
-                    System.out.println("⚠️ La carpeta ya existe en: " + rutaCarpeta2);
+                    System.out.println("La carpeta ya existe en: " + rutaCarpeta2);
                 }
             } else {
-                System.out.println("❌ Error al intentar crear la carpeta en: " + rutaCarpeta);
+                System.out.println("Error al intentar crear la carpeta en: " + rutaCarpeta);
             }
         } else {
-            System.out.println("⚠️ La carpeta ya existe en: " + rutaCarpeta);
+            System.out.println("La carpeta ya existe en: " + rutaCarpeta);
             if (!carpeta2.exists()) {
                 boolean creada = carpeta2.mkdirs();
                 if (creada) {
-                    System.out.println("✅ Carpeta creada exitosamente en: " + rutaCarpeta2);
+                    System.out.println("Carpeta creada exitosamente en: " + rutaCarpeta2);
                 } else {
-                    System.out.println("❌ Error al intentar crear la carpeta en: " + rutaCarpeta2);
+                    System.out.println("Error al intentar crear la carpeta en: " + rutaCarpeta2);
                 }
             } else {
-                System.out.println("⚠️ La carpeta ya existe en: " + rutaCarpeta2);
+                System.out.println("La carpeta ya existe en: " + rutaCarpeta2);
             }
         }
         CLASES.Dump.realizarDump();

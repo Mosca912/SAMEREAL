@@ -129,16 +129,16 @@ public class Relevar {
             ps6.setString(1, fechaActual);
             ps6.setInt(2, id);
             ps6.execute();
-            
+
             PreparedStatement stm9 = conexion.prepareStatement("INSERT INTO auditoria_movimientos (evento, id_tripulacion, id_usuario) VALUES (?, ?, ?)");
-                stm9.setString(1, "RELEVO_COMPLETADO");
-                stm9.setInt(2, id);
-                stm9.setInt(3, iduser);
-                try {
-                    stm9.execute();
-                } catch (SQLException e) {
-                    JOptionPane.showMessageDialog(null, "ERROR: " + e);
-                }
+            stm9.setString(1, "RELEVO_COMPLETADO");
+            stm9.setInt(2, id);
+            stm9.setInt(3, iduser);
+            try {
+                stm9.execute();
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, "ERROR: " + e);
+            }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, e);
         }
@@ -163,7 +163,7 @@ public class Relevar {
 
     // Guardar PDF con posiciones absolutas
     public static void guardar(JPanel panelSuperior, JPanel panelIzq1, JPanel panelIzq2, JPanel panelIzqGrande, JPanel panelDerGrande, JPanel panelDerMedio, JPanel panelInferior, JPanel Marcarext, String rutaArchivo, int id) throws Exception {
-
+        int base = CLASES.Usuario.base();
         Document document = new Document(PageSize.A4);
         PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(rutaArchivo));
         document.open();
@@ -178,10 +178,17 @@ public class Relevar {
 
         // 🧩 Agregar al documento
         document.add(img);
-        
+
         PdfContentByte canvas = writer.getDirectContent();
+
         String sql = "SELECT t.idtripulacion, CONCAT(e1.nombre, ' ', e1.apellido) AS cvs, CONCAT(e2.nombre, ' ', e2.apellido) AS medico, CONCAT(e3.nombre, ' ', e3.apellido) AS enfermero, a.victor FROM tripulacion t JOIN empleado e1 ON t.cvs = e1.id_Empleado JOIN empleado e2 ON t.medico = e2.id_Empleado JOIN empleado e3 ON t.enfermero = e3.id_Empleado INNER JOIN ambulancia a ON t.idAmbulancia=a.idAmbulancia WHERE idtripulacion=?;";
+        String sql2 = "SELECT ambulancia.Patente FROM ambulancia WHERE ambulancia.victor = ?";
+        String sql3 = "SELECT Base from base where idBase=?";
         try {
+            LocalDate hoy = LocalDate.now();
+            DateTimeFormatter formatoDeseado = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            String fechaFormateada;
+            fechaFormateada = hoy.format(formatoDeseado);
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
@@ -199,7 +206,7 @@ public class Relevar {
 
                 ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT,
                         new Phrase(med, font),
-                        69, 659, 0);
+                        69, 657, 0);
 
                 ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT,
                         new Phrase(enf, font),
@@ -208,6 +215,29 @@ public class Relevar {
                 ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT,
                         new Phrase(vic, font),
                         240, 692, 0);
+
+                ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT,
+                        new Phrase(fechaFormateada, font),
+                        65, 692, 0);
+                PreparedStatement ps2 = con.prepareStatement(sql2);
+                ps2.setString(1, vic);
+                ResultSet rs2 = ps2.executeQuery();
+                if (rs2.next()) {
+                    String patente = rs2.getString("Patente");
+                    ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT,
+                            new Phrase(patente, font),
+                            415, 692, 0);
+                    PreparedStatement ps3 = con.prepareStatement(sql3);
+                    ps3.setInt(1, base);
+                    ResultSet rs3 = ps3.executeQuery();
+
+                    if (rs3.next()) {
+                        String baseact = rs3.getString("Base");
+                        ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT,
+                                new Phrase(baseact, font),
+                                530, 692, 0);
+                    }
+                }
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "ERROR: " + ex.getMessage());
@@ -310,11 +340,11 @@ public class Relevar {
         document.add(imgInferior);
 
         //segunda pagina
-        document.close();   
+        document.close();
     }
 
     public static void Relevo(Connection conexion, JLabel victor, JLabel anterior, JLabel saliente, JLabel kmi, JLabel kmf, JLabel turno, JLabel serie, int id) {
-        int idamb=0;
+        int idamb = 0;
         String sql = "SELECT SEC_TO_TIME(TIME_TO_SEC(CASE WHEN MAX(llegada) < MIN(salida) THEN ADDTIME(MAX(llegada), '24:00:00') ELSE MAX(llegada) END) - TIME_TO_SEC(MIN(salida))) AS tiempo_total FROM movimientos WHERE idtripulacion = ? GROUP BY idtripulacion;";
         try {
             PreparedStatement ps = conexion.prepareStatement(sql);
@@ -347,7 +377,7 @@ public class Relevar {
             ResultSet rs3 = ps3.executeQuery();
             if (rs3.next()) {
                 victor.setText(rs3.getString("ambulancia.victor"));
-                idamb=rs3.getInt("tripulacion.idAmbulancia");
+                idamb = rs3.getInt("tripulacion.idAmbulancia");
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "ERROR: " + ex.getMessage());
@@ -407,7 +437,7 @@ public class Relevar {
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "ERROR: " + ex.getMessage());
         }
-        
+
     }
 
 }

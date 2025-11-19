@@ -275,7 +275,7 @@ public class Empleados extends javax.swing.JFrame implements CLASES.IBlockableFr
                 JOptionPane.showMessageDialog(null, "No se encontró ningún Empleado.");
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "ERROR13" + e);
+            JOptionPane.showMessageDialog(null, "ERROR" + e);
         }
     }
 
@@ -1140,7 +1140,7 @@ public class Empleados extends javax.swing.JFrame implements CLASES.IBlockableFr
                         }
                         JOptionPane.showMessageDialog(null, "Guardado");
                     } catch (HeadlessException | SQLException e) {
-                        JOptionPane.showMessageDialog(null, "ERROR1");
+                        JOptionPane.showMessageDialog(null, "ERROR "+ e);
                     }
 
                     try {
@@ -1195,7 +1195,7 @@ public class Empleados extends javax.swing.JFrame implements CLASES.IBlockableFr
                         }
                         JOptionPane.showMessageDialog(null, "Actualizado");
                     } catch (Exception e) {
-                        JOptionPane.showMessageDialog(null, "ERROR1");
+                        JOptionPane.showMessageDialog(null, "ERROR "+e);
                     }
 
                     try {
@@ -1327,7 +1327,7 @@ public class Empleados extends javax.swing.JFrame implements CLASES.IBlockableFr
             evt.consume();
         }
         
-        if (DNI.getText().length() >= 44) {
+        if (DNI.getText().length() >= 9) {
             evt.consume();
         }
     }//GEN-LAST:event_DNIKeyTyped

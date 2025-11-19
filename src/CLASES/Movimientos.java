@@ -516,7 +516,7 @@ public class Movimientos {
                             try {
                                 stm4.execute();
                             } catch (SQLException e) {
-                                JOptionPane.showMessageDialog(null, "ERROR12" + e);
+                                JOptionPane.showMessageDialog(null, "ERROR" + e);
                             }
                         } else {
                             System.out.println("⚠️ Insertado, pero no se pudo obtener el ID.");
@@ -526,7 +526,7 @@ public class Movimientos {
                     System.out.println("❌ Error: No se insertó ninguna fila.");
                 }
             } catch (SQLException e) {
-                JOptionPane.showMessageDialog(null, "ERROR12");
+                JOptionPane.showMessageDialog(null, "ERROR"+ e);
             }
         }
 
@@ -795,7 +795,7 @@ public class Movimientos {
                         }
 
                     } catch (SQLException e) {
-                        JOptionPane.showMessageDialog(null, "ERROR12");
+                        JOptionPane.showMessageDialog(null, "ERROR"+ e);
                     }
                 }
             }
@@ -866,7 +866,7 @@ public class Movimientos {
                 JOptionPane.showMessageDialog(null, "ERROR: " + e);
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "ERROR12");
+            JOptionPane.showMessageDialog(null, "ERROR"+ e);
         }
     }
     static int amb, cvs, med, enf;
@@ -1074,7 +1074,7 @@ public class Movimientos {
         try {
             stm.executeUpdate();
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "ERROR12");
+            JOptionPane.showMessageDialog(null, "ERROR"+ e);
         }
     }
 
@@ -1098,7 +1098,7 @@ public class Movimientos {
                     stm2.executeUpdate();
                     resultado = 1;
                 } catch (SQLException e) {
-                    JOptionPane.showMessageDialog(null, "ERROR12");
+                    JOptionPane.showMessageDialog(null, "ERROR"+ e);
                 }
             } else if (opcion == JOptionPane.CANCEL_OPTION || opcion == JOptionPane.CLOSED_OPTION) {
                 // El usuario eligió "Cancelar" o cerró la ventana
@@ -1119,7 +1119,7 @@ public class Movimientos {
         try {
             stm.executeUpdate();
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "ERROR12");
+            JOptionPane.showMessageDialog(null, "ERROR"+ e);
         }
     }
 }
